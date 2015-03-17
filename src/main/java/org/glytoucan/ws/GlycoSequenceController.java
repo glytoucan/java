@@ -79,4 +79,33 @@ public class GlycoSequenceController {
 
 		return gs;
 	}
+	
+	@RequestMapping("/execute")
+	public GlycoSequence execute(
+			@RequestParam(value = "primaryId", defaultValue = "idRequired") String primaryId) {
+		logger.debug("primaryId=" + primaryId + "<");
+		List<SparqlEntity> list = null;
+		try {
+			SelectSparql ss = getSelectSparql();
+			SparqlEntity se = ss.getSparqlEntity();
+			if (null==ss.getSparqlEntity())
+				se = new SparqlEntity();
+			se.setValue(Saccharide.PrimaryId, primaryId);
+			ss.setSparqlEntity(se);
+			logger.debug(ss.getSparql());
+			list = sparqlDAO.query(ss);
+		} catch (SparqlException e) {
+			return new GlycoSequence(0, "sorry something bad happened." + e.getMessage());
+		}
+		SparqlEntity se = null;
+		try {
+		se = list.get(0);
+		} catch (java.lang.IndexOutOfBoundsException ie) {
+			return new GlycoSequence(0, "sorry no results for " + primaryId );
+		}
+		GlycoSequence gs = new GlycoSequence(counter.incrementAndGet(), primaryId);
+		gs.setSequence(se.getValue(org.glycoinfo.rdf.glycan.GlycoSequence.Sequence));
+
+		return gs;
+	}
 }
