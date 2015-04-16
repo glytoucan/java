@@ -1,4 +1,4 @@
-package org.glytoucan.ws;
+package org.glytoucan.ws.controller;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
@@ -9,9 +9,9 @@ import org.glycoinfo.rdf.SelectSparql;
 import org.glycoinfo.rdf.SparqlException;
 import org.glycoinfo.rdf.dao.SparqlDAO;
 import org.glycoinfo.rdf.dao.SparqlEntity;
-import org.glycoinfo.rdf.glycan.GlycoSequenceSelectSparql;
 import org.glycoinfo.rdf.glycan.Saccharide;
 import org.glycoinfo.rdf.utils.TripleStoreProperties;
+import org.glytoucan.ws.api.GlycoSequence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.RequestMapping;

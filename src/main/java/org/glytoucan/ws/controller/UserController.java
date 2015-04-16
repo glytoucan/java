@@ -14,10 +14,10 @@ import org.glytoucan.ws.service.EmailManager;
 import org.glytoucan.ws.service.UserManager;
 import org.glytoucan.ws.api.Confirmation;
 import org.glytoucan.ws.api.RoleList;
-import org.glytoucan.ws.api.User;
 import org.glytoucan.ws.api.UserInput;
 import org.glytoucan.ws.api.UserList;
 import org.glytoucan.ws.api.PasswordValidator;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
@@ -38,9 +38,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import ch.qos.logback.classic.Logger;
-
-import com.knappsack.swagger4springweb.annotation.ApiExclude;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -53,7 +50,6 @@ import com.wordnik.swagger.annotations.AuthorizationScope;
  * This is the REST API for the users of the system
  * Allows us to add/delete/list registered users
  * 
- * @author sena
  *
  */
 @Controller
@@ -63,10 +59,10 @@ public class UserController {
 
 	public static Logger logger=(Logger) LoggerFactory.getLogger("org.glytoucan.ws.dao.UserController");
 	
-	@Autowired
+//	@Autowired
 	private UserManager userManager;
 	
-	@Autowired
+//	@Autowired
 	private EmailManager emailManager;
 		
 	public void setUserManager(UserManager userManager) {

@@ -1,4 +1,4 @@
-package org.glytoucan.ws;
+package org.glytoucan.ws.api;
 
 import java.util.List;
 
@@ -6,7 +6,6 @@ import org.glycoinfo.rdf.SelectSparql;
 import org.glycoinfo.rdf.SparqlException;
 import org.glycoinfo.rdf.dao.SparqlDAO;
 import org.glycoinfo.rdf.dao.SparqlEntity;
-import org.glycoinfo.rdf.glycan.GlycoSequenceSelectSparql;
 import org.glycoinfo.rdf.glycan.Saccharide;
 
 public class GlycoSequence {

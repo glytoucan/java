@@ -11,3 +11,5 @@ spring:
         username: dba
         password: dba
         graph: graph
+app:
+  docs: http://localhost:8080

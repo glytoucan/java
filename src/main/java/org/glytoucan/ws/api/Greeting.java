@@ -1,4 +1,4 @@
-package org.glytoucan.ws;
+package org.glytoucan.ws.api;
 
 public class Greeting {
 

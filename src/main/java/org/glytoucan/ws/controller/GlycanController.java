@@ -16,7 +16,6 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.apache.log4j.Logger;
 import org.eurocarbdb.MolecularFramework.io.CarbohydrateSequenceEncoding;
 import org.eurocarbdb.MolecularFramework.io.SugarImporterException;
 import org.eurocarbdb.MolecularFramework.io.SugarImporterFactory;
@@ -42,6 +41,7 @@ import org.glytoucan.ws.service.GlycanManager;
 import org.glytoucan.ws.service.UserManager;
 import org.glytoucan.ws.service.exception.GlycanNotFoundException;
 import org.glytoucan.ws.service.exception.UserQuotaExceededException;
+import org.slf4j.Logger;
 //import org.glycomedb.rdf.glycordf.util.GlycoRDFWriter;
 //import org.glycomedb.rdf.glycordf.util.RDFGeneratorGlycanConfig;
 //import org.glycomedb.residuetranslator.ResidueTranslator;
@@ -107,10 +107,10 @@ public class GlycanController {
 //	@Autowired
 	GlycanManager glycanManager;
 //	
-	@Autowired
+//	@Autowired
 	EmailManager emailManager;
 //	
-	@Autowired
+//	@Autowired
 	UserManager userManager;
 //	
 //	@Autowired
@@ -119,13 +119,13 @@ public class GlycanController {
 //	@Autowired
 //	MassCalculator massCalculator;
 	
-	@Autowired
+//	@Autowired
 	MonosaccharideConversion residueTranslator;
 	
-	@Autowired 
+//	@Autowired 
 	MonosaccharideConverter monosaccharideConverter;
 	
-	@Value("${documentation.services.basePath}")
+//	@Value("${documentation.services.basePath}")
 	String serverBasePath;
 
 //	public void setGlycanManager(GlycanManager glycanManager) {
