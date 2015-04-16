@@ -7,7 +7,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wordnik.swagger.annotations.Api;
+
 @RestController
+@Api(value="/status", description="Status request processing")
 public class GreetingController {
 
     private static final String template = "Hello, %s!";

@@ -1,26 +1,18 @@
 package org.glytoucan.ws.controller;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.StringWriter;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.eurocarbdb.MolecularFramework.io.CarbohydrateSequenceEncoding;
 import org.eurocarbdb.MolecularFramework.io.SugarImporterException;
-import org.eurocarbdb.MolecularFramework.io.SugarImporterFactory;
-import org.eurocarbdb.MolecularFramework.sugar.Sugar;
-import org.eurocarbdb.MolecularFramework.util.similiarity.SearchEngine.SearchEngineException;
 //import org.eurocarbdb.MolecularFramework.util.similiarity.SearchEngine.SearchEngineException;
 import org.eurocarbdb.MolecularFramework.util.visitor.GlycoVisitorException;
 import org.eurocarbdb.resourcesdb.io.MonosaccharideConversion;
@@ -71,10 +63,6 @@ import org.slf4j.Logger;
 //import org.glytoucan.ws.view.User;
 //import org.glytoucan.ws.view.search.CompositionSearchInput;
 import org.slf4j.LoggerFactory;
-import org.slf4j.Marker;
-import org.slf4j.MarkerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -427,7 +415,7 @@ public class GlycanController {
 			@ApiParam(required=true, value="accession numbers of the glycans to be retrieved") 
 			@RequestBody
 			GlycanList accessionNumbers,
-			@ApiParam(required=false, value="payload: full (default) or exhibit") 
+			@ApiParam(required=false, value="payload: full (default)") 
 			@RequestParam(required=false, value="payload", defaultValue="full")
 			String payload) {
 		
@@ -483,7 +471,7 @@ public class GlycanController {
 		return list;
 	}
 	
-	@RequestMapping(value = "/search/substructure", method = RequestMethod.POST, consumes={"application/xml", "application/json"}, produces={"application/xml", "application/json"})
+	@RequestMapping(value = "/search/substructure", method = RequestMethod.GET, produces={"application/json"})
     @ApiOperation(value="Searches for glycan structures containing the given structure, returns the existing glycan identifiers if any found", 
     			response=GlycanList.class)
     @ApiResponses(value ={@ApiResponse(code=200, message="Found match(es)"), 
@@ -495,8 +483,8 @@ public class GlycanController {
 			@RequestBody (required=true)
 			@ApiParam(required=true, value="Glycan") 
 			@Valid
-			GlycanInput glycan, 
-			@ApiParam(required=false, value="payload: id (default) or full or exhibit") 
+			GlycanInput glycan,
+			@ApiParam(required=false, value="payload: id (default) or full") 
 			@RequestParam(required=false, value="payload", defaultValue="id")
 			String payload) throws Exception {
 		logger.debug("Substructure search");
@@ -514,7 +502,7 @@ public class GlycanController {
 		
 		GlycanList matches = new GlycanList();
 //		matches.setGlycans(glycanManager.subStructureSearch(exportedStructure).toArray());
-		if (payload != null && (payload.equalsIgnoreCase("exhibit") || payload.equalsIgnoreCase("full"))) {
+		if (payload != null && (payload.equalsIgnoreCase("full"))) {
 			matches = listGlycansByAccessionNumbers(matches, payload);
 		}
 		return matches;
@@ -736,12 +724,12 @@ public class GlycanController {
 				logger.warn("Failed to add a glycan from the list. Reason: {}"+ e.getMessage());
 			} catch (SugarImporterException e) {
 				GlycanErrorResponse error = new GlycanErrorResponse();
-				error.setErrorMessage("Failed to import the structure from encoding " + glycan.getEncoding() + ". Reason: " + e.getErrorText());
+				error.setErrorMessage("Failed to import the structure from encoding " + glycan.getFormat() + ". Reason: " + e.getErrorText());
 				error.setStructure(glycan.getStructure());
 				error.setStatusCode(HttpStatus.BAD_REQUEST.value());
 				error.setErrorCode(ErrorCodes.PARSE_ERROR);
 				errorList.add(error);
-				logger.warn("Failed to import the structure from encoding " + glycan.getEncoding() + ". Reason: " + e.getErrorText());
+				logger.warn("Failed to import the structure from encoding " + glycan.getFormat() + ". Reason: " + e.getErrorText());
 			} catch (GlycoVisitorException e) {
 				GlycanErrorResponse error = new GlycanErrorResponse();
 				error.setErrorMessage("Failed to validate the structure. Reason: " + e.getMessage());
@@ -862,7 +850,7 @@ public class GlycanController {
         				if (!structure.isEmpty()) {
         					// submit each structure
         	        		GlycanInput glycan = new GlycanInput();
-        	        		glycan.setEncoding(encoding);
+        	        		glycan.setFormat(encoding);
         	        		glycan.setStructure(structure.trim());
         	        		list.add(glycan);
         				}
@@ -877,7 +865,7 @@ public class GlycanController {
 				if (!structure.isEmpty()) {
 					// submit each structure
 	        		GlycanInput glycan = new GlycanInput();
-	        		glycan.setEncoding(encoding);
+	        		glycan.setFormat(encoding);
 	        		glycan.setStructure(structure.trim());
 	        		list.add(glycan);
 				}
@@ -888,7 +876,7 @@ public class GlycanController {
 	        		logger.debug("Line: " + structure);
 	        		// submit each structure
 	        		GlycanInput glycan = new GlycanInput();
-	        		glycan.setEncoding(encoding);
+	        		glycan.setFormat(encoding);
 	        		glycan.setStructure(structure);
 	        		list.add(glycan);
 	        	}

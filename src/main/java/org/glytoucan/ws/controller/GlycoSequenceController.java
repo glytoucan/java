@@ -11,6 +11,7 @@ import org.glycoinfo.rdf.dao.SparqlDAO;
 import org.glycoinfo.rdf.dao.SparqlEntity;
 import org.glycoinfo.rdf.glycan.Saccharide;
 import org.glycoinfo.rdf.utils.TripleStoreProperties;
+import org.glytoucan.ws.api.GlycanResponse;
 import org.glytoucan.ws.api.GlycoSequence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -18,7 +19,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiResponse;
+import com.wordnik.swagger.annotations.ApiResponses;
+
 @RestController
+@Api(value="/sequence", description="Sequence Management")
 public class GlycoSequenceController {
 	protected Log logger = LogFactory.getLog(getClass());
 
@@ -52,8 +59,14 @@ public class GlycoSequenceController {
 	private final AtomicLong counter = new AtomicLong();
 
 	@RequestMapping("/retrieve")
+    @ApiOperation(value="Retrieves a glycan sequence with accession number as input", notes="Executes a sparql query to retrieve the WURCS result.")
+	@ApiResponses(value ={@ApiResponse(code=201, message="Structure added successfully"),
+			@ApiResponse(code=400, message="Illegal argument - Glycan should be valid"),
+			@ApiResponse(code=401, message="Unauthorized"),
+			@ApiResponse(code=415, message="Media type is not supported"),
+			@ApiResponse(code=500, message="Internal Server Error")})
 	public GlycoSequence retrieve(
-			@RequestParam(value = "primaryId", defaultValue = "idRequired") String primaryId) {
+			@RequestParam(value = "accessionNumber", defaultValue = "G00030MO") String primaryId) {
 		logger.debug("primaryId=" + primaryId + "<");
 		List<SparqlEntity> list = null;
 		try {
