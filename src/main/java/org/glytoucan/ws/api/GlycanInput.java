@@ -13,12 +13,12 @@ import com.wordnik.swagger.annotations.ApiModelProperty;
  * This class is used to collect information about a glycan from the user
  * View of GlycanEntity
  */
-@XmlRootElement (name="glycan-structure")
-@ApiModel (value="Glycan", description="Glycan representation")
+@XmlRootElement (name="glycan-sequence-input")
+@ApiModel (value="Glycan", description="Glycan representation in string format with format")
 public class GlycanInput {
 
 	String structure;
-	String encoding;
+	String format;
 
 	/**
 	 * @return the structure
@@ -26,7 +26,7 @@ public class GlycanInput {
 	@XmlJavaTypeAdapter(value=CDATAAdapter.class)
 	@NotEmpty
 	//@Structure
-	@ApiModelProperty (value="Glycan structure", required=true)
+	@ApiModelProperty (value="Glycan sequence", required=true)
 	public String getStructure() {
 		return structure;
 	}
@@ -42,15 +42,15 @@ public class GlycanInput {
 	 * @return the format
 	 */
 	@XmlAttribute
-	@ApiModelProperty (value="Encoding", required=false)
-	public String getEncoding() {
-		return encoding;
+	@ApiModelProperty (value="Format of the sequence", required=false)
+	public String getFormat() {
+		return format;
 	}
 
 	/**
 	 * @param encoding the format to set
 	 */
-	public void setEncoding(String encoding) {
-		this.encoding = encoding;
+	public void setFormat(String encoding) {
+		this.format = encoding;
 	}
 }
