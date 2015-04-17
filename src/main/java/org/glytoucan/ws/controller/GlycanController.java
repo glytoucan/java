@@ -17,8 +17,9 @@ import org.eurocarbdb.MolecularFramework.io.SugarImporterException;
 import org.eurocarbdb.MolecularFramework.util.visitor.GlycoVisitorException;
 import org.eurocarbdb.resourcesdb.io.MonosaccharideConversion;
 import org.eurocarbdb.resourcesdb.io.MonosaccharideConverter;
-import org.glycoinfo.batch.search.wurcs.SearchSparqlBean;
+import org.glycoinfo.rdf.SelectSparql;
 import org.glycoinfo.rdf.SelectSparqlBean;
+import org.glycoinfo.rdf.search.SearchSparqlBean;
 import org.glytoucan.ws.api.Confirmation;
 import org.glytoucan.ws.api.ErrorCodes;
 import org.glytoucan.ws.api.Glycan;
@@ -475,12 +476,12 @@ public class GlycanController {
 	
 	@RequestMapping(value = "/sparql/substructure", method = RequestMethod.GET, produces={"application/json"})
     @ApiOperation(value="Returns the select SPARQL used to find a substructure in the wurcs RDF ontology.", 
-    			response=SelectSparqlBean.class)
+    			response=SelectSparql.class)
     @ApiResponses(value ={@ApiResponse(code=200, message="Found match(es)"), 
     				@ApiResponse(code=400, message="Illegal argument - Glycan should be valid"),
     				@ApiResponse(code=404, message="Cannot generate"),
     				@ApiResponse(code=500, message="Internal Server Error")})
-	public @ResponseBody SelectSparqlBean substructureSearch (
+	public @ResponseBody SelectSparql substructureSearch (
 			@RequestBody (required=true)
 			@ApiParam(required=true, value="Glycan sequence and format") 
 			@Valid GlycanInput glycan) throws Exception {
@@ -507,7 +508,7 @@ public class GlycanController {
 //		}
 		
 //		GlycanList matches = new GlycanList();
-		SelectSparqlBean searchBean = new SelectSparqlBean();
+		SelectSparql searchBean = new SearchSparqlBean();
 //		matches.setGlycans(glycanManager.subStructureSearch(exportedStructure).toArray());
 //		if (payload != null && (payload.equalsIgnoreCase("full"))) {
 //			matches = listGlycansByAccessionNumbers(matches, payload);
