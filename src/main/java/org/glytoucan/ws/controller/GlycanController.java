@@ -238,7 +238,7 @@ public class GlycanController {
 //		}
 //	}
 	
-	@RequestMapping(value = "/add", method = RequestMethod.POST, consumes={"application/xml", "application/json"})
+	@RequestMapping(value = "/search/substructure", method = RequestMethod.POST, consumes={"application/xml", "application/json"}, produces={"application/xml", "application/json"})
     @ApiOperation(value="Adds a glycan structure to the system, returns the assigned glycan identifier", 
     			response=GlycanResponse.class, notes="Only currently logged in user can submit a structure, the returned object contains the accession number assigned or the already existing one")
     @ApiResponses(value ={@ApiResponse(code=201, message="Structure added successfully"),
