@@ -12,7 +12,10 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.eurocarbdb.MolecularFramework.io.CarbohydrateSequenceEncoding;
 import org.eurocarbdb.MolecularFramework.io.SugarImporterException;
+import org.eurocarbdb.MolecularFramework.io.SugarImporterFactory;
+import org.eurocarbdb.MolecularFramework.sugar.Sugar;
 //import org.eurocarbdb.MolecularFramework.util.similiarity.SearchEngine.SearchEngineException;
 import org.eurocarbdb.MolecularFramework.util.visitor.GlycoVisitorException;
 import org.eurocarbdb.resourcesdb.io.MonosaccharideConversion;
@@ -140,41 +143,42 @@ public class GlycanController {
 //        return t_config;
 //	}
 	
-//	public Sugar importParseValidate (Glycan glycan) throws GlycoVisitorException, SugarImporterException {
-//		String encoding = glycan.getEncoding();
-//		logger.debug("Input structure: {}", glycan.getStructure());
-//		Sugar sugarStructure = null;
-//		if (encoding != null && !encoding.isEmpty() && !(encoding.equalsIgnoreCase("glycoct") || encoding.equalsIgnoreCase("glycoct_condensed"))  && !encoding.equalsIgnoreCase("gws")) {
-//			logger.debug("Converting from {}", encoding);
-//			ArrayList<CarbohydrateSequenceEncoding> supported = SugarImporterFactory.getSupportedEncodings();
-//			for (Iterator<CarbohydrateSequenceEncoding> iterator = supported.iterator(); iterator.hasNext();) {
-//				CarbohydrateSequenceEncoding carbohydrateSequenceEncoding = (CarbohydrateSequenceEncoding) iterator
-//						.next();
-//				if (encoding.equalsIgnoreCase(carbohydrateSequenceEncoding.getId())) {	
-//					try {
-//						if (encoding.equalsIgnoreCase("kcf")) {
-//							sugarStructure = SugarImporterFactory.importSugar(glycan.getStructure(), carbohydrateSequenceEncoding, residueTranslator);
-//						}
-//						else {
-//							sugarStructure = SugarImporterFactory.importSugar(glycan.getStructure(), carbohydrateSequenceEncoding, monosaccharideConverter);
-//						}
-//					} catch (Exception e) {
-//						// import failed
-//						String message=e.getMessage();
-//						//e.printStackTrace();
-//						if (e instanceof SugarImporterException) {
-//							message = ((SugarImporterException)e).getErrorText() + ": " + ((SugarImporterException)e).getPosition();
-//						}
-//						throw new IllegalArgumentException("Structure cannot be imported: " + message);
-//					}
-//					break;
-//				}
-//			}
-//			if (sugarStructure == null && !encoding.equalsIgnoreCase("gws")) {
-//				//encoding is not supported
-//				throw new IllegalArgumentException("Encoding " + encoding + " is not supported");
-//			}
-//		} else {
+	public Sugar importParseValidate (GlycanInput glycan) throws GlycoVisitorException, SugarImporterException {
+		String encoding = glycan.getFormat();
+		logger.debug("Input structure: {}", glycan.getSequence());
+		Sugar sugarStructure = null;
+		if (encoding != null && !encoding.isEmpty() && !(encoding.equalsIgnoreCase("glycoct") || encoding.equalsIgnoreCase("glycoct_condensed"))  && !encoding.equalsIgnoreCase("gws")) {
+			logger.debug("Converting from {}", encoding);
+			ArrayList<CarbohydrateSequenceEncoding> supported = SugarImporterFactory.getSupportedEncodings();
+			for (Iterator<CarbohydrateSequenceEncoding> iterator = supported.iterator(); iterator.hasNext();) {
+				CarbohydrateSequenceEncoding carbohydrateSequenceEncoding = (CarbohydrateSequenceEncoding) iterator
+						.next();
+				if (encoding.equalsIgnoreCase(carbohydrateSequenceEncoding.getId())) {	
+					try {
+						if (encoding.equalsIgnoreCase("kcf")) {
+							sugarStructure = SugarImporterFactory.importSugar(glycan.getSequence(), carbohydrateSequenceEncoding, residueTranslator);
+						}
+						else {
+							sugarStructure = SugarImporterFactory.importSugar(glycan.getSequence(), carbohydrateSequenceEncoding, monosaccharideConverter);
+						}
+					} catch (Exception e) {
+						// import failed
+						String message=e.getMessage();
+						//e.printStackTrace();
+						if (e instanceof SugarImporterException) {
+							message = ((SugarImporterException)e).getErrorText() + ": " + ((SugarImporterException)e).getPosition();
+						}
+						throw new IllegalArgumentException("Structure cannot be imported: " + message);
+					}
+					break;
+				}
+			}
+			if (sugarStructure == null && !encoding.equalsIgnoreCase("gws")) {
+				//encoding is not supported
+				throw new IllegalArgumentException("Encoding " + encoding + " is not supported");
+			}
+		} 
+//		else {
 //			String structure;
 //			if (encoding != null && encoding.equalsIgnoreCase("gws")) { // glycoworkbench encoding
 //				structure = new GWSImporter().parse(glycan.getStructure());
@@ -185,14 +189,15 @@ public class GlycanController {
 //			}
 //			sugarStructure = StructureParserValidator.parse(structure);
 //		}
-//		
-//		
+		
+		
 //		if (StructureParserValidator.isValid(sugarStructure)) {		
 //			return sugarStructure;
 //		} else {
 //			throw new IllegalArgumentException("Validation error, please submit a valid structure");
 //		}
-//	}
+		return null;
+	}
 //	
 //	private void getCompositions (GlycanExhibit glycan, Set<GlycanComposition> compositions) {
 //		for (Iterator iterator = compositions.iterator(); iterator.hasNext();) {
@@ -241,89 +246,91 @@ public class GlycanController {
 //		}
 //	}
 	
-//	@RequestMapping(value = "/search/substructure", method = RequestMethod.POST, consumes={"application/xml", "application/json"}, produces={"application/xml", "application/json"})
-//    @ApiOperation(value="Adds a glycan structure to the system, returns the assigned glycan identifier", 
-//    			response=GlycanResponse.class, notes="Only currently logged in user can submit a structure, the returned object contains the accession number assigned or the already existing one")
-//    @ApiResponses(value ={@ApiResponse(code=201, message="Structure added successfully"),
-//    		@ApiResponse(code=400, message="Illegal argument - Glycan should be valid"),
-//    		@ApiResponse(code=401, message="Unauthorized"),
-//    		@ApiResponse(code=415, message="Media type is not supported"),
-//    		@ApiResponse(code=500, message="Internal Server Error")})
-//	public ResponseEntity<GlycanResponse> submitStructure (
-//		    @ApiParam(required=true, value="Glycan") 
-//		    @RequestBody (required=true)
-//		    @Valid GlycanInput glycan,
-//		    Principal p) throws Exception {
-//
-//		String userName = p.getName();
-//		logger.debug("begin import ParseValidate");
-////		Sugar sugarStructure = importParseValidate(glycan);
-//		logger.debug("end import ParseValidate");
-//		
-//		String exportedStructure = null;
-//		Double mass=null;
-//		boolean massError = false;
-//		Exception massException=null;
-//		
-////		if (sugarStructure == null) {
-////			throw new IllegalArgumentException("Structure cannot be imported");
-////		}
-//		
-//		// export into GlycoCT to make sure we have a uniform structure content in the DB
-//		try {
-//			logger.debug("begin exportStructure");
-////			exportedStructure = StructureParserValidator.exportStructure(sugarStructure);
-////			logger.debug("exported Structure: {}", exportedStructure);
-//		} catch (Exception e) {
-//			throw new IllegalArgumentException("Cannot export into common encoding: " + e.getMessage());
+	@RequestMapping(value = "/add/sequence", method = RequestMethod.POST, consumes={"application/xml", "application/json"}, produces={"application/json"})
+    @ApiOperation(value="Adds a glycan structure to the system, returns the assigned glycan identifier", 
+    			response=GlycanResponse.class, notes="Only currently logged in user can submit a structure, the returned object contains the accession number assigned or the already existing one.  Currently only wurcs or glycoct are supported.  After some simple validation of the string, the mass is calculated.  Substructure search of Motifs are then executed.  Finally the sequence is converted into wurcs RDF format and added into the ontology.")
+    @ApiResponses(value ={@ApiResponse(code=201, message="Structure added successfully"),
+    		@ApiResponse(code=400, message="Illegal argument - Glycan should be valid"),
+    		@ApiResponse(code=401, message="Unauthorized"),
+    		@ApiResponse(code=415, message="Media type is not supported"),
+    		@ApiResponse(code=500, message="Internal Server Error")})
+	public ResponseEntity<GlycanResponse> submitStructure (
+		    @ApiParam(required=true, value="Glycan") 
+		    @RequestBody (required=true)
+		    @Valid GlycanInput glycan,
+		    Principal p) throws Exception {
+
+		String userName = p.getName();
+		logger.debug("begin import ParseValidate");
+		if (glycan.getFormat().equals("glycoct")) {
+			Sugar sugarStructure = importParseValidate(glycan);
+		}
+		logger.debug("end import ParseValidate");
+		
+		String exportedStructure = null;
+		Double mass=null;
+		boolean massError = false;
+		Exception massException=null;
+		
+//		if (sugarStructure == null) {
+//			throw new IllegalArgumentException("Structure cannot be imported");
 //		}
-////		try {
-////			mass = massCalculator.calculateMass(sugarStructure);
-////			if (mass != null && mass <= 0) {
-////				// could not calculate mass
-////				logger.info("Could not calculate mass for the structure!");
-////				mass = null;
-////			}
-////		} catch (Exception e) {
-////			// failed to calculate mass
-////			massError = true;
-////			massException = e;
-////			mass = null;
-////		}
-//		
-//		GlycanResponse response = null;
+		
+		// export into GlycoCT to make sure we have a uniform structure content in the DB
+		try {
+			logger.debug("begin exportStructure");
+//			exportedStructure = StructureParserValidator.exportStructure(sugarStructure);
+//			logger.debug("exported Structure: {}", exportedStructure);
+		} catch (Exception e) {
+			throw new IllegalArgumentException("Cannot export into common encoding: " + e.getMessage());
+		}
 //		try {
-//			response = glycanManager.addStructure(exportedStructure, userName, mass);
-//			if (response.getExisting()) {
-//				logger.debug("GLYCAN_EXISTS:" + response.getAccessionNumber() + userName);
-//			} else {
-//				if (response.getQuotaExceeded()) {
-//					// send email to the moderator
-//					List<User> moderators = userManager.getModerators();
-//					emailManager.sendUserQuotaAlert(moderators, userName);
-//					throw new UserQuotaExceededException("Cannot add the glycan, user's quota exceeded. Please contact the Administrator");
-//				}
-//				logger.info ("GLYCAN_ADD,{},{}" + response.getAccessionNumber() + userName);
+//			mass = massCalculator.calculateMass(sugarStructure);
+//			if (mass != null && mass <= 0) {
+//				// could not calculate mass
+//				logger.info("Could not calculate mass for the structure!");
+//				mass = null;
 //			}
-//		} catch (DataIntegrityViolationException e) {
-//			// failed to add, need a new accession number
-//			boolean exception = true;
-//			do {
-//				logger.info("Duplicate accession number retrying." +  e.getMessage());
-//				try {
-//					response = glycanManager.assignNewAccessionNumber(exportedStructure, userName);
-//					exception = false;
-//				} catch (DataIntegrityViolationException ex) {
-//					exception = true;
-//				}
-//			} while (exception);
-//		} 
-//		if (massError) {
-//			logger.info("Mass calculation exception occured for glycan {}. Reason: {}" + response.getAccessionNumber() + massException);
+//		} catch (Exception e) {
+//			// failed to calculate mass
+//			massError = true;
+//			massException = e;
+//			mass = null;
 //		}
-//
-//		return new ResponseEntity<GlycanResponse> (response, HttpStatus.CREATED);
-//	}
+		
+		GlycanResponse response = null;
+		try {
+			response = glycanManager.addStructure(exportedStructure, userName, mass);
+			if (response.getExisting()) {
+				logger.debug("GLYCAN_EXISTS:" + response.getAccessionNumber() + userName);
+			} else {
+				if (response.getQuotaExceeded()) {
+					// send email to the moderator
+					List<User> moderators = userManager.getModerators();
+					emailManager.sendUserQuotaAlert(moderators, userName);
+					throw new UserQuotaExceededException("Cannot add the glycan, user's quota exceeded. Please contact the Administrator");
+				}
+				logger.info ("GLYCAN_ADD,{},{}" + response.getAccessionNumber() + userName);
+			}
+		} catch (DataIntegrityViolationException e) {
+			// failed to add, need a new accession number
+			boolean exception = true;
+			do {
+				logger.info("Duplicate accession number retrying." +  e.getMessage());
+				try {
+					response = glycanManager.assignNewAccessionNumber(exportedStructure, userName);
+					exception = false;
+				} catch (DataIntegrityViolationException ex) {
+					exception = true;
+				}
+			} while (exception);
+		} 
+		if (massError) {
+			logger.info("Mass calculation exception occured for glycan {}. Reason: {}" + response.getAccessionNumber() + massException);
+		}
+
+		return new ResponseEntity<GlycanResponse> (response, HttpStatus.CREATED);
+	}
 	
 	@RequestMapping(value="/{accessionNumber}/delete", method = RequestMethod.DELETE)
     @ApiOperation(value="Deletes the glycan with given accession number", response=Confirmation.class, notes="This can be accessed by the Administrator user only")
@@ -373,6 +380,7 @@ public class GlycanController {
 			@ApiResponse(code=500, message="Internal Server Error")})
 	public @ResponseBody Glycan getGlycan (
 			@ApiParam(required=true, value="id of the glycan") @PathVariable("accessionNumber") String accessionNumber) {
+		logger.debug("Get glycan");
 		Glycan glycanEntity = glycanManager.getGlycanByAccessionNumber(accessionNumber);
 		glycanEntity.getContributor().setEmail(""); // hide the email
 		return glycanEntity;
@@ -474,7 +482,9 @@ public class GlycanController {
 //		return list;
 //	}
 	
-	@RequestMapping(value = "/sparql/substructure", method = RequestMethod.GET, produces={"application/json"})
+	
+	// sample sparql : https://bitbucket.org/issaku/virtuoso/wiki/G00030MO%20(order%20by%20manual)
+	@RequestMapping(value = "/substructureSparql", method = RequestMethod.GET, produces={"application/json"})
     @ApiOperation(value="Returns the select SPARQL used to find a substructure in the wurcs RDF ontology.", 
     			response=SelectSparql.class)
     @ApiResponses(value ={@ApiResponse(code=200, message="Found match(es)"), 
@@ -482,9 +492,12 @@ public class GlycanController {
     				@ApiResponse(code=404, message="Cannot generate"),
     				@ApiResponse(code=500, message="Internal Server Error")})
 	public @ResponseBody SelectSparql substructureSearch (
-			@RequestBody (required=true)
-			@ApiParam(required=true, value="Glycan sequence and format") 
-			@Valid GlycanInput glycan) throws Exception {
+			@RequestParam(required=true, value="WURCS", defaultValue="WURCS")
+			@ApiParam(required=true, value="Glycan sequence", name="sequence") 
+			String sequence,
+			@RequestParam(required=true, value="wurcs", defaultValue="wurcs")
+			@ApiParam(required=true, value="Glycan format - wurcs or glycoct", name="format") 
+			String format) throws Exception {
 		logger.debug("Substructure search");
 		
 		// if glycoct:
@@ -495,6 +508,111 @@ public class GlycanController {
 		// validate the structure
 		
 		// wurcs to sparql
+
+		String define =" DEFINE sql:select-option \"order\"";
+		String prefix = " PREFIX glycan: <http://purl.jp/bio/12/glyco/glycan#>"
+				+ " PREFIX wurcs: <http://www.glycoinfo.org/glyco/owl/wurcs#>";
+		String select = " DISTINCT ?gseq str ( ?wurcs ) AS ?WURCS";
+		String from = " FROM <http://rdf.glycoinfo.org/wurcs/0.5.1>"
+				+ " FROM NAMED <http://rdf.glycoinfo.org/wurcs/0.5.1/ms>";
+		String where = "?glycan glycan:has_glycosequence ?gseq ."
+				+ "  ?gseq glycan:has_sequence ?wurcs ."
+				+ "  ?gseq wurcs:has_uniqueRES ?uRES1 ."
+				+ "  ?uRES1 wurcs:is_monosaccharide ?MS1 ."
+				+ "  GRAPH <http://rdf.glycoinfo.org/wurcs/0.5.1/ms> {"
+				+ "    ?UMS1 wurcs:subsumes ?MS1 ."
+				+ "    VALUES (?UMS1) { (<http://rdf.glycoinfo.org/glycan/wurcs/2.0/monosaccharide/u2122h_2*NCC%2F3%3DO>) }"
+				+ "  }"
+				+ "  ?RESa wurcs:is_uniqueRES ?uRES1 ."
+				+ "  ?GLIPa4 wurcs:has_RES ?RESa ."
+				+ "  ?GLIPa4 wurcs:has_SC_position 4 ."
+				+ "  ?GLIPSa4 wurcs:has_GLIP ?GLIPa4 ."
+				+ "  ?LINa4b1 wurcs:has_GLIPS ?GLIPSa4 ."
+				+ "  ?gseq wurcs:has_LIN ?LINa4b1 ."
+				+ "  ?LINa4b1 wurcs:has_GLIPS ?GLIPSb1 ."
+				+ "  ?GLIPSb1 wurcs:has_GLIP ?GLIPb1 ."
+				+ "  ?GLIPb1 wurcs:has_SC_position 1 ."
+				+ "  ?gseq wurcs:has_uniqueRES ?uRES2 ."
+				+ "  ?uRES2 wurcs:is_monosaccharide ?MS2 ."
+				+ "  GRAPH <http://rdf.glycoinfo.org/wurcs/0.5.1/ms> {"
+				+ "    ?UMS2 wurcs:subsumes ?MS2 ."
+				+ "    VALUES (?UMS2) { (<http://rdf.glycoinfo.org/glycan/wurcs/2.0/monosaccharide/12122h-1b_1-5_2*NCC%2F3%3DO>) }"
+				+ "  }"
+				+ "  ?RESb wurcs:is_uniqueRES ?uRES2 ."
+				+ "  ?GLIPb1 wurcs:has_RES ?RESb ."
+				+ "  ?GLIPb4 wurcs:has_RES ?RESb ."
+				+ "  ?GLIPb4 wurcs:has_SC_position 4 ."
+				+ "  ?GLIPSb4 wurcs:has_GLIP ?GLIPb4 ."
+				+ "  ?LINb4c1 wurcs:has_GLIPS ?GLIPSb4."
+				+ "  ?gseq wurcs:has_LIN ?LINb4c1 ."
+				+ "  ?LINb4c1 wurcs:has_GLIPS ?GLIPSc1 ."
+				+ "  ?GLIPSc1 wurcs:has_GLIP ?GLIPc1 ."
+				+ "  ?GLIPc1 wurcs:has_SC_position 1 ."
+				+ "  ?gseq wurcs:has_uniqueRES ?uRES3 ."
+				+ "  ?uRES3 wurcs:is_monosaccharide ?MS3 ."
+				+ "  GRAPH <http://rdf.glycoinfo.org/wurcs/0.5.1/ms> {"
+				+ "    ?UMS3 wurcs:subsumes ?MS3 ."
+				+ "    VALUES (?UMS3) { (<http://rdf.glycoinfo.org/glycan/wurcs/2.0/monosaccharide/11122h-1b_1-5>) }"
+				+ "  }"
+				+ "  ?RESc wurcs:is_uniqueRES ?uRES3 ."
+				+ "  ?GLIPc1 wurcs:has_RES ?RESc ."
+				+ "  ?GLIPc3 wurcs:has_RES ?RESc ."
+				+ "  ?GLIPc3 wurcs:has_SC_position 3 ."
+				+ "  ?GLIPSc3 wurcs:has_GLIP ?GLIPc3 ."
+				+ "  ?LINc3d1 wurcs:has_GLIPS ?GLIPSc3 ."
+				+ "  ?gseq wurcs:has_LIN ?LINc3d1 ."
+				+ "  ?LINc3d1 wurcs:has_GLIPS ?GLIPSd1 ."
+				+ "  ?GLIPSd1 wurcs:has_GLIP ?GLIPd1 ."
+				+ "  ?GLIPd1 wurcs:has_SC_position 1 ."
+				+ "  ?gseq wurcs:has_uniqueRES ?uRES4 ."
+				+ "  ?uRES4 wurcs:is_monosaccharide ?MS4 ."
+				+ "  GRAPH <http://rdf.glycoinfo.org/wurcs/0.5.1/ms> {"
+				+ "    ?UMS4 wurcs:subsumes ?MS4 ."
+				+ "    VALUES (?UMS4) { (<http://rdf.glycoinfo.org/glycan/wurcs/2.0/monosaccharide/21122h-1a_1-5>) }"
+				+ "  }"
+				+ "  ?RESd wurcs:is_uniqueRES ?uRES4 ."
+				+ "  ?GLIPd1 wurcs:has_RES ?RESd ."
+				+ "  ?GLIPc6 wurcs:has_RES ?RESc ."
+				+ "  ?GLIPc6 wurcs:has_SC_position 6 ."
+				+ "  ?GLIPSc6 wurcs:has_GLIP ?GLIPc6 ."
+				+ "  ?LINc6f1 wurcs:has_GLIPS ?GLIPSc6 ."
+				+ "  ?gseq wurcs:has_LIN ?LINc6f1 ."
+				+ "  ?LINc6f1 wurcs:has_GLIPS ?GLIPSf1 ."
+				+ "  ?GLIPSf1 wurcs:has_GLIP ?GLIPf1 ."
+				+ "  ?GLIPf1 wurcs:has_SC_position 1 ."
+				+ "  ?RESf wurcs:is_uniqueRES ?uRES4 ."
+				+ "  FILTER (?RESf != ?RESd )"
+				+ "  ?GLIPf1 wurcs:has_RES ?RESf ."
+				+ "  ?GLIPd2d4 wurcs:has_RES ?RESd ."
+				+ "  ?GLIPd2d4 wurcs:has_RES ?RESd2d4 ."
+				+ "  ?GLIPd2d4 wurcs:has_SC_position ?Posd2d4 ."
+				+ "  FILTER (  ( ?Posd2d4 = 2  && ?RESd2d4 = ?RESd )  ||   ( ?Posd2d4 = 4  && ?RESd2d4 = ?RESd )  || ( ?Posd2d4 = -1  && ?RESd2d4 = ?RESd))"
+				+ "  ?GLIPSd2d4 wurcs:has_GLIP ?GLIPd2d4 ."
+				+ "  ?LINe1d2d4 wurcs:has_GLIPS ?GLIPSd2d4 ."
+				+ "  ?gseq wurcs:has_LIN ?LINe1d2d4 ."
+				+ "  ?LINe1d2d4 wurcs:has_GLIPS ?GLIPSe1 ."
+				+ "  ?GLIPSe1 wurcs:has_GLIP ?GLIPe1 ."
+				+ "  ?GLIPe1 wurcs:has_SC_position 1 ."
+				+ "  ?RESe wurcs:is_uniqueRES ?uRES2 ."
+				+ "  FILTER(?RESe != ?RESb)"
+				+ "  ?GLIPe1 wurcs:has_RES ?RESe ."
+				+ "  ?GLIPf2f4 wurcs:has_RES ?RESf ."
+				+ "  ?GLIPf2f4 wurcs:has_RES ?RESf2f4 ."
+				+ "  ?GLIPf2f4 wurcs:has_SC_position ?Posf2f4 ."
+				+ "  FILTER (  ( ?Posf2f4 = 2  && ?RESf2f4 = ?RESf )  ||   ( ?Posf2f4 = 4  && ?RESf2f4 = ?RESf )  || ( ?Posf2f4 = -1  && ?RESf2f4 = ?RESf))"
+				+ "  ?GLIPSf2f4 wurcs:has_GLIP ?GLIPf2f4 ."
+				+ "  ?LINg1f2f4 wurcs:has_GLIPS ?GLIPSf2f4 ."
+				+ "  ?gseq wurcs:has_LIN ?LINg1f2f4 ."
+				+ "  ?LINg1f2f4 wurcs:has_GLIPS ?GLIPSg1 ."
+				+ "  ?GLIPSg1 wurcs:has_GLIP ?GLIPg1 ."
+				+ "  ?GLIPg1 wurcs:has_SC_position 1 ."
+				+ "  ?RESg wurcs:is_uniqueRES ?uRES2 ."
+				+ "  FILTER(?RESg != ?RESb && ?RESg != ?RESe)"
+				+ "  ?GLIPg1 wurcs:has_RES ?RESg . ";
+//						+ "  BIND( iri(replace(str(?glycan), \"http://rdf.glycoinfo.org/glycan/\", \"<img src=\\\"http://www.glytoucan.org/glyspace/service/glycans/\")) as ?glycan2)"
+//						+ "  BIND( iri(concat(?glycan2, \"/image?style=extended&format=png&notation=cfg\\\"/>\")) as ?glycans )}"
+//						+ " ORDER BY ?glycans";
+
 		
 //		Sugar sugarStructure = importParseValidate(glycan);
 //		if (sugarStructure == null) {
@@ -504,11 +622,17 @@ public class GlycanController {
 //		try {
 //			exportedStructure = StructureParserValidator.exportStructure(sugarStructure);
 //		} catch (Exception e) {
-//			throw new IllegalArgumentException("Cannot export into common encoding: " + e.getMessage());
+//			throw new IllegalArgumentException("Cannot export into com\nmon encoding: " + e.getMessage());
 //		}
 		
 //		GlycanList matches = new GlycanList();
 		SelectSparql searchBean = new SearchSparqlBean();
+		searchBean.setDefine(define);
+		searchBean.setPrefix(prefix);
+		searchBean.setSelect(select);
+		searchBean.setFrom(from);
+		searchBean.setWhere(where);
+		
 //		matches.setGlycans(glycanManager.subStructureSearch(exportedStructure).toArray());
 //		if (payload != null && (payload.equalsIgnoreCase("full"))) {
 //			matches = listGlycansByAccessionNumbers(matches, payload);
