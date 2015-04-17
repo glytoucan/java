@@ -484,7 +484,7 @@ public class GlycanController {
 	
 	
 	// sample sparql : https://bitbucket.org/issaku/virtuoso/wiki/G00030MO%20(order%20by%20manual)
-	@RequestMapping(value = "/substructureSparql", method = RequestMethod.GET, produces={"application/json"})
+	@RequestMapping(value = "/sparql/substructure", method = RequestMethod.GET, produces={"application/json"})
     @ApiOperation(value="Returns the select SPARQL used to find a substructure in the wurcs RDF ontology.", 
     			response=SelectSparql.class)
     @ApiResponses(value ={@ApiResponse(code=200, message="Found match(es)"), 
