@@ -509,7 +509,8 @@ public class GlycanController {
 		
 		// wurcs to sparql
 
-		String define =" DEFINE sql:select-option \"order\"";
+		String define =" DEFINE sql:select-option \"order\"".replace('\\', ' ');
+		logger.debug("define:>" + define + "<");
 		String prefix = " PREFIX glycan: <http://purl.jp/bio/12/glyco/glycan#>"
 				+ " PREFIX wurcs: <http://www.glycoinfo.org/glyco/owl/wurcs#>";
 		String select = " DISTINCT ?gseq str ( ?wurcs ) AS ?WURCS";
