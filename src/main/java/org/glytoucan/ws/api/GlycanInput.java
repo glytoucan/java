@@ -14,7 +14,7 @@ import com.wordnik.swagger.annotations.ApiModelProperty;
  * View of GlycanEntity
  */
 @XmlRootElement (name="glycan-sequence-input")
-@ApiModel (value="Glycan", description="Glycan representation in string format with format")
+@ApiModel (value="Glycan Sequence Request", description="Glycan representation string with format")
 public class GlycanInput {
 
 	String structure;
@@ -27,14 +27,14 @@ public class GlycanInput {
 	@NotEmpty
 	//@Structure
 	@ApiModelProperty (value="Glycan sequence", required=true)
-	public String getStructure() {
+	public String getSequence() {
 		return structure;
 	}
 
 	/**
 	 * @param structure the structure to set
 	 */
-	public void setStructure(String structure) {
+	public void setSequence(String structure) {
 		this.structure = structure;
 	}
 
@@ -42,7 +42,7 @@ public class GlycanInput {
 	 * @return the format
 	 */
 	@XmlAttribute
-	@ApiModelProperty (value="Format of the sequence", required=false)
+	@ApiModelProperty (value="Format of the sequence, glycoct or wurcs", required=false)
 	public String getFormat() {
 		return format;
 	}
