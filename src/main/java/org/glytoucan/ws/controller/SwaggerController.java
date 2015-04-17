@@ -19,7 +19,7 @@ public class SwaggerController extends ApiDocumentationController {
         setApiVersion("v1");
     }
 
-   @RequestMapping(value = "/", method = RequestMethod.GET)
+   @RequestMapping(value = "/documentation", method = RequestMethod.GET)
    public String documentation() {
    		logger.debug("documentation");
         return "documentation";

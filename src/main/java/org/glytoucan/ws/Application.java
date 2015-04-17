@@ -7,7 +7,6 @@ import org.glycoinfo.rdf.glycan.GlycoSequenceSelectSparql;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.BufferedImageHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
@@ -16,7 +15,6 @@ import com.knappsack.swagger4springweb.util.ScalaObjectMapper;
 
 
 @SpringBootApplication
-@Configuration
 public class Application {
 
 	@Bean
