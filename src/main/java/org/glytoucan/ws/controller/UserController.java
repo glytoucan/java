@@ -17,6 +17,7 @@ import org.glytoucan.ws.api.RoleList;
 import org.glytoucan.ws.api.UserInput;
 import org.glytoucan.ws.api.UserList;
 import org.glytoucan.ws.api.PasswordValidator;
+import org.hibernate.validator.internal.util.privilegedactions.GetClassLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
@@ -57,7 +58,7 @@ import com.wordnik.swagger.annotations.AuthorizationScope;
 @RequestMapping ("/users")
 public class UserController {
 
-	public static Logger logger=(Logger) LoggerFactory.getLogger("org.glytoucan.ws.dao.UserController");
+	public static Logger logger=(Logger) LoggerFactory.getLogger("org.glytoucan.ws.controller.UserController");
 	
 //	@Autowired
 	private UserManager userManager;
