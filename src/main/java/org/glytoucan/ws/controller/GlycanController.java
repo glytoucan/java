@@ -492,10 +492,10 @@ public class GlycanController {
     				@ApiResponse(code=404, message="Cannot generate"),
     				@ApiResponse(code=500, message="Internal Server Error")})
 	public @ResponseBody SelectSparql substructureSearch (
-			@RequestParam(required=true, value="WURCS", defaultValue="WURCS")
+			@RequestParam(required=true, value="sequence", defaultValue="WURCS")
 			@ApiParam(required=true, value="Glycan sequence", name="sequence") 
 			String sequence,
-			@RequestParam(required=true, value="wurcs", defaultValue="wurcs")
+			@RequestParam(required=true, value="format", defaultValue="wurcs")
 			@ApiParam(required=true, value="Glycan format - wurcs or glycoct", name="format") 
 			String format) throws Exception {
 		logger.debug("Substructure search");
