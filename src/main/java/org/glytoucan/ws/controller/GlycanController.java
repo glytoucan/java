@@ -20,8 +20,11 @@ import org.eurocarbdb.MolecularFramework.sugar.Sugar;
 import org.eurocarbdb.MolecularFramework.util.visitor.GlycoVisitorException;
 import org.eurocarbdb.resourcesdb.io.MonosaccharideConversion;
 import org.eurocarbdb.resourcesdb.io.MonosaccharideConverter;
+import org.glycoinfo.batch.search.wurcs.SubstructureSearchSparql;
 import org.glycoinfo.rdf.SelectSparql;
 import org.glycoinfo.rdf.SelectSparqlBean;
+import org.glycoinfo.rdf.dao.SparqlEntity;
+import org.glycoinfo.rdf.glycan.GlycoSequence;
 import org.glycoinfo.rdf.search.SearchSparqlBean;
 import org.glytoucan.ws.api.Confirmation;
 import org.glytoucan.ws.api.ErrorCodes;
@@ -503,113 +506,14 @@ public class GlycanController {
 		// if glycoct:
 		// validate the sequence
 		// convert to wurcs
-
+		
+		
 		// if wurcs:
 		// validate the structure
 		
 		// wurcs to sparql
 
-		String define =" DEFINE sql:select-option \"order\"".replace('\\', ' ');
-		logger.debug("define:>" + define + "<");
-		String prefix = " PREFIX glycan: <http://purl.jp/bio/12/glyco/glycan#>"
-				+ " PREFIX wurcs: <http://www.glycoinfo.org/glyco/owl/wurcs#>";
-		String select = " DISTINCT ?gseq str ( ?wurcs ) AS ?WURCS";
-		String from = " FROM <http://rdf.glycoinfo.org/wurcs/0.5.1>"
-				+ " FROM NAMED <http://rdf.glycoinfo.org/wurcs/0.5.1/ms>";
-		String where = "?glycan glycan:has_glycosequence ?gseq ."
-				+ "  ?gseq glycan:has_sequence ?wurcs ."
-				+ "  ?gseq wurcs:has_uniqueRES ?uRES1 ."
-				+ "  ?uRES1 wurcs:is_monosaccharide ?MS1 ."
-				+ "  GRAPH <http://rdf.glycoinfo.org/wurcs/0.5.1/ms> {"
-				+ "    ?UMS1 wurcs:subsumes ?MS1 ."
-				+ "    VALUES (?UMS1) { (<http://rdf.glycoinfo.org/glycan/wurcs/2.0/monosaccharide/u2122h_2*NCC%2F3%3DO>) }"
-				+ "  }"
-				+ "  ?RESa wurcs:is_uniqueRES ?uRES1 ."
-				+ "  ?GLIPa4 wurcs:has_RES ?RESa ."
-				+ "  ?GLIPa4 wurcs:has_SC_position 4 ."
-				+ "  ?GLIPSa4 wurcs:has_GLIP ?GLIPa4 ."
-				+ "  ?LINa4b1 wurcs:has_GLIPS ?GLIPSa4 ."
-				+ "  ?gseq wurcs:has_LIN ?LINa4b1 ."
-				+ "  ?LINa4b1 wurcs:has_GLIPS ?GLIPSb1 ."
-				+ "  ?GLIPSb1 wurcs:has_GLIP ?GLIPb1 ."
-				+ "  ?GLIPb1 wurcs:has_SC_position 1 ."
-				+ "  ?gseq wurcs:has_uniqueRES ?uRES2 ."
-				+ "  ?uRES2 wurcs:is_monosaccharide ?MS2 ."
-				+ "  GRAPH <http://rdf.glycoinfo.org/wurcs/0.5.1/ms> {"
-				+ "    ?UMS2 wurcs:subsumes ?MS2 ."
-				+ "    VALUES (?UMS2) { (<http://rdf.glycoinfo.org/glycan/wurcs/2.0/monosaccharide/12122h-1b_1-5_2*NCC%2F3%3DO>) }"
-				+ "  }"
-				+ "  ?RESb wurcs:is_uniqueRES ?uRES2 ."
-				+ "  ?GLIPb1 wurcs:has_RES ?RESb ."
-				+ "  ?GLIPb4 wurcs:has_RES ?RESb ."
-				+ "  ?GLIPb4 wurcs:has_SC_position 4 ."
-				+ "  ?GLIPSb4 wurcs:has_GLIP ?GLIPb4 ."
-				+ "  ?LINb4c1 wurcs:has_GLIPS ?GLIPSb4."
-				+ "  ?gseq wurcs:has_LIN ?LINb4c1 ."
-				+ "  ?LINb4c1 wurcs:has_GLIPS ?GLIPSc1 ."
-				+ "  ?GLIPSc1 wurcs:has_GLIP ?GLIPc1 ."
-				+ "  ?GLIPc1 wurcs:has_SC_position 1 ."
-				+ "  ?gseq wurcs:has_uniqueRES ?uRES3 ."
-				+ "  ?uRES3 wurcs:is_monosaccharide ?MS3 ."
-				+ "  GRAPH <http://rdf.glycoinfo.org/wurcs/0.5.1/ms> {"
-				+ "    ?UMS3 wurcs:subsumes ?MS3 ."
-				+ "    VALUES (?UMS3) { (<http://rdf.glycoinfo.org/glycan/wurcs/2.0/monosaccharide/11122h-1b_1-5>) }"
-				+ "  }"
-				+ "  ?RESc wurcs:is_uniqueRES ?uRES3 ."
-				+ "  ?GLIPc1 wurcs:has_RES ?RESc ."
-				+ "  ?GLIPc3 wurcs:has_RES ?RESc ."
-				+ "  ?GLIPc3 wurcs:has_SC_position 3 ."
-				+ "  ?GLIPSc3 wurcs:has_GLIP ?GLIPc3 ."
-				+ "  ?LINc3d1 wurcs:has_GLIPS ?GLIPSc3 ."
-				+ "  ?gseq wurcs:has_LIN ?LINc3d1 ."
-				+ "  ?LINc3d1 wurcs:has_GLIPS ?GLIPSd1 ."
-				+ "  ?GLIPSd1 wurcs:has_GLIP ?GLIPd1 ."
-				+ "  ?GLIPd1 wurcs:has_SC_position 1 ."
-				+ "  ?gseq wurcs:has_uniqueRES ?uRES4 ."
-				+ "  ?uRES4 wurcs:is_monosaccharide ?MS4 ."
-				+ "  GRAPH <http://rdf.glycoinfo.org/wurcs/0.5.1/ms> {"
-				+ "    ?UMS4 wurcs:subsumes ?MS4 ."
-				+ "    VALUES (?UMS4) { (<http://rdf.glycoinfo.org/glycan/wurcs/2.0/monosaccharide/21122h-1a_1-5>) }"
-				+ "  }"
-				+ "  ?RESd wurcs:is_uniqueRES ?uRES4 ."
-				+ "  ?GLIPd1 wurcs:has_RES ?RESd ."
-				+ "  ?GLIPc6 wurcs:has_RES ?RESc ."
-				+ "  ?GLIPc6 wurcs:has_SC_position 6 ."
-				+ "  ?GLIPSc6 wurcs:has_GLIP ?GLIPc6 ."
-				+ "  ?LINc6f1 wurcs:has_GLIPS ?GLIPSc6 ."
-				+ "  ?gseq wurcs:has_LIN ?LINc6f1 ."
-				+ "  ?LINc6f1 wurcs:has_GLIPS ?GLIPSf1 ."
-				+ "  ?GLIPSf1 wurcs:has_GLIP ?GLIPf1 ."
-				+ "  ?GLIPf1 wurcs:has_SC_position 1 ."
-				+ "  ?RESf wurcs:is_uniqueRES ?uRES4 ."
-				+ "  FILTER (?RESf != ?RESd )"
-				+ "  ?GLIPf1 wurcs:has_RES ?RESf ."
-				+ "  ?GLIPd2d4 wurcs:has_RES ?RESd ."
-				+ "  ?GLIPd2d4 wurcs:has_RES ?RESd2d4 ."
-				+ "  ?GLIPd2d4 wurcs:has_SC_position ?Posd2d4 ."
-				+ "  FILTER (  ( ?Posd2d4 = 2  && ?RESd2d4 = ?RESd )  ||   ( ?Posd2d4 = 4  && ?RESd2d4 = ?RESd )  || ( ?Posd2d4 = -1  && ?RESd2d4 = ?RESd))"
-				+ "  ?GLIPSd2d4 wurcs:has_GLIP ?GLIPd2d4 ."
-				+ "  ?LINe1d2d4 wurcs:has_GLIPS ?GLIPSd2d4 ."
-				+ "  ?gseq wurcs:has_LIN ?LINe1d2d4 ."
-				+ "  ?LINe1d2d4 wurcs:has_GLIPS ?GLIPSe1 ."
-				+ "  ?GLIPSe1 wurcs:has_GLIP ?GLIPe1 ."
-				+ "  ?GLIPe1 wurcs:has_SC_position 1 ."
-				+ "  ?RESe wurcs:is_uniqueRES ?uRES2 ."
-				+ "  FILTER(?RESe != ?RESb)"
-				+ "  ?GLIPe1 wurcs:has_RES ?RESe ."
-				+ "  ?GLIPf2f4 wurcs:has_RES ?RESf ."
-				+ "  ?GLIPf2f4 wurcs:has_RES ?RESf2f4 ."
-				+ "  ?GLIPf2f4 wurcs:has_SC_position ?Posf2f4 ."
-				+ "  FILTER (  ( ?Posf2f4 = 2  && ?RESf2f4 = ?RESf )  ||   ( ?Posf2f4 = 4  && ?RESf2f4 = ?RESf )  || ( ?Posf2f4 = -1  && ?RESf2f4 = ?RESf))"
-				+ "  ?GLIPSf2f4 wurcs:has_GLIP ?GLIPf2f4 ."
-				+ "  ?LINg1f2f4 wurcs:has_GLIPS ?GLIPSf2f4 ."
-				+ "  ?gseq wurcs:has_LIN ?LINg1f2f4 ."
-				+ "  ?LINg1f2f4 wurcs:has_GLIPS ?GLIPSg1 ."
-				+ "  ?GLIPSg1 wurcs:has_GLIP ?GLIPg1 ."
-				+ "  ?GLIPg1 wurcs:has_SC_position 1 ."
-				+ "  ?RESg wurcs:is_uniqueRES ?uRES2 ."
-				+ "  FILTER(?RESg != ?RESb && ?RESg != ?RESe)"
-				+ "  ?GLIPg1 wurcs:has_RES ?RESg . ";
+
 //						+ "  BIND( iri(replace(str(?glycan), \"http://rdf.glycoinfo.org/glycan/\", \"<img src=\\\"http://www.glytoucan.org/glyspace/service/glycans/\")) as ?glycan2)"
 //						+ "  BIND( iri(concat(?glycan2, \"/image?style=extended&format=png&notation=cfg\\\"/>\")) as ?glycans )}"
 //						+ " ORDER BY ?glycans";
@@ -627,13 +531,16 @@ public class GlycanController {
 //		}
 		
 //		GlycanList matches = new GlycanList();
-		SelectSparql searchBean = new SearchSparqlBean();
-		searchBean.setDefine(define);
-		searchBean.setPrefix(prefix);
-		searchBean.setSelect(select);
-		searchBean.setFrom(from);
-		searchBean.setWhere(where);
+		SparqlEntity se = new SparqlEntity();
+		se.setValue(GlycoSequence.Sequence, sequence);
+		SelectSparql searchBean = new SubstructureSearchSparql();
+		searchBean.setSparqlEntity(se);
 		
+		String where = searchBean.getWhere();
+		searchBean.setWhere(where.replace('\n', ' '));
+		String sparql = searchBean.getSparql();
+		searchBean.setSparql(sparql.replace('\n', ' '));
+				
 //		matches.setGlycans(glycanManager.subStructureSearch(exportedStructure).toArray());
 //		if (payload != null && (payload.equalsIgnoreCase("full"))) {
 //			matches = listGlycansByAccessionNumbers(matches, payload);
