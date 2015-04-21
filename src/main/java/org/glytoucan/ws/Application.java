@@ -1,5 +1,8 @@
 package org.glytoucan.ws;
 
+import org.eurocarbdb.resourcesdb.Config;
+import org.eurocarbdb.resourcesdb.io.MonosaccharideConversion;
+import org.eurocarbdb.resourcesdb.io.MonosaccharideConverter;
 import org.glycoinfo.rdf.SelectSparql;
 import org.glycoinfo.rdf.dao.SparqlDAO;
 import org.glycoinfo.rdf.dao.SparqlDAOSesameImpl;
@@ -27,6 +30,14 @@ public class Application {
 		SelectSparql select = new GlycoSequenceSelectSparql();
 		select.setFrom("FROM <http://rdf.glytoucan.org/sequence/wurcs>\nFROM <http://rdf.glytoucan.org>");
 		return select;
+	}
+	
+	@Bean
+	MonosaccharideConverter getMonosaccharideConverter() {
+		Config config = new Config();
+		MonosaccharideConverter mc = new MonosaccharideConverter();
+		mc.setConfig(config);
+		return mc;
 	}
 
 //    @Bean

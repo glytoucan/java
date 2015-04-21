@@ -13,9 +13,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.eurocarbdb.MolecularFramework.io.CarbohydrateSequenceEncoding;
+import org.eurocarbdb.MolecularFramework.io.SugarImporter;
 import org.eurocarbdb.MolecularFramework.io.SugarImporterException;
 import org.eurocarbdb.MolecularFramework.io.SugarImporterFactory;
+import org.eurocarbdb.MolecularFramework.io.GlycoCT.SugarImporterGlycoCTCondensed;
+import org.eurocarbdb.MolecularFramework.io.WURCS.SugarExporterWURCS;
 import org.eurocarbdb.MolecularFramework.sugar.Sugar;
+import org.eurocarbdb.MolecularFramework.util.validation.GlycoVisitorValidation;
+import org.eurocarbdb.MolecularFramework.util.validation.StructureParserValidator;
 //import org.eurocarbdb.MolecularFramework.util.similiarity.SearchEngine.SearchEngineException;
 import org.eurocarbdb.MolecularFramework.util.visitor.GlycoVisitorException;
 import org.eurocarbdb.resourcesdb.io.MonosaccharideConversion;
@@ -23,6 +28,7 @@ import org.eurocarbdb.resourcesdb.io.MonosaccharideConverter;
 import org.glycoinfo.batch.search.wurcs.SubstructureSearchSparql;
 import org.glycoinfo.rdf.SelectSparql;
 import org.glycoinfo.rdf.SelectSparqlBean;
+import org.glycoinfo.rdf.SparqlException;
 import org.glycoinfo.rdf.dao.SparqlEntity;
 import org.glycoinfo.rdf.glycan.GlycoSequence;
 import org.glycoinfo.rdf.search.SearchSparqlBean;
@@ -72,6 +78,7 @@ import org.slf4j.Logger;
 //import org.glytoucan.ws.view.User;
 //import org.glytoucan.ws.view.search.CompositionSearchInput;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -117,9 +124,9 @@ public class GlycanController {
 //	MassCalculator massCalculator;
 	
 //	@Autowired
-	MonosaccharideConversion residueTranslator;
+//	MonosaccharideConversion residueTranslator;
 	
-//	@Autowired 
+	@Autowired
 	MonosaccharideConverter monosaccharideConverter;
 	
 //	@Value("${documentation.services.basePath}")
@@ -145,6 +152,18 @@ public class GlycanController {
 //        t_config.setFlatSequence(false);
 //        return t_config;
 //	}
+	public boolean validateSequence (String sequence, String format) throws SugarImporterException, GlycoVisitorException {
+		logger.debug("Input structure: {}", sequence);
+		// assume GlycoCT encoding
+		Sugar sugarStructure = StructureParserValidator.parse(sequence);
+		
+		
+		if (StructureParserValidator.isValid(sugarStructure)) {		
+			return true;
+		} else {
+			throw new IllegalArgumentException("Validation error, please submit a valid structure");
+		}
+}
 	
 	public Sugar importParseValidate (GlycanInput glycan) throws GlycoVisitorException, SugarImporterException {
 		String encoding = glycan.getFormat();
@@ -159,7 +178,7 @@ public class GlycanController {
 				if (encoding.equalsIgnoreCase(carbohydrateSequenceEncoding.getId())) {	
 					try {
 						if (encoding.equalsIgnoreCase("kcf")) {
-							sugarStructure = SugarImporterFactory.importSugar(glycan.getSequence(), carbohydrateSequenceEncoding, residueTranslator);
+//							sugarStructure = SugarImporterFactory.importSugar(glycan.getSequence(), carbohydrateSequenceEncoding, residueTranslator);
 						}
 						else {
 							sugarStructure = SugarImporterFactory.importSugar(glycan.getSequence(), carbohydrateSequenceEncoding, monosaccharideConverter);
@@ -499,38 +518,43 @@ public class GlycanController {
 			@ApiParam(required=true, value="Glycan sequence", name="sequence") 
 			String sequence,
 			@RequestParam(required=true, value="format", defaultValue="wurcs")
-			@ApiParam(required=true, value="Glycan format - wurcs or glycoct", name="format") 
-			String format) throws Exception {
+			@ApiParam(required=true, value="Glycan format - currently only wurcs via GET", name="format") 
+			String format) throws SugarImporterException, GlycoVisitorException, SparqlException {
 		logger.debug("Substructure search");
+		logger.debug("sequence:" + sequence);
+		logger.debug("format:" + format);
 		
 		// if glycoct:
-		// validate the sequence
-		// convert to wurcs
-		
+		if (format != null && format.equals("glycoct")) {
+			// if it's not valid, would have thrown an exception.
+	
+			// convert to wurcs
+			SugarImporter t_objImporterGlycoCT = new SugarImporterGlycoCTCondensed();
+	
+			Sugar sugar = t_objImporterGlycoCT.parse(sequence);
+			// GlycoCT must be validated by GlycoVisitorValidation
+			GlycoVisitorValidation validation = new GlycoVisitorValidation();
+			validation.start(sugar);
+			if ( validation.getErrors().size() > 0 ) {
+				logger.error("Errors:");
+				for ( String err : validation.getErrors() ) {
+					logger.error( err );
+				}
+				logger.warn("Warnings:");
+				for ( String warn : validation.getWarnings() ) {
+					logger.warn( warn );
+				}
+				logger.warn("\n");
+			}
+			SugarExporterWURCS t_exporter3 = new SugarExporterWURCS();
+			t_exporter3.start(sugar);
+			sequence = t_exporter3.getWURCSCompress();
+		}
 		
 		// if wurcs:
 		// validate the structure
 		
 		// wurcs to sparql
-
-
-//						+ "  BIND( iri(replace(str(?glycan), \"http://rdf.glycoinfo.org/glycan/\", \"<img src=\\\"http://www.glytoucan.org/glyspace/service/glycans/\")) as ?glycan2)"
-//						+ "  BIND( iri(concat(?glycan2, \"/image?style=extended&format=png&notation=cfg\\\"/>\")) as ?glycans )}"
-//						+ " ORDER BY ?glycans";
-
-		
-//		Sugar sugarStructure = importParseValidate(glycan);
-//		if (sugarStructure == null) {
-//			throw new IllegalArgumentException("Structure cannot be imported");
-//		}
-		String exportedStructure;
-//		try {
-//			exportedStructure = StructureParserValidator.exportStructure(sugarStructure);
-//		} catch (Exception e) {
-//			throw new IllegalArgumentException("Cannot export into com\nmon encoding: " + e.getMessage());
-//		}
-		
-//		GlycanList matches = new GlycanList();
 		SparqlEntity se = new SparqlEntity();
 		se.setValue(GlycoSequence.Sequence, sequence);
 		SelectSparql searchBean = new SubstructureSearchSparql();
@@ -541,10 +565,6 @@ public class GlycanController {
 		String sparql = searchBean.getSparql();
 		searchBean.setSparql(sparql.replace('\n', ' '));
 				
-//		matches.setGlycans(glycanManager.subStructureSearch(exportedStructure).toArray());
-//		if (payload != null && (payload.equalsIgnoreCase("full"))) {
-//			matches = listGlycansByAccessionNumbers(matches, payload);
-//		}
 		return searchBean;
 	}
 	
