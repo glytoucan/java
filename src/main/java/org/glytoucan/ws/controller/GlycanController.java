@@ -366,34 +366,34 @@ public class GlycanController {
 		return new Confirmation("Glycan deleted successfully", HttpStatus.OK.value());
 	}
 	
-	@RequestMapping(value="/delete/list", method = RequestMethod.DELETE, consumes={"application/xml", "application/json"})
-    @ApiOperation(value="Deletes the glycans with given accession numbers", response=Confirmation.class, notes="This can be accessed by the Administrator user only")
-    @ApiResponses (value ={@ApiResponse(code=200, message="Glycans deleted successfully"), 
-    		@ApiResponse(code=400, message="Illegal argument - Only accession numbers should be given"),
-    		@ApiResponse(code=401, message="Unauthorized"),
-    		@ApiResponse(code=403, message="Not enough privileges to delete glycans"),
-    		@ApiResponse(code=404, message="Glycan does not exist"),
-    		@ApiResponse(code=415, message="Media type is not supported"),
-    		@ApiResponse(code=500, message="Internal Server Error")})
-	public @ResponseBody Confirmation deleteGlycans (
-			@ApiParam(required=true, value="accession numbers of the glycans to be deleted") 
-			@RequestBody(required=true) 
-			GlycanList accessionNumbers) {
-		GlycanList list = new GlycanList();
-		List<Object> objectList = accessionNumbers.getGlycans();
-		List<String> numberList = new ArrayList<>();
-		for (Iterator iterator = objectList.iterator(); iterator.hasNext();) {
-			Object item = (Object) iterator.next();
-			if (item instanceof String) {
-				numberList.add((String)item);
-			}
-			else {
-				throw new IllegalArgumentException("Only accession numbers should be given as input");
-			}
-		}
-		glycanManager.deleteGlycansByAccessionNumber(numberList);
-		return new Confirmation("Glycans deleted successfully", HttpStatus.OK.value());
-	}
+//	@RequestMapping(value="/delete/list", method = RequestMethod.DELETE, consumes={"application/xml", "application/json"})
+//    @ApiOperation(value="Deletes the glycans with given accession numbers", response=Confirmation.class, notes="This can be accessed by the Administrator user only")
+//    @ApiResponses (value ={@ApiResponse(code=200, message="Glycans deleted successfully"), 
+//    		@ApiResponse(code=400, message="Illegal argument - Only accession numbers should be given"),
+//    		@ApiResponse(code=401, message="Unauthorized"),
+//    		@ApiResponse(code=403, message="Not enough privileges to delete glycans"),
+//    		@ApiResponse(code=404, message="Glycan does not exist"),
+//    		@ApiResponse(code=415, message="Media type is not supported"),
+//    		@ApiResponse(code=500, message="Internal Server Error")})
+//	public @ResponseBody Confirmation deleteGlycans (
+//			@ApiParam(required=true, value="accession numbers of the glycans to be deleted") 
+//			@RequestBody(required=true) 
+//			GlycanList accessionNumbers) {
+//		GlycanList list = new GlycanList();
+//		List<Object> objectList = accessionNumbers.getGlycans();
+//		List<String> numberList = new ArrayList<>();
+//		for (Iterator iterator = objectList.iterator(); iterator.hasNext();) {
+//			Object item = (Object) iterator.next();
+//			if (item instanceof String) {
+//				numberList.add((String)item);
+//			}
+//			else {
+//				throw new IllegalArgumentException("Only accession numbers should be given as input");
+//			}
+//		}
+//		glycanManager.deleteGlycansByAccessionNumber(numberList);
+//		return new Confirmation("Glycans deleted successfully", HttpStatus.OK.value());
+//	}
 	
 	@RequestMapping(value = "/{accessionNumber}", method = RequestMethod.GET, produces={"application/xml", "application/json"})
 	@ApiOperation(value="Retrieves glycan by accession number", response=Glycan.class)
