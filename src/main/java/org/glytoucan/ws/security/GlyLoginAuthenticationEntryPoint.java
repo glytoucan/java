@@ -10,8 +10,8 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
-import org.glytoucan.ws.ErrorCodes;
-import org.glytoucan.ws.ErrorMessage;
+import org.glytoucan.ws.api.ErrorCodes;
+import org.glytoucan.ws.api.ErrorMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.AuthenticationException;

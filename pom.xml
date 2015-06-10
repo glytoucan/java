@@ -111,7 +111,6 @@
 			<artifactId>resourcesdb</artifactId>
 			<version>0.4</version>
 		</dependency>
-    <!--
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
@@ -125,7 +124,6 @@
         	<groupId>org.springframework.security</groupId>
         	<artifactId>spring-security-openid</artifactId>
         </dependency>
-    -->
 		<dependency>
 		  <groupId>com.jayway.restassured</groupId>
 		  <artifactId>rest-assured</artifactId>
@@ -207,8 +205,8 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -238,7 +236,7 @@
 	<pluginRepositories>
 		<pluginRepository>
 			<id>spring-releases</id>
-			<url>https://repo.spring.io/libs-release</url>
+			<url>http://repo.spring.io/libs-release</url>
 		</pluginRepository>
 	</pluginRepositories>
 </project>
