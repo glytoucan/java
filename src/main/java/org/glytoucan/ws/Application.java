@@ -5,24 +5,31 @@ import org.eurocarbdb.resourcesdb.io.MonosaccharideConversion;
 import org.eurocarbdb.resourcesdb.io.MonosaccharideConverter;
 import org.glycoinfo.rdf.SelectSparql;
 import org.glycoinfo.rdf.dao.SparqlDAO;
-import org.glycoinfo.rdf.dao.SparqlDAOSesameImpl;
+import org.glycoinfo.rdf.dao.SparqlDAOVirtSesameImpl;
 import org.glycoinfo.rdf.glycan.GlycoSequenceSelectSparql;
+import org.glytoucan.ws.controller.ServerCustomization;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.web.ServerProperties;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.http.converter.BufferedImageHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.knappsack.swagger4springweb.util.ScalaObjectMapper;
 
-
+@ComponentScan(scopedProxy = ScopedProxyMode.INTERFACES)
+//@EnableAutoConfiguration
 @SpringBootApplication
-public class Application {
+public class Application extends SpringBootServletInitializer {
 
 	@Bean
 	SparqlDAO getSparqlDAO() {
-		return new SparqlDAOSesameImpl();
+		return new SparqlDAOVirtSesameImpl();
 	}
 	
 	@Bean
@@ -71,5 +78,16 @@ public class Application {
 	
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
+    }
+    
+    
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(Application.class);
+    }
+        
+    @Bean
+    public ServerProperties getServerProperties() {
+        return new ServerCustomization();
     }
 }
