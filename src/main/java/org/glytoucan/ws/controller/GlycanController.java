@@ -17,7 +17,6 @@ import org.eurocarbdb.MolecularFramework.io.SugarImporter;
 import org.eurocarbdb.MolecularFramework.io.SugarImporterException;
 import org.eurocarbdb.MolecularFramework.io.SugarImporterFactory;
 import org.eurocarbdb.MolecularFramework.io.GlycoCT.SugarImporterGlycoCTCondensed;
-import org.eurocarbdb.MolecularFramework.io.WURCS.SugarExporterWURCS;
 import org.eurocarbdb.MolecularFramework.sugar.Sugar;
 import org.eurocarbdb.MolecularFramework.util.validation.GlycoVisitorValidation;
 import org.eurocarbdb.MolecularFramework.util.validation.StructureParserValidator;
@@ -546,9 +545,9 @@ public class GlycanController {
 				}
 				logger.warn("\n");
 			}
-			SugarExporterWURCS t_exporter3 = new SugarExporterWURCS();
-			t_exporter3.start(sugar);
-			sequence = t_exporter3.getWURCSCompress();
+//			SugarExporterWURC t_exporter3 = new SugarExporterWURCS();
+//			t_exporter3.start(sugar);
+//			sequence = t_exporter3.getWURCSCompress();
 		}
 		
 		// if wurcs:
@@ -564,7 +563,8 @@ public class GlycanController {
 		searchBean.setWhere(where.replace('\n', ' '));
 		String sparql = searchBean.getSparql();
 		searchBean.setSparql(sparql.replace('\n', ' '));
-				
+		logger.debug("GlycanController result:>" + searchBean.getSparql() + "<");
+
 		return searchBean;
 	}
 	
