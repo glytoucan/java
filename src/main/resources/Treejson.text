@@ -1,0 +1,47 @@
+{
+ "name": "G99981ST",
+ "children": [
+    {
+     "name": "has_motif",
+     "children": [
+      {"name": "G00065MO","size":10},
+      {"name": "G00030MO","size":10},
+      {"name": "G00029MO","size":10},
+      {"name": "G00026MO","size":10},
+      {"name": "G00055MO","size":10},
+      {"name": "G00027MO","size":10},
+      {"name": "G00046MO", "size": 10}
+       ]
+      },
+    {
+     "name": "has_isomer",
+     "children": [
+      {"name": "G00030MO", "size": 10}
+     ]
+    },
+    {
+     "name": "has_subsumes",
+     "children": [
+      {"name": "G00065MO", "size": 10}
+     ]
+    },
+    {
+     "name": "has_subsumed_by",
+     "children": [
+      {"name": "G00029MO", "size": 10}
+     ]
+    },
+    {
+     "name": "has_superstructure",
+     "children": [
+      {"name": "G00026MO", "size": 10}
+     ]
+   },
+   {
+    "name": "has_substructure",
+    "children": [
+     {"name": "G00055MO", "size": 10}
+    ]
+  }
+  ]
+}
