@@ -13,3 +13,8 @@ spring:
         graph: graph
 app:
   docs: http://localhost:8080
+
+google:
+  oauth2:
+    clientId: something.apps.googleusercontent.com
+    clientSecret: clientSecret
