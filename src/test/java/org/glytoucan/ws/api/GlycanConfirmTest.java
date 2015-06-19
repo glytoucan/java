@@ -3,11 +3,7 @@ package org.glytoucan.ws.api;
 import static org.junit.Assert.*;
 
 import java.util.Date;
-import java.util.Set;
 
-import org.glycoinfo.batch.search.wurcs.SubstructureSearchSparql;
-import org.glycoinfo.rdf.SelectSparql;
-import org.glycoinfo.rdf.scint.ScintTest;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
