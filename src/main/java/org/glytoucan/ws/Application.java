@@ -12,6 +12,7 @@ import org.glycoinfo.rdf.dao.virt.VirtSesameTransactionManager;
 import org.glycoinfo.rdf.glycan.GlycoSequenceSelectSparql;
 import org.glycoinfo.rdf.glycan.wurcs.MotifSequenceSelectSparql;
 import org.glycoinfo.rdf.utils.TripleStoreProperties;
+import org.glytoucan.ws.api.D3SequenceSelectSparql;
 import org.glytoucan.ws.controller.ServerCustomization;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryException;
@@ -45,6 +46,13 @@ public class Application extends SpringBootServletInitializer {
 	SelectSparql getSelectSparql() {
 		SelectSparql select = new GlycoSequenceSelectSparql();
 		select.setFrom("FROM <http://rdf.glytoucan.org/sequence/wurcs>\nFROM <http://rdf.glytoucan.org>");
+		return select;
+	}
+
+	@Bean(name = "d3SequenceSelectSparql")
+	SelectSparql getd3SelectSparql() {
+		SelectSparql select = new D3SequenceSelectSparql();
+		select.setFrom("FROM <http://rdf.glycoinfo.org/glycan/browser/demo>");
 		return select;
 	}
 	

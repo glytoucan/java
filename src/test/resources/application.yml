@@ -1,0 +1,20 @@
+GlycoctToKcfConverter:
+    filepass:
+        "/home/aoki/workspace/GlyConvert/src/main/resources/GlycoctToKcf2.pl"
+spring:
+    application:
+        name: glycosearch
+    triplestore:
+        driverClassName: virtuoso.jdbc4.Driver
+        dialect: sparqs
+        url: jdbc:virtuoso://test.ts.glytoucan.org:1111
+        username: dba
+        password: dba
+        graph: graph
+app:
+  docs: http://localhost:8080
+
+google:
+  oauth2:
+    clientId: something.apps.googleusercontent.com
+    clientSecret: clientSecret
