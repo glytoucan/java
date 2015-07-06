@@ -6,8 +6,15 @@ import org.eurocarbdb.resourcesdb.io.MonosaccharideConverter;
 import org.glycoinfo.rdf.SelectSparql;
 import org.glycoinfo.rdf.dao.SparqlDAO;
 import org.glycoinfo.rdf.dao.SparqlDAOVirtSesameImpl;
+import org.glycoinfo.rdf.dao.virt.VirtRepositoryConnectionFactory;
+import org.glycoinfo.rdf.dao.virt.VirtSesameConnectionFactory;
+import org.glycoinfo.rdf.dao.virt.VirtSesameTransactionManager;
 import org.glycoinfo.rdf.glycan.GlycoSequenceSelectSparql;
+import org.glycoinfo.rdf.glycan.wurcs.MotifSequenceSelectSparql;
+import org.glycoinfo.rdf.utils.TripleStoreProperties;
 import org.glytoucan.ws.controller.ServerCustomization;
+import org.openrdf.repository.Repository;
+import org.openrdf.repository.RepositoryException;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
@@ -18,6 +25,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.http.converter.BufferedImageHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+
+import virtuoso.sesame2.driver.VirtuosoRepository;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.knappsack.swagger4springweb.util.ScalaObjectMapper;
@@ -32,11 +41,16 @@ public class Application extends SpringBootServletInitializer {
 		return new SparqlDAOVirtSesameImpl();
 	}
 	
-	@Bean
+	@Bean(name = "glycoSequenceSelectSparql")
 	SelectSparql getSelectSparql() {
 		SelectSparql select = new GlycoSequenceSelectSparql();
 		select.setFrom("FROM <http://rdf.glytoucan.org/sequence/wurcs>\nFROM <http://rdf.glytoucan.org>");
 		return select;
+	}
+	
+	@Bean(name = "motifSequenceSelectSparql")
+	SelectSparql getmotifSequenceSelectSparql() {
+		return new MotifSequenceSelectSparql();
 	}
 	
 	@Bean
@@ -90,4 +104,27 @@ public class Application extends SpringBootServletInitializer {
     public ServerProperties getServerProperties() {
         return new ServerCustomization();
     }
+    
+	@Bean
+	VirtSesameConnectionFactory getSesameConnectionFactory() {
+		return new VirtRepositoryConnectionFactory(getRepository());
+	}
+	
+	@Bean
+	public Repository getRepository() {
+		return new VirtuosoRepository(
+				getTripleStoreProperties().getUrl(), 
+				getTripleStoreProperties().getUsername(),
+				getTripleStoreProperties().getPassword());
+	}
+
+	@Bean
+	TripleStoreProperties getTripleStoreProperties() {
+		return new TripleStoreProperties();
+	}
+	
+	@Bean
+	VirtSesameTransactionManager transactionManager() throws RepositoryException {
+		return new VirtSesameTransactionManager(getSesameConnectionFactory());
+	}
 }
