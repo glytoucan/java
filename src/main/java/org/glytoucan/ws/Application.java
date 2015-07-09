@@ -52,7 +52,7 @@ public class Application extends SpringBootServletInitializer {
 	@Bean(name = "d3SequenceSelectSparql")
 	SelectSparql getd3SelectSparql() {
 		SelectSparql select = new D3SequenceSelectSparql();
-		select.setFrom("FROM <http://rdf.glycoinfo.org/glycan/browser/demo>");
+//		select.setFrom("FROM <http://rdf.glycoinfo.org/glycan/browser/demo>");
 		return select;
 	}
 	

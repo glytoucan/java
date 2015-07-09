@@ -33,7 +33,8 @@ public class D3ControllerTest {
 	@Test
 	public void testD3() throws Exception {
 
-		D3_Tree_json result = D3.retrieve("GxxxxxxB");
+//		D3_Tree_json result = D3.D3retrieve("GxxxxxxB");
+		D3_Tree_json result = D3.D3retrieve("G99981ST");
 		ObjectMapper mapper = new ObjectMapper();
 		logger.debug(mapper.writeValueAsString(result));
 	}

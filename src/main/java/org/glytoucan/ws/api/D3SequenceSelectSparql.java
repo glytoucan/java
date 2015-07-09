@@ -54,7 +54,8 @@ public class D3SequenceSelectSparql extends SelectSparqlBean {
 				+ "?has_linkage_isomer ?isomer\n"
 				+ "?has_superstructure ?superS\n" + "?has_substructure ?subS\n"
 				+ "?subsumes ?subsume\n" + "?subsumed_by ?subsumeB\n";
-		this.from = "FROM <http://rdf.glycoinfo.org/glycan/browser/demo>";
+//		this.from = "FROM <http://rdf.glytoucan.org>\nFROM <http://rdf.glytoucan.org/sequence/wurcs>";
+//		this.from = "FROM <http://rdf.glycoinfo.org/glycan/browser/demo>";
 	}
 
 	public String getPrimaryId() {
