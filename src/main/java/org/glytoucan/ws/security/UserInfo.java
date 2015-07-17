@@ -11,6 +11,8 @@ public class UserInfo {
     private final String gender;
     private final String picture;
     private final String link;
+    private final String email;
+    private final String verifiedEmail;
 
     @JsonCreator
     public UserInfo(@JsonProperty("id") String id,
@@ -19,7 +21,9 @@ public class UserInfo {
                     @JsonProperty("family_name") String familyName,
                     @JsonProperty("gender") String gender,
                     @JsonProperty("picture") String picture,
-                    @JsonProperty("link") String link) {
+                    @JsonProperty("link") String link,
+                    @JsonProperty("email") String email,
+                    @JsonProperty("verified_email") String verifiedEmail) {
         this.id = id;
         this.name = name;
         this.givenName = givenName;
@@ -27,6 +31,8 @@ public class UserInfo {
         this.gender = gender;
         this.picture = picture;
         this.link = link;
+        this.email = email;
+        this.verifiedEmail = verifiedEmail;
     }
 
     public String getId() {
@@ -55,5 +61,13 @@ public class UserInfo {
 
     public String getLink() {
         return link;
+    }
+    
+    public String getEmail() {
+        return email;
+    }
+    
+    public String getVerifiedEmail() {
+        return email;
     }
 }
