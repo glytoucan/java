@@ -145,11 +145,11 @@ public class Application extends SpringBootServletInitializer {
 		return new VirtSesameTransactionManager(getSesameConnectionFactory());
 	}
 	
-	@Bean
-	public FilterRegistrationBean sitemeshFilter() {
-		FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
-		filterRegistrationBean.setFilter(new MySiteMeshFilter());
-		filterRegistrationBean.addUrlPatterns("/*");
-		return filterRegistrationBean;
-	}
+//	@Bean
+//	public FilterRegistrationBean sitemeshFilter() {
+//		FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
+//		filterRegistrationBean.setFilter(new MySiteMeshFilter());
+//		filterRegistrationBean.addUrlPatterns("/*");
+//		return filterRegistrationBean;
+//	}
 }
