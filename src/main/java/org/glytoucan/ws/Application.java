@@ -5,7 +5,7 @@ import org.eurocarbdb.resourcesdb.io.MonosaccharideConversion;
 import org.eurocarbdb.resourcesdb.io.MonosaccharideConverter;
 import org.glycoinfo.rdf.SelectSparql;
 import org.glycoinfo.rdf.dao.SparqlDAO;
-import org.glycoinfo.rdf.dao.SparqlDAOVirtSesameImpl;
+import org.glycoinfo.rdf.dao.virt.SparqlDAOVirtSesameImpl;
 import org.glycoinfo.rdf.dao.virt.VirtRepositoryConnectionFactory;
 import org.glycoinfo.rdf.dao.virt.VirtSesameConnectionFactory;
 import org.glycoinfo.rdf.dao.virt.VirtSesameTransactionManager;
@@ -16,16 +16,22 @@ import org.glytoucan.ws.api.D3SequenceSelectSparql;
 import org.glytoucan.ws.controller.ServerCustomization;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryException;
+import org.sitemesh.config.ConfigurableSiteMeshFilter;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.converter.BufferedImageHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import virtuoso.sesame2.driver.VirtuosoRepository;
 
@@ -33,14 +39,17 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.knappsack.swagger4springweb.util.ScalaObjectMapper;
 
 @ComponentScan(scopedProxy = ScopedProxyMode.INTERFACES)
-//@EnableAutoConfiguration
+@EnableAutoConfiguration
 @SpringBootApplication
+@EnableWebMvc
 public class Application extends SpringBootServletInitializer {
 
 	@Bean
 	SparqlDAO getSparqlDAO() {
 		return new SparqlDAOVirtSesameImpl();
 	}
+	
+	
 	
 	@Bean(name = "glycoSequenceSelectSparql")
 	SelectSparql getSelectSparql() {
@@ -134,5 +143,13 @@ public class Application extends SpringBootServletInitializer {
 	@Bean
 	VirtSesameTransactionManager transactionManager() throws RepositoryException {
 		return new VirtSesameTransactionManager(getSesameConnectionFactory());
+	}
+	
+	@Bean
+	public FilterRegistrationBean sitemeshFilter() {
+		FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
+		filterRegistrationBean.setFilter(new MySiteMeshFilter());
+		filterRegistrationBean.addUrlPatterns("/*");
+		return filterRegistrationBean;
 	}
 }
