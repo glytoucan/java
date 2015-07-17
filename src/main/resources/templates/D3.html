@@ -3,13 +3,11 @@
 <style>
 
 .node circle {
-  /*fill: #fff;*/
-  stroke: steelblue;
   stroke-width: 1.5px;
 }
 
 .node {
-  font: 10px sans-serif;
+  font: 15px sans-serif;
 }
 
 .link {
@@ -24,10 +22,10 @@ ID: {{ID}}
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script>
 
-var diameter = 960;
+var diameter = 1500;
 
 var tree = d3.layout.tree()
-    .size([360, diameter / 2 - 120])
+    .size([360,360])
     .separation(function(a, b) { return (a.parent == b.parent ? 1 : 2) / a.depth; });
 
 var diagonal = d3.svg.diagonal.radial()
@@ -39,10 +37,8 @@ var svg = d3.select("body").append("svg")
   .append("g")
     .attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
 
-//    var url = "http://localhost:8080/Tree/D3retrieve?primaryId=G00034ND";
     d3.json("http://localhost:8080/Tree/D3retrieve?primaryId={{ID}}", function (error, root) {
-//     })
-// d3.json("G99981ST.json", function(error, root) {
+
   var nodes = tree.nodes(root),
       links = tree.links(nodes);
 
@@ -58,83 +54,76 @@ var svg = d3.select("body").append("svg")
       .attr("class", "node")
       .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; });
 
-  // node.append("circle")
-  //     .attr("r", 4.5)
-  //     .attr("fill", function(d){
-  //       if (d.size <3000)
-  //         return "#555";
-  //       else return "#fff";
-  //     });
-  node.append("rect")
-      .attr("width",50)
-      .attr("height",20)
-      .attr("fill","#555")
-      .attr("transform", function(d) { return d.x < 180 ? "translate(8)" : "rotate(180)translate(-8)"; });
+      node.append("circle")
+      .attr("r", function(d){
+    	  if (d.name == "has_motif"||d.name == "has_linkage_isomer"||d.name == "has_superstructure"||d.name == "has_substructure"||d.name == "subsumes"||d.name == "subsumed_by")
+    	  		return null;
+    	  else return 10;
+      })
+      .attr("fill",function(d){
+    	  if (d.size == 1)
+                return "red";
+          if (d.size == 2)
+                return "blue";
+          if (d.size == 3)
+                return "green";
+          if (d.size == 4)
+                return "orange";
+       	  if (d.size == 5)
+                return "skyblue";
+       	  if (d.size == 6)
+                return "yellow";
+       	  else  return "purple";
+      })
+      .attr("stroke","black");
 
   var text = node.append("text")
-      .on("mouseover",function(d){
-        text(d.name);
-        //   .attr("dy", ".31em")
-        //   .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
-        //   .attr("transform", function(d) { return d.x < 180 ? "translate(8)" : "rotate(180)translate(-8)"; })
-        //   .text(function(d){
-        //   if(d.name == "has_motif"|| d.name =="has_isomer"|| d.name =="has_subsumes"|| d.name =="has_subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure")
-        //     return null;
-        //   else return d.name;
-        // })
-      })
       .attr("dy", ".31em")
       .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
       .attr("transform", function(d) { return d.x < 180 ? "translate(8)" : "rotate(180)translate(-8)"; })
       .text(function(d) {
-        if(d.name == "has_motif"|| d.name =="has_isomer"|| d.name =="has_subsumes"|| d.name =="has_subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure")
+        if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure")
           return d.name;
         else return null;
+      })
+      .attr("fill",function(d){
+    	  if (d.name == "has_motif")
+              return "red";
+            if (d.name == "has_linkage_isomer")
+              return "blue";
+            if (d.name == "has_superstructure")
+              return "green";
+            if (d.name == "has_substructure")
+              return "orange";
+            if (d.name == "subsumes")
+              return "skyblue";
+            if (d.name == "subsumed_by")
+              return "yellow";
+            else  return "black";
       });
 
 
-
   node.append("image")
-      // .on("mouseover", function(d){
-      //         d3.svg.node.text(this).
-      // })
-      // .on("mouseout",function(d){
-      //
-      // })
       .on("click",function(d){
         alert(d.name);
       })
       .attr("xlink:href", function(d){
-        if (d.name == "has_motif")
-          return null;
-        if (d.name == "has_linkage_isomer")
-          return "http://glytoucan.org/img/logo_toucan.png";
-        if (d.name == "has_superstructure")
-          return "http://glytoucan.org/img/logo_toucan.png";
-        if (d.name == "has_substructure")
-          return "http://glytoucan.org/img/logo_toucan.png";
-        if (d.name == "subsumes")
-          return "http://glytoucan.org/img/logo_toucan.png";
-        if (d.name == "subsumed_by")
-          return "http://glytoucan.org/img/logo_toucan.png";
-        else  return "http://glytoucan.org/glyspace/service/glycans/"+ d.name + "/image?style=extended&format=png&notation=cfg";
-    })
-      .attr("width", 100)
-      .attr("height", 30)
-      .attr("transform", function(d) { return d.x < 180 ? "translate(8)" : "rotate(180)translate(-8)"; });
-
-
-  // var imgs =svg.selectAll(".node")
-  // .enter().append("image")
-  //  .attr("xlink:href", "http://glytoucan.org/glyspace/service/glycans/G00009BX/image?style=extended&format=png&notation=cfg")
-  //      .attr("width", 150)
-  //      .attr("height", 200);
+	     if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure")
+	       return null;
+	     else  return "http://glytoucan.org/glyspace/service/glycans/"+ d.name + "/image?style=extended&format=png&notation=cfg";
+ 	 })
+      .attr("width", 150)
+      .attr("height", 70)
+      .attr("transform", function(d){
+      	if (d.size == null)
+     		return "rotate(180)translate(15,-35)";
+     	else
+     		return "translate(15,-35)";
+      });
 
 });
 
 d3.select(self.frameElement).style("height", diameter - 150 + "px");
-
-d3.select("image").on('contextmenu',function () { });
 
 
 </script>

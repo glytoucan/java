@@ -122,7 +122,7 @@ public class D3Controller {
 
 				String motifName = se.getValue("motif");
 				c1.setName(motifName);
-				c1.setSize(10);
+				c1.setSize(1);
 				if (c1.getName().length() == 0) {
 					break;
 				} else {
@@ -152,7 +152,7 @@ public class D3Controller {
 				se = list.get(j);
 				String isomerName = se.getValue("isomer");
 				c1.setName(isomerName);
-				c1.setSize(10);
+				c1.setSize(2);
 				if (c1.getName().length() == 0) {
 					break;
 				} else {
@@ -182,7 +182,7 @@ public class D3Controller {
 				se = list.get(j);
 				String superSName = se.getValue("superS");
 				c1.setName(superSName);
-				c1.setSize(10);
+				c1.setSize(3);
 				if (c1.getName().length() == 0) {
 					break;
 				} else {
@@ -213,7 +213,7 @@ public class D3Controller {
 
 				String subSName = se.getValue("subS");
 				c1.setName(subSName);
-				c1.setSize(10);
+				c1.setSize(4);
 				if (c1.getName().length() == 0) {
 					break;
 				} else {
@@ -243,7 +243,7 @@ public class D3Controller {
 				se = list.get(j);
 				String subsumeName = se.getValue("subsume");
 				c1.setName(subsumeName);
-				c1.setSize(10);
+				c1.setSize(5);
 				if (c1.getName().length() == 0) {
 					break;
 				} else {
@@ -274,7 +274,7 @@ public class D3Controller {
 
 				String subBName = se.getValue("subsumeB");
 				c1.setName(subBName);
-				c1.setSize(10);
+				c1.setSize(6);
 				if (c1.getName().length() == 0) {
 					break;
 				} else {
