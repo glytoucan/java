@@ -38,10 +38,7 @@ import virtuoso.sesame2.driver.VirtuosoRepository;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.knappsack.swagger4springweb.util.ScalaObjectMapper;
 
-@ComponentScan(scopedProxy = ScopedProxyMode.INTERFACES)
-@EnableAutoConfiguration
 @SpringBootApplication
-@EnableWebMvc
 public class Application extends SpringBootServletInitializer {
 
 	@Bean

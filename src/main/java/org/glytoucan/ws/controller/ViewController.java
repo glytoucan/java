@@ -14,7 +14,7 @@ public class ViewController {
 	@Value("${application.message:Hello World}")
 	private String message = "Hello World";
 
-	@RequestMapping("/")
+	@RequestMapping("/view")
 	public String welcome(Map<String, Object> model) {
 		model.put("time", new Date());
 		model.put("message", this.message);

@@ -140,11 +140,16 @@
 			<artifactId>xml-apis</artifactId>
 			<version>1.4.01</version>
 		</dependency>
-		
 		<dependency>
 		 <groupId>org.sitemesh</groupId>
 		 <artifactId>sitemesh</artifactId>
 		 <version>3.0.0</version>
+		</dependency>
+		
+		<dependency>
+ <groupId>org.glycoinfo.WURCSFramework</groupId>
+  <artifactId>WURCSRDF</artifactId>
+  <version>0.0.2-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 
