@@ -126,9 +126,9 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.glycoinfo</groupId>
-			<artifactId>wurcsframework</artifactId>
-			<version>0.0.2-SNAPSHOT</version>
+      <groupId>org.glycoinfo</groupId>
+      <artifactId>wurcsframework</artifactId>
+      <version>0.0.2-Glytoucan1.0</version>
 		</dependency>
 
 		<dependency>
@@ -149,7 +149,7 @@
 		<dependency>
  <groupId>org.glycoinfo.WURCSFramework</groupId>
   <artifactId>WURCSRDF</artifactId>
-  <version>0.0.2-SNAPSHOT</version>
+  <version>0.0.2-Glytoucan1.0</version>
 		</dependency>
 	</dependencies>
 
