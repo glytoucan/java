@@ -16,7 +16,7 @@ import org.glytoucan.ws.api.D3SequenceSelectSparql;
 import org.glytoucan.ws.controller.ServerCustomization;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryException;
-import org.sitemesh.config.ConfigurableSiteMeshFilter;
+//import org.sitemesh.config.ConfigurableSiteMeshFilter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -48,8 +48,6 @@ public class Application extends SpringBootServletInitializer {
 	SparqlDAO getSparqlDAO() {
 		return new SparqlDAOVirtSesameImpl();
 	}
-	
-	
 	
 	@Bean(name = "glycoSequenceSelectSparql")
 	SelectSparql getSelectSparql() {
