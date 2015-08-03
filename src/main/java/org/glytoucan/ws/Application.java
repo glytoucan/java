@@ -1,7 +1,6 @@
 package org.glytoucan.ws;
 
 import org.eurocarbdb.resourcesdb.Config;
-import org.eurocarbdb.resourcesdb.io.MonosaccharideConversion;
 import org.eurocarbdb.resourcesdb.io.MonosaccharideConverter;
 import org.glycoinfo.rdf.SelectSparql;
 import org.glycoinfo.rdf.dao.SparqlDAO;
@@ -16,22 +15,17 @@ import org.glytoucan.ws.api.D3SequenceSelectSparql;
 import org.glytoucan.ws.controller.ServerCustomization;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryException;
-//import org.sitemesh.config.ConfigurableSiteMeshFilter;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.ScopedProxyMode;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.converter.BufferedImageHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import virtuoso.sesame2.driver.VirtuosoRepository;
 
@@ -147,4 +141,36 @@ public class Application extends SpringBootServletInitializer {
 //		filterRegistrationBean.addUrlPatterns("/*");
 //		return filterRegistrationBean;
 //	}
+	
+	
+	
+//    <bean id="handlerMapping"
+//            class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
+//        <property name="interceptors">
+//            <list>
+//                <ref bean="officeHoursInterceptor"/>
+//            </list>
+//        </property>
+//    </bean>
+//	public RequestMappingHandlerMapping handlerMapping() {
+//		RequestMappingHandlerMapping r = new RequestMappingHandlerMapping();
+//		ArrayList<Object[]> list = new ArrayList();
+//		list.add(new LocalizationHandlerMapping());
+//		r.setInterceptors(list);
+//	}
+
+	@Bean
+	public WebMvcConfigurerAdapter webMvcConfigurerAdapter() {
+		return new WebConfig();
+	}
+	
+	@Bean
+	public FilterRegistrationBean filterRegistrationBean() {
+	    FilterRegistrationBean registrationBean = new FilterRegistrationBean();
+	    CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
+	    characterEncodingFilter.setEncoding("UTF-8");
+	    registrationBean.setFilter(characterEncodingFilter);
+//	    registrationBean.setOrder();
+	    return registrationBean;
+	}
 }

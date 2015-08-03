@@ -1,0 +1,91 @@
+	<nav class="globalNav">
+		<div class="globalNav_inner clearfix">
+			<a class="globalNav_logo" href="/">
+				<img class="globalNav_toucan" src="/img/logo_toucan.png" height="38" width="67" alt="" />
+				<span class="globalNav_logoText"><img src="/img/logo_text.png" height="40" width="90" alt="" /></span>
+			</a> 
+			<ul class="globalNav_ul">
+			{{! 
+			<?php if($user) { ?>
+				<li class="globalNavItem">
+					<div class="globalNavItem_group">
+						<a class="globalNavItem_btn globalNavItem_btn-pulldown" data-toggle="dropdown" href="#">
+							<span class="globalNavItem_text"><?php echo __($common_doc['registration']) ?></span>
+						</a>
+						<ul class="dropdown-menu globalNavItem_sub">
+						    <li><?php echo $this->Html->link($common_doc['byGraphic'], '/Registries/graphical') ?></li>
+						    <li><?php echo $this->Html->link($common_doc['byText'], '/Registries/index') ?></li>
+						    <li><?php echo $this->Html->link($common_doc['fileUpload'], '/Registries/upload') ?></li>
+					    </ul>
+					</div>
+			    </li>
+			<?php } ?>
+
+			<?php if($mod) { ?>
+				<li class="globalNavItem">
+					<div class="globalNavItem_group">
+						<a class="globalNavItem_btn globalNavItem_btn-pulldown" data-toggle="dropdown" href="#">
+							<span class="globalNavItem_text"><?php echo __('Admin') ?></span>
+						</a>
+						<ul class="dropdown-menu globalNavItem_sub">
+						    <li><?php echo $this->Html->link('User List', '/Users/listAll') ?></li>
+						    <li><?php echo $this->Html->link('Motif Management', '/Registries/motif') ?></li>
+						    <li><?php echo $this->Html->link('Glycans List', '/Structures/glycansList') ?></li>
+					    </ul>
+					</div>
+			    </li>
+			<?php } ?>
+			}}
+
+				<li class="globalNavItem">
+					<div class="globalNavItem_group">
+						<a class="globalNavItem_btn globalNavItem_btn-pulldown" data-toggle="dropdown" href="#">
+							<span class="globalNavItem_text">{{search}}</span>
+						</a>
+						<ul class="dropdown-menu globalNavItem_sub">
+						    <li><a href="/Structures/graphical">{{byGraphic}}</a></li>
+						    <li><a href="/Structures/structureSearch">{{byText}}</a></li>
+						    <li><a href="/Structures/search">{{byMotif}}</a></li>
+						</ul>
+					</div>
+				</li>
+
+				<li class="globalNavItem">
+					<div class="globalNavItem_group">
+						<a class="globalNavItem_btn globalNavItem_btn-pulldown" data-toggle="dropdown" href="#">
+							<span class="globalNavItem_text">{{viewAll}}</span>
+						</a>
+						<ul class="dropdown-menu globalNavItem_sub">
+						    <li><a href="/Motifs/listAll">{{motifList}}</a></li>
+						    <li><a href="/Structures">{{glycanList}}</a></li>
+						</ul>
+					</div>
+				</li>
+
+				<li class="globalNavItem"><a class="globalNavItem_btn" href="/Preferences/index"><span class="globalNavItem_text">{{preferences}}</span></a></li>
+				{{!
+			<?php if($user): ?>
+				<li class="globalNavItem"><a class="globalNavItem_btn" href="/Users/profile"><span class="globalNavItem_text"><?php echo($common_doc['profile']); ?></span></a></li>
+			<?php endif; ?>
+			<?php if(!$user): ?>
+				<li class="globalNavItem"><a class="globalNavItem_btn" data-toggle="modal" href="#SignIn"><span class="globalNavItem_text"><?php echo($common_doc['signIn']); ?></span></a></li>
+				<li class="globalNavItem"><a class="globalNavItem_btn" data-toggle="modal" href="#SignUp"><span class="globalNavItem_text"><?php echo($common_doc['signUp']); ?></span></a></li>
+			<?php endif; ?>
+			<?php if($user): ?>
+				<li class="globalNavItem"><a class="globalNavItem_btn" href="/Users/out"><span class="globalNavItem_text"><?php echo($common_doc['signOut']); ?></span></a></li>
+			<?php endif; ?>
+			</ul>
+			<li class="globalNavItem"><a class="globalNavItem_btn" data-toggle="modal" href="#SignIn"><span class="globalNavItem_text">Sign In</span></a></li>
+				<li class="globalNavItem"><a class="globalNavItem_btn" data-toggle="modal" href="#SignUp"><span class="globalNavItem_text">Sign Up</span></a></li>
+									</ul>
+			  }}
+<!-- Accession Number search form -->
+			<div class="globalNavSearch">
+				<form method="post" action="/Structures/Accession">
+					<input type="text" placeholder="{{accessionNumber}}" name="aNum" />
+					<button class="globalNavSearch_btn" type="submit"></button>
+				</form>
+			</div>
+<!-- /.Accession Number search form -->
+		</div><!--/.globalNav_inner-->
+	</nav>

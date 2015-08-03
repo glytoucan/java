@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+{{ > header }}
+	<title>Glycan Repository</title>
+</head>
+<body>
+<a name="top"></a><!--link for page top-->
+<div id="contents">
+{{ > nav }}
+<!--Start Error Message-->
+<!--END Error Message-->
+
+
+<div class="topMainVis">
+	<div class="topMainVis_inner">
+		<div class="topMainVis_title">
+			<h1>GlyTouCan<br /><span class="topMainVis_subTitle">THE GLYCAN REPOSITORY</span></h1>
+		</div><!--Chenged height from 333-->
+		<img class="topMainVis_img" src="/img/top_structure_img.png" height="300" width="382" alt="" />
+	</div>
+	<div id="top_status_app" class="topMainVis_bottom">
+		<div class="topMainVisStat">
+			<div class="topMainVisStat_col">
+				<p class="topMainVisStat_value topMainVisStat_value-num"><span class="statusTotalCount"></span></p>
+				<p class="topMainVisStat_label">{{glycans}}</p>
+			</div>
+			<div class="topMainVisStat_col">
+				<p class="topMainVisStat_value topMainVisStat_value-num"><span class="statusMotifCount"></span></p>
+				<p class="topMainVisStat_label">{{motifs}}</p>
+			</div>
+			<div class="topMainVisStat_col">
+				<p class="topMainVisStat_value topMainVisStat_value-num"><span class="statusMonosaccharideCount"></span></p>
+				<p class="topMainVisStat_label">{{monosaccharides}}</p>
+			</div>
+		</div><!--/.topMainVis_stat-->
+	</div>
+</div><!--/.topMainVis-->
+
+<div class="topPageMain clearfix">
+	<div class="topPageMain_content">
+		<div class="topPageColumn topPageColumn-01">
+			<p class="topPageColumn_title">{{LeftTitle.0}}</p>
+			<p class="topPageColumn_text">{{Left.0}}</p>
+		</div>
+		<div class="topPageColumn topPageColumn-02">
+			<p class="topPageColumn_title">{{LeftTitle.1}}</p>
+			<p class="topPageColumn_text">{{Left.1}}</p>
+		</div>
+		<div class="topPageColumn topPageColumn-03">
+			<p class="topPageColumn_title">{{LeftTitle.2}}</p>
+			<p class="topPageColumn_text">{{Left.2}}<a href="http://www.glyspace.org" target="_blank">{{Left.3}}</a>
+			</p>
+		</div>
+	</div><!--/.topPageMain_content-->
+
+	<div class="topPageMain_right">
+	<!--	<nav class="topNav">-->
+			<div class="topRight_image">
+			<!--	<p class="topNav_label topNav_label-01">Search</p>
+				<ul class="topNav_items">
+					<li></li>
+				</ul>-->
+				<img src="/img/glytoucan_top.png" alt="glytoucan" width="240" height="250" class="image" />			</div>
+			<div class="topRight_twitterTimeline">
+			<!--	<p class="topNav_label">View All</p>
+				<ul class="topNav_items">
+					<li></li>
+				</ul> -->
+				<a class="twitter-timeline" width="240" height="250" href="https://twitter.com/glytoucan" data-widget-id="524091769575583744" lang="en">Tweets by @glytoucan</a>
+            	<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+            	</script>
+			</div>
+	    <!--</nav>-->
+	</div><!--/.topPageMain_right-->
+
+</div><!--/.topPageMain-->
+{{!
+<!-- SignUp Modal form -->
+	<div class="modal hide fade" id="SignUp">
+		<div class="modal-header">
+			<button class="close" data-dismiss="modal">x</button>
+			<h3>Sign Up</h3>
+		</div>
+		<form action="/Users/up" id="indexForm_signup" method="post" accept-charset="utf-8"><div style="display:none;"><input type="hidden" name="_method" value="POST"/></div>	    <div class="modal-body">
+	        <br>
+	        The username can contain uppercase/lowercase letters, numbers, and the special chars (-, _) only.  The length should be between 3 to 15 characters.	        <div class="input text"><label for="SignupUsername">Username</label><input name="data[Username]" value="" id="SignupUsername" type="text"/></div>	        <br>
+	        The password length must be longer than four characters, have both uppercase and lowercase characters, one numeric, and one or more of the following special characters (!@#$%^&amp;*).	        <div class="input password"><label for="SignupPassword">Password</label><input name="data[Password]" value="" id="SignupPassword" type="password"/></div>	        <div class="input password"><label for="Confirm_Password">Confirm Password</label><input name="data[Confirm Password]" value="" id="Confirm_Password" type="password"/></div>	        <div class="input text"><label for="Full_Name">Full Name</label><input name="data[Full Name]" value="" id="Full_Name" type="text"/></div>	        <div class="input text"><label for="SignupEmail">Email</label><input name="data[Email]" value="" id="SignupEmail" type="text"/></div>	        <div class="input text"><label for="Affiliation">Affiliation</label><input name="data[Affiliation]" value="" id="Affiliation" type="text"/></div>	    </div>
+	    <div class="modal-footer">
+	        <div class="submit"><input  class="btn" type="submit" value="submit"/></div><br>
+	        Please note that even after registration, you will not be able to access until a moderator has authorized the login.	    </div>
+		</form>	</div><!--/.modal hide fade #SignUp-->
+
+<!-- Sign in Modal form -->
+	<div class="modal hide fade" id="SignIn">
+		<div class="modal-header">
+			<button class="close" data-dismiss="modal">x</button>
+			<h3></h3>
+		</div>
+		<form action="/Users/in" id="indexForm_signin" method="post" accept-charset="utf-8"><div style="display:none;"><input type="hidden" name="_method" value="POST"/></div>	    <div class="modal-body">
+	        <div class="input text"><label for="SigninUsername">Username</label><input name="data[Username]" value="" id="SigninUsername" type="text"/></div>	        <div class="input password"><label for="SigninPassword">Password</label><input name="data[Password]" value="" id="SigninPassword" type="password"/></div>	    </div>
+	    <div class="modal-footer">
+	        <a href="/Users/emailpwform" class="btn">Email Password</a>	        <a href="/Users/recoveruserform" class="btn">Recover Username</a>	        <button class="btn" type="submit">Sign In</button>	    </div>
+		</form>	</div><!--/.modal hide fade #SignIn-->
+}}
+
+
+{{>footer}}
+
+</div>
+</body>
+</html>
