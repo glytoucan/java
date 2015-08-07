@@ -19,10 +19,12 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.junit.Assert;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.web.servlet.FlashMap;
+import org.springframework.web.servlet.FlashMapManager;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+import org.springframework.web.servlet.support.RequestContextUtils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -37,6 +39,7 @@ public class LocalizationHandlerMapping extends HandlerInterceptorAdapter {
 	
 	@Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws IOException {
+	      if(modelAndView != null && (modelAndView.getViewName() != null && !modelAndView.getViewName().startsWith("redirect:"))) {
 		if (null == env) {
 			try {
 				File envfile = null;
@@ -148,9 +151,15 @@ public class LocalizationHandlerMapping extends HandlerInterceptorAdapter {
 			page="index";
 		} else {
 			int splitIndex = requestUri.indexOf('/', 1);
-			controller =  requestUri.substring(1, splitIndex);
-			page = requestUri.substring(splitIndex + 1);
-			
+
+			logger.debug("splitIndex:>" + splitIndex + "<");
+			if (splitIndex<0) {
+				controller =  requestUri.substring(1);
+				page = "index";
+			} else {
+				controller =  requestUri.substring(1, splitIndex);
+				page = requestUri.substring(splitIndex + 1);
+			}
 		}
 		
 		logger.debug("controller:>" + controller + "<");
@@ -184,6 +193,9 @@ public class LocalizationHandlerMapping extends HandlerInterceptorAdapter {
 			e1.printStackTrace();
 		}
 		
+		modelAndView.addObject("language", language);
+		modelAndView.addObject("notation", ""); // for viewAll
+
 		ClassPathResource resource;
 		if (null == rootNode) {
 			resource = new ClassPathResource("1.json");
@@ -196,6 +208,7 @@ public class LocalizationHandlerMapping extends HandlerInterceptorAdapter {
 //	    logger.debug(result);
 	    JsonNode article = result.get("article");
 //	    logger.debug(article);
+
 	    JsonNode pageNode = article.get(controller).get(page);
 	    Map contextMap = null;
 	    try {
@@ -217,8 +230,22 @@ public class LocalizationHandlerMapping extends HandlerInterceptorAdapter {
 			commonMap = mapper.treeToValue(common, Map.class);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
-			Assert.fail();
 		}
+		try {
 	    modelAndView.addAllObjects(commonMap);
-    }
+		} catch (Exception e) {
+			// language reading fails but shouldn't die.
+			logger.debug(e.getMessage());
+		}
+	    
+	    logger.debug(modelAndView.getModel().keySet());
+	    FlashMapManager manager = RequestContextUtils.getFlashMapManager(request);
+	    FlashMap lastAttributes = manager.retrieveAndUpdate(request, response);
+	    if (null != lastAttributes) {
+	    	logger.debug(lastAttributes.keySet());
+	    	manager.saveOutputFlashMap(lastAttributes, request, response);
+	    } else
+	    	logger.debug("no flashmap here");
+	      }
+   }
 }

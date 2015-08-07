@@ -5,17 +5,18 @@
 	<groupId>org.glytoucan</groupId>
 	<artifactId>ws</artifactId>
 	<version>0.1.0</version>
+	<packaging>war</packaging>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.2.2.RELEASE</version>
+		<version>1.2.5.RELEASE</version>
 	</parent>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-mustache</artifactId>
+			<artifactId>spring-boot-starter-freemarker</artifactId>
 			<exclusions>
 				<exclusion>
 					<groupId>org.springframework.boot</groupId>
@@ -26,6 +27,16 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-log4j</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security.oauth</groupId>
+			<artifactId>spring-security-oauth2</artifactId>
+			<version>2.0.4.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>org.glycoinfo</groupId>
@@ -66,13 +77,6 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-<!--
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-core</artifactId>
-			<scope>compile</scope>
-		</dependency>
--->
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-api</artifactId>
@@ -104,21 +108,6 @@
 			<artifactId>resourcesdb</artifactId>
 			<version>0.4</version>
 		</dependency>
-<!--
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-security</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.security.oauth</groupId>
-			<artifactId>spring-security-oauth2</artifactId>
-			<version>2.0.7.RELEASE</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-openid</artifactId>
-		</dependency>
--->
 		<dependency>
 			<groupId>com.jayway.restassured</groupId>
 			<artifactId>rest-assured</artifactId>
@@ -126,30 +115,32 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-      <groupId>org.glycoinfo</groupId>
-      <artifactId>wurcsframework</artifactId>
-      <version>0.0.2-Glytoucan1.0</version>
+			<groupId>org.glycoinfo</groupId>
+			<artifactId>wurcsframework</artifactId>
+			<version>0.0.2-Glytoucan1.0</version>
 		</dependency>
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-jdbc</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>xml-apis</groupId>
 			<artifactId>xml-apis</artifactId>
 			<version>1.4.01</version>
 		</dependency>
 		<dependency>
-		 <groupId>org.sitemesh</groupId>
-		 <artifactId>sitemesh</artifactId>
-		 <version>3.0.0</version>
+			<groupId>org.glycoinfo.WURCSFramework</groupId>
+			<artifactId>WURCSRDF</artifactId>
+			<version>0.0.2-Glytoucan1.0</version>
 		</dependency>
-		
 		<dependency>
- <groupId>org.glycoinfo.WURCSFramework</groupId>
-  <artifactId>WURCSRDF</artifactId>
-  <version>0.0.2-Glytoucan1.0</version>
+			<groupId>org.apache.tomcat.embed</groupId>
+			<artifactId>tomcat-embed-jasper</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
 		</dependency>
 	</dependencies>
 
@@ -250,4 +241,26 @@
 			<url>http://repo.spring.io/libs-release</url>
 		</pluginRepository>
 	</pluginRepositories>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<activation>
+				<activeByDefault></activeByDefault>
+			</activation>
+			<properties>
+				<hostname>test.glytoucan.org</hostname>
+			</properties>
+		</profile>
+		<profile>
+			<id>test</id>
+			<properties>
+				<spring.mainClass>org.glycoinfo.batch.mass.MassCalculatorSparqlBatch</spring.mainClass>
+			</properties>
+		</profile>
+	</profiles>
 </project>
