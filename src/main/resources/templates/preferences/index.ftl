@@ -1,14 +1,18 @@
 <!DOCTYPE html>
+<html lang="ja">
 <head>
-{{ > header }}
 	<title>Glycan Repository</title>
+<#include "../header.html">
+<link rel="canonical" href="https://glytoucan.org/Structures" />
 </head>
 <body>
 <a name="top"></a><!--link for page top-->
 <div id="contents">
-{{ > nav }}
+<#include "../nav.ftl">
+<#include "../error.ftl">
+
 <div class="container">
-<h1 class="page-header">{{Title.0}}</h1>
+<h1 class="page-header">${Title[0]}</h1>
 <!--Start Error Message-->
 <!--END Error Message-->
 <!-- selected message 
@@ -21,7 +25,7 @@
 ?>
 -->
 <fieldset>
-	<legend>{{TopTitle.0}}</legend>
+	<legend>${TopTitle[0]}</legend>
 	<input type="button" onclick="location.href='./image/cfg'"value="CFG">
 	<input type="button" onclick="location.href='./image/cfgbw'"value="CFG greyscale">
 	<input type="button" onclick="location.href='./image/uoxf'"value="Oxford">
@@ -29,9 +33,9 @@
 	<input type="button" onclick="location.href='./image/cfg-uoxf'"value="CFG and Oxford">
 	<input type="button" onclick="location.href='./image/iupac'"value="IUPAC">
 </fieldset>
-<img src="http://{{hostname}}/glyspace/service/glycans/G00026MO/image?format=png&notation=cfg&style=extended">
+<img src="http://${hostname}/glyspace/service/glycans/G00026MO/image?format=png&notation=cfg&style=extended">
 <fieldset>
-	<legend>{{TopTitle.1}}</legend>
+	<legend>${TopTitle[1]}</legend>
 	<input type="button" onclick="location.href='/Preferences/en'"value="English">
 	<input type="button" onclick="location.href='/Preferences/ja'"value="日本語">
 	<input type="button" onclick="location.href='/Preferences/ch1'"value="中文(简体)">
@@ -41,8 +45,8 @@
 	<input type="button" onclick="location.href='/Preferences/ru'"value="русский">
 </fieldset>
 </div>
-{{>footer}}
 
+<#include "../footer.html">
 </div>
 </body>
 </html>

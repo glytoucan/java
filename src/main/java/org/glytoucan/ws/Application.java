@@ -3,6 +3,7 @@ package org.glytoucan.ws;
 import org.eurocarbdb.resourcesdb.Config;
 import org.eurocarbdb.resourcesdb.io.MonosaccharideConverter;
 import org.glycoinfo.rdf.SelectSparql;
+import org.glycoinfo.rdf.SparqlException;
 import org.glycoinfo.rdf.dao.SparqlDAO;
 import org.glycoinfo.rdf.dao.virt.SparqlDAOVirtSesameImpl;
 import org.glycoinfo.rdf.dao.virt.VirtRepositoryConnectionFactory;
@@ -10,14 +11,17 @@ import org.glycoinfo.rdf.dao.virt.VirtSesameConnectionFactory;
 import org.glycoinfo.rdf.dao.virt.VirtSesameTransactionManager;
 import org.glycoinfo.rdf.glycan.GlycoSequenceSelectSparql;
 import org.glycoinfo.rdf.glycan.wurcs.MotifSequenceSelectSparql;
+import org.glycoinfo.rdf.scint.ClassHandler;
+import org.glycoinfo.rdf.scint.InsertScint;
+import org.glycoinfo.rdf.scint.SelectScint;
+import org.glycoinfo.rdf.service.GlycanProcedure;
+import org.glycoinfo.rdf.service.UserProcedure;
 import org.glycoinfo.rdf.utils.TripleStoreProperties;
 import org.glytoucan.ws.api.D3SequenceSelectSparql;
-import org.glytoucan.ws.controller.ServerCustomization;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryException;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
@@ -100,17 +104,16 @@ public class Application extends SpringBootServletInitializer {
         SpringApplication.run(Application.class, args);
     }
     
-    
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
         return application.sources(Application.class);
     }
         
-    @Bean
-    public ServerProperties getServerProperties() {
-        return new ServerCustomization();
-    }
-    
+//    @Bean
+//    public ServerProperties getServerProperties() {
+//        return new ServerCustomization();
+//    }
+//    
 	@Bean
 	VirtSesameConnectionFactory getSesameConnectionFactory() {
 		return new VirtRepositoryConnectionFactory(getRepository());
@@ -172,5 +175,64 @@ public class Application extends SpringBootServletInitializer {
 	    registrationBean.setFilter(characterEncodingFilter);
 //	    registrationBean.setOrder();
 	    return registrationBean;
+	}
+	
+	@Bean(name = "userProcedure")
+	UserProcedure getUserProcedure() throws SparqlException {
+		UserProcedure user = new org.glycoinfo.rdf.service.impl.UserProcedure();
+		return user;
+	}
+    
+	@Bean(name = "selectscintperson")
+	SelectScint getSelectPersonScint() throws SparqlException {
+		SelectScint select = new SelectScint();
+		
+		select.setClassHandler(getPersonClassHandler());
+		return select;
+	}
+
+	@Bean(name = "insertscintperson")
+	InsertScint getInsertPersonScint() throws SparqlException {
+		InsertScint insert = new InsertScint("http://rdf.glytoucan.org/users");
+		insert.setClassHandler(getPersonClassHandler());
+		return insert;
+	}
+
+	@Bean(name = "selectscintregisteraction")
+	SelectScint getSelectRegisterActionScint() throws SparqlException {
+		SelectScint select = new SelectScint();
+		select.setClassHandler(getRegisterActionClassHandler());
+		return select;
+	}
+
+	@Bean(name = "insertscintregisteraction")
+	InsertScint getInsertRegisterActionScint() throws SparqlException {
+		InsertScint insert = new InsertScint("http://rdf.glytoucan.org/users");
+		insert.setClassHandler(getRegisterActionClassHandler());
+		return insert;
+	}
+
+	ClassHandler getPersonClassHandler() throws SparqlException {
+		ClassHandler ch = new ClassHandler("schema", "http://schema.org/", "Person");
+		ch.setSparqlDAO(getSparqlDAO());
+		return ch; 
+	}
+	
+	ClassHandler getRegisterActionClassHandler() throws SparqlException {
+		ClassHandler ch = new ClassHandler("schema", "http://schema.org/", "RegisterAction");
+		ch.setSparqlDAO(getSparqlDAO());
+		return ch; 
+	}
+	
+	ClassHandler getDateTimeClassHandler() throws SparqlException {
+		ClassHandler ch = new ClassHandler("schema", "http://schema.org/", "DateTime");
+		ch.setSparqlDAO(getSparqlDAO());
+		return ch; 
+	}
+	
+	@Bean(name = "glycanProcedure")
+	GlycanProcedure getGlycanProcedure() throws SparqlException {
+		GlycanProcedure glycan = new org.glycoinfo.rdf.service.impl.GlycanProcedure();
+		return glycan;
 	}
 }

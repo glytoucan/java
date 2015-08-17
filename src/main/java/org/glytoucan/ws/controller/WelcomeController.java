@@ -1,13 +1,9 @@
 package org.glytoucan.ws.controller;
-import java.util.Date;
-import java.util.Map;
+import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 @Controller
 public class WelcomeController {
 	
@@ -15,4 +11,12 @@ public class WelcomeController {
 	public String welcome(Model model) {
 		return "index";
 	}
+	
+	@RequestMapping("/signout")
+	public String signout(Model model, HttpSession session) {
+		session.invalidate();
+		return "redirect:/";
+	}
+	
+	
 }

@@ -142,8 +142,11 @@
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
 	</dependencies>
-
 
 	<build>
 		<plugins>
@@ -252,9 +255,6 @@
 			<activation>
 				<activeByDefault></activeByDefault>
 			</activation>
-			<properties>
-				<hostname>test.glytoucan.org</hostname>
-			</properties>
 		</profile>
 		<profile>
 			<id>test</id>

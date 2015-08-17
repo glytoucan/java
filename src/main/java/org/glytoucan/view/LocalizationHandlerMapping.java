@@ -19,12 +19,11 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.glytoucan.ws.security.UserInfo;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.web.servlet.FlashMap;
-import org.springframework.web.servlet.FlashMapManager;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-import org.springframework.web.servlet.support.RequestContextUtils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -165,6 +164,11 @@ public class LocalizationHandlerMapping extends HandlerInterceptorAdapter {
 		logger.debug("controller:>" + controller + "<");
 		logger.debug("page:>" + page + "<");
 		
+		if (controller != null && controller.equals("error")) {
+		    logger.debug(modelAndView.getModel().keySet());
+
+			return;
+		}
 		JsonNode rootNode = null;
 		File file = null;
 		ObjectMapper mapper = new ObjectMapper();
@@ -192,7 +196,8 @@ public class LocalizationHandlerMapping extends HandlerInterceptorAdapter {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		
+
+		modelAndView.addObject("image.notation", "");
 		modelAndView.addObject("language", language);
 		modelAndView.addObject("notation", ""); // for viewAll
 
@@ -221,7 +226,6 @@ public class LocalizationHandlerMapping extends HandlerInterceptorAdapter {
 	    logger.debug(pageNode);
 	    modelAndView.addAllObjects(contextMap);
 	    
-	    
 	    // get common
 	    JsonNode common = rootNode.get("result").get("common");
 //	    logger.debug(common);
@@ -239,13 +243,18 @@ public class LocalizationHandlerMapping extends HandlerInterceptorAdapter {
 		}
 	    
 	    logger.debug(modelAndView.getModel().keySet());
-	    FlashMapManager manager = RequestContextUtils.getFlashMapManager(request);
-	    FlashMap lastAttributes = manager.retrieveAndUpdate(request, response);
-	    if (null != lastAttributes) {
-	    	logger.debug(lastAttributes.keySet());
-	    	manager.saveOutputFlashMap(lastAttributes, request, response);
-	    } else
-	    	logger.debug("no flashmap here");
+      }
+
+	      try {
+		if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof UserInfo) {
+			UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	        if (null != userInfo && userInfo.getVerifiedEmail()!=null && userInfo.getVerifiedEmail().equals("true")) {
+	        	logger.debug("user is verified");
+	        	modelAndView.addObject("user", true);
+	        }
+		}
+	      } catch (NullPointerException e) {
+	    	  logger.debug("user is not verified");
 	      }
    }
 }
