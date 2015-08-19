@@ -23,7 +23,7 @@ public class WelcomeControllerTest {
 			.getLogger("org.glytoucan.ws.controller.D3ControllerTest");
 
 	@Autowired
-	WelcomeController welcome; // D3という名前でD3Controllerを定義している
+	WelcomeController welcome;
 
 	@Test
 	public void testWelcome() throws Exception {
@@ -32,15 +32,4 @@ public class WelcomeControllerTest {
 		assertEquals("index", result);
 		logger.debug(result);
 	}
-	
-	
-	
-//	@Test
-//	public void testnullD3() throws Exception {
-//
-//		D3_Tree_json result = D3.retrieve("");
-//		ObjectMapper mapper = new ObjectMapper();
-//		logger.debug(mapper.writeValueAsString(result));
-//	}
-
 }

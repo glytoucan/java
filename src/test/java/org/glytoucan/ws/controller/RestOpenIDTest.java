@@ -38,21 +38,21 @@ public class RestOpenIDTest {
 
     @Test
     public void securedPageRedirectsToLoginPage() {
-        given().redirects().follow(false).when().get("/statuscheck").then()
+        given().redirects().follow(false).when().get("/Registries/index").then()
                 .statusCode(HttpStatus.SC_MOVED_TEMPORARILY)
-                .header("Location", endsWith("/login"));
+                .header("Location", endsWith("/signin"));
     }
 
     @Test
     public void loginPageRedirectsToGoogle() {
-        given().redirects().follow(false).when().get("/login").then()
+        given().redirects().follow(false).when().get("/signin").then()
                 .statusCode(HttpStatus.SC_MOVED_TEMPORARILY)
                 .header("Location", startsWith("https://accounts.google.com/o/oauth2/auth"));
     }
     
-    @Test
-    public void jsonRequestReturnsData() {
-        given().redirects().follow(false).when().get("/statuscheck.json").then()
-                .statusCode(HttpStatus.SC_UNAUTHORIZED);
-    }
+//    @Test
+//    public void jsonRequestReturnsData() {
+//        given().redirects().follow(false).when().get("/statuscheck.json").then()
+//                .statusCode(HttpStatus.SC_UNAUTHORIZED);
+//    }
 }

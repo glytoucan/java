@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
@@ -25,8 +24,6 @@ import org.springframework.ui.ExtendedModelMap;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.samskivert.mustache.Mustache;
-import com.samskivert.mustache.Template;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -98,16 +95,5 @@ public class ApplicationTests {
 		}
 		logger.debug("size of file:>" + file.getTotalSpace());
 		rootNode = mapper.readTree(file);
-	}
-	
-	@Test
-	public void testJmust() throws IOException {
-		
-		String text = "One, two, 日本語{{three}}. Three sir!";
-		Template tmpl = Mustache.compiler().compile(text);
-		Map<String, String> data = new HashMap<String, String>();
-		data.put("three", "five");
-		System.out.println(tmpl.execute(data));
-
 	}
 }

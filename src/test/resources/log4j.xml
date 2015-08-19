@@ -13,6 +13,10 @@
   <logger name="org.glytoucan">
     <level value="debug"/> 
   </logger>
+
+  <logger name="org.glycoinfo">
+    <level value="debug"/> 
+  </logger>
  
 	<root>
 		<level value="warn" />
