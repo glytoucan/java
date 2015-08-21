@@ -239,6 +239,15 @@ LIN
 1:1d(2+1)2n
 2:1o(3+1)3d
 RES
+1b:x-dgro-dgal-NON-2:6|1:a|2:keto|3:d
+2b:x-dglc-HEX-1:5
+3s:n-acetyl
+4s:n-acetyl
+LIN
+1:1o(-1+1)2d
+2:2d(2+1)3n
+3:1d(5+1)4n
+RES
 1b:x-dman-HEX-1:5
 2b:x-dgal-HEX-1:5
 3s:n-acetyl
@@ -248,7 +257,8 @@ LIN
 RES
 1b:x-dglc-HEX-1:5|1:a
 2b:b-dgal-HEX-1:5
-LIN\n1:1o(4+1)2d
+LIN
+1:1o(4+1)2d
 		*/
 		String id = "G00031MO";
 		String sequence = "RES\\n" + 

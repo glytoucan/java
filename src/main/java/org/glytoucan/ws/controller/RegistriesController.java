@@ -4,8 +4,11 @@ import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -26,7 +29,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+
 @Controller
+@Api(value="/Registries", description="Registration Management")
 @RequestMapping("/Registries")
 public class RegistriesController {
 	Log logger = LogFactory.getLog(RegistriesController.class);
@@ -120,7 +127,7 @@ public class RegistriesController {
 					listRegistered.add(si);
 	    		}
 			}
-    		
+
     		model.addAttribute("listRegistered", listRegistered);
     		model.addAttribute("listErrors", listErrors);
     		model.addAttribute("listNew", list);
@@ -128,10 +135,59 @@ public class RegistriesController {
         }
     }
 	
-	@RequestMapping("/complete")
-    public String complete(Model model, @ModelAttribute("listNew") List<SequenceInput> listNew, BindingResult result, RedirectAttributes redirectAttrs) throws SparqlException  {
-		logger.debug(listNew);
-		logger.debug(model.asMap());
+	@RequestMapping(value="/complete", method = RequestMethod.POST)
+    @ApiOperation(value="Confirms the completion of a registration", 
+	notes="Based on the previous /confirmation screen, the sequence array is processed and registered with the following logic:<br />"
+			+ "1. generation of base rdf.glycoinfo.org classes such as Saccha￼ride <br />"
+			+ "2. wurcsRDF generation.  create the WURCS RDF based on the wurcs input. <br />"
+			+ "3. calculate the mass.<br />"
+			+ "4. loop through motifs to register has_motif relationship.<br />"
+			+ "5. calculate cardinality and generate Components.<br />"
+			+ "6. for each monosaccharide in the glycan registered, create the monosaccharide alias.<br />"
+			+ "RDF:<br />"
+			+ "@PREFIX glycan: <http://purl.jp/bio/12/glyco/glycan#> ."
+			+ "@PREFIX glytoucan: <http://www.glytoucan.org/glyco/owl/glytoucan#> ."
+			+ "@PREFIX xsd:   <http://www.w3.org/2001/XMLSchema#> ."
+			+ "<http://rdf.glycoinfo.org/glycan/G00054MO>"
+			+ " a	glycan:saccharide ;"
+			+ "	glycan:has_resource_entry"
+			+ "		<http://www.glytoucan.org/Structures/Glycans/G00054MO> ."
+			+ "		 * <http://rdf.glycoinfo.org/Structures/Glycans/e06b141de8d13adfa0c3ad180b9eae06>"
+			+ "        a                          glycan:resource_entry ;"
+			+ "        glycan:in_glycan_database  glytoucan:database_glytoucan ;"
+			+ "        glytoucan:contributor      <http://rdf.glytoucan/contributor/userId/1> ;"
+			+ "        glytoucan:date_registered  \"2014-10-20 06:47:31.204\"^^xsd:dateTimeStamp ."
+			)
+    public String complete(HttpServletRequest request) throws SparqlException  {
+		String[] checked = request.getParameterValues("checked");
+		logger.debug(Arrays.asList(checked));
+		
+//		[RES\n1b:x-dgro-dgal-NON-2:6|1:a|2:keto|3:d\n2b:x-dglc-HEX-1:5\n3s:n-acetyl\n4s:n-acetyl\nLIN\n1:1o(-1+1)2d\n2:2d(2+1)3n\n3:1d(5+1)4n, 
+//		RES\n1b:x-dman-HEX-1:5\n2b:x-dgal-HEX-1:5\n3s:n-acetyl\nLIN\n1:1o(-1+1)2d\n2:2d(2+1)3n]
+//		[on,on] 
+		String[] resultSequence = request.getParameterValues("resultSequence");
+		String[] origSequence = request.getParameterValues("sequence");
+		String[] image = request.getParameterValues("image");
+		ArrayList<String> registerList = new ArrayList<String>();
+		ArrayList<String> origList = new ArrayList<String>();
+		ArrayList<String> imageList = new ArrayList<String>();
+		for (int i = 0; i < checked.length; i++) {
+			String check = checked[i];
+			if (StringUtils.isNotBlank(check) && check.equals("on")) {
+				registerList.add(resultSequence[i]);
+				origList.add(origSequence[i]);
+				imageList.add(image[i]);
+			}
+		}
+		List<String> results = null;
+		if (!registerList.isEmpty()) {
+			 results = glycanProcedure.register(registerList);
+		}
+
+		request.setAttribute("registeredList", registerList);
+		request.setAttribute("origList", origList);
+		request.setAttribute("imageList", imageList);
+		request.setAttribute("resultList", results);
 		return "register/complete";
 	}
 

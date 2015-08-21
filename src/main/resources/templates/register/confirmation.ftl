@@ -11,7 +11,7 @@
 <div class="container">
 <#include "../error.ftl">
   <h1 class="page-header">${Title[0]}</h1>
-  <form method="post" action="/Registries/complete" name="form1"> 
+  <form method="post" action="/Registries/complete"> 
   ${Register[0]}
   <div>
     <table class="table table-bordered table-striped table-hover">
@@ -32,21 +32,22 @@
         <div class="control-group">
           <div class="controls">
             <label class="checkbox">
-              <input type="checkbox" checked="checked" name="listNew[${newItem?index}].register">
+              <input type="checkbox" name="checked" checked="${listNew[newItem?index].register?c}">
             </label>
           </div>
         </div>
       </td>
       <td>
         ${listNew[newItem?index].sequence?html?replace("\\n", "<br>")}
-        <input type="hidden" name="listNew[${newItem?index}].sequence" value="${listNew[newItem?index].sequence}"/>
+        <input type="hidden" name="sequence" value="${listNew[newItem?index].sequence}"/>
       </td>
       <td>
         ${listNew[newItem?index].resultSequence?html?replace("\\n", "<br>")}
-        <input type="hidden" name="listNew[${newItem?index}].resultSequence" value="${listNew[newItem?index].resultSequence}"/>
+        <input type="hidden" name="resultSequence" value="${listNew[newItem?index].resultSequence}"/>
       </td>
       <td>
         <img src="${newItem.image}" />
+        <input type="hidden" name="image" value="${newItem.image}"/>
       </td>
     </tr>
 </#list>

@@ -27,7 +27,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiResponse;
+import com.wordnik.swagger.annotations.ApiResponses;
+
 @Controller
+@Api(value="/Structures", description="Structure Management")
 @RequestMapping("/Structures")
 public class StructuresController {
 	Log logger = LogFactory.getLog(StructuresController.class);
@@ -63,7 +69,18 @@ public class StructuresController {
 	}
 
 	@RequestMapping("/structure")
-    public String structure(Model model, @ModelAttribute("sequence") SequenceInput sequence, BindingResult result, RedirectAttributes redirectAttrs)  {
+    @ApiOperation(value="Confirms the completion of a registration", 
+	notes="Based on the previous /confirmation screen, the sequence array is processed and registered with the following logic:<br />"
+			+ "1. generation of base rdf.glycoinfo.org classes such as Saccha￼ride <br />"
+			+ "2. wurcsRDF generation.  create the WURCS RDF based on the wurcs input. <br />"
+			+ "3. calculate the mass.<br />"
+			+ "4. loop through motifs to register has_motif relationship.<br />"
+			+ "5. calculate cardinality and generate Components.<br />"
+			+ "6. for each monosaccharide in the glycan registered, create the monosaccharide alias.<br />")
+	@ApiResponses(value ={@ApiResponse(code=200, message="Structure added successfully"),
+			@ApiResponse(code=401, message="Unauthorized"),
+			@ApiResponse(code=500, message="Internal Server Error")})
+	public String structure(Model model, @ModelAttribute("sequence") SequenceInput sequence, BindingResult result, RedirectAttributes redirectAttrs)  {
 		logger.debug(sequence);
         if (StringUtils.isEmpty(sequence.getSequence())) {
         	
