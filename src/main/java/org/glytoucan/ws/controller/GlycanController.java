@@ -395,7 +395,7 @@ public class GlycanController {
 		Date date = sdf.parse(sparqlEntity.getValue("DateRegistered"));
 		glycan.setDateEntered(date);
 		glycan.setMass(Double.valueOf(sparqlEntity.getValue("Mass")));
-		glycan.setStructure(sparqlEntity.getValue("GlycoCTSequence"));
+		glycan.setStructure(sparqlEntity.getValue("GlycoCTSequence") + "\n");
 		glycan.setStructureLength(glycan.getStructure().length());
 
 		return glycan;

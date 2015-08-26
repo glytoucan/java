@@ -96,6 +96,14 @@ public class GlycanControllerTest {
 		logger.debug("RESULT>" + result.getStructure() +"<");
 	}
 	
+	@Test
+	public void testG00026MOProtocolScope() throws Exception {
+		Glycan result = gc.getGlycan("G00026MO");
+		logger.debug("RESULT>" + result.getStructure() +"<");
+		result = gc.getGlycan("G00031MO");
+		logger.debug("RESULT>" + result.getStructure() +"<");
+	}
+	
     @Test
     public void getG00031MO() {
         given().redirects().follow(false).when().get("/glycans/G00031MO").then().statusCode(HttpStatus.SC_OK);
