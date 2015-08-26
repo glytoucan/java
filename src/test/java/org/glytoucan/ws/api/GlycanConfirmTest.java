@@ -1,6 +1,6 @@
 package org.glytoucan.ws.api;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.Date;
 
@@ -19,15 +19,7 @@ public class GlycanConfirmTest {
 	     Date d = new Date(0);
 	     Glycan g = new Glycan();
 	     g.setAccessionNumber("G001234");
-	     User u = new User();
-	     u.setUserId(1);
-	     u.setEmail("support@glytoucan.org");
-	     u.setUserName("aoki");
-	     u.setLoginId("aokinobu");
-	     u.setAffiliation("Soka University");
-	     u.setDateRegistered(d);
-	     u.setLastLoggedIn(d);
-	     g.setContributor(u);
+	     g.setContributor("aoki");
 	     g.setDateEntered(d);
 	     g.setMass(123.0);
 	     g.setStructure("structureString");

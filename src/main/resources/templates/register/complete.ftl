@@ -37,13 +37,11 @@ ${origList[newItem?index]?html?replace("\\n", "<br>")}
 <img src="${imageList[newItem?index]}" />
 </td>
 <td>
-<#--
 <#if resultList[newItem?index]?starts_with("ERROR")>
-ID:${resultList[newItem?index]}
+${resultList[newItem?index]}
 <#else>
-  <a href="/Structures/glycans/>${resultList[newItem?index]}</a>
+New ID:<a href="/Structures/glycans/${resultList[newItem?index]}">${resultList[newItem?index]}</a>
 </#if>
--->
 </td>
 </tr>
 

@@ -8,9 +8,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.glytoucan.ws.api.DateSerializer;
-import org.glytoucan.ws.api.Motif;
-
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
@@ -27,7 +24,7 @@ public class Glycan {
 	Integer structureLength;
 	Double mass;
 	Set<Motif> motifs;
-	User contributor;
+	String contributor;
 //	Set<GlycanComposition> compositions;
 	
 	/**
@@ -106,11 +103,11 @@ public class Glycan {
 		this.mass = mass;
 	}
 	
-	public User getContributor() {
+	public String getContributor() {
 		return contributor;
 	}
 
-	public void setContributor(User contributor) {
+	public void setContributor(String contributor) {
 		this.contributor = contributor;
 	}
 

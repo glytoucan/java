@@ -11,10 +11,7 @@ import org.glycoinfo.rdf.dao.SparqlDAO;
 import org.glycoinfo.rdf.dao.SparqlEntity;
 import org.glycoinfo.rdf.glycan.Saccharide;
 import org.glycoinfo.rdf.utils.TripleStoreProperties;
-import org.glytoucan.ws.api.GlycanResponse;
 import org.glytoucan.ws.api.GlycoSequence;
-import org.glytoucan.ws.api.Greeting;
-import org.glytoucan.ws.api.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -30,6 +27,13 @@ import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
 
+/**
+ * @author aoki
+ *
+ * This work is licensed under the Creative Commons Attribution 4.0 International License. 
+ * To view a copy of this license, visit http://creativecommons.org/licenses/by/4.0/.
+ *
+ */
 @RestController
 @Api(value="/glycosequence", description="GlycoSequence-related interfaces")
 @RequestMapping ("/glycosequence")

@@ -13,14 +13,16 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.glycoinfo.batch.glyconvert.wurcs.sparql.GlycoSequenceToWurcsSelectSparql;
 import org.glycoinfo.conversion.util.DetectFormat;
 import org.glycoinfo.rdf.SparqlException;
 import org.glycoinfo.rdf.dao.SparqlEntity;
+import org.glycoinfo.rdf.glycan.wurcs.GlycoSequenceToWurcsSelectSparql;
 import org.glycoinfo.rdf.service.GlycanProcedure;
 import org.glytoucan.ws.client.GlyspaceClient;
 import org.glytoucan.ws.model.SequenceInput;
+import org.glytoucan.ws.security.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -159,6 +161,15 @@ public class RegistriesController {
 			+ "        glytoucan:date_registered  \"2014-10-20 06:47:31.204\"^^xsd:dateTimeStamp ."
 			)
     public String complete(HttpServletRequest request) throws SparqlException  {
+		
+		UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (null != userInfo && userInfo.getVerifiedEmail()!=null && userInfo.getVerifiedEmail().equals("true") && StringUtils.isNotBlank(userInfo.getGivenName())) {
+        	logger.debug("user is verified:>" + userInfo.getGivenName());
+        	glycanProcedure.setContributor(userInfo.getGivenName());
+        } else {
+        	return "redirect:/signin?errorMessage=Please sign in with a verified email address.  Check Profile for details.";
+        }
+		
 		String[] checked = request.getParameterValues("checked");
 		logger.debug(Arrays.asList(checked));
 		

@@ -11,10 +11,10 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.glycoinfo.batch.glyconvert.wurcs.sparql.GlycoSequenceToWurcsSelectSparql;
 import org.glycoinfo.conversion.error.ConvertException;
 import org.glycoinfo.rdf.SparqlException;
 import org.glycoinfo.rdf.dao.SparqlEntity;
+import org.glycoinfo.rdf.glycan.wurcs.GlycoSequenceToWurcsSelectSparql;
 import org.glycoinfo.rdf.service.GlycanProcedure;
 import org.glytoucan.ws.client.GlyspaceClient;
 import org.glytoucan.ws.model.SequenceInput;
@@ -93,7 +93,7 @@ public class StructuresController {
     		glycanProcedure.setSequence(sequence.getSequence());
     		SparqlEntity se;
     		try {
-    			se = glycanProcedure.search();
+    			se = glycanProcedure.searchBySequence();
     			
 			} catch (SparqlException e) {
 				redirectAttrs.addAttribute("errorMessage", "an error occurred");

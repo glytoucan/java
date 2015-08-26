@@ -1,17 +1,18 @@
 package org.glytoucan.ws.controller;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.security.Principal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Locale;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eurocarbdb.MolecularFramework.io.CarbohydrateSequenceEncoding;
 import org.eurocarbdb.MolecularFramework.io.SugarImporter;
 import org.eurocarbdb.MolecularFramework.io.SugarImporterException;
@@ -22,32 +23,18 @@ import org.eurocarbdb.MolecularFramework.util.validation.GlycoVisitorValidation;
 import org.eurocarbdb.MolecularFramework.util.validation.StructureParserValidator;
 //import org.eurocarbdb.MolecularFramework.util.similiarity.SearchEngine.SearchEngineException;
 import org.eurocarbdb.MolecularFramework.util.visitor.GlycoVisitorException;
-import org.eurocarbdb.resourcesdb.io.MonosaccharideConversion;
 import org.eurocarbdb.resourcesdb.io.MonosaccharideConverter;
 import org.glycoinfo.batch.search.wurcs.SubstructureSearchSparql;
 import org.glycoinfo.rdf.SelectSparql;
-import org.glycoinfo.rdf.SelectSparqlBean;
 import org.glycoinfo.rdf.SparqlException;
 import org.glycoinfo.rdf.dao.SparqlEntity;
 import org.glycoinfo.rdf.glycan.GlycoSequence;
-import org.glycoinfo.rdf.search.SearchSparqlBean;
+import org.glycoinfo.rdf.service.GlycanProcedure;
+import org.glycoinfo.rdf.service.UserProcedure;
 import org.glytoucan.ws.api.Confirmation;
-import org.glytoucan.ws.api.ErrorCodes;
 import org.glytoucan.ws.api.Glycan;
-import org.glytoucan.ws.api.GlycanErrorResponse;
 import org.glytoucan.ws.api.GlycanInput;
-import org.glytoucan.ws.api.GlycanInputList;
-import org.glytoucan.ws.api.GlycanList;
 import org.glytoucan.ws.api.GlycanResponse;
-import org.glytoucan.ws.api.GlycanResponseList;
-import org.glytoucan.ws.api.User;
-import org.glytoucan.ws.api.UserInput;
-import org.glytoucan.ws.service.EmailManager;
-import org.glytoucan.ws.service.GlycanManager;
-import org.glytoucan.ws.service.UserManager;
-import org.glytoucan.ws.service.exception.GlycanNotFoundException;
-import org.glytoucan.ws.service.exception.UserQuotaExceededException;
-import org.slf4j.Logger;
 //import org.glycomedb.rdf.glycordf.util.GlycoRDFWriter;
 //import org.glycomedb.rdf.glycordf.util.RDFGeneratorGlycanConfig;
 //import org.glycomedb.residuetranslator.ResidueTranslator;
@@ -75,10 +62,8 @@ import org.slf4j.Logger;
 //import org.glytoucan.ws.view.GlycanResponseList;
 //import org.glytoucan.ws.view.StructureParserValidator;
 //import org.glytoucan.ws.view.User;
-//import org.glytoucan.ws.view.search.CompositionSearchInput;
-import org.slf4j.LoggerFactory;
+//import orgimport org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -90,9 +75,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -105,16 +87,17 @@ import com.wordnik.swagger.annotations.ApiResponses;
 @RequestMapping ("/glycans")
 public class GlycanController {
 	
-	public static Logger logger=(Logger) LoggerFactory.getLogger("org.glytoucan.ws.dao.GlycanController");
+	private static final Log logger = LogFactory
+			.getLog(GlycanController.class);
 
-//	@Autowired
-	GlycanManager glycanManager;
+	@Autowired
+	GlycanProcedure glycanProcedure;
 //	
 //	@Autowired
-	EmailManager emailManager;
+//	EmailManager emailManager;
 //	
 //	@Autowired
-	UserManager userManager;
+	UserProcedure userManager;
 //	
 //	@Autowired
 //	ImageGenerator imageGenerator;
@@ -152,7 +135,7 @@ public class GlycanController {
 //        return t_config;
 //	}
 	public boolean validateSequence (String sequence, String format) throws SugarImporterException, GlycoVisitorException {
-		logger.debug("Input structure: {}", sequence);
+		logger.debug("Input structure: {" + sequence + "}");
 		// assume GlycoCT encoding
 		Sugar sugarStructure = StructureParserValidator.parse(sequence);
 		
@@ -166,10 +149,10 @@ public class GlycanController {
 	
 	public Sugar importParseValidate (GlycanInput glycan) throws GlycoVisitorException, SugarImporterException {
 		String encoding = glycan.getFormat();
-		logger.debug("Input structure: {}", glycan.getSequence());
+		logger.debug("Input structure: {" + glycan.getSequence() + "}");
 		Sugar sugarStructure = null;
 		if (encoding != null && !encoding.isEmpty() && !(encoding.equalsIgnoreCase("glycoct") || encoding.equalsIgnoreCase("glycoct_condensed"))  && !encoding.equalsIgnoreCase("gws")) {
-			logger.debug("Converting from {}", encoding);
+			logger.debug("Converting from {" + encoding +"}");
 			ArrayList<CarbohydrateSequenceEncoding> supported = SugarImporterFactory.getSupportedEncodings();
 			for (Iterator<CarbohydrateSequenceEncoding> iterator = supported.iterator(); iterator.hasNext();) {
 				CarbohydrateSequenceEncoding carbohydrateSequenceEncoding = (CarbohydrateSequenceEncoding) iterator
@@ -320,35 +303,36 @@ public class GlycanController {
 //		}
 		
 		GlycanResponse response = null;
-		try {
-			response = glycanManager.addStructure(exportedStructure, userName, mass);
+//		try {
+
+//			response = glycanManager.register(exportedStructure, userName);
 			if (response.getExisting()) {
 				logger.debug("GLYCAN_EXISTS:" + response.getAccessionNumber() + userName);
 			} else {
-				if (response.getQuotaExceeded()) {
-					// send email to the moderator
-					List<User> moderators = userManager.getModerators();
-					emailManager.sendUserQuotaAlert(moderators, userName);
-					throw new UserQuotaExceededException("Cannot add the glycan, user's quota exceeded. Please contact the Administrator");
-				}
+//				if (response.getQuotaExceeded()) {
+//					// send email to the moderator
+//					List<User> moderators = userManager.getModerators();
+//					emailManager.sendUserQuotaAlert(moderators, userName);
+//					throw new UserQuotaExceededException("Cannot add the glycan, user's quota exceeded. Please contact the Administrator");
+//				}
 				logger.info ("GLYCAN_ADD,{},{}" + response.getAccessionNumber() + userName);
 			}
-		} catch (DataIntegrityViolationException e) {
-			// failed to add, need a new accession number
-			boolean exception = true;
-			do {
-				logger.info("Duplicate accession number retrying." +  e.getMessage());
-				try {
-					response = glycanManager.assignNewAccessionNumber(exportedStructure, userName);
-					exception = false;
-				} catch (DataIntegrityViolationException ex) {
-					exception = true;
-				}
-			} while (exception);
-		} 
-		if (massError) {
-			logger.info("Mass calculation exception occured for glycan {}. Reason: {}" + response.getAccessionNumber() + massException);
-		}
+//		} catch (DataIntegrityViolationException e) {
+//			// failed to add, need a new accession number
+//			boolean exception = true;
+//			do {
+//				logger.info("Duplicate accession number retrying." +  e.getMessage());
+//				try {
+////					response = glycanManager.assignNewAccessionNumber(exportedStructure, userName);
+//					exception = false;
+//				} catch (DataIntegrityViolationException ex) {
+//					exception = true;
+//				}
+//			} while (exception);
+//		} 
+//		if (massError) {
+//			logger.info("Mass calculation exception occured for glycan {}. Reason: {}" + response.getAccessionNumber() + massException);
+//		}
 
 		return new ResponseEntity<GlycanResponse> (response, HttpStatus.CREATED);
 	}
@@ -361,7 +345,7 @@ public class GlycanController {
     		@ApiResponse(code=404, message="Glycan does not exist"),
     		@ApiResponse(code=500, message="Internal Server Error")})
 	public @ResponseBody Confirmation deleteGlycan (@ApiParam(required=true, value="accession number of the glycan to be deleted") @PathVariable("accessionNumber") String accessionNumber) {
-		glycanManager.deleteGlycanByAccessionNumber(accessionNumber);
+//		glycanManager.deleteByAccessionNumber(accessionNumber);
 		return new Confirmation("Glycan deleted successfully", HttpStatus.OK.value());
 	}
 	
@@ -400,11 +384,21 @@ public class GlycanController {
 			@ApiResponse(code=404, message="Glycan does not exist"),
 			@ApiResponse(code=500, message="Internal Server Error")})
 	public @ResponseBody Glycan getGlycan (
-			@ApiParam(required=true, value="id of the glycan") @PathVariable("accessionNumber") String accessionNumber) {
+			@ApiParam(required=true, value="id of the glycan") @PathVariable("accessionNumber") String accessionNumber) throws SparqlException, ParseException {
 		logger.debug("Get glycan");
-		Glycan glycanEntity = glycanManager.getGlycanByAccessionNumber(accessionNumber);
-		glycanEntity.getContributor().setEmail(""); // hide the email
-		return glycanEntity;
+		SparqlEntity sparqlEntity = glycanProcedure.searchByAccessionNumber(accessionNumber);
+		Glycan glycan = new Glycan();
+		glycan.setAccessionNumber(accessionNumber);
+		glycan.setContributor(sparqlEntity.getValue("Contributor"));
+		logger.debug(sparqlEntity.getValue("DateRegistered"));
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S", Locale.ENGLISH);
+		Date date = sdf.parse(sparqlEntity.getValue("DateRegistered"));
+		glycan.setDateEntered(date);
+		glycan.setMass(Double.valueOf(sparqlEntity.getValue("Mass")));
+		glycan.setStructure(sparqlEntity.getValue("GlycoCTSequence"));
+		glycan.setStructureLength(glycan.getStructure().length());
+
+		return glycan;
 	}
 	
 //	@RequestMapping(value = "/{accessionNumber}/rdf", method = RequestMethod.GET, produces={"text/turtle"})
@@ -695,38 +689,38 @@ public class GlycanController {
 //		return matches;
 //	}
 	
-	@RequestMapping(value = "/search/exact", method = RequestMethod.POST, consumes={"application/xml", "application/json"}, produces={"application/xml", "application/json"})
-    @ApiOperation(value="Searches for a glycan structure having exactly the same structure as the input structure", 
-    			response=Glycan.class)
-    @ApiResponses(value ={@ApiResponse(code=200, message="Found a match"), 
-    				@ApiResponse(code=400, message="Illegal argument - Glycan should be valid"),
-    				@ApiResponse(code=404, message="No matching glycan is found"),
-    				@ApiResponse(code=415, message="Media type is not supported"),
-    				@ApiResponse(code=500, message="Internal Server Error")})
-	public @ResponseBody Glycan exactStructureSearch (
-			@RequestBody (required=true)
-			@ApiParam(required=true, value="Glycan") 
-			@Valid
-			GlycanInput glycan) throws Exception {
-		
-//		String encoding = glycan.getEncoding();
-//		Sugar sugarStructure = importParseValidate(glycan);
-//		if (sugarStructure == null) {
-//			throw new IllegalArgumentException("Structure cannot be imported");
-//		}
-		String exportedStructure = null;
+//	@RequestMapping(value = "/search/exact", method = RequestMethod.POST, consumes={"application/xml", "application/json"}, produces={"application/xml", "application/json"})
+//    @ApiOperation(value="Searches for a glycan structure having exactly the same structure as the input structure", 
+//    			response=Glycan.class)
+//    @ApiResponses(value ={@ApiResponse(code=200, message="Found a match"), 
+//    				@ApiResponse(code=400, message="Illegal argument - Glycan should be valid"),
+//    				@ApiResponse(code=404, message="No matching glycan is found"),
+//    				@ApiResponse(code=415, message="Media type is not supported"),
+//    				@ApiResponse(code=500, message="Internal Server Error")})
+//	public @ResponseBody Glycan exactStructureSearch (
+//			@RequestBody (required=true)
+//			@ApiParam(required=true, value="Glycan") 
+//			@Valid
+//			GlycanInput glycan) throws Exception {
 //		
-//		// export into GlycoCT to make sure we have a uniform structure content in the DB
-//		try {
-//			exportedStructure = StructureParserValidator.exportStructure(sugarStructure);
-//		} catch (Exception e) {
-//			throw new IllegalArgumentException("Cannot export into common encoding: " + e.getMessage());
-//		}
-			
-		Glycan glycanEntity = glycanManager.getGlycanByStructure(exportedStructure);
-		glycanEntity.getContributor().setEmail(""); // hide the email
-		return glycanEntity;
-	}
+////		String encoding = glycan.getEncoding();
+////		Sugar sugarStructure = importParseValidate(glycan);
+////		if (sugarStructure == null) {
+////			throw new IllegalArgumentException("Structure cannot be imported");
+////		}
+//		String exportedStructure = null;
+////		
+////		// export into GlycoCT to make sure we have a uniform structure content in the DB
+////		try {
+////			exportedStructure = StructureParserValidator.exportStructure(sugarStructure);
+////		} catch (Exception e) {
+////			throw new IllegalArgumentException("Cannot export into common encoding: " + e.getMessage());
+////		}
+//			
+//		Glycan glycanEntity = glycanManager.getByStructure(exportedStructure);
+//		glycanEntity.getContributor().setEmail(""); // hide the email
+//		return glycanEntity;
+//	}
 	
 //	@RequestMapping (value="/search/complex", method=RequestMethod.POST, consumes={"application/xml", "application/json"}, produces={"application/xml", "application/json"})
 //    @ApiOperation(value="Searches for glycan structures using a combination of other searches with union/intersection/difference",
@@ -812,64 +806,64 @@ public class GlycanController {
 //		return new GlycanResponseList(responseList, errorList);
 //	}
 	
-	@RequestMapping(value="/check/list", method=RequestMethod.POST, consumes={"application/xml", "application/json"}, produces={"application/xml", "application/json"}) 
-	@ApiOperation(value="Check multiple glycan structures to see if they already exist in the registry and whether they are valid to be added", response=GlycanResponseList.class)
-	@ApiResponses(value ={@ApiResponse(code=200, message="Glycans checked successfully"), 
-			@ApiResponse(code=400, message="Illegal argument - Glycan List should be valid"),
-			@ApiResponse(code=415, message="Media type is not supported"),
-			@ApiResponse(code=500, message="Internal Server Error")})
-	public @ResponseBody GlycanResponseList glycanListCheck (
-			@ApiParam(name="glycans", required=true)
-			@RequestBody GlycanInputList glycans) {
-		if (glycans == null || glycans.getGlycans().isEmpty()) {
-			throw new IllegalArgumentException("Invalid Input: The list is empty - No glycans to check");
-		}
-		List<GlycanResponse> responseList = new ArrayList<>();
-		List<GlycanErrorResponse> errorList = new ArrayList<>();
-		for (Iterator<?> iterator = glycans.getGlycans().iterator(); iterator.hasNext();) {
-			GlycanInput glycan = (GlycanInput) iterator.next();
-			GlycanResponse gRes = new GlycanResponse();
-			gRes.setStructure(glycan.getSequence());
-			try {
-				Glycan glycanEntity = exactStructureSearch(glycan);
-				if (glycanEntity != null) {
-					gRes.setExisting(true);
-					gRes.setPending(glycanManager.isPending(glycanEntity));
-					gRes.setAccessionNumber(glycanEntity.getAccessionNumber());
-				}
-				else
-					gRes.setExisting(false);
-				responseList.add(gRes);
-			} catch (Exception e) {
-				if (e instanceof GlycanNotFoundException) {
-					// new glycan
-					gRes.setExisting(false);
-					responseList.add(gRes);
-				}
-				else {
-					GlycanErrorResponse error = new GlycanErrorResponse();
-					if (e instanceof SugarImporterException) {
-						error.setErrorMessage("Failed to import the structure. Reason: " + ((SugarImporterException)e).getErrorText());
-						error.setErrorCode(ErrorCodes.PARSE_ERROR);
-						logger.info("Failed to import the structure. Reason: {}"+ ((SugarImporterException)e).getErrorText());
-					} else if (e instanceof UserQuotaExceededException) {
-						error.setErrorMessage("User quota exceeded");
-						error.setErrorCode (ErrorCodes.NOT_ALLOWED);
-						logger.error("User quota exceeded");
-					}
-					else {
-						error.setErrorMessage("Failed to validate the structure. Reason: " + e.getMessage());
-						error.setErrorCode(ErrorCodes.INVALID_STRUCTURE);
-						logger.info("Failed to validate the structure. Reason: {}"+ e.getMessage());
-					}
-					error.setStructure(glycan.getSequence());
-					error.setStatusCode(HttpStatus.BAD_REQUEST.value());
-					errorList.add(error);
-				}
-			}
-		}
-		return new GlycanResponseList(responseList, errorList);
-	}
+//	@RequestMapping(value="/check/list", method=RequestMethod.POST, consumes={"application/xml", "application/json"}, produces={"application/xml", "application/json"}) 
+//	@ApiOperation(value="Check multiple glycan structures to see if they already exist in the registry and whether they are valid to be added", response=GlycanResponseList.class)
+//	@ApiResponses(value ={@ApiResponse(code=200, message="Glycans checked successfully"), 
+//			@ApiResponse(code=400, message="Illegal argument - Glycan List should be valid"),
+//			@ApiResponse(code=415, message="Media type is not supported"),
+//			@ApiResponse(code=500, message="Internal Server Error")})
+//	public @ResponseBody GlycanResponseList glycanListCheck (
+//			@ApiParam(name="glycans", required=true)
+//			@RequestBody GlycanInputList glycans) {
+//		if (glycans == null || glycans.getGlycans().isEmpty()) {
+//			throw new IllegalArgumentException("Invalid Input: The list is empty - No glycans to check");
+//		}
+//		List<GlycanResponse> responseList = new ArrayList<>();
+//		List<GlycanErrorResponse> errorList = new ArrayList<>();
+//		for (Iterator<?> iterator = glycans.getGlycans().iterator(); iterator.hasNext();) {
+//			GlycanInput glycan = (GlycanInput) iterator.next();
+//			GlycanResponse gRes = new GlycanResponse();
+//			gRes.setStructure(glycan.getSequence());
+//			try {
+//				Glycan glycanEntity = exactStructureSearch(glycan);
+//				if (glycanEntity != null) {
+//					gRes.setExisting(true);
+//					gRes.setPending(glycanManager.isPending(glycanEntity));
+//					gRes.setAccessionNumber(glycanEntity.getAccessionNumber());
+//				}
+//				else
+//					gRes.setExisting(false);
+//				responseList.add(gRes);
+//			} catch (Exception e) {
+//				if (e instanceof GlycanNotFoundException) {
+//					// new glycan
+//					gRes.setExisting(false);
+//					responseList.add(gRes);
+//				}
+//				else {
+//					GlycanErrorResponse error = new GlycanErrorResponse();
+//					if (e instanceof SugarImporterException) {
+//						error.setErrorMessage("Failed to import the structure. Reason: " + ((SugarImporterException)e).getErrorText());
+//						error.setErrorCode(ErrorCodes.PARSE_ERROR);
+//						logger.info("Failed to import the structure. Reason: {}"+ ((SugarImporterException)e).getErrorText());
+//					} else if (e instanceof UserQuotaExceededException) {
+//						error.setErrorMessage("User quota exceeded");
+//						error.setErrorCode (ErrorCodes.NOT_ALLOWED);
+//						logger.error("User quota exceeded");
+//					}
+//					else {
+//						error.setErrorMessage("Failed to validate the structure. Reason: " + e.getMessage());
+//						error.setErrorCode(ErrorCodes.INVALID_STRUCTURE);
+//						logger.info("Failed to validate the structure. Reason: {}"+ e.getMessage());
+//					}
+//					error.setStructure(glycan.getSequence());
+//					error.setStatusCode(HttpStatus.BAD_REQUEST.value());
+//					errorList.add(error);
+//				}
+//			}
+//		}
+//		return new GlycanResponseList(responseList, errorList);
+//	}
 	
 	/**
      * Accept a file containing glycan structures
@@ -969,7 +963,7 @@ public class GlycanController {
     		@RequestParam("style") 
     		String style
     		) throws Exception {
-    	Glycan glycanEntity = glycanManager.getGlycanByAccessionNumber(accessionNumber);
+    	SparqlEntity glycanEntity = glycanProcedure.searchByAccessionNumber(accessionNumber);
     	
     	byte[] bytes = null;
 //    			imageGenerator.getImage(glycanEntity.getStructure(), format, notation, style);

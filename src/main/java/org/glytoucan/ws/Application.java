@@ -5,17 +5,25 @@ import org.eurocarbdb.resourcesdb.io.MonosaccharideConverter;
 import org.glycoinfo.rdf.SelectSparql;
 import org.glycoinfo.rdf.SparqlException;
 import org.glycoinfo.rdf.dao.SparqlDAO;
+import org.glycoinfo.rdf.dao.SparqlEntity;
 import org.glycoinfo.rdf.dao.virt.SparqlDAOVirtSesameImpl;
 import org.glycoinfo.rdf.dao.virt.VirtRepositoryConnectionFactory;
 import org.glycoinfo.rdf.dao.virt.VirtSesameConnectionFactory;
 import org.glycoinfo.rdf.dao.virt.VirtSesameTransactionManager;
+import org.glycoinfo.rdf.glycan.ContributorInsertSparql;
+import org.glycoinfo.rdf.glycan.ContributorNameSelectSparql;
 import org.glycoinfo.rdf.glycan.GlycoSequenceSelectSparql;
+import org.glycoinfo.rdf.glycan.ResourceEntryInsertSparql;
+import org.glycoinfo.rdf.glycan.SaccharideInsertSparql;
+import org.glycoinfo.rdf.glycan.wurcs.GlycoSequenceResourceEntryContributorSelectSparql;
 import org.glycoinfo.rdf.glycan.wurcs.MotifSequenceSelectSparql;
 import org.glycoinfo.rdf.scint.ClassHandler;
 import org.glycoinfo.rdf.scint.InsertScint;
 import org.glycoinfo.rdf.scint.SelectScint;
+import org.glycoinfo.rdf.service.ContributorProcedure;
 import org.glycoinfo.rdf.service.GlycanProcedure;
 import org.glycoinfo.rdf.service.UserProcedure;
+import org.glycoinfo.rdf.service.impl.ContributorProcedureRdf;
 import org.glycoinfo.rdf.utils.TripleStoreProperties;
 import org.glytoucan.ws.api.D3SequenceSelectSparql;
 import org.openrdf.repository.Repository;
@@ -38,6 +46,8 @@ import com.knappsack.swagger4springweb.util.ScalaObjectMapper;
 
 @SpringBootApplication
 public class Application extends SpringBootServletInitializer {
+	
+	private static final String graph = "http://test.glytoucan.org/ver2";
 
 	@Bean
 	SparqlDAO getSparqlDAO() {
@@ -234,5 +244,49 @@ public class Application extends SpringBootServletInitializer {
 	GlycanProcedure getGlycanProcedure() throws SparqlException {
 		GlycanProcedure glycan = new org.glycoinfo.rdf.service.impl.GlycanProcedure();
 		return glycan;
+	}
+	
+	@Bean
+	SaccharideInsertSparql getSaccharideInsertSparql() {
+		SaccharideInsertSparql sis = new SaccharideInsertSparql();
+		sis.setGraph(graph);
+		return sis;
+	}
+	
+	@Bean(name = "contributorProcedure")
+	ContributorProcedure getContributorProcedure() throws SparqlException {
+		ContributorProcedure cp = new ContributorProcedureRdf();
+		return cp;
+	}
+
+	@Bean
+	ContributorInsertSparql getContributorInsertSparql() {
+		ContributorInsertSparql c = new ContributorInsertSparql();
+		c.setGraph(graph);
+		return c;
+	}
+	
+	@Bean
+	ContributorNameSelectSparql getContributorNameSelectSparql() {
+		ContributorNameSelectSparql selectbyNameContributor = new ContributorNameSelectSparql();
+		selectbyNameContributor.setFrom("FROM <" + graph + ">");
+		return selectbyNameContributor;
+	}
+
+	@Bean
+	ResourceEntryInsertSparql getResourceEntryInsertSparql() {
+		ResourceEntryInsertSparql resourceEntryInsertSparql = new ResourceEntryInsertSparql();
+		SparqlEntity se = new SparqlEntity();
+		se.setValue(ResourceEntryInsertSparql.Database, "glytoucan");
+		resourceEntryInsertSparql.setSparqlEntity(se);
+		resourceEntryInsertSparql.setGraph(graph);
+		return resourceEntryInsertSparql;
+	}
+
+	@Bean
+	SelectSparql glycoSequenceContributorSelectSparql() {
+		GlycoSequenceResourceEntryContributorSelectSparql sb = new GlycoSequenceResourceEntryContributorSelectSparql();
+		sb.setFrom("FROM <http://rdf.glytoucan.org>\nFROM <http://rdf.glytoucan.org/sequence/wurcs>");
+		return sb;
 	}
 }
