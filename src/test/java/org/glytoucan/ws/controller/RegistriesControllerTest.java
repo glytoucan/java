@@ -4,7 +4,6 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -52,7 +51,7 @@ public class RegistriesControllerTest {
 				.andExpect(view().name("register/index"))
 				.andExpect(
 						model().attribute("sequence",
-								hasProperty("sequence", isEmptyOrNullString())));
+								hasProperty("sequence")));
 	}
 
 	@Test

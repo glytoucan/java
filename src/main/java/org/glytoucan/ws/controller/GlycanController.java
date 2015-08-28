@@ -1,5 +1,7 @@
 package org.glytoucan.ws.controller;
 
+
+
 import java.io.IOException;
 import java.security.Principal;
 import java.text.ParseException;
@@ -7,8 +9,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.apache.commons.logging.Log;
@@ -29,11 +33,13 @@ import org.glycoinfo.rdf.SelectSparql;
 import org.glycoinfo.rdf.SparqlException;
 import org.glycoinfo.rdf.dao.SparqlEntity;
 import org.glycoinfo.rdf.glycan.GlycoSequence;
+import org.glycoinfo.rdf.glycan.GlycoSequenceSelectSparql;
 import org.glycoinfo.rdf.service.GlycanProcedure;
 import org.glycoinfo.rdf.service.UserProcedure;
 import org.glytoucan.ws.api.Confirmation;
 import org.glytoucan.ws.api.Glycan;
 import org.glytoucan.ws.api.GlycanInput;
+import org.glytoucan.ws.api.GlycanList;
 import org.glytoucan.ws.api.GlycanResponse;
 //import org.glycomedb.rdf.glycordf.util.GlycoRDFWriter;
 //import org.glycomedb.rdf.glycordf.util.RDFGeneratorGlycanConfig;
@@ -75,6 +81,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -82,6 +90,16 @@ import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
 
+/**
+ * @author aoki
+ *
+
+{"apiVersion":"v1","swaggerVersion":"1.2","apis":[{"path":"/doc/Tree","description":"D3 Tree format","position":0},{"path":"/doc/glycans","description":"Structure Management","position":0},{"path":"/doc/Registries","description":null,"position":0},{"path":"/doc/Preferences","description":null,"position":0},{"path":"/doc/Structures","description":null,"position":0},{"path":"/doc/org.glytoucan.ws.controller.WelcomeController","description":null,"position":0},{"path":"/doc/org.glytoucan.ws.controller.ViewController","description":null,"position":0},{"path":"/doc/Users","description":null,"position":0},{"path":"/doc/Motifs","description":null,"position":0},{"path":"/doc/glycosequence","description":"GlycoSequence-related interfaces","position":0}],"authorizations":null,"info":null}
+
+ * This work is licensed under the Creative Commons Attribution 4.0 International License. 
+ * To view a copy of this license, visit http://creativecommons.org/licenses/by/4.0/.
+ *
+ */
 @Controller
 @Api(value="/glycans", description="Structure Management")
 @RequestMapping ("/glycans")
@@ -470,32 +488,36 @@ public class GlycanController {
 //		return list;
 //	}
 	
-//	@RequestMapping(value = "/list", method = RequestMethod.GET, produces={"application/xml", "application/json"})
-//	@ApiOperation (value="Lists all the glycans", response=GlycanList.class, notes="payload option can be omitted to get only the glycan ids or set to 'full' to get glycan objects. 'exhibit' option allows to get glycan objects conforming to SIMILE Exhibit Json"
-//			+ " format.")
-//	@ApiResponses (value ={@ApiResponse(code=200, message="Success"), 
-//			@ApiResponse(code=500, message="Internal Server Error")})
-//	public @ResponseBody GlycanList listGlycans (
-//			@ApiParam(required=false, value="payload: id (default) or full or exhibit") 
-//			@RequestParam(required=false, value="payload", defaultValue="id")
-//			String payload) {
-//		GlycanList list = new GlycanList();
-//		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-//		String imageURL;
-//		String requestURI = request.getRequestURL().toString();
-//		if (payload != null && (payload.equalsIgnoreCase("full") || payload.equalsIgnoreCase("exhibit"))) {
-//			List<Glycan> glycans = glycanManager.getGlycans();
-//			for (Iterator<Glycan> iterator = glycans.iterator(); iterator.hasNext();) {
-//				Glycan glycanEntity = (Glycan) iterator.next();
-//				glycanEntity.getContributor().setEmail(""); // hide email from any user
-//			}
-//			list.setGlycans(glycans.toArray());
-//		}
-//		else {
-//			list.setGlycans(glycanManager.getGlycanIds().toArray());
-//		}
-//		return list;
-//	}
+	@RequestMapping(value = "/list", method = RequestMethod.GET, produces={"application/xml", "application/json"})
+	@ApiOperation (value="Lists all the glycans", response=GlycanList.class, notes="payload option can be omitted to get only the glycan ids or set to 'full' to get glycan objects. 'exhibit' option allows to get glycan objects conforming to SIMILE Exhibit Json"
+			+ " format.")
+	@ApiResponses (value ={@ApiResponse(code=200, message="Success"), 
+			@ApiResponse(code=500, message="Internal Server Error")})
+	public @ResponseBody GlycanList listGlycans (
+			@ApiParam(required=false, value="payload: id (default) or full or exhibit") 
+			@RequestParam(required=false, value="payload", defaultValue="id")
+			String payload) throws ParseException, SparqlException {
+		GlycanList list = new GlycanList();
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+		String imageURL;
+		String requestURI = request.getRequestURL().toString();
+		List<Glycan> glycanList = new ArrayList<Glycan>();
+		List<SparqlEntity> glycans = glycanProcedure.getGlycans();
+		for (SparqlEntity sparqlEntity : glycans) {
+			Glycan glycan = copyGlycan(sparqlEntity);
+		}
+		if (payload != null && (payload.equalsIgnoreCase("full") || payload.equalsIgnoreCase("exhibit"))) {
+			list.setGlycans(glycanList.toArray());
+		}
+		else {
+			List<String> ids = new ArrayList<String>();
+			for (SparqlEntity sparqlEntity : glycans) {
+				ids.add(sparqlEntity.getValue(GlycoSequenceSelectSparql.AccessionNumber));
+			}
+			list.setGlycans(ids.toArray());
+		}
+		return list;
+	}
 	
 	
 	// sample sparql : https://bitbucket.org/issaku/virtuoso/wiki/G00030MO%20(order%20by%20manual)
@@ -1028,5 +1050,19 @@ public class GlycanController {
     		headers.setContentType(MediaType.IMAGE_JPEG);
     	}
 		return new ResponseEntity<byte[]>(bytes, headers, HttpStatus.OK);
+    }
+    
+    public Glycan copyGlycan(SparqlEntity se) throws ParseException {
+		Glycan glycan = new Glycan();
+		glycan.setAccessionNumber(se.getValue(GlycoSequenceSelectSparql.AccessionNumber));
+		glycan.setContributor(se.getValue("Contributor"));
+		logger.debug(se.getValue("DateRegistered"));
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S", Locale.ENGLISH);
+		Date date = sdf.parse(se.getValue("DateRegistered"));
+		glycan.setDateEntered(date);
+		glycan.setMass(Double.valueOf(se.getValue("Mass")));
+		glycan.setStructure(se.getValue("GlycoCTSequence") + "\n");
+		glycan.setStructureLength(glycan.getStructure().length());
+		return glycan;
     }
 }

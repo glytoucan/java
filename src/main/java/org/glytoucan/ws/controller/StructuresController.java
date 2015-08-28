@@ -23,6 +23,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -139,12 +140,10 @@ public class StructuresController {
         }
     }
 	
-	@RequestMapping("/test")
-    public String test(RedirectAttributes redirectAttrs) {
-		redirectAttrs.addFlashAttribute("test", "why not");
-		return "redirect:/Structures/testout";
-	}
-	
+	@RequestMapping(value="/glycans/{accessionNumber}", method=RequestMethod.GET)
+	public String glycans(@PathVariable String accessionNumber, Model model)  {
+		return "structures/glycans";		
+    }	
 	@RequestMapping(value="/testout", method = RequestMethod.GET)
 	public String testout() {
 		return "structures/test";

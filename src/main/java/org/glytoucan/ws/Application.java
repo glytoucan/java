@@ -2,6 +2,7 @@ package org.glytoucan.ws;
 
 import org.eurocarbdb.resourcesdb.Config;
 import org.eurocarbdb.resourcesdb.io.MonosaccharideConverter;
+import org.glycoinfo.rdf.InsertSparql;
 import org.glycoinfo.rdf.SelectSparql;
 import org.glycoinfo.rdf.SparqlException;
 import org.glycoinfo.rdf.dao.SparqlDAO;
@@ -12,11 +13,13 @@ import org.glycoinfo.rdf.dao.virt.VirtSesameConnectionFactory;
 import org.glycoinfo.rdf.dao.virt.VirtSesameTransactionManager;
 import org.glycoinfo.rdf.glycan.ContributorInsertSparql;
 import org.glycoinfo.rdf.glycan.ContributorNameSelectSparql;
+import org.glycoinfo.rdf.glycan.GlycoSequenceInsertSparql;
 import org.glycoinfo.rdf.glycan.GlycoSequenceSelectSparql;
 import org.glycoinfo.rdf.glycan.ResourceEntryInsertSparql;
 import org.glycoinfo.rdf.glycan.SaccharideInsertSparql;
 import org.glycoinfo.rdf.glycan.wurcs.GlycoSequenceResourceEntryContributorSelectSparql;
 import org.glycoinfo.rdf.glycan.wurcs.MotifSequenceSelectSparql;
+import org.glycoinfo.rdf.glycan.wurcs.WurcsRDFInsertSparql;
 import org.glycoinfo.rdf.scint.ClassHandler;
 import org.glycoinfo.rdf.scint.InsertScint;
 import org.glycoinfo.rdf.scint.SelectScint;
@@ -47,7 +50,7 @@ import com.knappsack.swagger4springweb.util.ScalaObjectMapper;
 @SpringBootApplication
 public class Application extends SpringBootServletInitializer {
 	
-	private static final String graph = "http://test.glytoucan.org/ver2";
+	private static final String graph = "http://rdf.glytoucan.org";
 
 	@Bean
 	SparqlDAO getSparqlDAO() {
@@ -289,4 +292,21 @@ public class Application extends SpringBootServletInitializer {
 		sb.setFrom("FROM <http://rdf.glytoucan.org>\nFROM <http://rdf.glytoucan.org/sequence/wurcs>");
 		return sb;
 	}
+	
+	@Bean
+	WurcsRDFInsertSparql wurcsRDFInsertSparql() {
+		WurcsRDFInsertSparql wrdf = new WurcsRDFInsertSparql();
+		wrdf.setSparqlEntity(new SparqlEntity());
+		wrdf.setGraph("http://rdf.glytoucan.org/sequence/wurcs");
+		return wrdf;
+	}
+	
+	@Bean
+	InsertSparql glycoSequenceInsert() {
+		GlycoSequenceInsertSparql gsis = new GlycoSequenceInsertSparql();
+		gsis.setSparqlEntity(new SparqlEntity());
+		gsis.setGraphBase("http://rdf.glytoucan.org/sequence");
+		return gsis;
+	}
+
 }

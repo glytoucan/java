@@ -182,23 +182,39 @@ public class RegistriesController {
 		ArrayList<String> registerList = new ArrayList<String>();
 		ArrayList<String> origList = new ArrayList<String>();
 		ArrayList<String> imageList = new ArrayList<String>();
+		ArrayList<String> resultList = new ArrayList<String>();
 		for (int i = 0; i < checked.length; i++) {
 			String check = checked[i];
 			if (StringUtils.isNotBlank(check) && check.equals("on")) {
+				logger.debug("registering:" + resultSequence[i] + "<");
+				String id = glycanProcedure.register(resultSequence[i]);
 				registerList.add(resultSequence[i]);
 				origList.add(origSequence[i]);
 				imageList.add(image[i]);
+				resultList.add(id);
 			}
 		}
-		List<String> results = null;
-		if (!registerList.isEmpty()) {
-			 results = glycanProcedure.register(registerList);
-		}
-
+//		Map<String, String> results = null;
+//		List<String> resultList = new ArrayList<String>();
+//		if (!registerList.isEmpty()) {
+//			 results = glycanProcedure.register(registerList);
+//			 
+//			 
+////			 glycanProcedure.addGlycoSequence(origList);
+//		}
+//		for (String sequence: registerList) {
+//			for (Iterator iterator = results.keySet().iterator(); iterator.hasNext();) {
+//				String key = (String) iterator.next();
+//				String registeredSequence = results.get(key);
+//				if (registeredSequence.equals(sequence))
+//					resultList.add(key);
+//			}
+//		}
+				 
 		request.setAttribute("registeredList", registerList);
 		request.setAttribute("origList", origList);
 		request.setAttribute("imageList", imageList);
-		request.setAttribute("resultList", results);
+		request.setAttribute("resultList", resultList);
 		return "register/complete";
 	}
 
