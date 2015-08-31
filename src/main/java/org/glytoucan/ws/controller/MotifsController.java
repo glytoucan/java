@@ -5,8 +5,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.knappsack.swagger4springweb.annotation.ApiExclude;
+
 @Controller
 @RequestMapping("/Motifs")
+@ApiExclude
 public class MotifsController {
 
 	@RequestMapping("/")

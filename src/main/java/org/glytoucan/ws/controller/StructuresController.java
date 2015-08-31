@@ -28,13 +28,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.wordnik.swagger.annotations.Api;
+import com.knappsack.swagger4springweb.annotation.ApiExclude;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
 
 @Controller
-@Api(value="/Structures", description="Structure Management")
+@ApiExclude
 @RequestMapping("/Structures")
 public class StructuresController {
 	Log logger = LogFactory.getLog(StructuresController.class);

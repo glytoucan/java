@@ -4,7 +4,10 @@ import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.knappsack.swagger4springweb.annotation.ApiExclude;
 @Controller
+@ApiExclude
 public class WelcomeController {
 	
 	@RequestMapping("/")

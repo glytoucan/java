@@ -6,8 +6,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.knappsack.swagger4springweb.annotation.ApiExclude;
+
 @Controller
 @RequestMapping("/Preferences")
+@ApiExclude
 public class PreferencesController {
 
 	@RequestMapping("/")

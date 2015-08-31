@@ -31,11 +31,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.wordnik.swagger.annotations.Api;
+import com.knappsack.swagger4springweb.annotation.ApiExclude;
 import com.wordnik.swagger.annotations.ApiOperation;
 
 @Controller
-@Api(value="/Registries", description="Registration Management")
+@ApiExclude
 @RequestMapping("/Registries")
 public class RegistriesController {
 	Log logger = LogFactory.getLog(RegistriesController.class);
