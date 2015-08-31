@@ -2,6 +2,7 @@ package org.glytoucan.ws;
 
 import org.eurocarbdb.resourcesdb.Config;
 import org.eurocarbdb.resourcesdb.io.MonosaccharideConverter;
+import org.glycoinfo.batch.search.wurcs.SubstructureSearchSparql;
 import org.glycoinfo.rdf.InsertSparql;
 import org.glycoinfo.rdf.SelectSparql;
 import org.glycoinfo.rdf.SparqlException;
@@ -308,5 +309,11 @@ public class Application extends SpringBootServletInitializer {
 		gsis.setGraphBase("http://rdf.glytoucan.org/sequence");
 		return gsis;
 	}
-
+	
+    @Bean
+    SubstructureSearchSparql substructureSearchSparql() {
+    	SubstructureSearchSparql select = new SubstructureSearchSparql();
+//    	select.setFrom("");
+    	return select;
+    }
 }

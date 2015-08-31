@@ -35,7 +35,7 @@ import com.wordnik.swagger.annotations.ApiResponses;
  *
  */
 @RestController
-@Api(value="/glycosequence", description="GlycoSequence-related interfaces")
+@Api(value="/glycosequence", description="GlycoSequence data queries")
 @RequestMapping ("/glycosequence")
 public class GlycoSequenceController {
 	protected Log logger = LogFactory.getLog(getClass());

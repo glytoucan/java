@@ -12,9 +12,9 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.glycoinfo.conversion.error.ConvertException;
+import org.glycoinfo.conversion.error.ConvertFormatException;
 import org.glycoinfo.rdf.SparqlException;
 import org.glycoinfo.rdf.dao.SparqlEntity;
-import org.glycoinfo.rdf.glycan.wurcs.GlycoSequenceToWurcsSelectSparql;
 import org.glycoinfo.rdf.service.GlycanProcedure;
 import org.glytoucan.ws.client.GlyspaceClient;
 import org.glytoucan.ws.model.SequenceInput;
@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.knappsack.swagger4springweb.annotation.ApiExclude;
@@ -81,7 +82,9 @@ public class StructuresController {
 	@ApiResponses(value ={@ApiResponse(code=200, message="Structure added successfully"),
 			@ApiResponse(code=401, message="Unauthorized"),
 			@ApiResponse(code=500, message="Internal Server Error")})
-	public String structure(Model model, @ModelAttribute("sequence") SequenceInput sequence, BindingResult result, RedirectAttributes redirectAttrs)  {
+	public String structure(Model model, @ModelAttribute("sequence") SequenceInput sequence, BindingResult result, RedirectAttributes redirectAttrs, @RequestParam(required=false, value="errorMessage") String errorMessage)  {
+		if (StringUtils.isNotBlank(errorMessage))
+			model.addAttribute("errorMessage", errorMessage);
 		logger.debug(sequence);
         if (StringUtils.isEmpty(sequence.getSequence())) {
         	
@@ -97,22 +100,30 @@ public class StructuresController {
     			se = glycanProcedure.searchBySequence();
     			
 			} catch (SparqlException e) {
-				redirectAttrs.addAttribute("errorMessage", "an error occurred");
+				e.printStackTrace();
+				logger.debug("sparqlException:>" + e.getMessage());
+				redirectAttrs.addFlashAttribute("errorMessage", "an error occurred");
+				return "redirect:/Structures/structureSearch";
+			} catch (ConvertFormatException e) {
+				redirectAttrs.addFlashAttribute("errorMessage", "The format could not be determined, please refer to manual for supported formats.");
 				return "redirect:/Structures/structureSearch";
 			} catch (ConvertException e) {
-				redirectAttrs.addAttribute("errorMessage", "cannot convert this sequence");
+				e.printStackTrace();
+				logger.debug("ConvertException:>" + e.getMessage());
+				redirectAttrs.addFlashAttribute("errorMessage", e.getMessage());
 				return "redirect:/Structures/structureSearch";
 			}
-    		
-    		String id = se.getValue(GlycoSequenceToWurcsSelectSparql.AccessionNumber);
-    		if (null != id && id.equals("not registered")) {
+
+    		String id = se.getValue(GlycanProcedure.AccessionNumber);
+    		logger.debug("search found:>" + id + "<");
+    		if (null != id && id.equals(GlycanProcedure.NotRegistered)) {
 				sequence.setId("not registered");
 				GlyspaceClient gsClient = new GlyspaceClient();
 				try {
 					sequence.setImage(gsClient.getImage("https://test.glytoucan.org", sequence.getSequence()));
 				} catch (KeyManagementException | NoSuchAlgorithmException
 						| KeyStoreException | IOException e) {
-					redirectAttrs.addAttribute("errorMessage", "system error");
+					redirectAttrs.addFlashAttribute("errorMessage", "system error");
 					logger.error(e.getMessage());
 					e.printStackTrace();
 					return "redirect:/Structures/structureSearch";
@@ -129,13 +140,14 @@ public class StructuresController {
 				resultSequence = URLEncoder.encode("WURCS=2.0/2,2,1/[22112h-1a_1-5_2*NCC/3=O][12112h-1b_1-5]/1-2/a3-b1", "UTF-8");
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
-				resultSequence = se.getValue(GlycoSequenceToWurcsSelectSparql.Sequence);
+				resultSequence = se.getValue(GlycanProcedure.Sequence);
 			}
     		sequence.setResultSequence(resultSequence);
     		// embed wurcs, image, accNum into model
 //    		model.addAttribute("id", sequence.getId());
 //    		model.addAttribute("image", sequence.getImage());
 //    		model.addAttribute("wurcs", sequence.getResultSequence());
+    		
             return "structures/structure";
         }
     }
@@ -143,9 +155,16 @@ public class StructuresController {
 	@RequestMapping(value="/glycans/{accessionNumber}", method=RequestMethod.GET)
 	public String glycans(@PathVariable String accessionNumber, Model model)  {
 		return "structures/glycans";		
-    }	
-	@RequestMapping(value="/testout", method = RequestMethod.GET)
-	public String testout() {
+    }
+	
+	@RequestMapping(value="/test", method = RequestMethod.GET)
+	public String test() {
 		return "structures/test";
+	}
+	@RequestMapping(value="/testout", method = RequestMethod.GET)
+	public String testout(RedirectAttributes redirectAttrs) {
+		redirectAttrs.addAttribute("errorMessage", "error message");
+		redirectAttrs.addFlashAttribute("errorMessage", "error message");
+		return "redirect:/Structures/test";
 	}
 }

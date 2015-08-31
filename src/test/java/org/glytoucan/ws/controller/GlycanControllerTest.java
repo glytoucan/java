@@ -1,7 +1,13 @@
 package org.glytoucan.ws.controller;
 
 import static com.jayway.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.containsString;
 
+/*
+import static com.jayway.restassured.RestAssured.*;
+import static com.jayway.restassured.matcher.RestAssuredMatchers.*;
+import static org.hamcrest.Matchers.*;
+ */
 import org.apache.http.HttpStatus;
 import org.glycoinfo.batch.search.wurcs.SubstructureSearchSparql;
 import org.glycoinfo.rdf.SelectSparql;
@@ -24,7 +30,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import com.jayway.restassured.RestAssured;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringApplicationConfiguration(classes = {Application.class})
 @WebAppConfiguration
 @IntegrationTest("server.port:0")
 public class GlycanControllerTest {
@@ -42,7 +48,7 @@ public class GlycanControllerTest {
 
     @Autowired
 	GlycanController gc;
-
+    
 //	@Test
 	public void testG00032MOGlycoct() throws Exception {
 
@@ -82,7 +88,6 @@ public class GlycanControllerTest {
 
 	@Test
 	public void testG00012MOGlycoct() throws Exception {
-
 		// glycoct conversion to wurcs
 		SelectSparql compare = new SubstructureSearchSparql();
 		String G00003VQ = "WURCS=2.0/4,4,3/[u2122h][12112h-1b_1-5][22112h-1a_1-5][12112h-1b_1-5_2*NCC/3=O]/1-2-3-4/a4-b1_b3-c1_c3-d1";
@@ -90,6 +95,12 @@ public class GlycanControllerTest {
 		logger.debug("RESULT>" + result.getSparql() +"<");
 	}
 
+	@Test
+	public void testWurcsSubstructure() throws Exception {
+		String url = "glycans/sparql/substructure?sequence=WURCS%3D2.0%2F2%2C2%2C1%2F%5Ba1122h-1x_1-5%5D%5Ba2112h-1x_1-5_2*NCC%2F3%3DO%5D%2F1-2%2Fa%3F-b1&format=wurcs";
+        given().redirects().follow(false).when().get(url).then().statusCode(HttpStatus.SC_OK).and().body(containsString("http://rdf.glycoinfo.org/glycan/wurcs/2.0/monosaccharide/a1122h-1x_1-5"));
+	}
+	
 	@Test
 	public void testG00031MO() throws Exception {
 		Glycan result = gc.getGlycan("G00031MO");

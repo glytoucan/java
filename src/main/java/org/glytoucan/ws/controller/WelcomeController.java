@@ -9,7 +9,6 @@ import com.knappsack.swagger4springweb.annotation.ApiExclude;
 @Controller
 @ApiExclude
 public class WelcomeController {
-	
 	@RequestMapping("/")
 	public String welcome(Model model) {
 		return "index";
@@ -20,6 +19,4 @@ public class WelcomeController {
 		session.invalidate();
 		return "redirect:/";
 	}
-	
-	
 }

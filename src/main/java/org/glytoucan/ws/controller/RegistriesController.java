@@ -16,7 +16,6 @@ import org.apache.commons.logging.LogFactory;
 import org.glycoinfo.conversion.util.DetectFormat;
 import org.glycoinfo.rdf.SparqlException;
 import org.glycoinfo.rdf.dao.SparqlEntity;
-import org.glycoinfo.rdf.glycan.wurcs.GlycoSequenceToWurcsSelectSparql;
 import org.glycoinfo.rdf.service.GlycanProcedure;
 import org.glytoucan.ws.client.GlyspaceClient;
 import org.glytoucan.ws.model.SequenceInput;
@@ -83,18 +82,18 @@ public class RegistriesController {
 
 	    		SequenceInput si = new SequenceInput();
 	    		
-    			si.setSequence(sparqlEntity.getValue(GlycoSequenceToWurcsSelectSparql.FromSequence));
+    			si.setSequence(sparqlEntity.getValue(GlycanProcedure.FromSequence));
 
 	    		String resultSequence = null;
 //				try {
 //					resultSequence = URLEncoder.encode(sparqlEntity.getValue(GlycoSequenceToWurcsSelectSparql.Sequence), "UTF-8");
 //				} catch (UnsupportedEncodingException e) {
 //					e.printStackTrace();
-					resultSequence = sparqlEntity.getValue(GlycoSequenceToWurcsSelectSparql.Sequence);
+					resultSequence = sparqlEntity.getValue(GlycanProcedure.Sequence);
 //				}
 				si.setResultSequence(resultSequence);
 
-				String id = sparqlEntity.getValue(GlycoSequenceToWurcsSelectSparql.AccessionNumber);
+				String id = sparqlEntity.getValue(GlycanProcedure.AccessionNumber);
 	    		
 	    		if (StringUtils.isNotEmpty(resultSequence) && resultSequence.startsWith(GlycanProcedure.CouldNotConvertHeader)) {
 	    			si.setId(GlycanProcedure.CouldNotConvert);
@@ -122,12 +121,18 @@ public class RegistriesController {
 						e.printStackTrace();
 						return "redirect:/Registries/index";
 					}
+					glycanProcedure.setSequence(sparqlEntity.getValue(GlycanProcedure.FromSequence));
+					glycanProcedure.setFormat(sparqlEntity.getValue(GlycanProcedure.Format));
+					glycanProcedure.setId(sparqlEntity.getValue(GlycanProcedure.Id));
+					glycanProcedure.registerGlycoSequence();
 					list.add(si);
 	    		} else {
 	    			si.setId(id);
 	    			si.setImage(sparqlEntity.getValue(GlycanProcedure.Image));
 					listRegistered.add(si);
 	    		}
+	    		
+	    		logger.debug(si);
 			}
 
     		model.addAttribute("listRegistered", listRegistered);

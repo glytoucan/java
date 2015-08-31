@@ -109,6 +109,9 @@ public class GlycanController {
 			.getLog(GlycanController.class);
 
 	@Autowired
+	SubstructureSearchSparql substructureSearchSparql;
+	
+	@Autowired
 	GlycanProcedure glycanProcedure;
 //	
 //	@Autowired
@@ -152,6 +155,8 @@ public class GlycanController {
 //        t_config.setFlatSequence(false);
 //        return t_config;
 //	}
+	
+
 	public boolean validateSequence (String sequence, String format) throws SugarImporterException, GlycoVisitorException {
 		logger.debug("Input structure: {" + sequence + "}");
 		// assume GlycoCT encoding
@@ -572,16 +577,16 @@ public class GlycanController {
 		// wurcs to sparql
 		SparqlEntity se = new SparqlEntity();
 		se.setValue(GlycoSequence.Sequence, sequence);
-		SelectSparql searchBean = new SubstructureSearchSparql();
-		searchBean.setSparqlEntity(se);
+		SelectSparql selectSparql = substructureSearchSparql;
+		selectSparql.setSparqlEntity(se);
 		
-		String where = searchBean.getWhere();
-		searchBean.setWhere(where.replace('\n', ' '));
-		String sparql = searchBean.getSparql();
-		searchBean.setSparql(sparql.replace('\n', ' '));
-		logger.debug("GlycanController result:>" + searchBean.getSparql() + "<");
+		String where = selectSparql.getWhere();
+		selectSparql.setWhere(where.replace('\n', ' '));
+		String sparql = selectSparql.getSparql();
+		selectSparql.setSparql(sparql.replace('\n', ' '));
+		logger.debug("GlycanController result:>" + selectSparql.getSparql() + "<");
 
-		return searchBean;
+		return selectSparql;
 	}
 	
 //	@RequestMapping(value = "/search/composition", method = RequestMethod.POST, consumes={"application/xml", "application/json"}, produces={"application/xml", "application/json"})
