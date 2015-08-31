@@ -7,7 +7,24 @@ import com.wordnik.swagger.annotations.ApiModel;
 @ApiModel (value="Sequence Input", description="Structure Sequence")
 public class SequenceInput {
 	@NotEmpty
-	String sequence;
+	String sequence = "RES\\r\\n"
+			+ "1b:a-dgal-HEX-1:5\\r\\n"
+			+ "2s:n-acetyl\\r\\n"
+			+ "3b:b-dgal-HEX-1:5\\r\\n"
+			+ "LIN\\r\\n"
+			+ "1:1d(2+1)2n\\r\\n"
+			+ "2:1o(3+1)3d\\r\\n"
+			+ "RES\\r\\n"
+			+ "1b:x-dman-HEX-1:5\\r\\n"
+			+ "2b:x-dgal-HEX-1:5\\r\\n"
+			+ "3s:n-acetyl\\r\\n"
+			+ "LIN\\r\\n"
+			+ "1:1o(-1+1)2d\\r\\n"
+			+ "2:2d(2+1)3n\\r\\n"
+			+ "RES\\r\\n"
+			+ "1b:x-dglc-HEX-1:5|1:a\\r\\n"
+			+ "2b:b-dgal-HEX-1:5\\r\\n"
+			+ "LIN\n1:1o(4+1)2d";
     
     String resultSequence;
     
@@ -15,7 +32,7 @@ public class SequenceInput {
     
     String id;
     
-    boolean register = false;
+    boolean register = true;
 
 	public boolean isRegister() {
 		return register;
