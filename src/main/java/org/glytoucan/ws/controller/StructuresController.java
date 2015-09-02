@@ -15,6 +15,7 @@ import org.glycoinfo.conversion.error.ConvertException;
 import org.glycoinfo.conversion.error.ConvertFormatException;
 import org.glycoinfo.rdf.SparqlException;
 import org.glycoinfo.rdf.dao.SparqlEntity;
+import org.glycoinfo.rdf.glycan.GlycoSequence;
 import org.glycoinfo.rdf.service.GlycanProcedure;
 import org.glytoucan.ws.client.GlyspaceClient;
 import org.glytoucan.ws.model.SequenceInput;
@@ -133,16 +134,17 @@ public class StructuresController {
     			sequence.setImage(se.getValue(GlycanProcedure.Image));
     		}
     		
-    		String resultSequence = null;
-			try {
-//				resultSequence = URLEncoder.encode(se.getValue(GlycoSequenceToWurcsSelectSparql.Sequence), "UTF-8");
-//				WURCS=2.0/2,2,1/[22112h-1a_1-5_2*NCC/3=O][12112h-1b_1-5]/1-2/a3-b1
-				resultSequence = URLEncoder.encode("WURCS=2.0/2,2,1/[22112h-1a_1-5_2*NCC/3=O][12112h-1b_1-5]/1-2/a3-b1", "UTF-8");
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-				resultSequence = se.getValue(GlycanProcedure.Sequence);
-			}
-    		sequence.setResultSequence(resultSequence);
+//    		String resultSequence = null;
+//			try {
+////				resultSequence = URLEncoder.encode(se.getValue(GlycoSequenceToWurcsSelectSparql.Sequence), "UTF-8");
+////				WURCS=2.0/2,2,1/[22112h-1a_1-5_2*NCC/3=O][12112h-1b_1-5]/1-2/a3-b1
+//				resultSequence = URLEncoder.encode("WURCS=2.0/2,2,1/[22112h-1a_1-5_2*NCC/3=O][12112h-1b_1-5]/1-2/a3-b1", "UTF-8");
+//			} catch (UnsupportedEncodingException e) {
+//				e.printStackTrace();
+//				resultSequence = se.getValue(GlycanProcedure.Sequence);
+//			}
+//    		sequence.setResultSequence(resultSequence);
+    		sequence.setResultSequence(se.getValue(GlycoSequence.Sequence));
     		// embed wurcs, image, accNum into model
 //    		model.addAttribute("id", sequence.getId());
 //    		model.addAttribute("image", sequence.getImage());
