@@ -7,8 +7,8 @@ spring:
     triplestore:
         driverClassName: virtuoso.jdbc4.Driver
         dialect: sparqs
-        #url: jdbc:virtuoso://test.ts.glytoucan.org:1111
-        url: jdbc:virtuoso://127.0.0.1:1111
+        url: jdbc:virtuoso://test.ts.glytoucan.org:1111
+        #url: jdbc:virtuoso://127.0.0.1:1111
         username: dba
         password: dba
         graph: graph
@@ -20,5 +20,5 @@ app:
 
 google:
   oauth2:
-    clientId: 144546288829-o7vr36n5s7it71pi6tandfmsqteq38p3.apps.googleusercontent.com
-    clientSecret: Lpd2gIA6fRMgYuH3dhmrTx-O
+    clientId: 1
+    clientSecret: L
