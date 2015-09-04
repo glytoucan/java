@@ -8,13 +8,17 @@ spring:
         driverClassName: virtuoso.jdbc4.Driver
         dialect: sparqs
         url: jdbc:virtuoso://test.ts.glytoucan.org:1111
+        #url: jdbc:virtuoso://127.0.0.1:1111
         username: dba
         password: dba
         graph: graph
+server:
+    port: 80
+
 app:
   docs: http://localhost:8080
 
 google:
   oauth2:
-    clientId: something.apps.googleusercontent.com
-    clientSecret: clientSecret
+    clientId: 1
+    clientSecret: L
