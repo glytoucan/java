@@ -350,4 +350,11 @@ public class Application extends SpringBootServletInitializer {
 		mass.setGraphBase(graph);
 		return mass;
 	}
+	
+	@Bean
+	SelectSparql listAllGlycoSequenceContributorSelectSparql() {
+		GlycoSequenceResourceEntryContributorSelectSparql sb = new GlycoSequenceResourceEntryContributorSelectSparql();
+		sb.setFrom("FROM <http://rdf.glytoucan.org>\nFROM <http://rdf.glytoucan.org/sequence/wurcs>\nFROM <http://rdf.glytoucan.org/mass>");
+		return sb;
+	}
 }

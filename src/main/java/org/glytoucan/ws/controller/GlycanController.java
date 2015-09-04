@@ -15,6 +15,7 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eurocarbdb.MolecularFramework.io.CarbohydrateSequenceEncoding;
@@ -499,19 +500,25 @@ public class GlycanController {
 	@ApiResponses (value ={@ApiResponse(code=200, message="Success"), 
 			@ApiResponse(code=500, message="Internal Server Error")})
 	public @ResponseBody GlycanList listGlycans (
-			@ApiParam(required=false, value="payload: id (default) or full or exhibit") 
+			@ApiParam(required=false, value="payload: id (default) or full") 
 			@RequestParam(required=false, value="payload", defaultValue="id")
-			String payload) throws ParseException, SparqlException {
+			String payload, @ApiParam(required=true, value="limit: the limit to rows returned") 
+			@RequestParam(required=true, value="limit", defaultValue="100")
+			String limit, @ApiParam(required=false, value="offset: offset off of first row to retrieve") 
+			@RequestParam(required=false, value="offset", defaultValue="100")
+			String offset) throws ParseException, SparqlException {
 		GlycanList list = new GlycanList();
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
 		String imageURL;
 		String requestURI = request.getRequestURL().toString();
 		List<Glycan> glycanList = new ArrayList<Glycan>();
-		List<SparqlEntity> glycans = glycanProcedure.getGlycans();
+		List<SparqlEntity> glycans = glycanProcedure.getGlycans(limit, offset);
 		for (SparqlEntity sparqlEntity : glycans) {
 			Glycan glycan = copyGlycan(sparqlEntity);
+			logger.debug("adding:>" + glycan + "<");
+			glycanList.add(glycan);
 		}
-		if (payload != null && (payload.equalsIgnoreCase("full") || payload.equalsIgnoreCase("exhibit"))) {
+		if (payload != null && (payload.equalsIgnoreCase("full"))) {
 			list.setGlycans(glycanList.toArray());
 		}
 		else {
@@ -1063,12 +1070,15 @@ public class GlycanController {
 		Glycan glycan = new Glycan();
 		glycan.setAccessionNumber(se.getValue(GlycoSequenceSelectSparql.AccessionNumber));
 		glycan.setContributor(se.getValue("Contributor"));
+
 		logger.debug(se.getValue("DateRegistered"));
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S", Locale.ENGLISH);
 		Date date = sdf.parse(se.getValue("DateRegistered"));
 		glycan.setDateEntered(date);
-		glycan.setMass(Double.valueOf(se.getValue("Mass")));
-		glycan.setStructure(se.getValue("GlycoCTSequence") + "\n");
+		if (StringUtils.isNotBlank(se.getValue("Mass")))
+			glycan.setMass(Double.valueOf(se.getValue("Mass")));
+		if (StringUtils.isNotBlank(se.getValue("GlycoCTSequence")))
+			glycan.setStructure(se.getValue("GlycoCTSequence") + "\n");
 		glycan.setStructureLength(glycan.getStructure().length());
 		return glycan;
     }

@@ -7,9 +7,6 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
 
-import javax.mail.Message;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,9 +20,7 @@ import org.glycoinfo.rdf.scint.SelectScint;
 import org.glycoinfo.rdf.service.UserProcedure;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -89,27 +84,6 @@ public class RdfAuthenticationSuccessHandler extends
 			e.printStackTrace();
 			throw new ServletException(e);
 		}
-
-        MimeMessagePreparator preparator = new MimeMessagePreparator() {
-
-            public void prepare(MimeMessage mimeMessage) throws Exception {
-
-                mimeMessage.setRecipient(Message.RecipientType.TO,
-                        new InternetAddress(userInfo.getEmail()));
-                mimeMessage.setFrom(new InternetAddress("admin@glytoucan.org"));
-                mimeMessage.setSubject("registration:" + userInfo.getGivenName() + " " + userInfo.getEmail());
-                mimeMessage.setText(
-                        "new user info:\nFirst Name:" + userInfo.getGivenName() + "\nLast Name:"
-                            + userInfo.getFamilyName() + "\nemail:" + userInfo.getEmail() + "\nverified:" + userInfo.getVerifiedEmail());
-            }
-        };
-
-        try {
-            this.mailSender.send(preparator);
-        }
-        catch (MailException ex) {
-            logger.error(ex.getMessage());
-        }
 
         // pass processing back to SavedRequestAware parent.
 		super.onAuthenticationSuccess(request, response, authentication);

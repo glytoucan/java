@@ -42,7 +42,7 @@
 			<tbody>
 				<tr>
 					<td>${sequence.id}</td>
-					<td width="60%"><img src="http://${hostname}${sequence.image}"><p></td>
+					<td width="60%"><img src="${sequence.image}"><p></td>
 				</tr>
 			</tbody>
 		</table>

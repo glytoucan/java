@@ -111,6 +111,15 @@ public class Glycan {
 		this.contributor = contributor;
 	}
 
+	@Override
+	public String toString() {
+		return "Glycan [glycanId=" + glycanId + ", accessionNumber="
+				+ accessionNumber + ", dateEntered=" + dateEntered
+				+ ", structure=" + structure + ", structureLength="
+				+ structureLength + ", mass=" + mass + ", motifs=" + motifs
+				+ ", contributor=" + contributor + "]";
+	}
+
 
 	/**
 	 * @return the compositions
