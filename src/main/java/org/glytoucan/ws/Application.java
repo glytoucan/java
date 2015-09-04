@@ -1,8 +1,13 @@
 package org.glytoucan.ws;
 
+import java.io.IOException;
+
+import org.eurocarbdb.application.glycanbuilder.GlycanRendererAWT;
+import org.eurocarbdb.application.glycoworkbench.GlycanWorkspace;
 import org.eurocarbdb.resourcesdb.Config;
 import org.eurocarbdb.resourcesdb.io.MonosaccharideConverter;
 import org.glycoinfo.batch.search.wurcs.SubstructureSearchSparql;
+import org.glycoinfo.mass.MassInsertSparql;
 import org.glycoinfo.rdf.InsertSparql;
 import org.glycoinfo.rdf.SelectSparql;
 import org.glycoinfo.rdf.SparqlException;
@@ -29,6 +34,8 @@ import org.glycoinfo.rdf.service.GlycanProcedure;
 import org.glycoinfo.rdf.service.UserProcedure;
 import org.glycoinfo.rdf.service.impl.ContributorProcedureRdf;
 import org.glycoinfo.rdf.utils.TripleStoreProperties;
+import org.glycomedb.residuetranslator.ResidueTranslator;
+import org.glyspace.registry.utils.ImageGenerator;
 import org.glytoucan.ws.api.D3SequenceSelectSparql;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryException;
@@ -78,7 +85,7 @@ public class Application extends SpringBootServletInitializer {
 	}
 	
 	@Bean
-	MonosaccharideConverter getMonosaccharideConverter() {
+	MonosaccharideConverter monosaccharideConverter() {
 		Config config = new Config();
 		MonosaccharideConverter mc = new MonosaccharideConverter();
 		mc.setConfig(config);
@@ -306,7 +313,7 @@ public class Application extends SpringBootServletInitializer {
 	InsertSparql glycoSequenceInsert() {
 		GlycoSequenceInsertSparql gsis = new GlycoSequenceInsertSparql();
 		gsis.setSparqlEntity(new SparqlEntity());
-		gsis.setGraphBase("http://rdf.glytoucan.org/sequence");
+		gsis.setGraph("http://rdf.glytoucan.org");
 		return gsis;
 	}
 	
@@ -316,4 +323,31 @@ public class Application extends SpringBootServletInitializer {
 //    	select.setFrom("");
     	return select;
     }
+    
+    @Bean
+    ResidueTranslator residueTranslator() throws IOException {
+    	return new ResidueTranslator();
+    }
+
+    @Bean
+    ImageGenerator imageGenerator() {
+    	return new ImageGenerator();
+    }
+
+    @Bean
+    GlycanRendererAWT glycanRenderer() {
+    	return new GlycanRendererAWT();
+    }
+    
+    @Bean
+    GlycanWorkspace glycanWorkspace() {
+    	return new GlycanWorkspace(glycanRenderer());
+    }
+    
+	@Bean
+	MassInsertSparql massInsertSparql() {
+		MassInsertSparql mass = new MassInsertSparql();
+		mass.setGraphBase(graph);
+		return mass;
+	}
 }

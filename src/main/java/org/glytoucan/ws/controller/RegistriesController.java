@@ -67,6 +67,7 @@ public class RegistriesController {
     		logger.debug("text1>" + sequence.getSequence() + "<");
 
     		List<String> inputs = DetectFormat.split(sequence.getSequence());
+    		logger.debug("split input:>" + inputs + "<");
     		SparqlEntity se;
     		List<SparqlEntity> searchResults;
     		try {
@@ -76,6 +77,7 @@ public class RegistriesController {
 				return "redirect:/Registries/index";
 			}
     		
+    		logger.debug("search results:>" + searchResults + "<");
     		for (Iterator iterator = searchResults.iterator(); iterator
 					.hasNext();) {
 				SparqlEntity sparqlEntity = (SparqlEntity) iterator.next();
@@ -83,23 +85,31 @@ public class RegistriesController {
 	    		SequenceInput si = new SequenceInput();
 	    		
     			si.setSequence(sparqlEntity.getValue(GlycanProcedure.FromSequence));
+    			String imageSequence = si.getSequence().replaceAll("(?:\\r\\n|\\n)", "\\\\n");
+    			si.setSequence(imageSequence);
 
 	    		String resultSequence = null;
 //				try {
 //					resultSequence = URLEncoder.encode(sparqlEntity.getValue(GlycoSequenceToWurcsSelectSparql.Sequence), "UTF-8");
 //				} catch (UnsupportedEncodingException e) {
 //					e.printStackTrace();
-					resultSequence = sparqlEntity.getValue(GlycanProcedure.Sequence);
+					resultSequence = sparqlEntity.getValue(GlycanProcedure.ResultSequence);
+					
 //				}
+				if (StringUtils.isBlank(resultSequence))
+					resultSequence = sparqlEntity.getValue(GlycanProcedure.Sequence);
 				si.setResultSequence(resultSequence);
 
 				String id = sparqlEntity.getValue(GlycanProcedure.AccessionNumber);
 	    		
 	    		if (StringUtils.isNotEmpty(resultSequence) && resultSequence.startsWith(GlycanProcedure.CouldNotConvertHeader)) {
 	    			si.setId(GlycanProcedure.CouldNotConvert);
+//	    			String imageSequence = si.getSequence().replaceAll("(?:\\r\\n|\\n)", "\\\\n");
+	    			
+	    			logger.debug("imageSequence:>" + imageSequence + "<");
 					GlyspaceClient gsClient = new GlyspaceClient();
 					try {
-						si.setImage(gsClient.getImage("https://test.glytoucan.org", si.getSequence()));
+						si.setImage(gsClient.getImage("https://test.glytoucan.org", imageSequence));
 					} catch (KeyManagementException | NoSuchAlgorithmException
 							| KeyStoreException | IOException e) {
 						redirectAttrs.addAttribute("errorMessage", "system error");
@@ -110,25 +120,28 @@ public class RegistriesController {
 					logger.debug("adding to error:>" + si);
 					listErrors.add(si);
 	    		} else if (StringUtils.isNotEmpty(id) && id.equals(GlycanProcedure.NotRegistered)) {
+//	    			String imageSequence = si.getSequence().replaceAll("(?:\\r\\n|\\n)", "\\\\n");
+	    			
+	    			logger.debug("imageSequence:>" + imageSequence + "<");
 
 					GlyspaceClient gsClient = new GlyspaceClient();
 					try {
-						si.setImage(gsClient.getImage("https://test.glytoucan.org", si.getSequence()));
+						logger.debug("glycoct to image:>" + si.getSequence() + "<");
+						si.setImage(gsClient.getImage("https://test.glytoucan.org", imageSequence));
 					} catch (KeyManagementException | NoSuchAlgorithmException
 							| KeyStoreException | IOException e) {
-						redirectAttrs.addAttribute("errorMessage", "system error");
+						redirectAttrs.addFlashAttribute("errorMessage", "system error");
 						logger.error(e.getMessage());
 						e.printStackTrace();
 						return "redirect:/Registries/index";
 					}
-					glycanProcedure.setSequence(sparqlEntity.getValue(GlycanProcedure.FromSequence));
-					glycanProcedure.setFormat(sparqlEntity.getValue(GlycanProcedure.Format));
-					glycanProcedure.setId(sparqlEntity.getValue(GlycanProcedure.Id));
-					glycanProcedure.registerGlycoSequence();
+					logger.debug("adding to new:>" + si);
 					list.add(si);
 	    		} else {
+					si.setResultSequence(resultSequence);
 	    			si.setId(id);
 	    			si.setImage(sparqlEntity.getValue(GlycanProcedure.Image));
+					logger.debug("adding to old:>" + si);
 					listRegistered.add(si);
 	    		}
 	    		
@@ -192,7 +205,7 @@ public class RegistriesController {
 			String check = checked[i];
 			if (StringUtils.isNotBlank(check) && check.equals("on")) {
 				logger.debug("registering:" + resultSequence[i] + "<");
-				String id = glycanProcedure.register(resultSequence[i]);
+				String id = glycanProcedure.register(origSequence[i], resultSequence[i]);
 				registerList.add(resultSequence[i]);
 				origList.add(origSequence[i]);
 				imageList.add(image[i]);
@@ -203,7 +216,7 @@ public class RegistriesController {
 //		List<String> resultList = new ArrayList<String>();
 //		if (!registerList.isEmpty()) {
 //			 results = glycanProcedure.register(registerList);
-//			 
+//			 searchBySequence
 //			 
 ////			 glycanProcedure.addGlycoSequence(origList);
 //		}

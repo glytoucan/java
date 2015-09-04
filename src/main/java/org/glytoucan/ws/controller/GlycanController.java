@@ -36,29 +36,13 @@ import org.glycoinfo.rdf.glycan.GlycoSequence;
 import org.glycoinfo.rdf.glycan.GlycoSequenceSelectSparql;
 import org.glycoinfo.rdf.service.GlycanProcedure;
 import org.glycoinfo.rdf.service.UserProcedure;
+import org.glyspace.registry.importers.GWSImporter;
+import org.glyspace.registry.utils.ImageGenerator;
 import org.glytoucan.ws.api.Confirmation;
 import org.glytoucan.ws.api.Glycan;
 import org.glytoucan.ws.api.GlycanInput;
 import org.glytoucan.ws.api.GlycanList;
 import org.glytoucan.ws.api.GlycanResponse;
-//import org.glycomedb.rdf.glycordf.util.GlycoRDFWriter;
-//import org.glycomedb.rdf.glycordf.util.RDFGeneratorGlycanConfig;
-//import org.glycomedb.residuetranslator.ResidueTranslator;
-//import org.glytoucan.ws.dao.exceptions.ErrorCodes;
-//import org.glytoucan.ws.dao.exceptions.GlycanNotFoundException;
-//import org.glytoucan.ws.dao.exceptions.UserQuotaExceededException;
-//import org.glytoucan.ws.database.GlycanComposition;
-//import org.glytoucan.ws.database.GlycanEntity;
-//import org.glytoucan.ws.database.MotifEntity;
-//import org.glytoucan.ws.database.MotifTag;
-//import org.glytoucan.ws.database.UserEntity;
-//import org.glytoucan.ws.importers.GWSImporter;
-//import org.glytoucan.ws.service.EmailManager;
-//import org.glytoucan.ws.service.GlycanManager;
-//import org.glytoucan.ws.service.UserManager;
-//import org.glytoucan.ws.service.search.CombinationSearch;
-//import org.glytoucan.ws.utils.GlycanStructureProvider;
-//import org.glytoucan.ws.utils.ImageGenerator;
 //import org.glytoucan.ws.utils.MassCalculator;
 //import org.glytoucan.ws.view.Confirmation;
 //import org.glytoucan.ws.view.GlycanErrorResponse;
@@ -89,6 +73,23 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
+//import org.glycomedb.rdf.glycordf.util.GlycoRDFWriter;
+//import org.glycomedb.rdf.glycordf.util.RDFGeneratorGlycanConfig;
+//import org.glycomedb.residuetranslator.ResidueTranslator;
+//import org.glytoucan.ws.dao.exceptions.ErrorCodes;
+//import org.glytoucan.ws.dao.exceptions.GlycanNotFoundException;
+//import org.glytoucan.ws.dao.exceptions.UserQuotaExceededException;
+//import org.glytoucan.ws.database.GlycanComposition;
+//import org.glytoucan.ws.database.GlycanEntity;
+//import org.glytoucan.ws.database.MotifEntity;
+//import org.glytoucan.ws.database.MotifTag;
+//import org.glytoucan.ws.database.UserEntity;
+//import org.glytoucan.ws.importers.GWSImporter;
+//import org.glytoucan.ws.service.EmailManager;
+//import org.glytoucan.ws.service.GlycanManager;
+//import org.glytoucan.ws.service.UserManager;
+//import org.glytoucan.ws.service.search.CombinationSearch;
+//import org.glytoucan.ws.utils.GlycanStructureProvider;
 
 /**
  * @author aoki
@@ -120,8 +121,8 @@ public class GlycanController {
 //	@Autowired
 	UserProcedure userManager;
 //	
-//	@Autowired
-//	ImageGenerator imageGenerator;
+	@Autowired
+	ImageGenerator imageGenerator;
 //	
 //	@Autowired
 //	MassCalculator massCalculator;
@@ -205,25 +206,24 @@ public class GlycanController {
 				throw new IllegalArgumentException("Encoding " + encoding + " is not supported");
 			}
 		} 
-//		else {
-//			String structure;
-//			if (encoding != null && encoding.equalsIgnoreCase("gws")) { // glycoworkbench encoding
-//				structure = new GWSImporter().parse(glycan.getStructure());
-//				//logger.debug("converted from gws:  {}", structure);
-//			} else {
-//				// assume GlycoCT encoding
-//				structure = glycan.getStructure();
-//			}
-//			sugarStructure = StructureParserValidator.parse(structure);
-//		}
+		else {
+			String structure;
+			if (encoding != null && encoding.equalsIgnoreCase("gws")) { // glycoworkbench encoding
+				structure = new GWSImporter().parse(glycan.getSequence());
+				//logger.debug("converted from gws:  {}", structure);
+			} else {
+				// assume GlycoCT encoding
+				structure = glycan.getSequence();
+			}
+			sugarStructure = StructureParserValidator.parse(structure);
+		}
 		
 		
-//		if (StructureParserValidator.isValid(sugarStructure)) {		
-//			return sugarStructure;
-//		} else {
-//			throw new IllegalArgumentException("Validation error, please submit a valid structure");
-//		}
-		return null;
+		if (StructureParserValidator.isValid(sugarStructure)) {		
+			return sugarStructure;
+		} else {
+			throw new IllegalArgumentException("Validation error, please submit a valid structure");
+		}
 	}
 //	
 //	private void getCompositions (GlycanExhibit glycan, Set<GlycanComposition> compositions) {
@@ -991,9 +991,11 @@ public class GlycanController {
     		String style
     		) throws Exception {
     	SparqlEntity glycanEntity = glycanProcedure.searchByAccessionNumber(accessionNumber);
+    	String sequence = glycanEntity.getValue("GlycoCTSequence");
     	
-    	byte[] bytes = null;
-//    			imageGenerator.getImage(glycanEntity.getStructure(), format, notation, style);
+    	logger.debug("image for " + accessionNumber + " sequence:>" + sequence + "<");
+    	
+    	byte[] bytes = imageGenerator.getImage(sequence, format, notation, style);
 
 				
 		HttpHeaders headers = new HttpHeaders();
@@ -1030,21 +1032,21 @@ public class GlycanController {
     		String style
     		) throws Exception {
     	
-//    	Sugar sugarStructure = importParseValidate(glycan);
-//    	if (sugarStructure == null) {
-//			throw new IllegalArgumentException("Structure cannot be imported");
-//		}
+    	Sugar sugarStructure = importParseValidate(glycan);
+    	if (sugarStructure == null) {
+			throw new IllegalArgumentException("Structure cannot be imported");
+		}
 		String exportedStructure;
-//		
-//		// export into GlycoCT
-//		try {
-//			exportedStructure = StructureParserValidator.exportStructure(sugarStructure);
-//		} catch (Exception e) {
-//			throw new IllegalArgumentException("Cannot export into common encoding: " + e.getMessage());
-//		}
+		
+		// export into GlycoCT
+		try {
+			exportedStructure = StructureParserValidator.exportStructure(sugarStructure);
+		} catch (Exception e) {
+			throw new IllegalArgumentException("Cannot export into common encoding: " + e.getMessage());
+		}
     	
-    	byte[] bytes = null;
-//		imageGenerator.getImage(exportedStructure, format, notation, style);
+		logger.debug(exportedStructure);
+    	byte[] bytes = imageGenerator.getImage(exportedStructure, format, notation, style);
 		
 		HttpHeaders headers = new HttpHeaders();
     	if (format == null || format.equalsIgnoreCase("png")) {    

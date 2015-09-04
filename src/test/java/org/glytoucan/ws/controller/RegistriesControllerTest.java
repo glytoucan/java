@@ -69,7 +69,7 @@ public class RegistriesControllerTest {
 		si.setSequence(sequence);
 		si.setResultSequence("WURCS=2.0/2,2,1/[a2112h-1a_1-5_2*NCC/3=O][a2112h-1b_1-5]/1-2/a3-b1");
 //		si.setResultSequence("WURCS%3D2.0%2F2%2C2%2C1%2F%5B22112h-1a_1-5_2*NCC%2F3%3DO%5D%5B12112h-1b_1-5%5D%2F1-2%2Fa3-b1");
-		si.setImage("/glyspace/service/glycans/G00031MO/image?style=extended&format=png&notation=cfg");
+		si.setImage("/glycans/G00031MO/image?style=extended&format=png&notation=cfg");
 
 			mockMvc.perform(
 					post("/Registries/confirmation").contentType(
@@ -292,7 +292,7 @@ LIN
 		si.setId(id);
 		si.setSequence(sequence);
 		si.setResultSequence("WURCS=2.0/2,2,1/[a2112h-1a_1-5_2*NCC/3=O][a2112h-1b_1-5]/1-2/a3-b1");
-		si.setImage("/glyspace/service/glycans/" + id + "/image?style=extended&format=png&notation=cfg");
+		si.setImage("/glycans/" + id + "/image?style=extended&format=png&notation=cfg");
 		SequenceInput si2 = new SequenceInput();
 		si2.setId(null);
 		si2.setSequence(sequence2);
@@ -314,5 +314,86 @@ LIN
 					.andExpect(model().attribute("listNew", contains(si2)))
 					.andExpect(model().attribute("listErrors", contains(si3)));
 	}
+
+
+	@Test
+	public void testRegisterNew() throws Exception {
+		
+		/*
+RES
+1b:x-dgal-HEX-1:5
+2b:x-dman-HEX-1:5
+3s:n-acetyl
+LIN
+1:1o(-1+1)2d
+2:1d(2+1)3n
+		*/
+//		String id = "G00031MO";
+		String sequence = "RES\\n"
+				+ "1b:x-dgal-HEX-1:5\\n"
+				+ "2b:x-dman-HEX-1:5\\n"
+				+ "3s:n-acetyl\\n"
+				+ "LIN\\n"
+				+ "1:1o(-1+1)2d\\n"
+				+ "2:1d(2+1)3n";
+		
+		logger.debug("sequence:>" + sequence + "<");
+		SequenceInput si = new SequenceInput();
+		si.setId(null);
+		si.setSequence(sequence);
+		si.setResultSequence("WURCS=2.0/2,2,1/[a2112h-1a_1-5_2*NCC/3=O][a2112h-1b_1-5]/1-2/a3-b1");
+//		si.setImage("/glycans/" + id + "/image?style=extended&format=png&notation=cfg");
+			mockMvc.perform(
+					post("/Registries/confirmation").contentType(
+							MediaType.APPLICATION_FORM_URLENCODED).param(
+							"sequence", sequence))
+					.andExpect(status().isOk())
+					.andExpect(view().name("register/confirmation"))
+					.andExpect(model().attribute("listRegistered", contains(si)));
+	}
+	
+
+	@Test
+	public void testRegisterNew2() throws Exception {
+		
+		/*
+RES
+1b:x-dman-HEX-1:5
+2b:x-dgal-HEX-1:5
+LIN
+1:1o(-1+1)2d
+		*/
+//		String id = "G00031MO";
+		String sequence = "RES\\n"
+				+ "1b:x-dman-HEX-1:5\\n"
+				+ "2b:x-dgal-HEX-1:5\\n"
+				+ "LIN\\n"
+				+ "1:1o(-1+1)2d\\n";
+		
+		logger.debug("sequence:>" + sequence + "<");
+//		String[] resultSequence = request.getParameterValues("resultSequence");
+//		String[] origSequence = request.getParameterValues("sequence");
+//		String[] image = request.getParameterValues("image");
+
+		
+		SequenceInput si = new SequenceInput();
+		si.setId(null);
+		si.setSequence(sequence);
+		si.setResultSequence("WURCS=2.0/2,2,1/[a2112h-1a_1-5_2*NCC/3=O][a2112h-1b_1-5]/1-2/a3-b1");
+//		si.setImage("/glycans/" + id + "/image?style=extended&format=png&notation=cfg");
+			mockMvc.perform(
+					post("/Registries/complete").contentType(
+							MediaType.APPLICATION_FORM_URLENCODED)
+							.param("checked", "on")
+							.param("resultSequence", "WURCS=2.0/2,2,1/[a1122h-1x_1-5][a2112h-1x_1-5]/1-2/a?-b1")
+							.param("sequence", sequence)
+							.param("image", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALoAAABSCAIAAABse1lJAAADkUlEQVR42u3bv0sbYRjA8aeDrU3TNmArKUQMmLZRrpiWFDIU6pAhgy0OFjpkSCGDQxbhBimhKGRwUEghg4UOLh0EoVIyBBQOCoVCBgcHR/8EhwwZHNLnjLUdLJprc28av1/eWeXez7333g+lRXThhENAcCG4EFwILgQXgguHgOBCcCG4EFwILgQXDgHBheBCcCG4EFwILhwCggvBheBCcCG4EFw4BAQXggvBheBCXezo6KgPuci/yM9jUa/Xi8ViOp1u/2rLsjKZTKlU2t/f7x0ru7u7iUTClJjucjn++d6Hb1wcxxHrhkSuyZuwlGOyMSGfLfk0Lqtj8npYhgfUjc5TL6wr8Xh8ZWWlP1eX3ueiE2Dbtty7KktR+f7k7PHtsdgjMjRgcJ7a1Wo15dK3F6Me56LHXZ6HJHVLtif/aOV0fHkk44FCoWCQy8LCwuLiYn9udXufi869PLvtLh7nWmkPJ6FiDK4xuVxueXkZLga4VKtVd7OiAi5o5ecaEw6HTe1j8vn82toaXPzm4l6Gxq67O9mOrLSHPaI7XyOzpUuL2avhJeWie0b3VsiDleOdbyQSMXJ3rX92MpmEi99cdFWX+YhHLjpeDJVKJf9nq9FoBIPBZrMJF1+56O2o+1jFM5fiqKnr0dTU1NbWFlx85SJXpONN7u/jfcyyLCMTVi6X9f4ILmdz6WKerej4+FDMFQgEeAng6+oyODgoX/9idanc18uZqVM8lUrt7OzAxT8usdjxiyHPXN5F0+m0KS66y56bm4OLf1yy2ay8HfXO5dXdYrFoiovew0ejUbj4x2Vzc1Oe3vTMRRener1u8PlHKBQ6ODiAi09cms2mnqDy4YEXLktR3T20jKaXQhUPF//eGa2vr8t4oIP3i+2xPanOHMcxy8W2bSPvGi/1G+nZ2Vl5eaejx/+ZTEanqmW6QqFg5EuGS82l0WjoZcUVc5E1xklMT0/PzMwY/DrptFwuV6lU4OL313QqRteYZDJ5zj5mdUy3t3pO94KV9sbLyF6bb3VP9jE6Ae5H3Xp3vTFx8gTPSbjvleYjugJZllWtVlu9kV6GTL2X5j8Bfp2yeq+RzWZ1FXGf+YoEg8F4PJ7P52u1Wi8sKu0ODw/D4fDe3l6/caHuiTH1q+FCcCG4EFwILgQXIrgQXAguBBeCC8GFCC4EF4ILwYXgQnAhggvBheBCcCG4EFyI4EJwIbgQXOh/6geJSrubc4F5CgAAAABJRU5ErkJggg==")
+							)
+					.andExpect(status().isOk())
+					.andExpect(view().name("register/confirmation"))
+					.andExpect(model().attribute("listNew", contains(si)));
+	}
+
+
 	
 }

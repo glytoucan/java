@@ -117,7 +117,7 @@
 		<dependency>
 			<groupId>org.glycoinfo</groupId>
 			<artifactId>wurcsframework</artifactId>
-			<version>0.0.2-Glytoucan1.0</version>
+      <version>0.0.2-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
@@ -150,6 +150,25 @@
 			<groupId>org.freemarker</groupId>
 			<artifactId>freemarker</artifactId>
 			<version>2.3.23</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glyspace</groupId>
+			<artifactId>api</artifactId>
+			<version>0.1RELEASE</version>
+			<exclusions>
+				<!-- <exclusion> -->
+				<!-- <artifactId>javassist</artifactId> -->
+				<!-- <groupId>javassist</groupId> -->
+				<!-- </exclusion> -->
+				<exclusion>
+					<groupId>ch.qos.logback</groupId>
+					<artifactId>logback-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>ch.qos.logback</groupId>
+					<artifactId>logback-classic</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	</dependencies>
 
@@ -260,6 +279,9 @@
 			<activation>
 				<activeByDefault></activeByDefault>
 			</activation>
+<!-- 			<properties> -->
+<!-- 				<spring.mainClass>org.springframework.boot.loader.PropertiesLauncher</spring.mainClass> -->
+<!-- 			</properties> -->
 		</profile>
 		<profile>
 			<id>test</id>

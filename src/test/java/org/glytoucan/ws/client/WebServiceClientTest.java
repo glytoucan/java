@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +30,33 @@ public class WebServiceClientTest {
 				+ "2:2o(3+1)3d\\n"
 				+ "3:3o(3+1)4d\\n"
 				+ "4:4d(2+1)5n");
+		Assert.assertNotNull(image);
+		logger.debug(image);
+	}
+
+	@Test
+	public void imageTest() throws Exception {
+		GlyspaceClient gsClient = new GlyspaceClient();
+		String image = gsClient.getImage("https://test.glytoucan.org", "RES\\n"
+				+ "1b:x-dgal-HEX-1:5\\n"
+				+ "2b:x-dman-HEX-1:5\\n"
+				+ "3s:n-acetyl\\n"
+				+ "LIN\\n"
+				+ "1:1o(-1+1)2d\\n"
+				+ "2:1d(2+1)3n");
+		Assert.assertNotNull(image);
+		logger.debug(image);
+	}
+
+	@Test
+	public void imageTestmanglc() throws Exception {
+		GlyspaceClient gsClient = new GlyspaceClient();
+		String image = gsClient.getImage("https://test.glytoucan.org", "RES\\n"
+				+ "1b:x-dman-HEX-1:5\\n"
+				+ "2b:x-dglc-HEX-1:5\\n"
+				+ "LIN\\n"
+				+ "1:1o(-1+1)2d\\n");
+		Assert.assertNotNull(image);
 		logger.debug(image);
 	}
 	

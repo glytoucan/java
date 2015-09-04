@@ -163,7 +163,7 @@ $(function () { // wrapper function
       this.motifList = {};
       this.monosaccharideList = {};
       this.current_items = {motif: {}, monosaccharide: {}};
-      this.$listBox.draggable();
+      this.$listBox.draggable({handle: '.listBox_title, .listBox_tab'});
 
       this.mass_enable = false;
       this.mass_initValue = {min: -1, max: -1};
@@ -1013,13 +1013,14 @@ $(function () { // wrapper function
       };
       this.$loading.removeClass('loading_anim--hide');
       util.ajax_get('substructure_search', obj).then(function (data) {
-        if (data === '') {
+        var data_arr = data.split('<hr />');
+        if (data_arr[0].replace(/\n/g, '') === '') {
           _this.$resultNothing.addClass('glSearchNothing--show');
           _this.$resultTable.children('tbody').html('');
+          _this.$resultTable.addClass('subResultTable--hide');
           _this.$pager.html('');
           return;
         }
-        var data_arr = data.split('<hr />');
         _this.$resultTable.children('tbody').html(data_arr[0]);
         var total = data_arr[1].replace(/^\s+/, '').split(/\s+/)[0];
         _this.$count.text(total);

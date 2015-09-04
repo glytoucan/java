@@ -40,7 +40,7 @@ ${origList[newItem?index]?html?replace("\\n", "<br>")}
 <#if resultList[newItem?index]?starts_with("ERROR")>
 ${resultList[newItem?index]}
 <#else>
-New ID:<a href="/Structures/glycans/${resultList[newItem?index]}">${resultList[newItem?index]}</a>
+New ID:<a href="/Structures/Glycans/${resultList[newItem?index]}">${resultList[newItem?index]}</a>
 </#if>
 </td>
 </tr>

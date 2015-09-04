@@ -152,7 +152,7 @@ public class StructuresController {
         }
     }
 	
-	@RequestMapping(value="/glycans/{accessionNumber}", method=RequestMethod.GET)
+	@RequestMapping(value="/Glycans/{accessionNumber}", method=RequestMethod.GET)
 	public String glycans(@PathVariable String accessionNumber, Model model)  {
 		return "structures/glycans";		
     }
