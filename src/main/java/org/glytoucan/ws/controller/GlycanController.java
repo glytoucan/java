@@ -512,7 +512,7 @@ public class GlycanController {
 		String imageURL;
 		String requestURI = request.getRequestURL().toString();
 		List<Glycan> glycanList = new ArrayList<Glycan>();
-		List<SparqlEntity> glycans = glycanProcedure.getGlycans(limit, offset);
+		List<SparqlEntity> glycans = glycanProcedure.getGlycans(offset, limit);
 		for (SparqlEntity sparqlEntity : glycans) {
 			Glycan glycan = copyGlycan(sparqlEntity);
 			logger.debug("adding:>" + glycan + "<");
