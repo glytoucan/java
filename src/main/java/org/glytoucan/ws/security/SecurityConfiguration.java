@@ -53,7 +53,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-    	http.csrf().disable();
+//    	http.csrf().disable();
         http.addFilterAfter(oAuth2ClientContextFilter(), AbstractPreAuthenticatedProcessingFilter.class)
                 .addFilterAfter(openIdConnectAuthenticationFilter(), OAuth2ClientContextFilter.class)
                 .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint())
