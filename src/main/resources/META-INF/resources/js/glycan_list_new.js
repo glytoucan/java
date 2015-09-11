@@ -1102,6 +1102,31 @@ $(function () { // wrapper function
   }; //statusApp END.
 
 
+  var motifListApp = {
+    init: function () {
+      this.cacheElements();
+      this.getList();
+    },
+
+    cacheElements: function () {
+      this.$app = $('#motifListApp');
+      this.$total = this.$app.find('.motifList_count');
+      this.$table = this.$app.find('.motifList_table');
+    },
+
+    getList: function () {
+      var _this = this;
+      var obj = {notation: this.$app.data('notation') || 'cfg'};
+      util.ajax_get('motif_list', obj).then(function (data) {
+        _this.$table.children('tbody').html(data);
+        var count = _this.$table.children('tbody').find('tr').length;
+        _this.$total.text(count);
+      }, function (err) {
+        console.log(err);
+      });
+    }
+  }; //motifListApp END.
+
 ////////////////////////////////////////
 
 //routing
@@ -1113,6 +1138,8 @@ $(function () { // wrapper function
     statusApp.init();
   } else if ($('#substructure_list_app').length > 0 ) {
     substructureApp.init();
+  } else if ($('#motifListApp').length > 0) {
+    motifListApp.init();
   }
 
 });

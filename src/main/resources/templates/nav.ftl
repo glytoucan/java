@@ -71,7 +71,6 @@
 				<li class="globalNavItem"><a class="globalNavItem_btn" href="/signout"><span class="globalNavItem_text">${signOut}</span></a></li>
 </#if>
 		</ul>
--->
 <!-- Accession Number search form -->
 			<div class="globalNavSearch">
 				<form method="post" action="/Structures/Accession">

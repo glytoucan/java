@@ -1,10 +1,7 @@
 package org.glytoucan.ws.controller;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-import org.glycoinfo.batch.search.wurcs.SubstructureSearchSparql;
-import org.glycoinfo.rdf.SelectSparql;
-import org.glycoinfo.rdf.search.SearchSparqlBean;
 import org.glytoucan.ws.Application;
 import org.glytoucan.ws.api.GlycoSequence;
 import org.junit.Test;
@@ -15,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)

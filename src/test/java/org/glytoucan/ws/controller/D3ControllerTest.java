@@ -1,10 +1,5 @@
 package org.glytoucan.ws.controller;
 
-import static org.junit.Assert.*;
-
-import org.glycoinfo.batch.search.wurcs.SubstructureSearchSparql;
-import org.glycoinfo.rdf.SelectSparql;
-import org.glycoinfo.rdf.search.SearchSparqlBean;
 import org.glytoucan.ws.Application;
 import org.glytoucan.ws.api.D3_Tree_json;
 import org.junit.Test;
