@@ -41,7 +41,8 @@
 				  -->
 				
 <@spring.formTextarea 'sequence.sequence' 'id="sequence" placeholder="Sequence" name="sequence" style="width: 465px; height: 300px;"' />
-
+<input type="hidden" name="from" value="structure" />
+<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 				<#--
 				
 				 name="sequence" style="width: 465px; height: 300px;"

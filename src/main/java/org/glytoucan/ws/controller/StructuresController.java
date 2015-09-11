@@ -69,7 +69,7 @@ public class StructuresController {
 //		model.addAttribute("errorMessage", errorMessage);
 		return "structures/structure_search";
 	}
-
+	
 	@RequestMapping("/structure")
     @ApiOperation(value="Confirms the completion of a registration", 
 	notes="Based on the previous /confirmation screen, the sequence array is processed and registered with the following logic:<br />"
@@ -103,15 +103,15 @@ public class StructuresController {
 				e.printStackTrace();
 				logger.debug("sparqlException:>" + e.getMessage());
 				redirectAttrs.addFlashAttribute("errorMessage", "an error occurred");
-				return "redirect:/Structures/structureSearch";
+				return "redirect:/Structures/" + sequence.getFrom();
 			} catch (ConvertFormatException e) {
 				redirectAttrs.addFlashAttribute("errorMessage", "The format could not be determined, please refer to manual for supported formats.");
-				return "redirect:/Structures/structureSearch";
+				return "redirect:/Structures/" + sequence.getFrom();
 			} catch (ConvertException e) {
 				e.printStackTrace();
 				logger.debug("ConvertException:>" + e.getMessage());
 				redirectAttrs.addFlashAttribute("errorMessage", e.getMessage());
-				return "redirect:/Structures/structureSearch";
+				return "redirect:/Structures/"  + sequence.getFrom();
 			}
 
     		String id = se.getValue(GlycanProcedure.AccessionNumber);
@@ -128,7 +128,7 @@ public class StructuresController {
 					redirectAttrs.addFlashAttribute("errorMessage", "system error");
 					logger.error(e.getMessage());
 					e.printStackTrace();
-					return "redirect:/Structures/structureSearch";
+					return "redirect:/Structures/"  + sequence.getFrom();
 				}
     		} else {
     			sequence.setId(id);
