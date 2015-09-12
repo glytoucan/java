@@ -3,15 +3,15 @@
 <head>
 	<title>Glycan Repository</title>
 <#include "header.html">
-<link rel="canonical" href="https://beta.glytoucan.org" />
+<link rel="canonical" href="http://beta.glytoucan.org" />
 <script type="application/ld+json">
 {
   "@context": "http://schema.org",
   "@type": "WebSite",
-  "url": "https://beta.glytoucan.org/",
+  "url": "http://beta.glytoucan.org/",
   "potentialAction": {
     "@type": "SearchAction",
-    "target": "https://glytoucan.org/Structures/Glycans/{search_term_string}",
+    "target": "http://beta.glytoucan.org/Structures/Glycans/{search_term_string}",
     "query-input": "required name=search_term_string"
   }
 }
