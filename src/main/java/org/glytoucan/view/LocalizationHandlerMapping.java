@@ -96,47 +96,47 @@ public class LocalizationHandlerMapping extends HandlerInterceptorAdapter {
 
 //		logger.debug(headers);
 //		String acceptEncoding = request.getHeader("accept-encoding");
-		String acceptLanguage = request.getHeader("accept-language");
-//		logger.debug(acceptEncoding);
-		logger.debug(acceptLanguage);
+//		String acceptLanguage = request.getHeader("accept-language");
+////		logger.debug(acceptEncoding);
+//		logger.debug(acceptLanguage);
 //		 gzip, deflate, sdch
 //		2015-08-03 10:27:02 DEBUG LocalizationHandlerMapping:85 - en-US,en;q=0.8,ja;q=0.6
-		if (null == language) {
-			StringTokenizer tok = new StringTokenizer(acceptLanguage, ";");
-			while(tok.hasMoreTokens()) {
-				String token = tok.nextToken();
-				switch (token) {
-				case "en":
-					language = "1";
-					break;
-				case "ja":
-					language = "2";
-					break;
-				case "zh-cn":
-					language = "3";
-					break;
-				case "zh-hk":
-					language = "3";
-					break;
-				case "zh-tw":
-					language = "4";
-					break;
-				case "fr":
-					language = "5";
-					break;
-				case "de":
-					language = "6";
-					break;
-				case "ro":
-					language = "7";
-					break;
-				default:
-					break;
-				}
-			}
+//		if (null == language) {
+//			StringTokenizer tok = new StringTokenizer(acceptLanguage, ";");
+//			while(tok.hasMoreTokens()) {
+//				String token = tok.nextToken();
+//				switch (token) {
+//				case "en":
+//					language = "1";
+//					break;
+//				case "ja":
+//					language = "2";
+//					break;
+//				case "zh-cn":
+//					language = "3";
+//					break;
+//				case "zh-hk":
+//					language = "3";
+//					break;
+//				case "zh-tw":
+//					language = "4";
+//					break;
+//				case "fr":
+//					language = "5";
+//					break;
+//				case "de":
+//					language = "6";
+//					break;
+//				case "ro":
+//					language = "7";
+//					break;
+//				default:
+//					break;
+//				}
+//			}
 			if (null == language)
 				language = "1";
-		}
+//		}
 		
 //		while (headers.hasMoreElements()) {
 //			String header = (String) headers.nextElement();
