@@ -24,7 +24,7 @@
 	$img = Image of a query
 	$submit_wurcs = WURCS sequence of a query
 -->
-  <div id="substructure_list_app" data-notation="${(image.notation)!""}" data-lang="${language}" data-wurcs="${sequence.resultSequence}" >
+  <div id="substructure_list_app" data-notation="${(imageNotation)!"cfg"}" data-lang="${language}" data-wurcs="${sequence.resultSequence}" >
 	<h1 class="page-header">Substructure search results</h1> 
 	<!-- Query accession number and Image -->
 	<div class="page-header">

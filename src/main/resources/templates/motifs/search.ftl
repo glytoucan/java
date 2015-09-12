@@ -21,7 +21,7 @@
 
 	<h4>${TopTitle[0]}</h4>
 
-    <div id="motifSearchApp" data-notation="${'image.notation'}">
+    <div id="motifSearchApp" data-notation="${imageNotation}">
 	  $motifs.size
 	  <h3>${Top[0]}: <span class="motifSearch_count"></span></h3>
 

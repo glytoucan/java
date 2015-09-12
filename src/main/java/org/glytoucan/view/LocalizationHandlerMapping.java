@@ -197,7 +197,7 @@ public class LocalizationHandlerMapping extends HandlerInterceptorAdapter {
 			e1.printStackTrace();
 		}
 
-		modelAndView.addObject("image.notation", "");
+		modelAndView.addObject("imageNotation", "cfg");
 		modelAndView.addObject("language", language);
 		modelAndView.addObject("notation", ""); // for viewAll
 
