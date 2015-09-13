@@ -15,6 +15,7 @@ import org.glycoinfo.conversion.error.ConvertException;
 import org.glycoinfo.conversion.error.ConvertFormatException;
 import org.glycoinfo.rdf.SparqlException;
 import org.glycoinfo.rdf.dao.SparqlEntity;
+import org.glycoinfo.rdf.glycan.Saccharide;
 import org.glycoinfo.rdf.service.GlycanProcedure;
 import org.glytoucan.ws.client.GlyspaceClient;
 import org.glytoucan.ws.model.SequenceInput;
@@ -157,12 +158,24 @@ public class StructuresController {
     }
 	
 	@RequestMapping(value="/Glycans/{accessionNumber}", method=RequestMethod.GET)
-	public String glycans(@PathVariable String accessionNumber, Model model)  {
+	public String glycans(@PathVariable String accessionNumber, Model model, RedirectAttributes redirectAttrs)  {
+		try {
+			if (!glycanProcedure.checkExists(accessionNumber)) {
+				redirectAttrs.addFlashAttribute("errorMessage", "This accession number does not exist");
+
+				return "redirect:/";
+			}
+		} catch (SparqlException e) {
+			e.printStackTrace();
+			redirectAttrs.addFlashAttribute("errorMessage", "Currently under maintence please try again in a few minutes");
+			return "redirect:/";
+		}
 		return "structures/glycans";		
     }
 
 	@RequestMapping(value="/Accession", method=RequestMethod.POST)
 	public String accession(@ModelAttribute("aNum") String aNum)  {
+		
 		return "redirect:/Structures/Glycans/" + aNum;
     }
 	
