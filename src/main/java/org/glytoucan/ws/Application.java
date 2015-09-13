@@ -23,6 +23,7 @@ import org.glycoinfo.rdf.glycan.GlycoSequenceInsertSparql;
 import org.glycoinfo.rdf.glycan.GlycoSequenceSelectSparql;
 import org.glycoinfo.rdf.glycan.ResourceEntryInsertSparql;
 import org.glycoinfo.rdf.glycan.SaccharideInsertSparql;
+import org.glycoinfo.rdf.glycan.SaccharideSelectSparql;
 import org.glycoinfo.rdf.glycan.wurcs.GlycoSequenceResourceEntryContributorSelectSparql;
 import org.glycoinfo.rdf.glycan.wurcs.MotifSequenceSelectSparql;
 import org.glycoinfo.rdf.glycan.wurcs.WurcsRDFInsertSparql;
@@ -362,8 +363,14 @@ public class Application extends SpringBootServletInitializer {
 	@Bean
 	WurcsRDFMSInsertSparql wurcsRDFMSInsertSparql() {
 		WurcsRDFMSInsertSparql wrdf = new WurcsRDFMSInsertSparql();
-		wrdf.setSparqlEntity(new SparqlEntity());
 		wrdf.setGraph("http://rdf.glytoucan.org/wurcs/ms");
 		return wrdf;
+	}
+	
+	@Bean
+	SaccharideSelectSparql saccharideSelectSparql() {
+		SaccharideSelectSparql select = new SaccharideSelectSparql();
+		select.setFrom("FROM <http://rdf.glytoucan.org>\n");
+		return select;
 	}
 }

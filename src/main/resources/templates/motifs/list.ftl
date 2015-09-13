@@ -18,7 +18,8 @@
 		<span class="text_userGuide"><img src="/img/text_userGuide.png" height="40" width="80" alt="" /></span>
 	</a>
 </h1>
-${Top[0]}
+
+<h4>${Top[0]}</h4>
 
 	<div id="motifListApp" data-notation="cfg">
 		<h4>
@@ -26,10 +27,12 @@ ${Top[0]}
 			<span class="motifList_count"></span><br /><br />
 		</h4>
 
+        <div class="container">
 		<table class="table table-striped motifList_table">
 			<thead><tr><th>Name</th><th>Sequence</th><th>Reducing end</th><th>Frequency</th></tr></thead>
 			<tbody></tbody>
 		</table>
+		</div>
 	</div><!--/#motifListApp-->
 
 </div>

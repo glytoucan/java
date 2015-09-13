@@ -20,7 +20,7 @@ ${Title[0]}
 </a>
 </h1>
 <!--Glycan List -->
-<div id="glycan_list_app" data-notation="${notation}" data-lang="${language}">
+<div id="glycan_list_app" data-notation="${imageNotation}" data-lang="${language}">
 	<div class="glSearchWrapper">
 		<div class="incSearch">
 			<!--Search -->

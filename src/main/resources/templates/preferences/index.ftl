@@ -16,7 +16,7 @@
 <!--Start Error Message-->
 <!--END Error Message-->
 <!-- selected message 
-<?php  $image = $this->Session->check('image.notation');
+<?php  $image = $this->Session->check('imageNotation');
 	  if ($image) {
 	  	echo "Image notation : ", $this->Session->read('image.nLabel');
 	  }else{

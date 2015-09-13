@@ -228,8 +228,7 @@ public class RegistriesControllerTest {
 
 	@Test
 	public void testRegisterNewAndG00031MOAndError() throws Exception {
-		
-		/*
+/*
 RES
 1b:a-dgal-HEX-1:5
 2s:n-acetyl
