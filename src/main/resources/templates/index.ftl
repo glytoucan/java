@@ -41,10 +41,11 @@
 				    <p class="topMainVisStat_value topMainVisStat_value-num"><span class="statusMotifCount"></span></p>
 					<p class="topMainVisStat_label">${motifs}</p>
 				</a>
-				<a class="topMainVisStat_col" href="/Monosaccharides">
+			<!--	<a class="topMainVisStat_col" href="/Monosaccharides"> -->
+				<div class="topMainVisStat_col" href="/Monosaccharides">
 					<p class="topMainVisStat_value topMainVisStat_value-num"><span class="statusMonosaccharideCount"></span></p>
 					<p class="topMainVisStat_label">${monosaccharides}</p>
-				</a>
+				</div>
 			</div><!--/.topMainVis_stat-->
 		</div>
 	</div><!--/.topMainVis-->
