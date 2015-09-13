@@ -50,7 +50,7 @@ $(function () { // wrapper function
       $.ajax({
         type: 'GET',
         //url: stanza_url + stanza_name + "?" + params,
-        url: '/connect.jsp',
+        url: '/connect.php',
         data: {
           url: stanza_url + stanza_name + "?" + params
         },
@@ -1116,7 +1116,7 @@ $(function () { // wrapper function
 
     getList: function () {
       var _this = this;
-      var obj = {notation: this.$app.data('notation') || 'cfg'};
+      var obj = {notation: this.$app.data('notation') || 'cfg', page: 'motif_list'};
       util.ajax_get('motif_list', obj).then(function (data) {
         _this.$table.children('tbody').html(data);
         var count = _this.$table.children('tbody').find('tr').length;
@@ -1126,6 +1126,31 @@ $(function () { // wrapper function
       });
     }
   }; //motifListApp END.
+
+  var motifSearchApp = {
+    init: function () {
+      this.cacheElements();
+      this.getList();
+    },
+
+    cacheElements: function () {
+      this.$app = $('#motifSearchApp');
+      this.$total = this.$app.find('.motifSearch_count');
+      this.$table = this.$app.find('.motifSearch_table');
+    },
+
+    getList: function () {
+      var _this = this;
+      var obj = {notation: this.$app.data('notation') || 'cfg', page: 'motif_search'};
+      util.ajax_get('motif_list', obj).then(function (data) {
+        _this.$table.children('tbody').html(data);
+        var count = _this.$table.children('tbody').find('tr').length;
+        _this.$total.text(count);
+      }, function (err) {
+        console.log(err);
+      });
+    }
+  }; //motifSearchApp END.
 
 ////////////////////////////////////////
 
@@ -1140,6 +1165,8 @@ $(function () { // wrapper function
     substructureApp.init();
   } else if ($('#motifListApp').length > 0) {
     motifListApp.init();
+  } else if ($('#motifSearchApp').length > 0) {
+    motifSearchApp.init();
   }
 
 });
