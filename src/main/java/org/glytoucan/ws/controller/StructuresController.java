@@ -161,7 +161,7 @@ public class StructuresController {
 		return "structures/glycans";		
     }
 
-	@RequestMapping(value="/Glycans/Accession", method=RequestMethod.POST)
+	@RequestMapping(value="/Accession", method=RequestMethod.POST)
 	public String accession(@PathVariable String aNum)  {
 		return "redirect:/Structures/Glycans/" + aNum;
     }
