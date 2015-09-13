@@ -160,6 +160,11 @@ public class StructuresController {
 	public String glycans(@PathVariable String accessionNumber, Model model)  {
 		return "structures/glycans";		
     }
+
+	@RequestMapping(value="/Glycans/Accession", method=RequestMethod.POST)
+	public String accession(@PathVariable String aNum)  {
+		return "redirect:/Structures/Glycans/" + aNum;
+    }
 	
 	@RequestMapping(value="/test", method = RequestMethod.GET)
 	public String test() {
