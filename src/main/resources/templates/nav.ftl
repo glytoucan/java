@@ -75,6 +75,7 @@
 			<div class="globalNavSearch">
 				<form method="post" action="/Structures/Accession">
 					<input type="text" placeholder="${accessionNumber}" name="aNum" />
+<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 					<button class="globalNavSearch_btn" type="submit"></button>
 				</form>
 			</div>
