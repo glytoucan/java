@@ -33,7 +33,7 @@
 	<input type="button" onclick="location.href='./image/cfg-uoxf'"value="CFG and Oxford">
 	<input type="button" onclick="location.href='./image/iupac'"value="IUPAC">
 </fieldset>
-<img src="http://${hostname}/glyspace/service/glycans/G00026MO/image?format=png&notation=cfg&style=extended">
+<img src="http://${hostname}/glycans/G00026MO/image?format=png&notation=cfg&style=extended">
 <fieldset>
 	<legend>${TopTitle[1]}</legend>
 	<input type="button" onclick="location.href='/Preferences/en'"value="English">

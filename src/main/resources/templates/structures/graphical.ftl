@@ -73,10 +73,7 @@ var callBack=[];
 callBack.run=function(response){
   document.write('Please wait... searching for:' + response);
   var r = response;
-  // test.glytoucan.org/Structures/structure?input01=sub&select1=RES%0A1b:b-dglc-HEX-1:5%0A2s:n-acetyl%0A3b:b-dglc-HEX-1:5%0A4s:n-acetyl%0A5b:b-dman-HEX-1:5%0A6b:a-dman-HEX-1:5%0A7b:a-dman-HEX-1:5%0A8b:a-dman-HEX-1:5%0A9b:a-dman-HEX-1:5%0A10b:a-lgal-HEX-1:5|6:d%0ALIN%0A1:1d(2+1)2n%0A2:1o(4+1)3d%0A3:3d(2+1)4n%0A4:3o(4+1)5d%0A5:5o(3+1)6d%0A6:5o(6+1)7d%0A7:7o(3+1)8d%0A8:7o(6+1)9d%0A9:1o(6+1)10d%0A
-  
-  // "/Structures/structure"
-  var url = "/Structures/structure?from=graphical&input01=sub&select1=glycoCT_condensed&sequence=";
+  var url = "/Structures/structure?from=graphical&sequence=";
   var x = url + encodeURIComponent(r);
   //alert(x);
 
