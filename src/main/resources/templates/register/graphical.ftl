@@ -45,7 +45,7 @@
       "widgetset": "ac.uk.icl.dell.vaadin.glycanbuilder.widgetset.GlycanbuilderWidgetset",
       "theme": "ucdb_2011theme",
       "versionInfo": {"vaadinVersion": "7.0.0"},
-      "vaadinDir": "/GlycanBuilder/",
+      "vaadinDir": "/GlycanBuilder/VAADIN/",
       "heartbeatInterval": 300,
       "debug": false,
       "standalone": false,
