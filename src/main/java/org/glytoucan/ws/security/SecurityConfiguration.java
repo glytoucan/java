@@ -10,8 +10,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.oauth2.client.filter.OAuth2ClientContextFilter;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
@@ -33,9 +35,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
+    public AuthenticationFailureHandler failureHandler() {
+    	SimpleUrlAuthenticationFailureHandler suafh = new SimpleUrlAuthenticationFailureHandler();
+    	suafh.setDefaultFailureUrl("/");
+    	return suafh;
+    }
+
+    
+    @Bean
     public OpenIDConnectAuthenticationFilter openIdConnectAuthenticationFilter() {
     	OpenIDConnectAuthenticationFilter open = new OpenIDConnectAuthenticationFilter(LOGIN_URL);
     	open.setAuthenticationSuccessHandler(successHandler());
+    	open.setAuthenticationFailureHandler(failureHandler());
         return open;
     }
 
@@ -64,7 +75,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(POST, "/Structures/**").permitAll()
                 .antMatchers(GET, "/Users/**").authenticated()
                 .antMatchers(GET, "/Registries/**").authenticated()
-                .antMatchers(POST, "/Registries/**").authenticated()
-                .antMatchers(GET, "/signin").authenticated();
+                .antMatchers(POST, "/Registries/**").authenticated();
     }
 }

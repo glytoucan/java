@@ -5,7 +5,6 @@
 				<span class="globalNav_logoText"><img src="/img/logo_text.png" height="40" width="90" alt="" /></span>
 			</a> 
 			<ul class="globalNav_ul">
-<#if user??>
 				<li class="globalNavItem">
 					<div class="globalNavItem_group">
 						<a class="globalNavItem_btn globalNavItem_btn-pulldown" data-toggle="dropdown" href="#">
@@ -18,7 +17,6 @@
 					    </ul>
 					</div>
 			    </li>
-</#if>
 
 <#--
 			<?php if($mod) { ?>

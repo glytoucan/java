@@ -16,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.client.OAuth2RestOperations;
+import org.springframework.security.oauth2.common.exceptions.UserDeniedAuthorizationException;
+import org.springframework.security.openid.AuthenticationCancelledException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 
@@ -35,8 +37,22 @@ public class OpenIDConnectAuthenticationFilter extends AbstractAuthenticationPro
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException, IOException, ServletException {
    	 	logger.debug("checking with google from:>" + request.getRequestURI() + "<");
+   	 	try {
         final ResponseEntity<UserInfo> userInfoResponseEntity = restTemplate.getForEntity("https://www.googleapis.com/oauth2/v2/userinfo", UserInfo.class);
+//   	 	ResponseEntity<UserInfo> userInfoResponseEntity ;
+//   	 	try {
+//        userInfoResponseEntity = restTemplate.getForEntity("https://www.googleapis.com/oauth2/v2/userinfo", UserInfo.class);
+//   	 	} catch (Exception e) {
+//   	 		e.printStackTrace();
+//   	 		logger.debug(e.getMessage());
+//   	 		throw e;
+//   	  	}
    	 	logger.debug("UserInfo:>", userInfoResponseEntity);
         return new PreAuthenticatedAuthenticationToken(userInfoResponseEntity.getBody(), empty(), NO_AUTHORITIES);
+   	 	} catch (UserDeniedAuthorizationException e) {
+   	 		e.printStackTrace();
+   	 		logger.debug("user denied:>" + e.getMessage());
+   	 		throw new  AuthenticationCancelledException(e.getMessage(), e);
+   	 	}
     }
 }
