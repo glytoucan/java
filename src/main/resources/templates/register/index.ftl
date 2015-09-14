@@ -31,6 +31,7 @@
 				</div>
 				${Left[0]}
 <@spring.formTextarea 'sequence.sequence' 'id="sequence" placeholder="Sequence" cols="20" rows="15" style="width: 370px; height: 600px;"' />
+<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 				<div class="submit">
 					<input class="btn btn-primary" type="submit" value="${submit}" />
 					<button type="reset" class="btn">${clear}</button>
