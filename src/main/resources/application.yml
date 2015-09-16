@@ -19,7 +19,7 @@ app:
   docs: http://localhost:8080
 
 server:
-  port: 8080
+  port: 80
 
 google:
   oauth2:
