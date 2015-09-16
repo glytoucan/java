@@ -65,9 +65,6 @@
 <#else>
 				<li class="globalNavItem"><a class="globalNavItem_btn" href="/signin"><span class="globalNavItem_text"><img src="/img/signin.png" /></span></a></li>
 </#if>
-<#if user??>
-				<li class="globalNavItem"><a class="globalNavItem_btn" href="/signout"><span class="globalNavItem_text">${signOut}</span></a></li>
-</#if>
 		</ul>
 <!-- Accession Number search form -->
 			<div class="globalNavSearch">

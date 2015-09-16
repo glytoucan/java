@@ -7,6 +7,7 @@ import org.eurocarbdb.application.glycoworkbench.GlycanWorkspace;
 import org.eurocarbdb.resourcesdb.Config;
 import org.eurocarbdb.resourcesdb.io.MonosaccharideConverter;
 import org.glycoinfo.batch.search.wurcs.SubstructureSearchSparql;
+import org.glycoinfo.client.MSdbClient;
 import org.glycoinfo.mass.MassInsertSparql;
 import org.glycoinfo.rdf.InsertSparql;
 import org.glycoinfo.rdf.SelectSparql;
@@ -21,10 +22,13 @@ import org.glycoinfo.rdf.glycan.ContributorInsertSparql;
 import org.glycoinfo.rdf.glycan.ContributorNameSelectSparql;
 import org.glycoinfo.rdf.glycan.GlycoSequenceInsertSparql;
 import org.glycoinfo.rdf.glycan.GlycoSequenceSelectSparql;
+import org.glycoinfo.rdf.glycan.Monosaccharide;
 import org.glycoinfo.rdf.glycan.ResourceEntryInsertSparql;
 import org.glycoinfo.rdf.glycan.SaccharideInsertSparql;
 import org.glycoinfo.rdf.glycan.SaccharideSelectSparql;
+import org.glycoinfo.rdf.glycan.msdb.MSInsertSparql;
 import org.glycoinfo.rdf.glycan.wurcs.GlycoSequenceResourceEntryContributorSelectSparql;
+import org.glycoinfo.rdf.glycan.wurcs.MonosaccharideSelectSparql;
 import org.glycoinfo.rdf.glycan.wurcs.MotifSequenceSelectSparql;
 import org.glycoinfo.rdf.glycan.wurcs.WurcsRDFInsertSparql;
 import org.glycoinfo.rdf.glycan.wurcs.WurcsRDFMSInsertSparql;
@@ -35,12 +39,14 @@ import org.glycoinfo.rdf.service.ContributorProcedure;
 import org.glycoinfo.rdf.service.GlycanProcedure;
 import org.glycoinfo.rdf.service.UserProcedure;
 import org.glycoinfo.rdf.service.impl.ContributorProcedureRdf;
+import org.glycoinfo.rdf.service.impl.MailService;
 import org.glycoinfo.rdf.utils.TripleStoreProperties;
 import org.glycomedb.residuetranslator.ResidueTranslator;
 import org.glyspace.registry.utils.ImageGenerator;
 import org.glytoucan.ws.api.D3SequenceSelectSparql;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -372,5 +378,28 @@ public class Application extends SpringBootServletInitializer {
 		SaccharideSelectSparql select = new SaccharideSelectSparql();
 		select.setFrom("FROM <http://rdf.glytoucan.org>\n");
 		return select;
+	}
+	
+	@Bean
+	MailService mailService() {
+		return new MailService();
+	}
+	
+	@Bean
+	MSdbClient msdbClient() {
+		return new MSdbClient();
+	}
+	
+	@Bean
+	MonosaccharideSelectSparql monosaccharideSelectSparql() {
+		MonosaccharideSelectSparql sb = new MonosaccharideSelectSparql();
+		return sb;
+	}
+	
+	@Bean
+	public MSInsertSparql msInsertSparql() {
+		MSInsertSparql wrss = new MSInsertSparql();
+		wrss.setGraph("http://rdf.glytoucan.org/msdb");
+		return wrss;
 	}
 }

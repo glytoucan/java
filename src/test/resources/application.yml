@@ -18,3 +18,17 @@ google:
   oauth2:
     clientId: something.apps.googleusercontent.com
     clientSecret: clientSecret
+
+mail:
+  address:
+    from: support@glytoucan.org
+    admin: admin@glytoucan.org
+  subject:
+    newRegistration: Your registration to the Glycan Repository, GlyTouCan
+    notifyRegistration: NEW registration:>
+  body:
+    newRegistration: newRegistration.vm
+    notifyRegistration: notifyRegistration.vm
+
+msDb:
+  rdf: http://www.monosaccharidedb.org/rdf/monosaccharide.action?name=
