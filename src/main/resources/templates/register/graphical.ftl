@@ -68,15 +68,15 @@
 <script type="text/javascript">
 var callBack=[];
 callBack.run=function(response){
-  document.write('Please wait... searching for:' + response);
+  document.write('Please wait... checking for:' + response);
   var r = response;
   var url = "/Registries/confirmation?from=graphical&sequence=";
   var x = url + encodeURIComponent(r);
   //alert(x);
 
   if (r.length < 1) {
-    alert("Please enter a structure to search");
-    window.location.assign("/Structures/graphical");
+    alert("Please enter a structure");
+    window.location.assign("/Registries/graphical");
     return;
   }
   //var s = [ url, "" , r].join("");
@@ -85,7 +85,7 @@ callBack.run=function(response){
 </script>
 
       <form id="frm1" name="frm1" action="ms" method="GET" class="form-search">
-        <input type="button" name="Search" value="${search}" onclick='exportCanvas("glycoct_condensed","callBack");'/>
+        <input type="button" name="Register" value="${register}" onclick='exportCanvas("glycoct_condensed","callBack");'/>
       </form>
 
       <div class="row-fluid">
