@@ -64,6 +64,7 @@
 </table>
 <h3><?php echo __('Total Count') . ':' . $hit; ?></h3>
 -->
+				<li class="globalNavItem"><a class="globalNavItem_btn" href="/signout"><span class="globalNavItem_text">${signOut}</span></a></li>
 
 </div>
 </div>
