@@ -10,7 +10,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Enumeration;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -164,7 +163,7 @@ public class LocalizationHandlerMapping extends HandlerInterceptorAdapter {
 		logger.debug("controller:>" + controller + "<");
 		logger.debug("page:>" + page + "<");
 		
-		if (controller != null && controller.equals("error")) {
+		if (controller != null && (controller.equals("error") || controller.equals("D3"))) {
 		    logger.debug(modelAndView.getModel().keySet());
 
 			return;
@@ -214,6 +213,7 @@ public class LocalizationHandlerMapping extends HandlerInterceptorAdapter {
 	    JsonNode article = result.get("article");
 //	    logger.debug(article);
 
+	    
 	    JsonNode pageNode = article.get(controller).get(page);
 	    Map contextMap = null;
 	    try {

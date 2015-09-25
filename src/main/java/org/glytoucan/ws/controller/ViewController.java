@@ -12,7 +12,7 @@ public class ViewController {
 	@RequestMapping(value = "/D3/{ID}")
     public String findPet(@PathVariable String ID, Model model) {
 		model.addAttribute("ID", ID);
-		return "D3";
+		return "D3/D3";
     }
 
 	@RequestMapping(value = "/D3_motif_isomer/{ID}")

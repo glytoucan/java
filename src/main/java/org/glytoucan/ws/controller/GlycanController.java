@@ -34,7 +34,6 @@ import org.glycoinfo.rdf.SelectSparql;
 import org.glycoinfo.rdf.SparqlException;
 import org.glycoinfo.rdf.dao.SparqlEntity;
 import org.glycoinfo.rdf.glycan.GlycoSequence;
-import org.glycoinfo.rdf.glycan.GlycoSequenceSelectSparql;
 import org.glycoinfo.rdf.service.GlycanProcedure;
 import org.glycoinfo.rdf.service.UserProcedure;
 import org.glyspace.registry.importers.GWSImporter;
@@ -524,7 +523,7 @@ public class GlycanController {
 		else {
 			List<String> ids = new ArrayList<String>();
 			for (SparqlEntity sparqlEntity : glycans) {
-				ids.add(sparqlEntity.getValue(GlycoSequenceSelectSparql.AccessionNumber));
+				ids.add(sparqlEntity.getValue(GlycoSequence.AccessionNumber));
 			}
 			list.setGlycans(ids.toArray());
 		}
@@ -1068,7 +1067,7 @@ public class GlycanController {
     
     public Glycan copyGlycan(SparqlEntity se) throws ParseException {
 		Glycan glycan = new Glycan();
-		glycan.setAccessionNumber(se.getValue(GlycoSequenceSelectSparql.AccessionNumber));
+		glycan.setAccessionNumber(se.getValue(GlycoSequence.AccessionNumber));
 		glycan.setContributor(se.getValue("Contributor"));
 
 		logger.debug(se.getValue("DateRegistered"));
