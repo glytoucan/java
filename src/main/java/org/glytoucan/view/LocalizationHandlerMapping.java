@@ -163,7 +163,7 @@ public class LocalizationHandlerMapping extends HandlerInterceptorAdapter {
 		logger.debug("controller:>" + controller + "<");
 		logger.debug("page:>" + page + "<");
 		
-		if (controller != null && (controller.equals("error") || controller.equals("D3"))) {
+		if (controller != null && (controller.equals("error") || controller.contains("D3"))) {
 		    logger.debug(modelAndView.getModel().keySet());
 
 			return;
