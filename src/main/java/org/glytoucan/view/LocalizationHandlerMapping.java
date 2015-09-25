@@ -163,11 +163,12 @@ public class LocalizationHandlerMapping extends HandlerInterceptorAdapter {
 		logger.debug("controller:>" + controller + "<");
 		logger.debug("page:>" + page + "<");
 		
-		if (controller != null && (controller.equals("error") || controller.contains("D3"))) {
+		if (controller != null && controller.equals("error")) {
 		    logger.debug(modelAndView.getModel().keySet());
 
 			return;
 		}
+
 		JsonNode rootNode = null;
 		File file = null;
 		ObjectMapper mapper = new ObjectMapper();
@@ -214,18 +215,6 @@ public class LocalizationHandlerMapping extends HandlerInterceptorAdapter {
 //	    logger.debug(article);
 
 	    
-	    JsonNode pageNode = article.get(controller).get(page);
-	    Map contextMap = null;
-	    try {
-			contextMap = mapper.treeToValue(pageNode, Map.class);
-	    } catch (NullPointerException e) {
-	    	page="index";
-		    pageNode = article.get(controller).get(page);
-			contextMap = mapper.treeToValue(pageNode, Map.class);
-	    }
-	    logger.debug(pageNode);
-	    modelAndView.addAllObjects(contextMap);
-	    
 	    // get common
 	    JsonNode common = rootNode.get("result").get("common");
 //	    logger.debug(common);
@@ -241,7 +230,26 @@ public class LocalizationHandlerMapping extends HandlerInterceptorAdapter {
 			// language reading fails but shouldn't die.
 			logger.debug(e.getMessage());
 		}
-	    
+
+		if (controller != null && controller.contains("D3")) {
+		    logger.debug(modelAndView.getModel().keySet());
+
+			return;
+		}
+		
+	    JsonNode pageNode = article.get(controller).get(page);
+	    Map contextMap = null;
+	    try {
+			contextMap = mapper.treeToValue(pageNode, Map.class);
+	    } catch (NullPointerException e) {
+	    	page="index";
+		    pageNode = article.get(controller).get(page);
+			contextMap = mapper.treeToValue(pageNode, Map.class);
+	    }
+	    logger.debug(pageNode);
+	    modelAndView.addAllObjects(contextMap);
+
+		
 	    logger.debug(modelAndView.getModel().keySet());
       }
 
