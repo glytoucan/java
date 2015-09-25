@@ -14,4 +14,22 @@ public class ViewController {
 		model.addAttribute("ID", ID);
 		return "D3";
     }
+
+	@RequestMapping(value = "/D3_motif_isomer/{ID}")
+	public String findPet2(@PathVariable String ID, Model model) {
+		model.addAttribute("ID", ID);
+		return "D3_motif_isomer";
+    }
+	
+	@RequestMapping(value = "/D3_structure_subsume/{ID}")
+	public String findPet4(@PathVariable String ID, Model model) {
+		model.addAttribute("ID", ID);
+		return "D3_structure_subsume";
+    }
+	
+	@RequestMapping(value = "/D3_dndTree/{ID}")
+	public String findPet_dnd(@PathVariable String ID, Model model) {
+		model.addAttribute("ID", ID);
+		return "D3_dndTree";
+    }
 }
