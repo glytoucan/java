@@ -84,7 +84,26 @@ public class RdfAuthenticationSuccessHandler extends
 			e.printStackTrace();
 			throw new ServletException(e);
 		}
-
+//        MimeMessagePreparator preparator = new MimeMessagePreparator() {
+//
+//        	public void prepare(MimeMessage mimeMessage) throws Exception {
+//
+//                mimeMessage.setRecipient(Message.RecipientType.TO,
+//                        new InternetAddress(userInfo.getEmail()));
+//                mimeMessage.setFrom(new InternetAddress("admin@glytoucan.org"));
+//                mimeMessage.setSubject("registration:" + userInfo.getGivenName() + " " + userInfo.getEmail());
+//                mimeMessage.setText(
+//                        "new user info:\nFirst Name:" + userInfo.getGivenName() + "\nLast Name:"
+//                            + userInfo.getFamilyName() + "\nemail:" + userInfo.getEmail() + "\nverified:" + userInfo.getVerifiedEmail());
+//            }
+//        };
+//
+//        try {
+//            this.mailSender.send(preparator);
+//        }
+//        catch (MailException ex) {
+//            logger.error(ex.getMessage());
+//        }
         // pass processing back to SavedRequestAware parent.
 		super.onAuthenticationSuccess(request, response, authentication);
 	}
