@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
+<html lang="ja">
+
+<head>
+	<title>Glycan D3</title>
+<#include "../header.html">
+
 <style>
 
 .node circle {
@@ -17,7 +23,14 @@
 }
 
 </style>
+</head>
+
 <body>
+<a name="top"></a><!--link for page top-->
+<div id="contents">
+<#include "../nav.ftl">
+<#include "../error.ftl">
+
 ID: ${ID}
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script>
@@ -154,6 +167,9 @@ d3.select(self.frameElement).style("height", diameter - 150 + "px");
 
 
 </script>
+
+<#include "../footer.html">
+</div>
 </body>
 </html>
 
