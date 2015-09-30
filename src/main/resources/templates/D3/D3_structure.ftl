@@ -94,7 +94,7 @@ var svg = d3.select("body").append("svg")
     .attr("transform", "translate(" + diameter / 3 + "," + diameter / 4 + ")");
 	
 
-    d3.json("http://localhost:8080/Tree/D3retrieve3?primaryId=${ID}", function (error, root) {
+    d3.json("/Tree/D3retrieve3?primaryId=${ID}", function (error, root) {
 
   var nodes = tree.nodes(root),
       links = tree.links(nodes);
