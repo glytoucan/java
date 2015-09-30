@@ -308,6 +308,7 @@ public class D3Controller {
 		return a;
 	}
 
+
 	
 	@RequestMapping(value = "/D3retrieve2", method = RequestMethod.GET)
 	@ApiOperation(value = "Retrieve the sequence of json of D3 Tree ", response = D3_Tree_json.class)
@@ -421,10 +422,10 @@ public class D3Controller {
 		return a;
 	}
 	
-	@RequestMapping(value = "/D3retrieve4", method = RequestMethod.GET)
+	@RequestMapping(value = "/D3retrieve3", method = RequestMethod.GET)
 	@ApiOperation(value = "Retrieve the sequence of json of D3 Tree ", response = D3_Tree_json.class)
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Sequence retrieved successfully") })
-	public @ResponseBody D3_Tree_json D3retrieve4(
+	public @ResponseBody D3_Tree_json D3retrieve3(
 			@ApiParam(required = true, value = "id of the sequence") @RequestParam(value = "primaryId", defaultValue = "G00030MO") String primaryId) {
 		logger.debug("primaryId=" + primaryId + "<");
 		// error messageを返す（形式が違うもの）
@@ -448,14 +449,10 @@ public class D3Controller {
 		D3_Tree_json a = new D3_Tree_json();
 		Tree_json b3 = new Tree_json();
 		Tree_json b4 = new Tree_json();
-		Tree_json b5 = new Tree_json();
-		Tree_json b6 = new Tree_json();
 		TreeSequence c2 = new TreeSequence();
 		ArrayList<Tree_json> b_list = new ArrayList<Tree_json>();
 		ArrayList<TreeSequence> c_list3 = new ArrayList<TreeSequence>();
 		ArrayList<TreeSequence> c_list4 = new ArrayList<TreeSequence>();
-		ArrayList<TreeSequence> c_list5 = new ArrayList<TreeSequence>();
-		ArrayList<TreeSequence> c_list6 = new ArrayList<TreeSequence>();
 
 		try {
 			// table to d3 class
@@ -520,8 +517,60 @@ public class D3Controller {
 				b_list.add(b4);
 			}
 
-			j = 0;
-			k = 0;
+			
+			logger.debug("list" + list + "<");
+
+			String GlycanName = se.getValue("id");
+			a.setName(GlycanName);
+			a.setChildren(b_list);
+
+		} catch (java.lang.IndexOutOfBoundsException ie) {
+			return null;
+		}
+		// GlycoSequence gs = new GlycoSequence(counter.incrementAndGet(),
+		// primaryId);
+		// gs.setSequence(se.getValue(org.glycoinfo.rdf.glycan.GlycoSequence.Sequence));
+
+		return a;
+	}
+	
+	@RequestMapping(value = "/D3retrieve4", method = RequestMethod.GET)
+	@ApiOperation(value = "Retrieve the sequence of json of D3 Tree ", response = D3_Tree_json.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Sequence retrieved successfully") })
+	public @ResponseBody D3_Tree_json D3retrieve4(
+			@ApiParam(required = true, value = "id of the sequence") @RequestParam(value = "primaryId", defaultValue = "G00030MO") String primaryId) {
+		logger.debug("primaryId=" + primaryId + "<");
+		// error messageを返す（形式が違うもの）
+		List<SparqlEntity> list = null;
+		try {
+			SelectSparql ss = getSelectD3Sparql();
+			SparqlEntity se = ss.getSparqlEntity();
+			if (null == ss.getSparqlEntity())
+				se = new SparqlEntity();
+			se.setValue(Saccharide.PrimaryId, primaryId);
+			ss.setSparqlEntity(se);
+			logger.debug(ss.getSparql());
+			list = sparqlDAO.query(ss);
+		} catch (SparqlException e) {
+			D3_Tree_json a = new D3_Tree_json();
+			a.setName("sorry");
+			return a;
+		}
+		SparqlEntity se = null;
+
+		D3_Tree_json a = new D3_Tree_json();
+		Tree_json b5 = new Tree_json();
+		Tree_json b6 = new Tree_json();
+		TreeSequence c2 = new TreeSequence();
+		ArrayList<Tree_json> b_list = new ArrayList<Tree_json>();
+		ArrayList<TreeSequence> c_list5 = new ArrayList<TreeSequence>();
+		ArrayList<TreeSequence> c_list6 = new ArrayList<TreeSequence>();
+
+		try {
+			// table to d3 class
+			int j = 0;
+			int k = 0;
+			
 			c2.setName("test_keiko");
 			for (SparqlEntity i : list) {
 				TreeSequence c1 = new TreeSequence();

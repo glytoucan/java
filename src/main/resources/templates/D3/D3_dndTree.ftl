@@ -19,7 +19,22 @@
     stroke: steelblue; */
     stroke-width: 1.5px;
   }
-
+  
+  .node image {
+	position: absolute;
+	z-index: -1;
+  }
+	
+  .front {
+    position: absolute;
+    z-index: 2;
+  }
+	
+  .back {
+	position: absolute;
+	z-index: -1;
+  }
+  
   .node text {
     font-size:10px;
     font-family:sans-serif;
@@ -45,6 +60,41 @@
        display: none;
   }
 
+	div.menu{
+   float: left;
+   width: 15%;
+}
+div.blockb{
+ float: right;
+ width: 85%;
+}
+div.menu ul{
+margin: 0;
+padding: 0;
+list-style-type: none;
+}
+div.menu li{
+display: inline;
+padding: 0;
+margin: 0;
+}
+div.menu li a{
+display: block;
+width: 150px;
+padding: 3px;
+margin: 10px 0px 10px 0px;
+text-decoration: none;
+border: outset 3px #C2CBBD;
+background-color: #C2CBBD;
+text-align: center;
+color: #000000;
+font-size: 14px;
+}
+div.menu li a:hover{
+border: inset 3px #95A38D;
+background-color: #95A38D;
+}
+
 </style>
 </head>
 <body>
@@ -52,9 +102,19 @@
 <div id="contents">
 <#include "../nav.ftl">
 <#include "../error.ftl">
-ID: ${ID}
+<!-- ID: ${ID} -->
 <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
 <script src="http://d3js.org/d3.v3.min.js"></script>
+<div class="menu">
+ 	 <ul>
+ 	 <li><a href="/D3_dndTree/${ID}">All data</a></li>
+ 	 <li><a href="/D3_motif_isomer/${ID}">Motif and Isomer</a></li>
+ 	 <li><a href="/D3_structure/${ID}">Superstructure and Substructure</a></li>
+ 	 <li><a href="/D3_subsumed/${ID}">Subsumes and Subsumed_by</a></li>
+ 	 <li><a href="/Structures/Glycans/${ID}">RETURN</a></li>
+  </div>
+
+<div class="blockb">
 <script>
 treeJSON = d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData) {
 
@@ -73,10 +133,8 @@ treeJSON = d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData)
 	    var root;
 
 	    // size of the diagram
-	    //var viewerWidth = $(document).width();
-	    //var viewerHeight = $(document).height();
-	    var viewerWidth = 1000;
-	    var viewerHeight = 1000;
+	    var viewerWidth = $(document).width()*0.85;
+	    var viewerHeight = $(document).height();
 
 	    var tree = d3.layout.tree()
 	        .size([viewerHeight, viewerWidth]);
@@ -212,23 +270,23 @@ treeJSON = d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData)
 
 	    // Define the drag listeners for drag/drop behaviour of nodes.
 	    dragListener = d3.behavior.drag()
-	        .on("dragstart", function(d) {
-	            if (d == root) {
-	                return;
-	            }
-	            dragStarted = true;
-	            nodes = tree.nodes(d);
-	            d3.event.sourceEvent.stopPropagation();
-	            // it's important that we suppress the mouseover event on the node being dragged. Otherwise it will absorb the mouseover event and the underlying node will not detect it d3.select(this).attr('pointer-events', 'none');
-	        })
+	        // .on("dragstart", function(d) {
+        //     if (d == root) {
+        //         return;
+        //     }
+        //     dragStarted = true;
+        //     nodes = tree.nodes(d);
+        //     d3.event.sourceEvent.stopPropagation();
+        //     // it's important that we suppress the mouseover event on the node being dragged. Otherwise it will absorb the mouseover event and the underlying node will not detect it d3.select(this).attr('pointer-events', 'none');
+        // })
 	        .on("drag", function(d) {
 	            if (d == root) {
 	                return;
 	            }
-	            if (dragStarted) {
-	                domNode = this;
-	                initiateDrag(d, domNode);
-	            }
+	            // if (dragStarted) {
+            //     domNode = this;
+            //     initiateDrag(d, domNode);
+            // }
 
 	            // get coords of mouseEvent relative to svg container to allow for panning
 	            relCoords = d3.mouse($('svg').get(0));
@@ -647,8 +705,8 @@ treeJSON = d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData)
 
 </script>
     <div id="tree-container"></div>
-
-<#include "../footer.html">
 </div>
+<#include "../footer.html">
+
 </body>
 </html>
