@@ -10,9 +10,15 @@ import com.knappsack.swagger4springweb.annotation.ApiExclude;
 @ApiExclude
 public class ViewController {
 	@RequestMapping(value = "/D3/{ID}")
+    public String findPetTop(@PathVariable String ID, Model model) {
+		model.addAttribute("ID", ID);;
+		return "D3/D3";
+    }
+	
+	@RequestMapping(value = "/D3_Tree/{ID}")
     public String findPet(@PathVariable String ID, Model model) {
 		model.addAttribute("ID", ID);
-		return "D3/D3";
+		return "D3/D3_Tree";
     }
 
 	@RequestMapping(value = "/D3_motif_isomer/{ID}")
@@ -21,10 +27,16 @@ public class ViewController {
 		return "D3/D3_motif_isomer";
     }
 	
-	@RequestMapping(value = "/D3_structure_subsume/{ID}")
+	@RequestMapping(value = "/D3_structure/{ID}")
 	public String findPet4(@PathVariable String ID, Model model) {
 		model.addAttribute("ID", ID);
-		return "D3/D3_structure_subsume";
+		return "D3/D3_structure";
+    }
+	
+	@RequestMapping(value = "/D3_subsumed/{ID}")
+	public String findPet5(@PathVariable String ID, Model model) {
+		model.addAttribute("ID", ID);
+		return "D3/D3_subsumed";
     }
 	
 	@RequestMapping(value = "/D3_dndTree/{ID}")

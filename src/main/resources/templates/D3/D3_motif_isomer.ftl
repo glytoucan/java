@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <html lang="ja">
-
 <head>
 	<title>Glycan D3</title>
 <#include "../header.html">
@@ -21,21 +20,66 @@
   stroke: #ccc;
   stroke-width: 1.5px;
 }
+	div.menu{
+   float: left;
+   width: 15%;
+}
+div.blockb{
+ float: right;
+ width: 85%;
+}
+div.menu ul{
+margin: 0;
+padding: 0;
+list-style-type: none;
+}
+div.menu li{
+display: inline;
+padding: 0;
+margin: 0;
+}
+div.menu li a{
+display: block;
+width: 150px;
+padding: 3px;
+margin: 10px 0px 10px 0px;
+text-decoration: none;
+border: outset 3px #C2CBBD;
+background-color: #C2CBBD;
+text-align: center;
+color: #000000;
+font-size: 14px;
+}
+div.menu li a:hover{
+border: inset 3px #95A38D;
+background-color: #95A38D;
+}
 
 </style>
 </head>
-
 <body>
 <a name="top"></a><!--link for page top-->
 <div id="contents">
 <#include "../nav.ftl">
 <#include "../error.ftl">
 
-ID: ${ID}
+<!-- ID: ${ID} -->
 <script src="http://d3js.org/d3.v3.min.js"></script>
+	<div class="menu">
+ 	 <ul>
+ 	 <li><a href="/D3_dndTree/${ID}">All data</a></li>
+ 	 <li><a href="/D3_motif_isomer/${ID}">Motif and Isomer</a></li>
+ 	 <li><a href="/D3_structure/${ID}">Superstructure and Substructure</a></li>
+ 	 <li><a href="/D3_subsumed/${ID}">Subsumes and Subsumed_by</a></li>
+ 	 <li><a href="/Structures/Glycans/${ID}">RETURN</a></li>
+  </div>
+
+<div class="blockb">
 <script>
 
-var diameter = 1500;
+var viewerWidth = $(document).width();
+var viewerHeight = $(document).height();
+var diameter = viewerWidth*1.5;
 
 var tree = d3.layout.tree()
     .size([360,360])
@@ -45,12 +89,13 @@ var diagonal = d3.svg.diagonal.radial()
     .projection(function(d) { return [d.y, d.x / 180 * Math.PI]; });
 
 var svg = d3.select("body").append("svg")
-    .attr("width", diameter)
+    .attr("width", diameter*0.7)
     .attr("height", diameter - 150)
   .append("g")
-    .attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
+    .attr("transform", "translate(" + diameter / 3 + "," + diameter / 4 + ")");
+	
 
-    d3.json("/Tree/D3retrieve?primaryId=${ID}", function (error, root) {
+    d3.json("http://localhost:8080/Tree/D3retrieve2?primaryId=${ID}", function (error, root) {
 
   var nodes = tree.nodes(root),
       links = tree.links(nodes);
@@ -167,9 +212,7 @@ d3.select(self.frameElement).style("height", diameter - 150 + "px");
 
 
 </script>
-
-<#include "../footer.html">
 </div>
+<#include "../footer.html">
 </body>
 </html>
-
