@@ -38,3 +38,8 @@ mail:
 
 msDb:
   rdf: http://www.monosaccharidedb.org/rdf/monosaccharide.action?name=
+
+multipart:
+  location: /upload
+  max-file-size: 5Mb
+  max-request-size: 10Mb

@@ -1,6 +1,7 @@
 package org.glytoucan.ws;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import org.eurocarbdb.application.glycanbuilder.GlycanRendererAWT;
 import org.eurocarbdb.application.glycoworkbench.GlycanWorkspace;
@@ -51,6 +52,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.MediaType;
 import org.springframework.http.converter.BufferedImageHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.filter.CharacterEncodingFilter;
@@ -58,10 +60,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 import virtuoso.sesame2.driver.VirtuosoRepository;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.knappsack.swagger4springweb.util.ScalaObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootApplication
+
+
 public class Application extends SpringBootServletInitializer {
 	
 	private static final String graph = "http://rdf.glytoucan.org";
@@ -115,11 +120,25 @@ public class Application extends SpringBootServletInitializer {
 
     @Bean
     public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
-     MappingJackson2HttpMessageConverter jsonConverter = new MappingJackson2HttpMessageConverter();
-     ScalaObjectMapper objectMapper = new ScalaObjectMapper();
-     objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-     jsonConverter.setObjectMapper(objectMapper);
-     return jsonConverter;
+//     MappingJackson2HttpMessageConverter jsonConverter = new MappingJackson2HttpMessageConverter();
+//     ScalaObjectMapper objectMapper = new ScalaObjectMapper();
+//     objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+//     jsonConverter.setObjectMapper(objectMapper);
+//     return jsonConverter;
+    	
+    	MappingJackson2HttpMessageConverter jacksonConverter = new
+    			MappingJackson2HttpMessageConverter();
+    			jacksonConverter.setSupportedMediaTypes(Arrays.asList(MediaType.valueOf("application/json")));
+    			jacksonConverter.setObjectMapper(jacksonObjectMapper());
+    			return jacksonConverter;
+    }
+    
+    @Bean
+    public ObjectMapper jacksonObjectMapper() {
+    ObjectMapper objectMapper = new ObjectMapper();
+    objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    objectMapper.setSerializationInclusion(Include.NON_NULL);
+    return objectMapper;
     }
     
     @Bean
@@ -374,7 +393,7 @@ public class Application extends SpringBootServletInitializer {
 	@Bean
 	SaccharideSelectSparql saccharideSelectSparql() {
 		SaccharideSelectSparql select = new SaccharideSelectSparql();
-		select.setFrom("FROM <http://rdf.glytoucan.org>\n");
+		select.setFrom("FROM <http://rdf.glytoucan.org>\nFROM <http://rdf.glytoucan.org/2.0>");
 		return select;
 	}
 	

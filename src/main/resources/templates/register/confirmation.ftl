@@ -43,6 +43,7 @@
       <td>
         ${listNew[newItem?index].sequence?html?replace("\\n", "<br>")}
         <input type="hidden" name="sequence" value="${listNew[newItem?index].sequence}"/>
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
       </td>
       <td>
         ${listNew[newItem?index].resultSequence?html?replace("\\n", "<br>")}
@@ -142,6 +143,7 @@
 
   Download this data.
 <form action="/registries/download" id="downloadForm" method="post" accept-charset="utf-8">
+<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 
 <#list listNew>
 <#items as newItem>

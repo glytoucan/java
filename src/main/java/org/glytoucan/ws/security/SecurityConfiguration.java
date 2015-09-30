@@ -65,6 +65,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 //    	http.csrf().disable();
+    	http.csrf().ignoringAntMatchers("/glycans/**");
         http.addFilterAfter(oAuth2ClientContextFilter(), AbstractPreAuthenticatedProcessingFilter.class)
                 .addFilterAfter(openIdConnectAuthenticationFilter(), OAuth2ClientContextFilter.class)
                 .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint())
@@ -73,6 +74,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(GET, "/error").permitAll()
                 .antMatchers(GET, "/Structures/**").permitAll()
                 .antMatchers(POST, "/Structures/**").permitAll()
+                .antMatchers(POST, "/glycans/**").permitAll()
                 .antMatchers(GET, "/Users/**").authenticated()
                 .antMatchers(GET, "/Registries/**").authenticated()
                 .antMatchers(POST, "/Registries/**").authenticated();
