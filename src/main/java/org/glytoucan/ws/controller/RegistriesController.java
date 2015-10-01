@@ -28,6 +28,7 @@ import org.glycoinfo.conversion.util.DetectFormat;
 import org.glycoinfo.rdf.SparqlException;
 import org.glycoinfo.rdf.dao.SparqlEntity;
 import org.glycoinfo.rdf.service.GlycanProcedure;
+import org.glycoinfo.rdf.service.UserProcedure;
 import org.glyspace.registry.utils.ImageGenerator;
 import org.glytoucan.ws.model.SequenceInput;
 import org.glytoucan.ws.security.UserInfo;
@@ -57,6 +58,9 @@ public class RegistriesController {
 
 	@Autowired
 	ImageGenerator imageGenerator;
+	
+	@Autowired
+	UserProcedure userProcedure;
 
 	@RequestMapping("/graphical")
 	public String graphical(Model model, RedirectAttributes redirectAttrs) {
@@ -260,7 +264,8 @@ public class RegistriesController {
 				&& userInfo.getVerifiedEmail().equals("true")
 				&& StringUtils.isNotBlank(userInfo.getGivenName())) {
 			logger.debug("user is verified:>" + userInfo.getGivenName());
-			glycanProcedure.setContributor(userInfo.getGivenName());
+			String userId = userProcedure.getUserId(userInfo.getEmail());
+			glycanProcedure.setContributorId(userId);
 		} else {
 			return "redirect:/signin?errorMessage=Please sign in with a verified email address.  Check Profile for details.";
 		}

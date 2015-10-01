@@ -44,6 +44,20 @@ public class RdfAuthenticationSuccessHandler extends
 	 * 
 	 * Newly registered user, store data into RDF.
 	 * 
+	 * This is an important method as the Contributor information was pre-existing and yet the authentication method was handled outside of RDF.
+	 * 
+	 * This has changed with rdf glytoucan.  So in order to make use of/map the previously created Contributor linkages, it's necessary to associate
+	 * a newly logged in Google user to the pre-existing Contributor class.  When newly registering, all that is necessary would then be the Contributor ID. 
+	 * 
+	 * In order to retrieve the ID (to registered), it is assumed the user would be logged in, thus the email address should be available.
+	 * The email address would then be used to reference the id by the mapping data created by this method.
+	 * 
+	 * mapping process is found here:
+	 * org.glycoinfo.rdf.service.impl.UserProcedure line 168:
+	 * 		contributorProcedure.setName(getSparqlEntity().getValue(org.glycoinfo.rdf.service.UserProcedure.givenName) + " " + getSparqlEntity().getValue(org.glycoinfo.rdf.service.UserProcedure.familyName));
+	 * 
+	 * The previously registered foaf name was a First name, blank space, and last name.  So if the exact same words are used in google, it will be mapped automatically.
+	 * 
 	 * @see org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler#onAuthenticationSuccess(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.springframework.security.core.Authentication)
 	 */
 	@Override

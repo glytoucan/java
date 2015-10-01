@@ -69,8 +69,8 @@
     <table class="table table-bordered table-striped table-hover">
     <tr>
       <td>#</td>
-      <td>Original Structure</td>
-      <td>Structure/GlycoCT</td>
+      <td>Original Glycan Sequence</td>
+      <td>Sequence</td>
       <td>Image</td>
     </tr>
 
@@ -105,8 +105,8 @@
     <table class="table table-bordered table-striped table-hover">
     <tr>
       <td>#</td>
-      <td>Original Structure</td>
-      <td>Structure/GlycoCT</td>
+      <td>Original Glycan Sequence</td>
+      <td>Sequence</td>
       <td>Image</td>
       <td>ID</td>
     </tr>

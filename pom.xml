@@ -117,7 +117,7 @@
 		<dependency>
 			<groupId>org.glycoinfo</groupId>
 			<artifactId>wurcsframework</artifactId>
-      <version>0.0.2-SNAPSHOT</version>
+			<version>0.0.2-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
@@ -165,30 +165,30 @@
 					<artifactId>logback-classic</artifactId>
 				</exclusion>
 				<exclusion>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-test</artifactId>
+					<groupId>org.springframework.security</groupId>
+					<artifactId>spring-security-test</artifactId>
 				</exclusion>
 				<exclusion>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-core</artifactId>
+					<groupId>org.springframework.security</groupId>
+					<artifactId>spring-security-core</artifactId>
 				</exclusion>
 				<exclusion>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-web</artifactId>
+					<groupId>org.springframework.security</groupId>
+					<artifactId>spring-security-web</artifactId>
 				</exclusion>
 				<exclusion>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-config</artifactId>
+					<groupId>org.springframework.security</groupId>
+					<artifactId>spring-security-config</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
-	  		<groupId>org.springframework.boot</groupId>
+			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
 		<dependency>
-		  <groupId>org.springframework.security</groupId>
-		  <artifactId>spring-security-openid</artifactId>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-openid</artifactId>
 		</dependency>
 	</dependencies>
 
@@ -267,10 +267,9 @@
 			<url>http://repo.spring.io/libs-release</url>
 		</repository>
 		<repository>
-			<id>spring-milestone</id>
-			<url>http://repo.spring.io/libs-milestone</url>
+			<id>spring-milestones</id>
+			<url>http://repo.spring.io/libs-milestone/</url>
 		</repository>
-
 
 		<repository>
 			<id>glycoinfo</id>
@@ -305,9 +304,9 @@
 			<activation>
 				<activeByDefault></activeByDefault>
 			</activation>
-<!-- 			<properties> -->
-<!-- 				<spring.mainClass>org.springframework.boot.loader.PropertiesLauncher</spring.mainClass> -->
-<!-- 			</properties> -->
+			<!-- <properties> -->
+			<!-- <spring.mainClass>org.springframework.boot.loader.PropertiesLauncher</spring.mainClass> -->
+			<!-- </properties> -->
 		</profile>
 		<profile>
 			<id>test</id>

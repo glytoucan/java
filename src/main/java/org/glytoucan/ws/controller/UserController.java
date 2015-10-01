@@ -46,11 +46,10 @@ public class UserController {
 				return "redirect:/signout";
 			}
 			
-			for (SparqlEntity sparqlEntity : userData) {
-				logger.debug(sparqlEntity);
-			        
-				model.addAttribute("userProfile", sparqlEntity.getData());
-			}
+			SparqlEntity sparqlEntity = userData.iterator().next();
+			logger.debug(sparqlEntity);
+			model.addAttribute("userProfile", sparqlEntity.getData());
+			
 			// TODO: check for verified email in RDF
 	        if (userInfo.getVerifiedEmail()!=null && userInfo.getVerifiedEmail().equals("true")) {
 	        	model.addAttribute("verifiedEmail", true);

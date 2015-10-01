@@ -32,8 +32,8 @@
 	<input type="button" onclick="location.href='./image/uoxf-color'"value="Oxford colorscale">
 	<input type="button" onclick="location.href='./image/cfg-uoxf'"value="CFG and Oxford">
 	<input type="button" onclick="location.href='./image/iupac'"value="IUPAC">
+<img src="/glycans/G00026MO/image?format=png&notation=cfg&style=extended">
 </fieldset>
-<img src="http://${hostname}/glycans/G00026MO/image?format=png&notation=cfg&style=extended">
 <fieldset>
 	<legend>${TopTitle[1]}</legend>
 	<input type="button" onclick="location.href='/Preferences/en'"value="English">

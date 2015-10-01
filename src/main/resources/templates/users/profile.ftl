@@ -28,6 +28,10 @@
 <td>${userProfile.email}</td>
 </tr>
 <tr>
+<td>Contributor Id</td>
+<td>${userProfile.alternateName}</td>
+</tr>
+<tr>
 <td>Verified Email</td>
 <td>${verifiedEmail?c}</td>
 </tr>
