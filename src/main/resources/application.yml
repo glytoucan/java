@@ -8,9 +8,8 @@ spring:
     dialect: sparqs
     #url: jdbc:virtuoso://test.ts.glytoucan.org:1111
     #url: jdbc:virtuoso://localhost:1112
-    url: jdbc:virtuoso://glytoucan.org:1112
+    #url: jdbc:virtuoso://glytoucan.org:1112
     username: dba
-    password: dba
     graph: graph
   mail:
     host: test.glytoucan.org
