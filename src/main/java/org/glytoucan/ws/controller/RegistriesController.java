@@ -6,6 +6,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.KeyManagementException;
@@ -109,6 +111,11 @@ public class RegistriesController {
 			return "redirect:" + error;
 		} else {
 			logger.debug("text1>" + sequence.getSequence() + "<");
+			try {
+				logger.debug("text1encoded>" + URLEncoder.encode(sequence.getSequence(), "UTF-8") + "<");
+			} catch (UnsupportedEncodingException e1) {
+				e1.printStackTrace();
+			}
 
 			List<String> inputs = DetectFormat.split(sequence.getSequence());
 			logger.debug("split input:>" + inputs + "<");

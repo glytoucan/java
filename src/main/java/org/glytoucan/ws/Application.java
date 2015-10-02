@@ -48,7 +48,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootApplication
-@Import(value = { GlycanProcedureConfig.class})
+@Import(value = { GlycanProcedureConfig.class })
 public class Application extends SpringBootServletInitializer {
 	
 	private static final String graph = "http://rdf.glytoucan.org";
