@@ -16,7 +16,6 @@ import org.glycoinfo.conversion.error.ConvertException;
 import org.glycoinfo.conversion.error.ConvertFormatException;
 import org.glycoinfo.rdf.SparqlException;
 import org.glycoinfo.rdf.dao.SparqlEntity;
-import org.glycoinfo.rdf.glycan.Saccharide;
 import org.glycoinfo.rdf.service.GlycanProcedure;
 import org.glytoucan.ws.model.SequenceInput;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -123,7 +122,7 @@ public class StructuresController {
 				try {
 	    			String imageSequence = sequence.getSequence().replaceAll("(?:\\r\\n|\\n)", "\\\\n");
 
-					sequence.setImage(gsClient.getImage("https://test.glytoucan.org", imageSequence));
+					sequence.setImage(gsClient.getImage("http://beta.glytoucan.org", imageSequence));
 				} catch (KeyManagementException | NoSuchAlgorithmException
 						| KeyStoreException | IOException e) {
 					redirectAttrs.addFlashAttribute("errorMessage", "system error");
