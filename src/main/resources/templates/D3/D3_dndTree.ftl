@@ -15,26 +15,24 @@
   }
 
   .node circle {
-    /* fill: #fff;
-    stroke: steelblue; */
     stroke-width: 1.5px;
   }
-  
+
   .node image {
 	position: absolute;
 	z-index: -1;
   }
-	
+
   .front {
     position: absolute;
     z-index: 2;
   }
-	
+
   .back {
 	position: absolute;
 	z-index: -1;
   }
-  
+
   .node text {
     font-size:10px;
     font-family:sans-serif;
@@ -68,6 +66,13 @@ div.blockb{
  float: right;
  width: 85%;
 }
+
+div.menu a {
+	font-size:30px;
+    font-family:sans-serif;
+    color: black;
+}
+
 div.menu ul{
 margin: 0;
 padding: 0;
@@ -107,11 +112,13 @@ background-color: #95A38D;
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <div class="menu">
  	 <ul>
+ 	<a><br>${ID}<br></a>
  	 <li><a href="/D3_dndTree/${ID}">All data</a></li>
  	 <li><a href="/D3_motif_isomer/${ID}">Motif and Isomer</a></li>
  	 <li><a href="/D3_structure/${ID}">Superstructure and Substructure</a></li>
  	 <li><a href="/D3_subsumed/${ID}">Subsumes and Subsumed_by</a></li>
  	 <li><a href="/Structures/Glycans/${ID}">RETURN</a></li>
+
   </div>
 
 <div class="blockb">
@@ -535,6 +542,96 @@ treeJSON = d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData)
 	                })
 	            .style("fill-opacity", 0);
 
+				var text3;
+	            var text_name2 = null;
+	            nodeEnter.append("image")
+	            .attr("xlink:href", function(d){
+	             if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure")
+	               return null;
+	             else  return "http://glytoucan.org/glyspace/service/glycans/"+ d.name + "/image?style=extended&format=png&notation=cfg";
+	         })
+	            .attr("width", function(d){
+	                if (d.size == null)
+	                   return 150;
+	                else return 50;
+	                })
+	            .attr("height", function(d){
+	                if (d.size == null)
+	                   return 50;
+	                else return 20;
+	                })
+	            .attr("transform", function(d){
+	                if (d.size == null)
+	                   return "translate(-120,-30)";
+	                else return "translate(10,-10)";
+	              })
+	              .on("mouseover", function (d) {
+	                  d3.select(this).attr("width", 200)
+	                                 .attr("height", 100)
+	                                 .attr("xlink:href", function(d){
+	                                 if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure")
+	                                   return null;
+	                                 else  return "http://glytoucan.org/glyspace/service/glycans/"+ d.name + "/image?style=extended&format=png&notation=cfg";
+	                               })
+	                               .attr("transform", function(d){
+	                                 if(d.size == null)
+	                                  return "translate(-120,-30)";
+	                                else return "translate(100,-10)";
+	                              });
+	                        if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure"){text_name2 = null;}
+	                        else if (d.size == null){text_name = null;}
+	                        else{text_name2 = d.name;};
+
+	                          text3 = nodeEnter.append("text")
+	                          .attr("x", function(d) {
+	                              return d.children || d._children ? -10 : 10;
+	                          })
+	                          .attr("dy", ".35em")
+	                          .attr('class', 'nodeText')
+	                          .attr("text-anchor", function(d) {
+	                              return d.children || d._children ? "end" : "start";
+	                          })
+	                          .text(function(d) {
+					                 if (d.name == text_name2){
+						                 if(d.size == null){
+						                 	return null;
+						                 }
+						                  return d.name;
+									}
+			                        else return null;
+	                            })
+	                          .attr("transform", function(d){
+	                            if(d.size == null)
+	                             return "translate(-30,100)";
+	                           else return "translate(100,100)";
+	                         });
+	              })
+	              .on("mouseout", function (d) {
+	                  d3.select(this).attr("width", function(d){
+	                      if (d.size == null)
+	                         return 150;
+	                      else return 50;
+	                      })
+	                  .attr("height", function(d){
+	                      if (d.size == null)
+	                         return 50;
+	                      else return 20;
+	                      })
+	                      .attr("xlink:href", function(d){
+	                      if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure")
+	                        return null;
+	                      else  return "http://glytoucan.org/glyspace/service/glycans/"+ d.name + "/image?style=extended&format=png&notation=cfg";
+	                    })
+	                    .attr("transform", function(d){
+	                      if(d.size == null)
+	                       return "translate(-120,-30)";
+	                     else return "translate(10,-10)";
+	                   });
+	                   text3.remove();
+	                    //.attr("class",orderlist[0]);
+	              });
+
+
 	        // phantom node to give us mouseover in a radius around it
 	        nodeEnter.append("circle")
 	            .attr('class', 'ghostCircle')
@@ -588,34 +685,104 @@ treeJSON = d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData)
 	                return d._children ? "lightsteelblue" : "#fff";
 	            })
 	            .attr("stroke","black");
-	            // .style("fill", function(d) {
-	            //     return d._children ? "lightsteelblue" : "#fff";
-	            // });
 
-	            node.append("image")
-	                  .on("click",function(d){
-	                    alert(d.name +"<br>"+ d.x +"<br>" + d.y);
-	                  })
-	                  .attr("xlink:href", function(d){
-	            	     if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure")
-	            	       return null;
-	            	     else  return "http://glytoucan.org/glyspace/service/glycans/"+ d.name + "/image?style=extended&format=png&notation=cfg";
-	             	 })
-	                  .attr("width", function(d){
-	                    	if (d.size == null)
-	                   		   return 150;
-	                   	  else return 50;
-	                      })
-	                  .attr("height", function(d){
-	                    	if (d.size == null)
-	                   		   return 50;
-	                   	  else return 20;
-	                      })
-	                  .attr("transform", function(d){
-	                    	if (d.size == null)
-	                   		   return "translate(-150,-30)";
-	                   	  else return "translate(10,-10)";
-	                    });
+					var text_name = null;
+			        var text2;
+			            node.append("image")
+			                  // .on("click",function(d){
+			                  //   alert(d.name +"<br>"+ d.x +"<br>" + d.y);
+			                  // })
+			                  .attr("xlink:href", function(d){
+			            	     if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure")
+			            	       return null;
+			            	     else  return "http://glytoucan.org/glyspace/service/glycans/"+ d.name + "/image?style=extended&format=png&notation=cfg";
+			             	 })
+			                  .attr("width", function(d){
+			                    	if (d.size == null)
+			                   		   return 150;
+			                   	  else return 50;
+			                      })
+			                  .attr("height", function(d){
+			                    	if (d.size == null)
+			                   		   return 50;
+			                   	  else return 20;
+			                      })
+			                  .attr("transform", function(d){
+			                    	if (d.size == null)
+			                   		   return "translate(-120,-30)";
+			                   	  else return "translate(10,-10)";
+			                    })
+			                    // .attr("class",orderlist[0])
+			                    //.attr('pointer-events', 'mouseover')
+			                    .on("mouseover", function (d) {
+			                        d3.select(this).attr("width", 200)
+			                                       .attr("height", 100)
+			                                       .attr("xlink:href", function(d){
+			                                 	     if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure")
+			                                 	       return null;
+			                                 	     else  return "http://glytoucan.org/glyspace/service/glycans/"+ d.name + "/image?style=extended&format=png&notation=cfg";
+			                                  	 })
+			                                     .attr("transform", function(d){
+			                                       if(d.size == null)
+			                                        return "translate(-120,-30)";
+			                                  	  else return "translate(100,-10)";
+			                                    });
+			                          if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure"){text_name = null;}
+			                          else if (d.size == null){text_name = null;}
+			                          else{text_name = d.name;};
+
+			                            text2 = nodeEnter.append("text")
+			                            .attr("x", function(d) {
+			                                return d.children || d._children ? -10 : 10;
+			                            })
+			                            .attr("dy", ".35em")
+			                            .attr('class', 'nodeText')
+			                            .attr("text-anchor", function(d) {
+			                                return d.children || d._children ? "end" : "start";
+			                            })
+			                            .text(function(d) {
+							                 if (d.name == text_name){
+								                 if(d.size == null){
+								                 	return null;
+								                 }
+								                  return d.name;
+											}
+					                        else return null;
+			                            })
+			                            .attr("transform", function(d){
+			                              if(d.size == null)
+			                               return "translate(-30,100)";
+			                             else return "translate(100,100)";
+			                           });
+			                                     //iamge2.attr("class",orderlist[1]);
+			                          //alert(d.name);
+			                    })
+			                    .on("mouseout", function (d) {
+			                        d3.select(this).attr("width", function(d){
+			                          	if (d.size == null)
+			                         		   return 150;
+			                         	  else return 50;
+			                            })
+			                        .attr("height", function(d){
+			                          	if (d.size == null)
+			                         		   return 50;
+			                         	  else return 20;
+			                            })
+			                            .attr("xlink:href", function(d){
+			                            if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure")
+			                              return null;
+			                            else  return "http://glytoucan.org/glyspace/service/glycans/"+ d.name + "/image?style=extended&format=png&notation=cfg";
+			                          })
+			                          .attr("transform", function(d){
+			                            if(d.size == null)
+			                             return "translate(-120,-30)";
+			                           else return "translate(10,-10)";
+			                         });
+			                         text2.remove();
+
+			                          //.attr("class",orderlist[0]);
+			                    });
+
 
 	        // Transition nodes to their new position.
 	        var nodeUpdate = node.transition()
