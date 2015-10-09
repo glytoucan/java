@@ -6,6 +6,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.file.Files;
@@ -20,6 +21,7 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
@@ -60,7 +62,7 @@ public class RegistriesController {
 
 	@Autowired
 	ImageGenerator imageGenerator;
-	
+
 	@Autowired
 	UserProcedure userProcedure;
 
@@ -112,7 +114,9 @@ public class RegistriesController {
 		} else {
 			logger.debug("text1>" + sequence.getSequence() + "<");
 			try {
-				logger.debug("text1encoded>" + URLEncoder.encode(sequence.getSequence(), "UTF-8") + "<");
+				logger.debug("text1encoded>"
+						+ URLEncoder.encode(sequence.getSequence(), "UTF-8")
+						+ "<");
 			} catch (UnsupportedEncodingException e1) {
 				e1.printStackTrace();
 			}
@@ -222,24 +226,24 @@ public class RegistriesController {
 	private String convertSequenceToImage(String imageSequence)
 			throws KeyManagementException, NoSuchAlgorithmException,
 			KeyStoreException, IOException {
-		 GlyspaceClient gsClient = new GlyspaceClient();
-		 return gsClient.getImage("http://localhost", imageSequence);
-//		byte[] bytes = null;
-//		try {
-//			bytes = imageGenerator.getImage(imageSequence, "png", "cfg",
-//					"extended");
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//
-//		ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-//
-//		BufferedImage bufimage = ImageIO.read(bais);
-//
-//		String image = encodeToString(bufimage, "png");
-//
-//		return "data:image/png;base64," + image;
+		GlyspaceClient gsClient = new GlyspaceClient();
+		return gsClient.getImage("http://localhost", imageSequence);
+		// byte[] bytes = null;
+		// try {
+		// bytes = imageGenerator.getImage(imageSequence, "png", "cfg",
+		// "extended");
+		// } catch (Exception e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
+		//
+		// ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+		//
+		// BufferedImage bufimage = ImageIO.read(bais);
+		//
+		// String image = encodeToString(bufimage, "png");
+		//
+		// return "data:image/png;base64," + image;
 	}
 
 	@RequestMapping(value = "/complete", method = RequestMethod.POST)
@@ -370,8 +374,9 @@ public class RegistriesController {
 				return "redirect:/Registries/upload";
 			}
 		} else {
-			redirectAttrs.addFlashAttribute("errorMessage", "You failed to upload "
-					+ file.getName() + " because the file was empty.");
+			redirectAttrs.addFlashAttribute("errorMessage",
+					"You failed to upload " + file.getName()
+							+ " because the file was empty.");
 			return "redirect:/Registries/upload";
 		}
 	}
@@ -400,5 +405,66 @@ public class RegistriesController {
 			e.printStackTrace();
 		}
 		return imageString;
+	}
+
+	@RequestMapping("/download")
+	public void download(HttpServletRequest request,
+			HttpServletResponse response) throws SparqlException {
+		String[] listRegisteredId = request.getParameterValues("registeredId");
+		String[] listRegisteredSequence = request.getParameterValues("registeredSequence");
+		String[] listRegisteredResult = request.getParameterValues("registeredResultSequence");
+		String[] listSequence = request.getParameterValues("sequence");
+		String[] listResultSequence = request.getParameterValues("resultSequence");
+		String[] listErrorSequence = request.getParameterValues("errorSequence");
+		String[] listErrorResultSequence = request.getParameterValues("errorResultSequence");
+		response.setContentType("text/csv");
+
+		String csvFileName = "glytoucanDownload.csv";
+		// creates mock data
+		String headerKey = "Content-Disposition";
+		String headerValue = String.format("attachment; filename=\"%s\"",
+				csvFileName);
+		response.setHeader(headerKey, headerValue);
+
+		try {
+			boolean idExists = false;
+			if (null != listRegisteredId) {
+				idExists = true;
+				response.getWriter().append("id,");
+			}
+			if ((null != listRegisteredSequence) || (null != listSequence) || (null != listErrorSequence)) {
+				response.getWriter().append("sequence");
+			}
+			if ((null != listRegisteredResult) || (null != listResultSequence) || (null != listErrorResultSequence)) {
+				response.getWriter().append(",result sequence\r\n");
+			}
+			if (null != listRegisteredId) {
+				for (int i = 0; i < listRegisteredId.length; i++) {
+					response.getWriter().append("\"" + listRegisteredId[i] + "\",");
+					response.getWriter().append("\"" + listRegisteredSequence[i] + "\",");
+					response.getWriter().append("\"" + listRegisteredResult[i] + "\"\r\n");
+				}
+			}
+			if (null != listSequence) {
+				for (int i = 0; i < listSequence.length; i++) {
+					if (idExists)
+						response.getWriter().append("\"\",");
+					response.getWriter().append("\"" + listSequence[i] + "\",");
+					response.getWriter().append("\"" + listResultSequence[i] + "\"\r\n");
+				}
+			}
+			if (null != listErrorSequence) {
+				for (int i = 0; i < listErrorSequence.length; i++) {
+					if (idExists)
+						response.getWriter().append("\"\",");
+					response.getWriter().append("\"" + listErrorSequence[i] + "\",");
+					response.getWriter().append("\"" + listErrorResultSequence[i] + "\"\r\n");
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return;
 	}
 }

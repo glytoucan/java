@@ -142,29 +142,30 @@
 <#if ((listNew?size > 0) || (listErrors?size > 0) || (listRegistered?size > 0)) >
 
   Download this data.
-<form action="/registries/download" id="downloadForm" method="post" accept-charset="utf-8">
+<form action="/Registries/download" id="downloadForm" method="post" accept-charset="utf-8">
 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 
 <#list listNew>
 <#items as newItem>
-  <input type="hidden" name="listNew[${newItem?index}].sequence" value="${listNew[newItem?index].sequence}"/>
-  <input type="hidden" name="listNew[${newItem?index}].resultSequence" value="${listNew[newItem?index].resultSequence}"/>
+  <input type="hidden" name="sequence" value="${listNew[newItem?index].sequence}"/>
+  <input type="hidden" name="resultSequence" value="${listNew[newItem?index].resultSequence}"/>
 </#items>
 <#else>
 </#list>
 
 <#list listErrors>
 <#items as newItem>
-  <input type="hidden" name="listErrors[${newItem?index}].sequence" value="${listErrors[newItem?index].sequence}"/>
-  <input type="hidden" name="listErrors[${newItem?index}].resultSequence" value="${listErrors[newItem?index].resultSequence}"/>
+  <input type="hidden" name="errorSequence" value="${listErrors[newItem?index].sequence}"/>
+  <input type="hidden" name="errorResultSequence" value="${listErrors[newItem?index].resultSequence}"/>
 </#items>
 <#else>
 </#list>
 
 <#list listRegistered>
 <#items as newItem>
-  <input type="hidden" name="listRegistered[${newItem?index}].sequence" value="${listRegistered[newItem?index].sequence}"/>
-  <input type="hidden" name="listRegistered[${newItem?index}].resultSequence" value="${listRegistered[newItem?index].resultSequence}"/>
+  <input type="hidden" name="registeredId" value="${listRegistered[newItem?index].id}"/>
+  <input type="hidden" name="registeredSequence" value="${listRegistered[newItem?index].sequence}"/>
+  <input type="hidden" name="registeredResultSequence" value="${listRegistered[newItem?index].resultSequence}"/>
 </#items>
 <#else>
 </#list>

@@ -51,6 +51,20 @@ New ID:<a href="/Structures/Glycans/${resultList[newItem?index]}">${resultList[n
 </div>
 
 
+Download this data.
+<form action="/Registries/download" id="downloadForm" method="post" accept-charset="utf-8">
+<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+
+
+<#list registeredList as newItem>
+<input type="hidden" name="registeredId" value="${resultList[newItem?index]}"/>
+<input type="hidden" name="registeredResultSequence" value="${registeredList[newItem?index]}"/>
+<input type="hidden" name="registeredSequence" value="${origList[newItem?index]}"/>
+</#list>
+
+  <div class="submit"><input  class="btn" type="submit" value="Download"/></div>
+</form>
+
 
 <#-- end contents -->
 
