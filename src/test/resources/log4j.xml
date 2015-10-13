@@ -11,10 +11,12 @@
 	</appender>
 
   <logger name="org.glytoucan">
+    <appender-ref ref="console" />
     <level value="debug"/> 
   </logger>
 
   <logger name="org.glycoinfo">
+    <appender-ref ref="console" />
     <level value="debug"/> 
   </logger>
  
