@@ -138,9 +138,6 @@ public class GlycanController {
 //	@Value("${documentation.services.basePath}")
 	String serverBasePath;
 	
-	@Autowired 
-	SparqlEntityFactory sparqlEntityFactory;
-
 //	public void setGlycanManager(GlycanManager glycanManager) {
 //		this.glycanManager = glycanManager;
 //	}
@@ -414,7 +411,8 @@ public class GlycanController {
 	public @ResponseBody Glycan getGlycan (
 			@ApiParam(required=true, value="id of the glycan") @PathVariable("accessionNumber") String accessionNumber) throws SparqlException, ParseException {
 		logger.debug("Get glycan");
-		SparqlEntity se = sparqlEntityFactory.create();
+    	SparqlEntity se = new SparqlEntity();
+
 		se.setValue(Saccharide.PrimaryId, accessionNumber);
 
 		SparqlEntity sparqlEntity = glycanProcedure.searchByAccessionNumber(accessionNumber);
@@ -1004,9 +1002,14 @@ public class GlycanController {
     		@RequestParam("style") 
     		String style
     		) throws Exception {
-		SparqlEntity se = sparqlEntityFactory.create();
+//		SparqlEntity se = sparqlEntityFactory.create();
+    	SparqlEntity se = new SparqlEntity();
 		se.setValue(Saccharide.PrimaryId, accessionNumber);
-		sparqlEntityFactory.set(se);
+		
+		SparqlEntityFactory.set(se);
+//		sparqlEntityFactory.set(se);
+//		logger.debug("sparqlEntityFactory:>" + sparqlEntityFactory + "<");
+		logger.debug("SparqlEntity:>" + se + "<");
     	SparqlEntity glycanEntity = glycanProcedure.searchByAccessionNumber(accessionNumber);
     	String sequence = glycanEntity.getValue("GlycoCTSequence");
     	
