@@ -10,6 +10,7 @@ import org.eurocarbdb.resourcesdb.io.MonosaccharideConverter;
 import org.glycoinfo.rdf.SelectSparql;
 import org.glycoinfo.rdf.SparqlException;
 import org.glycoinfo.rdf.dao.SparqlDAO;
+import org.glycoinfo.rdf.dao.SparqlEntityFactory;
 import org.glycoinfo.rdf.dao.virt.SparqlDAOVirtSesameImpl;
 import org.glycoinfo.rdf.dao.virt.VirtRepositoryConnectionFactory;
 import org.glycoinfo.rdf.dao.virt.VirtSesameConnectionFactory;
@@ -282,5 +283,10 @@ public class Application extends SpringBootServletInitializer {
 	@Bean
 	MailService mailService() {
 		return new MailService();
+	}
+	
+	@Bean
+	SparqlEntityFactory sparqlEntityFactory() {
+		return new SparqlEntityFactory();
 	}
 }

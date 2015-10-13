@@ -33,7 +33,9 @@ import org.glycoinfo.batch.search.wurcs.SubstructureSearchSparql;
 import org.glycoinfo.rdf.SelectSparql;
 import org.glycoinfo.rdf.SparqlException;
 import org.glycoinfo.rdf.dao.SparqlEntity;
+import org.glycoinfo.rdf.dao.SparqlEntityFactory;
 import org.glycoinfo.rdf.glycan.GlycoSequence;
+import org.glycoinfo.rdf.glycan.Saccharide;
 import org.glycoinfo.rdf.service.GlycanProcedure;
 import org.glycoinfo.rdf.service.UserProcedure;
 import org.glyspace.registry.importers.GWSImporter;
@@ -135,6 +137,9 @@ public class GlycanController {
 	
 //	@Value("${documentation.services.basePath}")
 	String serverBasePath;
+	
+	@Autowired 
+	SparqlEntityFactory sparqlEntityFactory;
 
 //	public void setGlycanManager(GlycanManager glycanManager) {
 //		this.glycanManager = glycanManager;
@@ -409,6 +414,9 @@ public class GlycanController {
 	public @ResponseBody Glycan getGlycan (
 			@ApiParam(required=true, value="id of the glycan") @PathVariable("accessionNumber") String accessionNumber) throws SparqlException, ParseException {
 		logger.debug("Get glycan");
+		SparqlEntity se = sparqlEntityFactory.create();
+		se.setValue(Saccharide.PrimaryId, accessionNumber);
+
 		SparqlEntity sparqlEntity = glycanProcedure.searchByAccessionNumber(accessionNumber);
 		Glycan glycan = new Glycan();
 		glycan.setAccessionNumber(accessionNumber);
@@ -996,6 +1004,9 @@ public class GlycanController {
     		@RequestParam("style") 
     		String style
     		) throws Exception {
+		SparqlEntity se = sparqlEntityFactory.create();
+		se.setValue(Saccharide.PrimaryId, accessionNumber);
+		sparqlEntityFactory.set(se);
     	SparqlEntity glycanEntity = glycanProcedure.searchByAccessionNumber(accessionNumber);
     	String sequence = glycanEntity.getValue("GlycoCTSequence");
     	
