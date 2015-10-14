@@ -272,21 +272,20 @@ public class LocalizationHandlerMapping extends HandlerInterceptorAdapter {
 			modelAndView.addAllObjects(contextMap);
 
 			logger.debug(modelAndView.getModel().keySet());
-		}
-
-		try {
-			if (SecurityContextHolder.getContext().getAuthentication()
-					.getPrincipal() instanceof UserInfo) {
-				UserInfo userInfo = (UserInfo) SecurityContextHolder
-						.getContext().getAuthentication().getPrincipal();
-				if (null != userInfo && userInfo.getVerifiedEmail() != null
-						&& userInfo.getVerifiedEmail().equals("true")) {
-					logger.debug("user is verified");
-					modelAndView.addObject("user", true);
+			try {
+				if (SecurityContextHolder.getContext().getAuthentication()
+						.getPrincipal() instanceof UserInfo) {
+					UserInfo userInfo = (UserInfo) SecurityContextHolder
+							.getContext().getAuthentication().getPrincipal();
+					if (null != userInfo && userInfo.getVerifiedEmail() != null
+							&& userInfo.getVerifiedEmail().equals("true")) {
+						logger.debug("user is verified");
+						modelAndView.addObject("user", true);
+					}
 				}
+			} catch (NullPointerException e) {
+				logger.debug("user is not verified");
 			}
-		} catch (NullPointerException e) {
-			logger.debug("user is not verified");
 		}
 	}
 }
