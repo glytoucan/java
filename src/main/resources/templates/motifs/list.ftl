@@ -21,7 +21,7 @@
 
 <h4>${Top[0]}</h4>
 
-	<div id="motifListApp" data-notation="cfg">
+	<div id="motifListApp" data-notation="${imageNotation}">
 		<h4>
 			Count:
 			<span class="motifList_count"></span><br /><br />

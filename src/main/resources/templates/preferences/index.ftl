@@ -26,14 +26,14 @@
 -->
 <fieldset>
 	<legend>${TopTitle[0]}</legend>
-	<input type="button" onclick="location.href='./image/cfg'"value="CFG">
-	<input type="button" onclick="location.href='./image/cfgbw'"value="CFG greyscale">
-	<input type="button" onclick="location.href='./image/uoxf'"value="Oxford">
-	<input type="button" onclick="location.href='./image/uoxf-color'"value="Oxford colorscale">
-	<input type="button" onclick="location.href='./image/cfg-uoxf'"value="CFG and Oxford">
-	<input type="button" onclick="location.href='./image/iupac'"value="IUPAC">
-<img src="/glycans/G00026MO/image?format=png&notation=cfg&style=extended">
+	<input type="button" onclick="location.href='/Preferences/image/cfg'"value="CFG">
+	<input type="button" onclick="location.href='/Preferences/image/cfgbw'"value="CFG greyscale">
+	<input type="button" onclick="location.href='/Preferences/image/uoxf'"value="Oxford">
+	<input type="button" onclick="location.href='/Preferences/image/uoxf-color'"value="Oxford colorscale">
+	<input type="button" onclick="location.href='/Preferences/image/cfg-uoxf'"value="CFG and Oxford">
+	<input type="button" onclick="location.href='/Preferences/image/iupac'"value="IUPAC">
 </fieldset>
+<img src="/glycans/G00029MO/image?format=png&notation=${imageNotation}&style=extended">
 <fieldset>
 	<legend>${TopTitle[1]}</legend>
 	<input type="button" onclick="location.href='/Preferences/en'"value="English">

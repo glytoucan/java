@@ -4,6 +4,7 @@ import javax.servlet.http.HttpSession;
 import org.glytoucan.view.LocalizationHandlerMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.knappsack.swagger4springweb.annotation.ApiExclude;
@@ -62,6 +63,12 @@ public class PreferencesController {
 	@RequestMapping("/ru")
 	public String ru(Model model, HttpSession httpSession) {
 		httpSession.setAttribute(LocalizationHandlerMapping.LANGUAGE, "7");
+		return "preferences/index";
+	}
+	
+	@RequestMapping("/image/{imageNotation}")
+	public String image(@PathVariable String imageNotation, Model model, HttpSession httpSession) {
+		httpSession.setAttribute(LocalizationHandlerMapping.IMAGENOTATION, imageNotation);
 		return "preferences/index";
 	}
 }

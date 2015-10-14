@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.glytoucan.ws.security.UserInfo;
@@ -31,6 +32,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class LocalizationHandlerMapping extends HandlerInterceptorAdapter {
 	public static final String LANGUAGE = "language";
 	public static final String HOSTNAME = "hostname";
+	public static final String IMAGENOTATION = "imageNotation";
 	Log logger = LogFactory.getLog(LocalizationHandlerMapping.class);
 
 	private static String env = null;
@@ -212,8 +214,13 @@ public class LocalizationHandlerMapping extends HandlerInterceptorAdapter {
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
+			
+			String imageNotation = (String) session.getAttribute(IMAGENOTATION);
+			if (StringUtils.isBlank(imageNotation))
+				imageNotation = "cfg";
+			logger.debug("imageNotation:>" + imageNotation + "<");
 
-			modelAndView.addObject("imageNotation", "cfg");
+			modelAndView.addObject("imageNotation", imageNotation);
 			modelAndView.addObject("language", language);
 			modelAndView.addObject("notation", ""); // for viewAll
 
