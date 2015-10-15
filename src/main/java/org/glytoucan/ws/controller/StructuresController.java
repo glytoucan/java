@@ -94,10 +94,10 @@ public class StructuresController {
         } else {
     		logger.debug("text1>" + sequence.getSequence() + "<");
 
-    		glycanProcedure.setSequence(sequence.getSequence());
+//    		glycanProcedure.setSequence(sequence.getSequence());
     		SparqlEntity se;
     		try {
-    			se = glycanProcedure.searchBySequence();
+    			se = glycanProcedure.searchBySequence(sequence.getSequence());
     			
 			} catch (SparqlException e) {
 				e.printStackTrace();

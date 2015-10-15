@@ -271,12 +271,13 @@ public class RegistriesController {
 
 		UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
+		String userId = null;
 		if (null != userInfo && userInfo.getVerifiedEmail() != null
 				&& userInfo.getVerifiedEmail().equals("true")
 				&& StringUtils.isNotBlank(userInfo.getGivenName())) {
 			logger.debug("user is verified:>" + userInfo.getGivenName());
-			String userId = userProcedure.getUserId(userInfo.getEmail());
-			glycanProcedure.setContributorId(userId);
+			userId = userProcedure.getUserId(userInfo.getEmail());
+//			glycanProcedure.setContributorId(userId);
 		} else {
 			return "redirect:/signin?errorMessage=Please sign in with a verified email address.  Check Profile for details.";
 		}
@@ -298,8 +299,7 @@ public class RegistriesController {
 			String check = checked[i];
 			if (StringUtils.isNotBlank(check) && check.equals("on")) {
 				logger.debug("registering:" + resultSequence[i] + "<");
-				String id = glycanProcedure.register(origSequence[i],
-						resultSequence[i]);
+				String id = glycanProcedure.register(origSequence[i], userId);
 				registerList.add(resultSequence[i]);
 				origList.add(origSequence[i]);
 				imageList.add(image[i]);
