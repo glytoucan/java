@@ -21,7 +21,7 @@
       <td>#</td>
       <td>Register?</td>
       <td>Original Structure</td>
-      <td>Structure/GlycoCT</td>
+      <td>Structure</td>
       <td>Image</td>
     </tr>
 
