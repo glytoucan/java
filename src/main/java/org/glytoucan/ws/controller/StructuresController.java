@@ -158,6 +158,8 @@ public class StructuresController {
 	
 	@RequestMapping(value="/Glycans/{accessionNumber}", method=RequestMethod.GET)
 	public String glycans(@PathVariable String accessionNumber, Model model, RedirectAttributes redirectAttrs)  {
+		if (StringUtils.isNotBlank(accessionNumber) && accessionNumber.startsWith("G"))
+			return "structures/glycans";		
 		try {
 			if (!glycanProcedure.checkExists(accessionNumber)) {
 				redirectAttrs.addFlashAttribute("errorMessage", "This accession number does not exist");
