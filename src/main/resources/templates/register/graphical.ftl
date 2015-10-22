@@ -9,7 +9,7 @@
 <a name="top"></a><!--link for page top-->
 <div id="contents">
 <#include "../nav.ftl">
-<#include "../error.ftl">
+<#include "../errormessage.ftl">
 <div class="container">
 <h2 class="page-header">${Title[0]}
   <a class="userGuide" href="${Title[2]}" target="_blank">

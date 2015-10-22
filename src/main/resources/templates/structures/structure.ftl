@@ -10,7 +10,7 @@
 <div id="contents">
 <#include "../nav.ftl">
 
-<#include "../error.ftl">
+<#include "../errormessage.ftl">
 <div class="container">
   <!-- -<a href="${Title[2]}" target="_blank">${Title[1]}</a> --> 
   <#--	// $submit_wurcs = 'WURCS%3D2.0/2,2,1/%5Bx2122h-1x_1-5_2*NCC/3=O%5D%5Bx1221m-1x_1-5%5D/1-2/a?-b1';

@@ -9,7 +9,7 @@
 <div id="contents">
 <#include "../nav.ftl">
 <div class="container">
-<#include "../error.ftl">
+<#include "../errormessage.ftl">
 
 <#-- contents -->
 

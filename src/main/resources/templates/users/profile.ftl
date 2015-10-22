@@ -9,7 +9,6 @@
 <a name="top"></a><!--link for page top-->
 <div id="contents">
 <#include "../nav.ftl">
-
 <#include "../errormessage.ftl">
 
 <div class="container" style="padding:20px 0">

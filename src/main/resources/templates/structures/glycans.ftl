@@ -10,7 +10,7 @@
 <div id="contents">
 <#include "../nav.ftl">
 
-<#include "../error.ftl">
+<#include "../errormessage.ftl">
 <div class="container">
 
 <div id="glycan_entry_app" data-notation="${imageNotation}" data-lang="${language}">

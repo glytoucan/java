@@ -9,7 +9,7 @@
 <div id="contents">
 <#include "../nav.ftl">
 <div class="container">
-<#include "../error.ftl">
+<#include "../errormessage.ftl">
   <h1 class="page-header">${Title[0]}</h1>
 
 <#list listNew>
