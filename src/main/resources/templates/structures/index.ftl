@@ -9,7 +9,7 @@
 <a name="top"></a><!--link for page top-->
 <div id="contents">
 <#include "../nav.ftl">
-<#include "../error.ftl">
+<#include "../errormessage.ftl">
 
 <div class="container">
 <h1 class="page-header">

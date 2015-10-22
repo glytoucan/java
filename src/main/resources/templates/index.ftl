@@ -22,8 +22,8 @@
 <div id="contents">
 
 	<#include "nav.ftl">
-	<#include "error.ftl">
-	
+	<#include "errormessage.ftl">
+		
 	<div class="topMainVis">
 		<div class="topMainVis_inner">
 			<div class="topMainVis_title">

@@ -176,9 +176,7 @@ public class LocalizationHandlerMapping extends HandlerInterceptorAdapter {
 			logger.debug("page:>" + page + "<");
 
 			if (controller != null && controller.equals("error")) {
-				logger.debug(modelAndView.getModel().keySet());
-
-				return;
+				controller = "Stanzas";
 			}
 
 			JsonNode rootNode = null;
@@ -222,7 +220,8 @@ public class LocalizationHandlerMapping extends HandlerInterceptorAdapter {
 
 			modelAndView.addObject("imageNotation", imageNotation);
 			modelAndView.addObject("language", language);
-			modelAndView.addObject("notation", ""); // for viewAll
+			/** http://freemarker.org/docs/pgui_quickstart_createconfiguration.html */
+			modelAndView.addObject("imagepath", "https://glytoucan.org/glycans/");
 
 			ClassPathResource resource;
 			if (null == rootNode) {
@@ -253,7 +252,7 @@ public class LocalizationHandlerMapping extends HandlerInterceptorAdapter {
 				logger.debug(e.getMessage());
 			}
 
-			if (controller != null && controller.contains("D3")) {
+			if (controller != null && (controller.contains("D3") || controller.contains("init"))) {
 				logger.debug(modelAndView.getModel().keySet());
 
 				return;

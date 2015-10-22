@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
@@ -31,4 +32,14 @@ public class UserControllerTest {
 		String results = userC.profile(map, redMap);
 		logger.debug(results);
 	}
+	
+	@Test
+	@Transactional
+	public void testGenerateHash() throws Exception {
+		ExtendedModelMap map = new ExtendedModelMap();
+		RedirectAttributesModelMap redMap = new RedirectAttributesModelMap();
+		String results = userC.profile(map, redMap);
+		logger.debug(results);
+	}
+
 }

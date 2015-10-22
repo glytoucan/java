@@ -91,9 +91,8 @@ public class RdfAuthenticationSuccessHandler extends
 			logger.error("fail");
 		}
 		
-		userProcedure.setSparqlEntity(sparqlentity);
 		try {
-			userProcedure.addUser();
+			userProcedure.addUser(sparqlentity);
 		} catch (SparqlException e) {
 			e.printStackTrace();
 			throw new ServletException(e);

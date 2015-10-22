@@ -34,7 +34,7 @@ public class UserController {
 				redirectAttrs.addAttribute("warningMessage", "Could not retrieve user information.  Please Login");
 				return "redirect:/signout";
 			}
-			List<SparqlEntity> userData = null;
+			SparqlEntity userData = null;
 			try {
 				userData = userProcedure.getUser(userInfo.getEmail());
 			} catch (SparqlException e) {
@@ -46,9 +46,8 @@ public class UserController {
 				return "redirect:/signout";
 			}
 			
-			SparqlEntity sparqlEntity = userData.iterator().next();
-			logger.debug(sparqlEntity);
-			model.addAttribute("userProfile", sparqlEntity.getData());
+			logger.debug(userData);
+			model.addAttribute("userProfile", userData.getData());
 			
 			// TODO: check for verified email in RDF
 	        if (userInfo.getVerifiedEmail()!=null && userInfo.getVerifiedEmail().equals("true")) {
@@ -110,4 +109,29 @@ public class UserController {
 //		return "structures/test";
 //	}
 
+	@RequestMapping("/generateKey")
+	public String generateKey(Model model, RedirectAttributes redirectAttrs) {
+		if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof UserInfo) {
+			UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			if (userInfo == null) {
+				redirectAttrs.addAttribute("warningMessage", "Could not retrieve user information.  Please Login");
+				return "redirect:/signout";
+			}
+			String hash = null;
+			try {
+				hash = userProcedure.generateHash(userInfo.getId());
+			} catch (SparqlException e) {
+				redirectAttrs.addAttribute("warningMessage", "Could not retrieve user information.  Please Login");
+				return "redirect:/signout";
+			};
+			if (null == hash) {
+				redirectAttrs.addAttribute("warningMessage", "Could not retrieve user information.  Please Login");
+				return "redirect:/signout";
+			}
+			
+			logger.debug(hash);
+		}
+		
+		return "redirect:/Users/profile";
+	}
 }

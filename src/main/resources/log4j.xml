@@ -26,15 +26,13 @@
 	</appender>
 -->
 	<logger name="org.glycoinfo">
-		<appender-ref ref="console" />
-		<appender-ref ref="file" />
 		<level value="debug" />
+		<appender-ref ref="console" />
 	</logger>
 
   <logger name="org.glytoucan">
-    <appender-ref ref="console" />
-    <appender-ref ref="file" />
     <level value="debug"/>
+		<appender-ref ref="console" />
   </logger>
 
 
@@ -46,7 +44,7 @@
 	</logger>
 -->
 	<root>
-		<level value="ERROR" />
+		<level value="error" />
 		<appender-ref ref="console" />
 		<appender-ref ref="file" />
 	</root>

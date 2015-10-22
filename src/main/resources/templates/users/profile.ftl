@@ -10,18 +10,16 @@
 <div id="contents">
 <#include "../nav.ftl">
 
-<#include "../error.ftl">
-
-
-<h1 class="page-header">${Title[0]}</h1>
+<#include "../errormessage.ftl">
 
 <div class="container" style="padding:20px 0">
+<h1 class="page-header">${Title[0]}</h1>
 
 <table class="table table-striped">
 <tbody>
 <tr>
 <td>${username}</td>
-<td>${userProfile.givenName}</td>
+<td>${userProfile.Name}</td>
 </tr>
 <tr>
 <td>${email}</td>
@@ -34,6 +32,16 @@
 <tr>
 <td>Verified Email</td>
 <td>${verifiedEmail?c}</td>
+</tr>
+<tr>
+
+<td><a href="/Users/generateKey">Generate API Key</a></td>
+<#if userProfile.membershipNumber??>
+<td>${userProfile.membershipNumber}</td>
+<#else>
+<td></td>
+</#if>
+
 </tr>
 <#--
 <tr>
@@ -68,7 +76,8 @@
 </table>
 <h3><?php echo __('Total Count') . ':' . $hit; ?></h3>
 -->
-				<li class="globalNavItem"><a class="globalNavItem_btn" href="/signout"><span class="globalNavItem_text">${signOut}</span></a></li>
+
+				In order to signout properly, first disconnect the repository access from google accounts, and then click on <a href="/signout">${signOut}</a>
 
 </div>
 </div>
