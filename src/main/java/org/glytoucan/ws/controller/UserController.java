@@ -36,7 +36,7 @@ public class UserController {
 			}
 			SparqlEntity userData = null;
 			try {
-				userData = userProcedure.getUser(userInfo.getEmail());
+				userData = userProcedure.getUser(userInfo.getId());
 			} catch (SparqlException e) {
 				redirectAttrs.addAttribute("warningMessage", "Could not retrieve user information.  Please Login");
 				return "redirect:/signout";
