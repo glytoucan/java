@@ -92,7 +92,7 @@ public class RdfAuthenticationSuccessHandler extends
 		}
 		
 		try {
-			userProcedure.addUser(sparqlentity);
+			userProcedure.add(sparqlentity);
 		} catch (SparqlException e) {
 			e.printStackTrace();
 			throw new ServletException(e);
