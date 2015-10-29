@@ -36,7 +36,7 @@ public class UserController {
 			}
 			SparqlEntity userData = null;
 			try {
-				userData = userProcedure.getUser(userInfo.getId());
+				userData = userProcedure.getById(userInfo.getId());
 			} catch (SparqlException e) {
 				redirectAttrs.addAttribute("warningMessage", "Could not retrieve user information.  Please Login");
 				return "redirect:/signout";
@@ -57,57 +57,6 @@ public class UserController {
 		
     	return "users/profile";
 	}
-
-//	@RequestMapping("/index")
-//	public String index(Model model) {
-//		return "structures/index";
-//	}
-//
-//	@RequestMapping("/graphical")
-//	public String graphical(Model model, HttpSession httpSession) {
-//		return "structures/graphical";
-//	}
-//	
-//	@RequestMapping(value="/structureSearch", method = RequestMethod.GET)
-//	public String structureSearch(Model model, @ModelAttribute("sequence") Sequence sequence, BindingResult result/*, @RequestParam(value="errorMessage", required=false) String errorMessage*/) {
-////		logger.debug(errorMessage);
-////		model.addAttribute("errorMessage", errorMessage);
-//		return "structures/structure_search";
-//	}
-//
-//	@RequestMapping("/structure")
-//    public String structure(@ModelAttribute("sequence") Sequence sequence, BindingResult result, RedirectAttributes redirectAttrs) {
-//		logger.debug(sequence);
-//        if (StringUtils.isEmpty(sequence.getSequence())) {
-//        	
-//        	logger.debug("adding errorMessage:>input sequence<");
-//        	redirectAttrs.addFlashAttribute("errorMessage", "Please input a sequence");
-//        	return "redirect:/Structures/structureSearch";
-//        } else {
-//    		logger.debug("text1>" + sequence.getSequence() + "<");
-//    		// check RDF for wurcs
-//    		
-//    		// if not wurcs, convert
-//
-//    		// get image
-//    		// get accession number
-//    		
-//    		// embed wurcs, image, accNum into model
-//    		
-//            return "structures/structure";
-//        }
-//    }
-//	
-//	@RequestMapping("/test")
-//    public String test(RedirectAttributes redirectAttrs) {
-//		redirectAttrs.addFlashAttribute("test", "why not");
-//		return "redirect:/Structures/testout";
-//	}
-//	
-//	@RequestMapping(value="/testout", method = RequestMethod.GET)
-//	public String testout() {
-//		return "structures/test";
-//	}
 
 	@RequestMapping("/generateKey")
 	public String generateKey(Model model, RedirectAttributes redirectAttrs) {

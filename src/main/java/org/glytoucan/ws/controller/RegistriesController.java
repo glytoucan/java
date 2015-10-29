@@ -6,7 +6,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.file.Files;
@@ -276,7 +275,7 @@ public class RegistriesController {
 				&& userInfo.getVerifiedEmail().equals("true")
 				&& StringUtils.isNotBlank(userInfo.getGivenName())) {
 			logger.debug("user is verified:>" + userInfo.getGivenName());
-			userId = userProcedure.getUserId(userInfo.getEmail());
+			userId = userProcedure.getIdByEmail(userInfo.getEmail());
 //			glycanProcedure.setContributorId(userId);
 		} else {
 			return "redirect:/signin?errorMessage=Please sign in with a verified email address.  Check Profile for details.";

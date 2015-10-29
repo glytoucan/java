@@ -299,16 +299,6 @@
 		<repository>
 			<id>glycoinfo</id>
 			<url>http://nexus.glycoinfo.org/content/groups/public</url>
-			<releases>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-				<checksumPolicy>warn</checksumPolicy>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-				<checksumPolicy>warn</checksumPolicy>
-			</snapshots>
 		</repository>
 	</repositories>
 

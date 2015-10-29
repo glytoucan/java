@@ -21,6 +21,7 @@ import org.glycoinfo.rdf.scint.InsertScint;
 import org.glycoinfo.rdf.scint.SelectScint;
 import org.glycoinfo.rdf.service.GlycanProcedure;
 import org.glycoinfo.rdf.service.UserProcedure;
+import org.glycoinfo.rdf.service.impl.ContributorProcedureConfig;
 import org.glycoinfo.rdf.service.impl.GlycanProcedureConfig;
 import org.glycoinfo.rdf.service.impl.MailService;
 import org.glycoinfo.rdf.service.impl.UserProcedureConfig;
@@ -45,14 +46,14 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import virtuoso.sesame2.driver.VirtuosoRepository;
-
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import virtuoso.sesame2.driver.VirtuosoRepository;
+
 @SpringBootApplication
-@Import(value = { GlycanProcedureConfig.class, UserProcedureConfig.class })
+@Import(value = { GlycanProcedureConfig.class, UserProcedureConfig.class, ContributorProcedureConfig.class })
 public class Application extends SpringBootServletInitializer {
 	
 	private static final String graph = "http://rdf.glytoucan.org";
