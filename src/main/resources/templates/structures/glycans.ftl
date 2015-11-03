@@ -89,6 +89,9 @@
 				<li class="entryMain_menuList">
 					<span class="entryMain_menuText" data-stanza="relation_glycoepitope" data-category="GlycoEpitope">GlycoEpitope</span>
 				</li>
+				<li class="entryMain_menuList">
+					<span class="entryMain_menuText" data-stanza="relation_unicarbdb" data-category="UniCarb-DB">UniCarb-DB</span>
+				</li>
 			</ul>
 		</div><!--/.entryMain_menu-->
 		<div class="entryMain_left">
