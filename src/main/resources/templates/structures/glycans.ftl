@@ -50,7 +50,7 @@
 				</li>
 				<!-- Isomer -->
 				<li class="entryMain_menuList">
-					<span class="entryMain_menuText" data-stanza="relation_list" data-category="Isomer">Isomer</span>
+					<span class="entryMain_menuText" data-stanza="relation_list" data-category="Linkage Isomer">Linkage Isomer</span>
 				</li>
 			</ul>
 		</div><!--/.entryMain_menu-->
