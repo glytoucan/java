@@ -1243,12 +1243,24 @@ input::-ms-clear {
 	background: #ccc;
 }
 
-
 /*Change white-space:normal;*/
 .entryMain_menuText {
 	display: inline-block;
 	vertical-align: middle;
 	white-space: pre;
+}
+
+a.entryMain_menuText:link{
+	color: #ffffff; 
+}
+a.entryMain_menuText:visited{
+	color: #ffffff; 
+}
+a.entryMain_menuText:hover{
+	color: #ffffff; 
+}
+a.entryMain_menuText:active{
+	color: #ff0000; 
 }
 
 .entryMain_left {

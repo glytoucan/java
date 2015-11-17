@@ -35,6 +35,7 @@
 		</div><!--/.entry_loading-->
 	</div>
 	<hr class="entry_hr" />
+
 	<!-- Relational data -->
 	<h2 class="entry_subtitle">${relatedData}</h2>
 	<div class="entryMain clearfix" data-init="motif">
@@ -44,13 +45,17 @@
 				<li class="entryMain_menuList entryMain_menuList--current">
 					<span class="entryMain_menuText" data-stanza="relation_list" data-category="Motif">${motif}</span>
 				</li>
-				<!-- Mono-<br />saccharide -->
+				<!-- Monosaccharide Composition -->
 				<li class="entryMain_menuList">
 					<span class="entryMain_menuText" data-stanza="relation_list" data-category="Monosaccharide">${monosaccharideComposition}</span>
 				</li>
-				<!-- Isomer -->
+				<!-- Linkage Isomer -->
 				<li class="entryMain_menuList">
 					<span class="entryMain_menuText" data-stanza="relation_list" data-category="Linkage Isomer">Linkage Isomer</span>
+				</li>
+				<!-- Visualization Tool -->
+				<li class="entryMain_menuList">
+					<a class="entryMain_menuText" href="/D3_dndTree/${accNum}">Visualization Tool</a>
 				</li>
 			</ul>
 		</div><!--/.entryMain_menu-->
@@ -79,6 +84,7 @@
 			</div>
 		</div><!--/.entryMain_left-->
 	</div><!--/.entryMain-->
+
 	<!-- Linked DB -->
 	<h2 class="entry_subtitle">${linkedDb}</h2>
 	<div class="entryMain clearfix" data-init="bcsdb">
