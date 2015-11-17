@@ -40,13 +40,17 @@
 	<div class="entryMain clearfix" data-init="motif">
 		<div class="entryMain_menu">
 			<ul>
+				<!-- Motif -->
 				<li class="entryMain_menuList entryMain_menuList--current">
-					<!-- Motif -->
 					<span class="entryMain_menuText" data-stanza="relation_list" data-category="Motif">${motif}</span>
 				</li>
+				<!-- Mono-<br />saccharide -->
 				<li class="entryMain_menuList">
-					<!-- Mono-<br />saccharide -->
 					<span class="entryMain_menuText" data-stanza="relation_list" data-category="Monosaccharide">${monosaccharideComposition}</span>
+				</li>
+				<!-- Isomer -->
+				<li class="entryMain_menuList">
+					<span class="entryMain_menuText" data-stanza="relation_list" data-category="Linkage Isomer">Linkage Isomer</span>
 				</li>
 			</ul>
 		</div><!--/.entryMain_menu-->
