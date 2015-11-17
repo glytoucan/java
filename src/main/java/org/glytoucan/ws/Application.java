@@ -28,7 +28,8 @@ import org.glycoinfo.rdf.service.impl.UserProcedureConfig;
 import org.glycoinfo.rdf.utils.TripleStoreProperties;
 import org.glycomedb.residuetranslator.ResidueTranslator;
 import org.glyspace.registry.utils.ImageGenerator;
-import org.glytoucan.ws.api.D3SequenceSelectSparql;
+import org.glytoucan.ws.api.D3SequenceSelectSparql_isomer;
+import org.glytoucan.ws.api.D3SequenceSelectSparql_motif;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryException;
 import org.springframework.boot.SpringApplication;
@@ -71,9 +72,16 @@ public class Application extends SpringBootServletInitializer {
 		return select;
 	}
 
-	@Bean(name = "d3SequenceSelectSparql")
-	SelectSparql getd3SelectSparql() {
-		SelectSparql select = new D3SequenceSelectSparql();
+	@Bean(name = "d3SequenceSelectSparql_motif")
+	SelectSparql getd3SelectSparql_motif() {
+		SelectSparql select = new D3SequenceSelectSparql_motif();
+//		select.setFrom("FROM <http://rdf.glycoinfo.org/glycan/browser/demo>");
+		return select;
+	}
+	
+	@Bean(name = "d3SequenceSelectSparql_isomer")
+	SelectSparql getd3SelectSparql_isomer() {
+		SelectSparql select = new D3SequenceSelectSparql_isomer();
 //		select.setFrom("FROM <http://rdf.glycoinfo.org/glycan/browser/demo>");
 		return select;
 	}

@@ -8,7 +8,7 @@ import com.knappsack.swagger4springweb.annotation.ApiExclude;
 
 @Controller
 @ApiExclude
-public class ViewController {
+public class D3ViewController {
 	@RequestMapping(value = "/D3/{ID}")
     public String findPetTop(@PathVariable String ID, Model model) {
 		model.addAttribute("ID", ID);;

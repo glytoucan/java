@@ -20,14 +20,20 @@
   stroke: #ccc;
   stroke-width: 1.5px;
 }
-	div.menu{
+/*	div.menu{
    float: left;
    width: 15%;
 }
 div.blockb{
  float: right;
- width: 85%;
+ width: all - 180px;
+}*/
+div.menu a {
+	font-size:30px;
+    font-family:sans-serif;
+    color: black;
 }
+
 div.menu ul{
 margin: 0;
 padding: 0;
@@ -61,12 +67,13 @@ background-color: #95A38D;
 <a name="top"></a><!--link for page top-->
 <div id="contents">
 <#include "../nav.ftl">
-<#include "../error.ftl">
+<#include "../errormessage.ftl">
 
 <!-- ID: ${ID} -->
 <script src="http://d3js.org/d3.v3.min.js"></script>
-	<div class="menu">
+	<div style="float:left;" class="menu">
  	 <ul>
+ 	 <a><br>${ID}<br></a>
  	 <li><a href="/D3_dndTree/${ID}">All data</a></li>
  	 <li><a href="/D3_motif_isomer/${ID}">Motif and Isomer</a></li>
  	 <li><a href="/D3_structure/${ID}">Superstructure and Substructure</a></li>
@@ -74,10 +81,10 @@ background-color: #95A38D;
  	 <li><a href="/Structures/Glycans/${ID}">RETURN</a></li>
   </div>
 
-<div class="blockb">
+<div style="float:left;" class="blockb">
 <script>
 
-var viewerWidth = $(document).width();
+var viewerWidth = $(document).width()*0.8;
 var viewerHeight = $(document).height();
 var diameter = viewerWidth*1.5;
 
@@ -88,11 +95,11 @@ var tree = d3.layout.tree()
 var diagonal = d3.svg.diagonal.radial()
     .projection(function(d) { return [d.y, d.x / 180 * Math.PI]; });
 
-var svg = d3.select("body").append("svg")
+var svg = d3.select(".blockb").append("svg")
     .attr("width", diameter*0.7)
     .attr("height", diameter - 150)
   .append("g")
-    .attr("transform", "translate(" + diameter / 3 + "," + diameter / 4 + ")");
+    .attr("transform", "translate(" + diameter / 3 + "," + diameter / 2.5 + ")");
 	
 
     d3.json("/Tree/D3retrieve2?primaryId=${ID}", function (error, root) {
@@ -182,16 +189,13 @@ var svg = d3.select("body").append("svg")
     	    else return "rotate(270)translate(60,10)"; */
       });
 
-
+  var text3;
+  var text_name3 = null;
   node.append("image")
-      .on("click",function(d){
-        alert(d.name +"<br>"+ d.x +"<br>" + d.y);
-        
-      })
       .attr("xlink:href", function(d){
 	     if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure")
 	       return null;
-	     else  return "http://glytoucan.org/glyspace/service/glycans/"+ d.name + "/image?style=extended&format=png&notation=cfg";
+	     else  return "http://glytoucan.org/glycans/"+ d.name + "/image?style=extended&format=png&notation=cfg";
  	 })
       .attr("width", 150)
       .attr("height", 70)
@@ -204,15 +208,74 @@ var svg = d3.select("body").append("svg")
      	else if (d.x == 0)
      		return "rotate(270)translate(15,-35)";
      	else return "rotate(180)translate(-165,-40)";
-      });
+      })
+	.on("mouseover", function (d) {
+	                          text3 = node.append("text")
+	                          .attr("dy", ".31em")
+     						  .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
+	                          .text(function(d) {
+					                 if (d.name == text_name3){
+						                 if(d.size == null){
+						                 	return null;
+						                 }
+						                  return d.name;
+									}
+			                        else return null;
+	                            })
+	                           .attr("fill",function(d){
+    	  if (d.name == "has_motif")
+              return "red";
+            if (d.name == "has_linkage_isomer")
+              return "blue";
+            if (d.name == "has_superstructure")
+              return "green";
+            if (d.name == "has_substructure")
+              return "orange";
+            if (d.name == "subsumes")
+              return "skyblue";
+            if (d.name == "subsumed_by")
+              return "purple";
+            else  return "black";
+      })
+      .attr("transform", function(d){
+    	    if (d.name == "has_motif")
+    		  return "rotate(270)translate(60,10)";
+            if (d.name == "has_linkage_isomer")
+            	return "rotate(270)translate(60,10)";
+            if (d.name == "has_superstructure")
+            	return "rotate(270)translate(60,10)";
+            if (d.name == "has_substructure")
+            	return "rotate(270)translate(60,10)";
+            if (d.name == "subsumes")
+            	return "rotate(270)translate(60,10)";
+            if (d.name == "subsumed_by")
+            	return "rotate(270)translate(60,10)";
+            else  return "rotate(270)translate(60,10)";	
+    	 /*  if (d.size == null)
+         		return "rotate(270)translate(60,10)";
+         	else if (d.x < 180)
+         		return "rotate(270)translate(60,10)";
+         	else if (d.x == 0)
+         		return "rotate(270)translate(60,10)";
+         	//else return "rotate(180)translate(-165,-40)";
+    	    else return "rotate(270)translate(60,10)"; */
+      })
+	              })
+	              .on("mouseout", function (d) {
+	                   //text3.remove();
+	              });
+});	              
 
-});
 
 d3.select(self.frameElement).style("height", diameter - 150 + "px");
 
 
 </script>
+	<div id="tree-container"></div>
+
 </div>
 <#include "../footer.html">
+</div>
+
 </body>
 </html>

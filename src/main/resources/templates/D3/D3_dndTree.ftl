@@ -58,14 +58,14 @@
        display: none;
   }
 
-	div.menu{
+/*	div.menu{
    float: left;
    width: 15%;
 }
 div.blockb{
  float: right;
  width: 85%;
-}
+}*/
 
 div.menu a {
 	font-size:30px;
@@ -106,11 +106,11 @@ background-color: #95A38D;
 <a name="top"></a><!--link for page top-->
 <div id="contents">
 <#include "../nav.ftl">
-<#include "../error.ftl">
+<#include "../errormessage.ftl">
 <!-- ID: ${ID} -->
 <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
 <script src="http://d3js.org/d3.v3.min.js"></script>
-<div class="menu">
+<div style="float:left;" class="menu">
  	 <ul>
  	<a><br>${ID}<br></a>
  	 <li><a href="/D3_dndTree/${ID}">All data</a></li>
@@ -121,7 +121,7 @@ background-color: #95A38D;
 
   </div>
 
-<div class="blockb">
+<div style="float:left;" class="blockb">
 <script>
 treeJSON = d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData) {
 
@@ -502,7 +502,7 @@ treeJSON = d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData)
 	            .call(dragListener)
 	            .attr("class", "node")
 	            .attr("transform", function(d) {
-	                return "translate(" + source.y0 + "," + source.x0 + ")";
+	                return "translate(" + source.y0+"," + source.x0 + ")";
 	            })
 	            .on('click', click);
 
@@ -542,13 +542,13 @@ treeJSON = d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData)
 	                })
 	            .style("fill-opacity", 0);
 
-				var text3;
-	            var text_name2 = null;
+		var text3;
+	    var text_name3 = null;
 	            nodeEnter.append("image")
 	            .attr("xlink:href", function(d){
 	             if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure")
 	               return null;
-	             else  return "http://glytoucan.org/glyspace/service/glycans/"+ d.name + "/image?style=extended&format=png&notation=cfg";
+	             else  return "http://glytoucan.org/glycans/"+ d.name + "/image?style=extended&format=png&notation=cfg";
 	         })
 	            .attr("width", function(d){
 	                if (d.size == null)
@@ -571,16 +571,16 @@ treeJSON = d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData)
 	                                 .attr("xlink:href", function(d){
 	                                 if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure")
 	                                   return null;
-	                                 else  return "http://glytoucan.org/glyspace/service/glycans/"+ d.name + "/image?style=extended&format=png&notation=cfg";
+	                                 else  return "http://glytoucan.org/glycans/"+ d.name + "/image?style=extended&format=png&notation=cfg";
 	                               })
 	                               .attr("transform", function(d){
 	                                 if(d.size == null)
 	                                  return "translate(-120,-30)";
 	                                else return "translate(100,-10)";
 	                              });
-	                        if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure"){text_name2 = null;}
-	                        else if (d.size == null){text_name = null;}
-	                        else{text_name2 = d.name;};
+	                        if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure"){text_name3 = null;}
+	                        else if (d.size == null){text_name3 = null;}
+	                        else{text_name3 = d.name;};
 
 	                          text3 = nodeEnter.append("text")
 	                          .attr("x", function(d) {
@@ -592,7 +592,7 @@ treeJSON = d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData)
 	                              return d.children || d._children ? "end" : "start";
 	                          })
 	                          .text(function(d) {
-					                 if (d.name == text_name2){
+					                 if (d.name == text_name3){
 						                 if(d.size == null){
 						                 	return null;
 						                 }
@@ -620,7 +620,7 @@ treeJSON = d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData)
 	                      .attr("xlink:href", function(d){
 	                      if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure")
 	                        return null;
-	                      else  return "http://glytoucan.org/glyspace/service/glycans/"+ d.name + "/image?style=extended&format=png&notation=cfg";
+	                      else  return "http://glytoucan.org/glycans/"+ d.name + "/image?style=extended&format=png&notation=cfg";
 	                    })
 	                    .attr("transform", function(d){
 	                      if(d.size == null)
@@ -695,7 +695,7 @@ treeJSON = d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData)
 			                  .attr("xlink:href", function(d){
 			            	     if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure")
 			            	       return null;
-			            	     else  return "http://glytoucan.org/glyspace/service/glycans/"+ d.name + "/image?style=extended&format=png&notation=cfg";
+			            	     else  return "http://glytoucan.org/glycans/"+ d.name + "/image?style=extended&format=png&notation=cfg";
 			             	 })
 			                  .attr("width", function(d){
 			                    	if (d.size == null)
@@ -720,7 +720,7 @@ treeJSON = d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData)
 			                                       .attr("xlink:href", function(d){
 			                                 	     if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure")
 			                                 	       return null;
-			                                 	     else  return "http://glytoucan.org/glyspace/service/glycans/"+ d.name + "/image?style=extended&format=png&notation=cfg";
+			                                 	     else  return "http://glytoucan.org/glycans/"+ d.name + "/image?style=extended&format=png&notation=cfg";
 			                                  	 })
 			                                     .attr("transform", function(d){
 			                                       if(d.size == null)
@@ -771,7 +771,7 @@ treeJSON = d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData)
 			                            .attr("xlink:href", function(d){
 			                            if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure")
 			                              return null;
-			                            else  return "http://glytoucan.org/glyspace/service/glycans/"+ d.name + "/image?style=extended&format=png&notation=cfg";
+			                            else  return "http://glytoucan.org/glycans/"+ d.name + "/image?style=extended&format=png&notation=cfg";
 			                          })
 			                          .attr("transform", function(d){
 			                            if(d.size == null)
@@ -874,6 +874,7 @@ treeJSON = d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData)
     <div id="tree-container"></div>
 </div>
 <#include "../footer.html">
+</div>
 
 </body>
 </html>
