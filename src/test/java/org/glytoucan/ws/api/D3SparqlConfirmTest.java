@@ -23,7 +23,7 @@ public class D3SparqlConfirmTest {
 
 	@Test
 	public void jsonSerializationTest() throws Exception {
-	    D3SequenceSelectSparql dp = new D3SequenceSelectSparql(); 
+	    D3SequenceSelectSparql_motif dp = new D3SequenceSelectSparql_motif(); 
 
 	    
 	    SparqlEntity sparqlentity = new SparqlEntity();

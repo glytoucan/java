@@ -40,8 +40,8 @@ public class D3Controller {
 	SparqlDAO sparqlDAO;
 
 	@Autowired
-	@Qualifier(value = "d3SequenceSelectSparql")
-	private SelectSparql selectD3Sparql;
+	@Qualifier(value = "d3SequenceSelectSparql_motif")
+	private SelectSparql selectD3Sparql_motif;
 
 	public SparqlDAO getSparqlDAO() {
 		return sparqlDAO;
@@ -51,12 +51,24 @@ public class D3Controller {
 		this.sparqlDAO = sparqlDAO;
 	}
 
-	public void setSelectD3Sparql(SelectSparql read) {
-		this.selectD3Sparql = read;
+	public void setSelectD3Sparql_motif(SelectSparql read) {
+		this.selectD3Sparql_motif = read;
 	}
 
-	public SelectSparql getSelectD3Sparql() {
-		return selectD3Sparql;
+	public SelectSparql getSelectD3Sparql_motif() {
+		return selectD3Sparql_motif;
+	}
+	
+	@Autowired
+	@Qualifier(value = "d3SequenceSelectSparql_isomer")
+	private SelectSparql selectD3Sparql_isomer;
+
+	public void setSelectD3Sparql(SelectSparql read) {
+		this.selectD3Sparql_isomer = read;
+	}
+
+	public SelectSparql getSelectD3Sparql_isomer() {
+		return selectD3Sparql_isomer;
 	}
 
 	@Bean
@@ -73,22 +85,39 @@ public class D3Controller {
 			@ApiParam(required = true, value = "id of the sequence") @RequestParam(value = "primaryId", defaultValue = "G00030MO") String primaryId) {
 		logger.debug("primaryId=" + primaryId + "<");
 		// error messageを返す（形式が違うもの）
-		List<SparqlEntity> list = null;
+		/*List<SparqlEntity> list = new ArrayList<SparqlEntity>();*/
+		List<SparqlEntity> list_motif = null;
+		List<SparqlEntity> list_isomer = null;
 		try {
-			SelectSparql ss = getSelectD3Sparql();
-			SparqlEntity se = ss.getSparqlEntity();
-			if (null == ss.getSparqlEntity())
-				se = new SparqlEntity();
-			se.setValue(Saccharide.PrimaryId, primaryId);
-			ss.setSparqlEntity(se);
-			logger.debug(ss.getSparql());
-			list = sparqlDAO.query(ss);
+			/* motif*/
+			SelectSparql motif_ss = getSelectD3Sparql_motif();
+			SparqlEntity motif_se = motif_ss.getSparqlEntity();
+			if (null == motif_ss.getSparqlEntity())
+				motif_se = new SparqlEntity();
+			motif_se.setValue(Saccharide.PrimaryId, primaryId);
+			motif_ss.setSparqlEntity(motif_se);
+			/* list.addAll(sparqlDAO.query(motif_ss));*/
+			list_motif = sparqlDAO.query(motif_ss);
+			
+			/* isomer*/
+			SelectSparql isomer_ss = getSelectD3Sparql_isomer();
+			SparqlEntity isomer_se = isomer_ss.getSparqlEntity();
+			if (null == isomer_ss.getSparqlEntity())
+				isomer_se = new SparqlEntity();
+			isomer_se.setValue(Saccharide.PrimaryId, primaryId);
+			isomer_ss.setSparqlEntity(isomer_se);
+			
+			logger.debug(isomer_ss.getSparql());
+			/* list.addAll(sparqlDAO.query(isomer_ss));*/
+			list_isomer = sparqlDAO.query(isomer_ss);
+			
 		} catch (SparqlException e) {
 			D3_Tree_json a = new D3_Tree_json();
 			a.setName("sorry");
 			return a;
 		}
-		SparqlEntity se = null;
+		SparqlEntity motif_se = null;
+		SparqlEntity isomer_se = null;
 
 		D3_Tree_json a = new D3_Tree_json();
 		Tree_json b1 = new Tree_json();
@@ -111,66 +140,69 @@ public class D3Controller {
 			int j = 0;
 			int k = 0;
 			c2.setName("test_keiko");
-			for (SparqlEntity i : list) {
-				TreeSequence c1 = new TreeSequence();
-				se = list.get(j);
-				// logger.debug("list.motif" + se.getValue("motif") + "<");
-
-				String motifName = se.getValue("motif");
-				c1.setName(motifName);
-				c1.setSize(1);
-				if (c1.getName().length() == 0) {
-					break;
-				} else {
-					b1.setName("has_motif");
-					if (c1.getName().equals(c2.getName())) { // c1Name.equals(c2Name)
+			if (list_motif != null) {
+				for (SparqlEntity i : list_motif) {
+					TreeSequence c1 = new TreeSequence();
+					motif_se = list_motif.get(j);
+					// logger.debug("list.motif" + se.getValue("motif") + "<");
+	
+					String motifName = motif_se.getValue("motif");
+					c1.setName(motifName);
+					c1.setSize(1);
+					if (c1.getName().length() == 0) {
 						break;
-					} else {
-						c_list1.add(c1);
-						k++;
+					}  else {
+						b1.setName("has_motif");
+						if (c1.getName().equals(c2.getName())) { // c1Name.equals(c2Name)
+							break;
+						} else {
+							c_list1.add(c1);
+							k++;
+						}
+	
 					}
-
+					c2.setName(c1.getName());
+					j++;
 				}
-				c2.setName(c1.getName());
-				j++;
-			}
-			if (k != 0) {
-				logger.debug("clist1がblistに");
-				b1.setChildren(c_list1);
-				b_list.add(b1);
+				if (k != 0) {
+					logger.debug("clist1がblistに");
+					b1.setChildren(c_list1);
+					b_list.add(b1);
+				}
 			}
 
 			j = 0;
 			k = 0;
 			c2.setName("test_keiko");
-			for (SparqlEntity i : list) {
-				TreeSequence c1 = new TreeSequence();
-				se = list.get(j);
-				String isomerName = se.getValue("isomer");
-				c1.setName(isomerName);
-				c1.setSize(2);
-				if (c1.getName().length() == 0) {
-					break;
-				} else {
-					b2.setName("has_linkage_isomer");
-					if (c1.getName().equals(c2.getName())) { // c1Name.equals(c2Name)
+			if (list_isomer != null) {
+				for (SparqlEntity i : list_isomer) {
+					TreeSequence c1 = new TreeSequence();
+					isomer_se = list_isomer.get(j);
+					String isomerName = isomer_se.getValue("isomer");
+					c1.setName(isomerName);
+					c1.setSize(2);
+					if (c1.getName().length() == 0) {
 						break;
 					} else {
-						c_list2.add(c1);
-						k++;
+						b2.setName("has_linkage_isomer");
+						if (c1.getName().equals(c2.getName())) { // c1Name.equals(c2Name)
+							break;
+						} else {
+							c_list2.add(c1);
+							k++;
+						}
+	
 					}
-
+					c2.setName(c1.getName());
+					j++;
 				}
-				c2.setName(c1.getName());
-				j++;
+				if (k != 0) {
+					logger.debug("clist2がblistに");
+					b2.setChildren(c_list2);
+					b_list.add(b2);
+				}
 			}
-			if (k != 0) {
-				logger.debug("clist2がblistに");
-				b2.setChildren(c_list2);
-				b_list.add(b2);
-			}
-			
-			j = 0;
+			/*j = 0;
 			k = 0;
 			c2.setName("test_keiko");
 			for (SparqlEntity i : list) {
@@ -292,9 +324,9 @@ public class D3Controller {
 				b_list.add(b6);
 			}
 			
-			logger.debug("list" + list + "<");
+			logger.debug("list" + list + "<");*/
 
-			String GlycanName = se.getValue("id");
+			String GlycanName = motif_se.getValue("id");
 			a.setName(GlycanName);
 			a.setChildren(b_list);
 
@@ -310,7 +342,7 @@ public class D3Controller {
 
 
 	
-	@RequestMapping(value = "/D3retrieve2", method = RequestMethod.GET)
+/*	@RequestMapping(value = "/D3retrieve2", method = RequestMethod.GET)
 	@ApiOperation(value = "Retrieve the sequence of json of D3 Tree ", response = D3_Tree_json.class)
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Sequence retrieved successfully") })
 	public @ResponseBody D3_Tree_json D3retrieve2(
@@ -644,7 +676,7 @@ public class D3Controller {
 		// gs.setSequence(se.getValue(org.glycoinfo.rdf.glycan.GlycoSequence.Sequence));
 
 		return a;
-	}
+	}*/
 	// @RequestMapping("/execute")
 	// @ApiOperation(value="Execute a sparql", response=GlycoSequence.class)
 	// @ApiResponses (value ={@ApiResponse(code=200,

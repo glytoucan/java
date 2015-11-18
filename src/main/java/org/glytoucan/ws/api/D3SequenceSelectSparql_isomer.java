@@ -26,7 +26,7 @@ import org.springframework.util.Assert;
  */
 
 @Component
-public class D3SequenceSelectSparql extends SelectSparqlBean {
+public class D3SequenceSelectSparql_isomer extends SelectSparqlBean {
 
 	// public static final String SaccharideURI = Saccharide.URI;
 	// public static final String id = "id";
@@ -42,19 +42,17 @@ public class D3SequenceSelectSparql extends SelectSparqlBean {
 	// public static final String hassumes = Saccharide.PrimaryId;
 	// public static final String hassumes_by = Saccharide.PrimaryId;
 
-	public D3SequenceSelectSparql(String sparql) {
+	public D3SequenceSelectSparql_isomer(String sparql) {
 		super(sparql);
 	}
 
-	public D3SequenceSelectSparql() {
+	public D3SequenceSelectSparql_isomer() {
 		super();
 		this.prefix = "PREFIX glycan: <http://purl.jp/bio/12/glyco/glycan#>\n"
-				+ "PREFIX glytoucan:  <http://www.glytoucan.org/glyco/owl/glytoucan#>";
-		this.select = "DISTINCT ?id\n" + "?has_motif ?motif\n"
-				+ "?has_linkage_isomer ?isomer\n"
-				+ "?has_superstructure ?superS\n" + "?has_substructure ?subS\n"
-				+ "?subsumes ?subsume\n" + "?subsumed_by ?subsumeB\n";
-//		this.from = "FROM <http://rdf.glytoucan.org>\nFROM <http://rdf.glytoucan.org/sequence/wurcs>";
+				+ "PREFIX glytoucan:  <http://www.glytoucan.org/glyco/owl/glytoucan#>"
+				+"PREFIX rogs: <http://http://www.glycoinfo.org/glyco/owl/relation#>";
+		this.select = "DISTINCT ?id\n" + "?has_linkage_isomer ?isomer\n";
+		this.from = "FROM <http://rdf.glytoucan.org>\nFROM <http://rdf.glytoucan.org/core>\nFROM <http://rdf.glytoucan.org/motif>\nFROM <http://rdf.glytoucan.org/isomer>";
 //		this.from = "FROM <http://rdf.glycoinfo.org/glycan/browser/demo>";
 	}
 
@@ -65,32 +63,11 @@ public class D3SequenceSelectSparql extends SelectSparqlBean {
 	@Override
 	public String getWhere() throws SparqlException {
 		this.where = "VALUES ?id {" + getPrimaryId() + "}\n"
-				+ "VALUES ?has_motif { glycan:has_motif }\n"
-				+ "VALUES ?has_linkage_isomer { glytoucan:has_linkage_isomer }\n"
-				+ "VALUES ?has_superstructure { glytoucan:has_superstructure }\n"
-				+ "VALUES ?has_substructure { glytoucan:has_substructure }\n"
-				+ "VALUES ?subsumes { glytoucan:subsumes }\n"
-				+ "VALUES ?subsumed_by { glytoucan:subsumed_by }\n"
-
+				+ "VALUES ?has_linkage_isomer { rogs:hasLinkageIsomer }\n"
 				+ "?s glytoucan:has_primary_id ?id .\n"
-
-				+ "OPTIONAL {\n" + "?s ?has_motif ?hm .\n"
-				+ "?hm glytoucan:has_primary_id ?motif .\n" + "}\n"
 
 				+ "OPTIONAL {\n" + "?s ?has_linkage_isomer ?hli .\n"
 				+ "?hli glytoucan:has_primary_id ?isomer .\n" + "}\n"
-
-				+ "OPTIONAL {\n" + "?s ?has_superstructure ?hsuper .\n"
-				+ "?hsuper glytoucan:has_primary_id ?superS .\n" + "}\n"
-
-				+ "OPTIONAL {\n" + "?s ?has_substructure ?hsub .\n"
-				+ "?hsub glytoucan:has_primary_id ?subS .\n" + "}\n"
-
-				+ "OPTIONAL {\n" + "?s ?subsumes ?subsumes .\n"
-				+ "?subsumes glytoucan:has_primary_id ?subsume .\n" + "}\n"
-
-				+ "OPTIONAL {\n" + "?s ?subsumed_by ?sb .\n"
-				+ "?sb glytoucan:has_primary_id ?subsumeB .\n" + "}\n"
 
 		;
 

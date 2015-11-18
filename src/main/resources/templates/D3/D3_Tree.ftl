@@ -63,7 +63,7 @@ background-color: #95A38D;
 <a name="top"></a><!--link for page top-->
 <div id="contents">
 <#include "../nav.ftl">
-<#include "../error.ftl">
+<#include "../errormessage.ftl">
 
 <!-- ID: ${ID} -->
 <script src="http://d3js.org/d3.v3.min.js"></script>
@@ -93,7 +93,7 @@ var svg = d3.select("body").append("svg")
     .attr("width", diameter*0.7)
     .attr("height", diameter - 150)
   .append("g")
-    .attr("transform", "translate(" + diameter / 3 + "," + diameter / 4 + ")");
+    .attr("transform", "translate(" + diameter / 3 + "," + diameter / 3.5 + ")");
 	
     d3.json("/Tree/D3retrieve?primaryId=${ID}", function (error, root) {
 
@@ -191,7 +191,7 @@ var svg = d3.select("body").append("svg")
       .attr("xlink:href", function(d){
 	     if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure")
 	       return null;
-	     else  return "http://glytoucan.org/glyspace/service/glycans/"+ d.name + "/image?style=extended&format=png&notation=cfg";
+	     else  return "http://glytoucan.org/glycans/"+ d.name + "/image?style=extended&format=png&notation=cfg";
  	 })
       .attr("width", 150)
       .attr("height", 70)

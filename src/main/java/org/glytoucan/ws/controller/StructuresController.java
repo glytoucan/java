@@ -159,8 +159,10 @@ public class StructuresController {
 	@RequestMapping(value="/Glycans/{accessionNumber}", method=RequestMethod.GET)
 	public String glycans(@PathVariable String accessionNumber, Model model, RedirectAttributes redirectAttrs)  {
 		try {
-			if (StringUtils.isNotBlank(accessionNumber) && accessionNumber.startsWith("G") && glycanProcedure.checkExists(accessionNumber))
+			if (StringUtils.isNotBlank(accessionNumber) && accessionNumber.startsWith("G") && glycanProcedure.checkExists(accessionNumber)) {
+     			model.addAttribute("accNum", accessionNumber);
 				return "structures/glycans";
+			}
 		} catch (SparqlException e) {
 			e.printStackTrace();
 			redirectAttrs.addFlashAttribute("errorMessage", "Currently under maintence please try again in a few minutes");
