@@ -102,15 +102,15 @@ public class StructuresController {
 			} catch (SparqlException e) {
 				e.printStackTrace();
 				logger.debug("sparqlException:>" + e.getMessage());
-				redirectAttrs.addFlashAttribute("errorMessage", "an error occurred");
+				redirectAttrs.addFlashAttribute("errorMessage", e.getMessage());
 				return "redirect:/Structures/" + sequence.getFrom();
 			} catch (ConvertFormatException e) {
-				redirectAttrs.addFlashAttribute("errorMessage", "The format could not be determined, please refer to manual for supported formats.");
+				redirectAttrs.addFlashAttribute("errorMessage", "The format could not be determined, please refer to manual for supported formats.  Details:" + e.getMessage());
 				return "redirect:/Structures/" + sequence.getFrom();
 			} catch (ConvertException e) {
 				e.printStackTrace();
 				logger.debug("ConvertException:>" + e.getMessage());
-				redirectAttrs.addFlashAttribute("errorMessage", e.getMessage());
+				redirectAttrs.addFlashAttribute("errorMessage", "convert exception:>" + e.getMessage());
 				return "redirect:/Structures/"  + sequence.getFrom();
 			}
 
@@ -158,20 +158,16 @@ public class StructuresController {
 	
 	@RequestMapping(value="/Glycans/{accessionNumber}", method=RequestMethod.GET)
 	public String glycans(@PathVariable String accessionNumber, Model model, RedirectAttributes redirectAttrs)  {
-		if (StringUtils.isNotBlank(accessionNumber) && accessionNumber.startsWith("G"))
-			return "structures/glycans";		
 		try {
-			if (!glycanProcedure.checkExists(accessionNumber)) {
-				redirectAttrs.addFlashAttribute("errorMessage", "This accession number does not exist");
-
-				return "redirect:/";
-			}
+			if (StringUtils.isNotBlank(accessionNumber) && accessionNumber.startsWith("G") && glycanProcedure.checkExists(accessionNumber))
+				return "structures/glycans";
 		} catch (SparqlException e) {
 			e.printStackTrace();
 			redirectAttrs.addFlashAttribute("errorMessage", "Currently under maintence please try again in a few minutes");
 			return "redirect:/";
 		}
-		return "structures/glycans";		
+		redirectAttrs.addFlashAttribute("errorMessage", "This accession number does not exist");
+		return "redirect:/";
     }
 
 	@RequestMapping(value="/Accession", method=RequestMethod.POST)
