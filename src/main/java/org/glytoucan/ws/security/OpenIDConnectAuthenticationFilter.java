@@ -26,7 +26,7 @@ public class OpenIDConnectAuthenticationFilter extends AbstractAuthenticationPro
 	static final Logger logger = LoggerFactory.getLogger(OpenIDConnectAuthenticationFilter.class);
 	
     @Resource
-    private OAuth2RestOperations restTemplate;
+    private OAuth2RestOperations oAuth2RestOperations;
 
     protected OpenIDConnectAuthenticationFilter(String defaultFilterProcessesUrl) {
         super(defaultFilterProcessesUrl);
@@ -38,7 +38,7 @@ public class OpenIDConnectAuthenticationFilter extends AbstractAuthenticationPro
             throws AuthenticationException, IOException, ServletException {
    	 	logger.debug("checking with google from:>" + request.getRequestURI() + "<");
    	 	try {
-        final ResponseEntity<UserInfo> userInfoResponseEntity = restTemplate.getForEntity("https://www.googleapis.com/oauth2/v2/userinfo", UserInfo.class);
+        final ResponseEntity<UserInfo> userInfoResponseEntity = oAuth2RestOperations.getForEntity("https://www.googleapis.com/oauth2/v2/userinfo", UserInfo.class);
 //   	 	ResponseEntity<UserInfo> userInfoResponseEntity ;
 //   	 	try {
 //        userInfoResponseEntity = restTemplate.getForEntity("https://www.googleapis.com/oauth2/v2/userinfo", UserInfo.class);

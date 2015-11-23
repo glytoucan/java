@@ -127,7 +127,7 @@ public class RegistriesController {
 			try {
 				searchResults = glycanProcedure.search(inputs);
 			} catch (SparqlException e) {
-				redirectAttrs.addAttribute("errorMessage", "an error occurred");
+				redirectAttrs.addFlashAttribute("errorMessage", e.getMessage());
 				return "redirect:" + error;
 			}
 
@@ -178,7 +178,7 @@ public class RegistriesController {
 
 					} catch (KeyManagementException | NoSuchAlgorithmException
 							| KeyStoreException | IOException e) {
-						redirectAttrs.addAttribute("errorMessage",
+						redirectAttrs.addFlashAttribute("errorMessage",
 								"system error");
 						logger.error(e.getMessage());
 						e.printStackTrace();
@@ -199,7 +199,7 @@ public class RegistriesController {
 
 					} catch (KeyManagementException | NoSuchAlgorithmException
 							| KeyStoreException | IOException e) {
-						redirectAttrs.addAttribute("errorMessage",
+						redirectAttrs.addFlashAttribute("errorMessage",
 								"system error");
 						logger.error(e.getMessage());
 						e.printStackTrace();
