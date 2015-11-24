@@ -6,6 +6,7 @@
 <#include "../header.html">
 <style type="text/css">
 
+
 	.node {
     cursor: pointer;
   }
@@ -538,7 +539,7 @@ treeJSON = d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData)
 	                        return "skyblue";
 	                      if (d.name == "subsumed_by")
 	                        return "purple";
-	                      if (d.name == "No_relation_data")
+	                      if (d.name == "None")
 	                      	return "black";
 	                      else  return "black";
 	                })
@@ -548,7 +549,7 @@ treeJSON = d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData)
 	    var text_name3 = null;
 	            nodeEnter.append("image")
 	            .attr("xlink:href", function(d){
-	             if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure" || d.name == "No_relation_data")
+	             if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure" || d.name == "None")
 	               return null;
 	             else  return "http://glytoucan.org/glycans/"+ d.name + "/image?style=extended&format=png&notation=cfg";
 	         })
@@ -571,7 +572,7 @@ treeJSON = d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData)
 	                  d3.select(this).attr("width", 200)
 	                                 .attr("height", 100)
 	                                 .attr("xlink:href", function(d){
-	                                 if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure"|| d.name == "No_relation_data")
+	                                 if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure"|| d.name == "None")
 	                                   return null;
 	                                 else  return "http://glytoucan.org/glycans/"+ d.name + "/image?style=extended&format=png&notation=cfg";
 	                               })
@@ -580,7 +581,7 @@ treeJSON = d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData)
 	                                  return "translate(-120,-30)";
 	                                else return "translate(100,-10)";
 	                              });
-	                        if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure"|| d.name == "No_relation_data"){text_name3 = null;}
+	                        if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure"|| d.name == "None"){text_name3 = null;}
 	                        else if (d.size == null){text_name3 = null;}
 	                        else{text_name3 = d.name;};
 
@@ -620,7 +621,7 @@ treeJSON = d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData)
 	                      else return 20;
 	                      })
 	                      .attr("xlink:href", function(d){
-	                      if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure"|| d.name == "No_relation_data")
+	                      if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure"|| d.name == "None")
 	                        return null;
 	                      else  return "http://glytoucan.org/glycans/"+ d.name + "/image?style=extended&format=png&notation=cfg";
 	                    })
@@ -657,7 +658,7 @@ treeJSON = d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData)
 	                return d.children || d._children ? "end" : "start";
 	            })
 	            .text(function(d) {
-	                if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure"|| d.name == "No_relation_data")
+	                if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure"|| d.name == "None")
 	                  return d.name;
 	                else return null;
 	              });
@@ -666,7 +667,7 @@ treeJSON = d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData)
 	        node.select("circle.nodeCircle")
 	            //.attr("r", 4.5)
 	            .attr("r", function(d){
-	          	  if (d.name == "has_motif"||d.name == "has_linkage_isomer"||d.name == "has_superstructure"||d.name == "has_substructure"||d.name == "subsumes"||d.name == "subsumed_by"|| d.name == "No_relation_data")
+	          	  if (d.name == "has_motif"||d.name == "has_linkage_isomer"||d.name == "has_superstructure"||d.name == "has_substructure"||d.name == "subsumes"||d.name == "subsumed_by"|| d.name == "None")
 	          	  		return null;
 	          	  else return 4.5;
 	            })
@@ -695,7 +696,7 @@ treeJSON = d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData)
 			                  //   alert(d.name +"<br>"+ d.x +"<br>" + d.y);
 			                  // })
 			                  .attr("xlink:href", function(d){
-			            	     if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure"|| d.name == "No_relation_data")
+			            	     if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure"|| d.name == "None")
 			            	       return null;
 			            	     else  return "http://glytoucan.org/glycans/"+ d.name + "/image?style=extended&format=png&notation=cfg";
 			             	 })
@@ -720,7 +721,7 @@ treeJSON = d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData)
 			                        d3.select(this).attr("width", 200)
 			                                       .attr("height", 100)
 			                                       .attr("xlink:href", function(d){
-			                                 	     if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure"|| d.name == "No_relation_data")
+			                                 	     if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure"|| d.name == "None")
 			                                 	       return null;
 			                                 	     else  return "http://glytoucan.org/glycans/"+ d.name + "/image?style=extended&format=png&notation=cfg";
 			                                  	 })
@@ -729,7 +730,7 @@ treeJSON = d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData)
 			                                        return "translate(-120,-30)";
 			                                  	  else return "translate(100,-10)";
 			                                    });
-			                          if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure"|| d.name == "No_relation_data"){text_name = null;}
+			                          if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure"|| d.name == "None"){text_name = null;}
 			                          else if (d.size == null){text_name = null;}
 			                          else{text_name = d.name;};
 
@@ -771,7 +772,7 @@ treeJSON = d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData)
 			                         	  else return 20;
 			                            })
 			                            .attr("xlink:href", function(d){
-			                            if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure"|| d.name == "No_relation_data")
+			                            if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure"|| d.name == "None")
 			                              return null;
 			                            else  return "http://glytoucan.org/glycans/"+ d.name + "/image?style=extended&format=png&notation=cfg";
 			                          })

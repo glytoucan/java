@@ -260,6 +260,11 @@ public class D3Controller {
 					if (c1.getName().length() == 0) {
 						check++;
 						logger.debug("check="+ check);
+						c1.setName("None");
+						c_list1.add(c1);
+						b1.setName("has_motif");
+						b1.setChildren(c_list1);
+						b_list.add(b1);
 						break;
 					}  else {
 						b1.setName("has_motif");
@@ -297,6 +302,11 @@ public class D3Controller {
 					if (c1.getName().length() == 0) {
 						check++;
 						logger.debug("check="+ check);
+						c1.setName("None");
+						c_list2.add(c1);
+						b2.setName("has_linkage_isomer");
+						b2.setChildren(c_list2);
+						b_list.add(b2);
 						break;
 					} else {
 						b2.setName("has_linkage_isomer");
@@ -434,16 +444,20 @@ public class D3Controller {
 			/*String GlycanName = motif_se.getValue("id");
 			a.setName(GlycanName);*/
 			a.setName(primaryId);
-			if (check != 2 /* motif and isomer = 2*/){
+			a.setChildren(b_list);
+			
+			/* 全体で None を出したい時
+			if (check != 2 (motif and isomer = 2) ){	
 				logger.debug("into_normal");
 				a.setChildren(b_list);
 			}else{
 				logger.debug("into_b7");
-				b7.setName("No_relation_data");
+				b7.setName("None");
 				b7.setChildren(null);
 				b_list.add(b7);
 				a.setChildren(b_list);
 			}
+			*/
 
 		} catch (java.lang.IndexOutOfBoundsException ie) {
 			return null;
