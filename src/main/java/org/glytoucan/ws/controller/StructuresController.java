@@ -100,16 +100,15 @@ public class StructuresController {
     			se = glycanProcedure.searchBySequence(sequence.getSequence());
     			
 			} catch (SparqlException e) {
-				e.printStackTrace();
-				logger.debug("sparqlException:>" + e.getMessage());
+				logger.error("sparqlException:>" + e.getMessage());
 				redirectAttrs.addFlashAttribute("errorMessage", e.getMessage());
 				return "redirect:/Structures/" + sequence.getFrom();
 			} catch (ConvertFormatException e) {
+				logger.error("ConvertFormatException:>" + e.getMessage());
 				redirectAttrs.addFlashAttribute("errorMessage", "The format could not be determined, please refer to manual for supported formats.  Details:" + e.getMessage());
 				return "redirect:/Structures/" + sequence.getFrom();
 			} catch (ConvertException e) {
-				e.printStackTrace();
-				logger.debug("ConvertException:>" + e.getMessage());
+				logger.error("ConvertException:>" + e.getMessage());
 				redirectAttrs.addFlashAttribute("errorMessage", "convert exception:>" + e.getMessage());
 				return "redirect:/Structures/"  + sequence.getFrom();
 			}
