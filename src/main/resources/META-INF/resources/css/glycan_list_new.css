@@ -1471,6 +1471,11 @@ a.entryMain_menuText:active{
 	width: 30%;
 }
 
+.cardView_table-unicarbkb th {
+	text-align: left;
+	width: 30%;
+}
+
 /*Glycan entry page END*/
 
 
