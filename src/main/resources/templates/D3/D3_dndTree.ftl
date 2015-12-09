@@ -4,9 +4,43 @@
 <head>
 	<title>Glycan D3 dndTree</title>
 <#include "../header.html">
+
+<script data-require="d3@3.5.3" data-semver="3.5.3" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.js"></script>
+
 <style type="text/css">
 
+/* d3-context-menu styles */
+.d3-context-menu {
+	position: absolute;
+	display: none;
+	background-color: #f2f2f2;
+	border-radius: 4px;
 
+	font-family: Arial, sans-serif;
+	font-size: 14px;
+	min-width: 150px;
+	border: 1px solid #d4d4d4;
+
+	z-index:1200;
+}
+
+.d3-context-menu ul {
+	list-style-type: none;
+	margin: 4px 0px;
+	padding: 0px;
+	cursor: default;
+}
+
+.d3-context-menu ul li {
+	padding: 4px 16px;
+}
+
+.d3-context-menu ul li:hover {
+	background-color: #4677f8;
+	color: #fefefe;
+}
+
+/* dndTree styles */
 	.node {
     cursor: pointer;
   }
@@ -102,6 +136,7 @@ background-color: #95A38D;
 }
 
 </style>
+
 </head>
 <body>
 <a name="top"></a><!--link for page top-->
@@ -113,7 +148,7 @@ background-color: #95A38D;
 <script src="https://d3js.org/d3.v3.min.js"></script>
 <div style="float:left;" class="menu">
  	 <ul>
- 	<a><br>${ID}<br></a>
+ 	 <br><font size="6" color="black">${ID}</font><br>
  	 <li><a href="/D3_dndTree/${ID}">All data</a></li>
 <!-- 	 <li><a href="/D3_motif_isomer/${ID}">Motif and Isomer</a></li>
  	 <li><a href="/D3_structure/${ID}">Superstructure and Substructure</a></li>
@@ -124,7 +159,112 @@ background-color: #95A38D;
 
 <div style="float:left;" class="blockb">
 <script>
-treeJSON = d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData) {
+d3.contextMenu = function (menu, openCallback) {
+
+	// create the div element that will hold the context menu
+	d3.selectAll('.d3-context-menu').data([1])
+		.enter()
+		.append('div')
+		.attr('class', 'd3-context-menu');
+
+	// close menu
+	d3.select('body').on('click.d3-context-menu', function() {
+		d3.select('.d3-context-menu').style('display', 'none');
+	});
+
+	// this gets executed when a contextmenu event occurs
+	return function(data, index) {
+		var elm = this;	
+		d3.selectAll('.d3-context-menu').html('');
+		var list = d3.selectAll('.d3-context-menu').append('ul');
+		list.selectAll('li').data(menu).enter()
+			.append('li')
+			.html(function(d) {
+				return (typeof d.title === 'string') ? d.title : d.title(data);
+			})
+			.on('click', function(d, i) {
+				d.action(elm, data, index);
+				d3.select('.d3-context-menu').style('display', 'none');
+			});
+
+		// the openCallback allows an action to fire before the menu is displayed
+		// an example usage would be closing a tooltip
+		if (openCallback) {
+			if (openCallback(data, index) === false) {
+				return;
+			}
+		}
+
+		// display context menu
+		d3.select('.d3-context-menu')
+			.style('left', (d3.event.pageX - 2) + 'px')
+			.style('top', (d3.event.pageY - 2) + 'px')
+			.style('display', 'block');
+
+		d3.event.preventDefault();
+		d3.event.stopPropagation();
+	};
+};
+
+// Function of copy
+var copyTextToClipboard = function(txt){
+    var copyArea = $("<textarea/>");
+    copyArea.text(txt);
+    $("body").append(copyArea);
+    copyArea.select();
+    document.execCommand("copy");
+    copyArea.remove();
+}
+
+// context menu
+
+var menu = [
+	{
+		title: 'Copy this glycan ID',
+		action: function(elm, d, i) {
+			// Copy this glycan ID
+			var cTxt = d.name;
+			copyTextToClipboard(cTxt);
+			alert("Copy this glycan ID \"" + d.name + "\" in Clipboard");
+		}
+	},
+	{
+		title: 'Center on this glycan',
+		action: function(elm, d, i) {		
+			// Center on this glycan
+			if (d.name != null) {
+				// link to this glycan's relation
+				location.href = "/D3_dndTree/" + d.name;
+			}
+		}
+	},
+	{
+		title: 'Open this glycan\'s entry page',
+		action: function(elm, d, i) {		
+			// Open this glycan\'s entry page
+			if (d.name != null) {
+				// New Tab: link to this glycan's entry page
+				window.open('/Structures/Glycans/'+ d.name);
+				// New Window
+				//window.open('/Structures/Glycans/'+ d.name, '_blank', 'width=800,height=600');
+			}
+		}
+	},
+	{
+		title: 'Show this glycan image',
+		action: function(elm, d, i) {
+			// Show of this glycan image
+			if (d.name != null) {
+				// New Tab: link to this glycan's relation
+				window.open('https://glytoucan.org/glycans/'+ d.name + '/image?style=extended&format=png&notation=cfg');
+				// New Window
+				// window.open('https://glytoucan.org/glycans/'+ d.name + '/image?style=extended&format=png&notation=cfg', '_blank', 'width=800,height=600');
+			}
+		}
+	}
+];
+
+d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData) {
 
 	    // Calculate total nodes, max label length
 	    var totalNodes = 0;
@@ -277,7 +417,7 @@ treeJSON = d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData)
 
 
 	    // Define the drag listeners for drag/drop behaviour of nodes.
-	    dragListener = d3.behavior.drag()
+    dragListener = d3.behavior.drag()
 	        // .on("dragstart", function(d) {
         //     if (d == root) {
         //         return;
@@ -429,7 +569,7 @@ treeJSON = d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData)
 	        scale = zoomListener.scale();
 	        x = -source.y0;
 	        y = -source.x0;
-	        x = x * scale + viewerWidth / 2;
+	        x = x * scale + viewerWidth / 3.5;
 	        y = y * scale + viewerHeight / 2;
 	        d3.select('g').transition()
 	            .duration(duration)
@@ -457,7 +597,7 @@ treeJSON = d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData)
 	        if (d3.event.defaultPrevented) return; // click suppressed
 	        d = toggleChildren(d);
 	        update(d);
-	        centerNode(d);
+	        //centerNode(d);
 	    }
 
 	    function update(source) {
@@ -568,6 +708,7 @@ treeJSON = d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData)
 	                   return "translate(-120,-30)";
 	                else return "translate(10,-10)";
 	              })
+	              .on('contextmenu', d3.contextMenu(menu))
 	              .on("mouseover", function (d) {
 	                  d3.select(this).attr("width", 200)
 	                                 .attr("height", 100)
@@ -784,7 +925,8 @@ treeJSON = d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData)
 			                         text2.remove();
 
 			                          //.attr("class",orderlist[0]);
-			                    });
+			                    })
+			                    .on('contextmenu', d3.contextMenu(menu));
 
 
 	        // Transition nodes to their new position.
