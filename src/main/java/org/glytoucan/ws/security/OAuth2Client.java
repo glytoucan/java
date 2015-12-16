@@ -41,7 +41,7 @@ public class OAuth2Client {
         googleOAuth2Details.setClientSecret(clientSecret);
         googleOAuth2Details.setUserAuthorizationUri("https://accounts.google.com/o/oauth2/auth");
         googleOAuth2Details.setAccessTokenUri("https://www.googleapis.com/oauth2/v3/token");
-        googleOAuth2Details.setScope(asList("email"));
+        googleOAuth2Details.setScope(asList("https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/userinfo.profile"));
         return googleOAuth2Details;
     }
 
