@@ -1250,17 +1250,21 @@ input::-ms-clear {
 	white-space: pre;
 }
 
+a.entryMain_menuText {
+	text-decoration: none;
+}
+
 a.entryMain_menuText:link{
-	color: #ffffff; 
+	color: #ffffff;
 }
 a.entryMain_menuText:visited{
-	color: #ffffff; 
+	color: #ffffff;
 }
 a.entryMain_menuText:hover{
-	color: #ffffff; 
+	color: #ffffff;
 }
 a.entryMain_menuText:active{
-	color: #ff0000; 
+	color: #ff0000;
 }
 
 .entryMain_left {
@@ -1273,14 +1277,14 @@ a.entryMain_menuText:active{
 	vertical-align: top;
 }
 
-.entryMain_leftBox {
-	position: relative;
-}
-
 .entryMain_header {
 	background: #fff;
 	-webkit-box-shadow: 0 0 3px 1px #dddddd;
 	box-shadow: 0 0 3px 1px #dddddd;
+}
+
+.entryMain_header--noData {
+	display: none;
 }
 
 .entryMain_title {
@@ -1301,6 +1305,20 @@ a.entryMain_menuText:active{
 
 .cardView {
 	width: 100%;
+}
+
+.cardView_noData {
+	display: block;
+	padding: 20px 0;
+	text-align: center;
+}
+
+.cardView_category {
+	display: none;
+}
+
+.cardView_category--show {
+	display: block;
 }
 
 .cardView_ul {
