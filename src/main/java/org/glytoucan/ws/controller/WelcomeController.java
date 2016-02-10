@@ -58,7 +58,7 @@ public class WelcomeController {
 		
 	   Map<String, Object> map = new HashMap<String, Object>();
 	   Map<String, Object> results = glycanQueryRest.getListStructures(map);
-	   String limit = "1000";
+	   String limit = "10000";
 	   map.put(GlycanQuerySpec.LIMIT, limit);
 	   
 	   GlycanList list = (GlycanList)results.get(GlycanSpec.MESSAGE);
@@ -76,7 +76,7 @@ public class WelcomeController {
 			   logger.debug("acc:>" + acc);
 		   }
 		  
-		   offset += 1000;
+		   offset += 10000;
 		   map.put(GlycanQuerySpec.OFFSET, offset + "");
 		   results = glycanQueryRest.getListStructures(map);
 		   list = (GlycanList)results.get(GlycanSpec.MESSAGE);
