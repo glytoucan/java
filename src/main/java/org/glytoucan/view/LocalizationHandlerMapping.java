@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Enumeration;
 import java.util.Map;
 
@@ -15,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -44,57 +41,18 @@ public class LocalizationHandlerMapping extends HandlerInterceptorAdapter {
 		if (modelAndView != null
 				&& (modelAndView.getViewName() != null && !modelAndView
 						.getViewName().startsWith("redirect:"))) {
-			if (null == env) {
-				try {
-					File envfile = null;
-					File envdir = new File(System.getProperty("java.io.tmpdir")
-							+ "/glytoucan.env");
-					if (!envdir.exists()) {
-						envdir.mkdir();
-					}
-					if (envdir.exists()) {
-						envfile = new File(envdir.getAbsolutePath()
-								+ "/env.txt");
-					}
-					if (null != envfile && !envfile.exists()) {
-						FileUtils.writeStringToFile(envfile, "dev");
-						// PrintWriter out = new PrintWriter(envfile.getName());
-						// out.println("dev");
-						// out.close();
-					} else {
-						logger.debug("file exists at:"
-								+ envfile.getAbsolutePath());
-					}
-					logger.info("size of file:>" + envfile.getTotalSpace());
-					byte[] encoded = Files.readAllBytes(Paths.get(envfile
-							.getPath()));
-					env = new String(encoded, "UTF-8");
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-			}
-
 			HttpSession session = request.getSession();
 
 			String hostname = (String) session.getAttribute(HOSTNAME);
 
 			if (null == hostname) {
-				logger.debug("ENVIRONMENT:>" + env + "<");
-				switch (env.trim()) {
-				case "dev":
-					session.setAttribute(HOSTNAME, "test.glytoucan.org");
-					break;
-				case "test":
-					session.setAttribute(HOSTNAME, "test.glytoucan.org");
-					break;
-				case "prod":
-					session.setAttribute(HOSTNAME, "glytoucan.org");
-					break;
-				default:
-					break;
-				}
+				hostname = System.getProperty("hostname");
+				if (null == hostname)
+					hostname = "test.glytoucan.org";
+				logger.debug("hostname:>" + hostname + "<");
+				
+				session.setAttribute(HOSTNAME, hostname);
 			}
-			hostname = (String) session.getAttribute(HOSTNAME);
 			modelAndView.addObject("hostname", hostname);
 
 			String language = (String) session.getAttribute(LANGUAGE);
@@ -252,7 +210,7 @@ public class LocalizationHandlerMapping extends HandlerInterceptorAdapter {
 				logger.debug(e.getMessage());
 			}
 
-			if (controller != null && (controller.contains("D3") || controller.contains("init"))) {
+			if (controller != null && (controller.contains("D3") || controller.contains("init") || controller.contains("sitemap"))) {
 				logger.debug(modelAndView.getModel().keySet());
 
 				return;

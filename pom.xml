@@ -36,7 +36,7 @@
 		<dependency>
 			<groupId>org.springframework.security.oauth</groupId>
 			<artifactId>spring-security-oauth2</artifactId>
-			</dependency>
+		</dependency>
 		<dependency>
 			<groupId>org.glycoinfo</groupId>
 			<artifactId>batch</artifactId>
@@ -127,7 +127,7 @@
 		<dependency>
 			<groupId>org.glycoinfo.WURCSFramework</groupId>
 			<artifactId>WURCSRDF</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.0.1-working-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.tomcat.embed</groupId>
@@ -190,11 +190,20 @@
 			<artifactId>spring-security-openid</artifactId>
 		</dependency>
 		<dependency>
-		  <groupId>commons-codec</groupId>
-		  <artifactId>commons-codec</artifactId>
-		  <version>1.9</version>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.9</version>
 		</dependency>
-
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.9</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glytoucan</groupId>
+			<artifactId>client</artifactId>
+			<version>0.0.2-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 
 	<build>

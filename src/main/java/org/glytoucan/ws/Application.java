@@ -33,7 +33,9 @@ import org.glytoucan.ws.api.D3SequenceSelectSparql_motif;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryException;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.hateoas.HypermediaAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
@@ -55,6 +57,8 @@ import virtuoso.sesame2.driver.VirtuosoRepository;
 
 @SpringBootApplication
 @Import(value = { GlycanProcedureConfig.class, UserProcedureConfig.class, ContributorProcedureConfig.class })
+// http://stackoverflow.com/questions/31307883/springfox-dependency-breaking-my-spring-context
+@EnableAutoConfiguration(exclude = {HypermediaAutoConfiguration.class})
 public class Application extends SpringBootServletInitializer {
 	
 	private static final String graph = "http://rdf.glytoucan.org";

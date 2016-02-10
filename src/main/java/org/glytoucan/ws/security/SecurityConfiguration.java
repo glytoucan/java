@@ -71,6 +71,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint())
                 .and().authorizeRequests()
                 .antMatchers(GET, "/").permitAll()
+                .antMatchers(GET, "/sitemap.xml").permitAll()
                 .antMatchers(GET, "/error").permitAll()
                 .antMatchers(GET, "/Structures/**").permitAll()
                 .antMatchers(POST, "/Structures/**").permitAll()
