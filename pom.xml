@@ -195,11 +195,6 @@
 			<version>1.9</version>
 		</dependency>
 		<dependency>
-			<groupId>commons-codec</groupId>
-			<artifactId>commons-codec</artifactId>
-			<version>1.9</version>
-		</dependency>
-		<dependency>
 			<groupId>org.glytoucan</groupId>
 			<artifactId>client</artifactId>
 			<version>0.0.2-SNAPSHOT</version>
