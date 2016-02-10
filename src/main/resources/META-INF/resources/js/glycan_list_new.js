@@ -810,8 +810,8 @@ $(function () { // wrapper function
       this.$title.text(this.accNum);
       this.notation = this.$app.data('notation') || 'cfg';
       this.language = this.$app.data('lang') || '1';
-      this.linked_status = [];
       this.getEntry();
+      this.initData();
     },
 
     cacheElements: function () {
@@ -848,16 +848,7 @@ $(function () { // wrapper function
         }
         var data_arr = data.split('<hr />');
         _this.$entryInfo.html(data_arr[0]);
-        _this.linked_status = data_arr.slice(1);
         _this.renderEntry();
-        _this.initLinkedDB();
-        _this.$entryData.each(function () {
-          var init_category = $(this).data('init');
-          var init_stanza = $(this).find('.entryMain_menuList--current').children('.entryMain_menuText').data('stanza');
-          if (init_stanza !== null && init_stanza !== undefined) {
-            _this.getList(init_stanza, $(this), init_category);
-          }
-        });
       }, function (err) {
         console.log(err);
       }).always(function () {
@@ -874,57 +865,6 @@ $(function () { // wrapper function
       var wurcs_decoded = decodeURIComponent(wurcs_code);
       this.$entryInfo.find('.infoStructure_code-wurcs').find('code').text(wurcs_decoded);
       this.structureHeight = this.$app.find('.infoBox_3cols').innerHeight() - 50;
-    },
-
-    initLinkedDB: function () {
-      var init = false;
-      var i, param, status, category, $target;
-      for (i = 0; i < this.linked_status.length; i += 1) {
-        param = this.linked_status[i].replace(/\n/g, '').split(':');
-        status = parseInt(param[1], 10);
-        category = param[0];
-        if (status < 1) {
-          $('span[data-stanza="relation_' + category + '"]').parent('li.entryMain_menuList').addClass('entryMain_menuList--disabled');
-        } else if (!init) {
-          $target = $('span[data-stanza="relation_' + category + '"]');
-          $target.parent('li.entryMain_menuList').addClass('entryMain_menuList--current');
-          $target.parents('.entryMain').find(this.$listTitle).text($target.data('category'));
-          init = true;
-        }
-      }
-      if (!init) {
-        $('.entryMain_menu-linkedDB').parents('.entryMain').find(this.$listTitle).text('No information.');
-      }
-    },
-
-    getList: function (use_stanza, $dataArea, category) {
-      var _this = this;
-      var obj = {category: category, acc: this.accNum, lang: this.language};
-      $dataArea.find(this.$loadingList).removeClass('entry_loading--hide');
-      util.ajax_get(use_stanza, obj).then(function (data) {
-        $dataArea.find(_this.$listView).html(data);
-        _this.renderList($dataArea);
-      }, function (err) {
-        console.log(err);
-      }).always(function () {
-        $dataArea.find(_this.$loadingList).addClass('entry_loading--hide');
-      });
-    },
-
-    renderList: function ($dataArea) {
-      var _this = this;
-      $dataArea.find('.js_zoomImg').each(function () {
-        var src = IMG_PATH + $(this).data('acc') + '/image?style=extended&format=png&notation=' + _this.notation;
-        $(this).attr('src', src);
-      });
-      $dataArea.find('.cardView_disName').each(function () {
-        var text = $(this).text();
-        $(this).text(text.replace('http://www.ncbi.nlm.nih.gov/mesh?term=', ''));
-      });
-      var count = $dataArea.find('li.cardView_li, .cardView_disName').length;
-      if ($dataArea.find(this.$listStatus).find('.entryMain_count').length > 0) {
-        $dataArea.find(this.$listStatus).find('.entryMain_count').text(count);
-      }
     },
 
     switchStructure: function (e) {
@@ -952,18 +892,119 @@ $(function () { // wrapper function
       $target.removeClass('flexCodeWrapper--open');
     },
 
+    initData: function () {
+      var _this = this;
+      this.$entryData.each(function () {
+        _this.getData($(this));
+      });
+    },
+
+    getData: function ($target) {
+      var _this = this;
+      var list = [];
+      $target.find('.entryMain_menuText').each(function () {
+        var category = $(this).data('category');
+        var stanza = $(this).data('stanza');
+        if (stanza !== undefined && category !== undefined) {
+          list.push({category: category, acc: _this.accNum, lang: _this.language, stanza: stanza, $target: $target});
+        }
+      });
+      $target.find(this.$loadingList).removeClass('entry_loading--hide');
+      var i = 0;
+      var prevValue = new $.Deferred().resolve(0);
+      for (i = 0; i < list.length; i += 1) {
+        prevValue = prevValue.then(function (next_i) {
+          return _this.getHtml(list, next_i);
+        });
+      }
+    },
+
+    getHtml: function (list, i) {
+      var _this = this;
+      var dfd = new $.Deferred();
+      var param = list[i];
+      var obj = {category: param.category.toLowerCase(), acc: param.acc, lang: param.lang};
+      var $tag;
+      util.ajax_get(param.stanza, obj).then(function (data) {
+        $tag = $('<div class="cardView_category" data-category="' + param.category + '">' + data + '</div>');
+        param.$target.find('.cardView').append($tag);
+        if (i === (list.length - 1)) {
+          param.$target.find(_this.$loadingList).addClass('entry_loading--hide');
+          _this.setCurrent(param.$target);
+        }
+        dfd.resolve(i + 1);
+      });
+      return dfd.promise();
+    },
+
+    setCurrent: function ($target) {
+      var _this = this;
+      var exist = false;
+      var category, $category, count;
+      $target.find('.cardView_category').each(function () {
+        $category = $(this);
+        category = $category.data('category');
+        count = $category.find('li, td').length;
+        if (count > 0) {
+          if (!exist) {
+            _this.renderSelected($target, category);
+            _this.renderList($target);
+            exist = true;
+          }
+        } else {
+          $target.find('span.entryMain_menuText[data-category="' + category + '"]').parent('li').addClass('entryMain_menuList--disabled');
+        }
+      });
+      if (!exist) {
+        $target.find('.entryMain_header').addClass('entryMain_header--noData');
+        $target.find('.cardView').append('<span class="cardView_noData">No data found.</span>');
+      }
+    },
+
+    renderSelected: function ($target, category) {
+      $target.find('span.entryMain_menuText[data-category="' + category + '"]').parent('li').addClass('entryMain_menuList--current');
+      var $category = $target.find('.cardView_category[data-category="' + category + '"]');
+      var count = $category.find('li, td').length;
+      $target.find('.cardView_category').removeClass('cardView_category--show');
+      $category.addClass('cardView_category--show');
+      $target.find('.entryMain_title').text(category);
+      if ($target.find('.entryMain_count').length > 0) {
+        $target.find('.entryMain_count').text(count);
+      }
+    },
+
+    renderList: function ($target) {
+      var _this = this;
+      $target.find('.js_zoomImg').each(function () {
+        var src = IMG_PATH + $(this).data('acc') + '/image?style=extended&format=png&notation=' + _this.notation;
+        $(this).attr('src', src);
+      });
+      $target.find('.cardView_disName').each(function () {
+        var text = $(this).text();
+        $(this).text(text.replace('http://www.ncbi.nlm.nih.gov/mesh?term=', ''));
+      });
+    },
+
     changeList: function (e) {
       var $clicked = $(e.currentTarget);
-      if ($clicked.hasClass('entryMain_menuList--current') || $clicked.hasClass('entryMain_menuList--disabled')) {
+      if ($clicked.hasClass('entryMain_menuList--disabled') || $clicked.hasClass('entryMain_menuList--current')) {
         return;
       }
-      var $dataArea = $($clicked.closest(this.$entryData));
-      var use_stanza = $clicked.children('.entryMain_menuText').data('stanza');
-      $dataArea.find('li.entryMain_menuList').removeClass('entryMain_menuList--current');
-      $clicked.addClass('entryMain_menuList--current');
+      if ($clicked.children('a').length > 0) {
+        var path = $clicked.children('a').attr('href');
+        var current = window.location.href;
+        var host = current.replace(/\/Structures.*$/, '');
+        window.location.href = host + path;
+        return;
+      }
       var category = $clicked.children('.entryMain_menuText').data('category');
-      $dataArea.find(this.$listTitle).text(category);
-      this.getList(use_stanza, $dataArea, category.toLowerCase());
+      if (category === null || category === undefined) {
+        return;
+      }
+      var $target = $clicked.parents('.entryMain');
+      $target.find('.entryMain_menuList').removeClass('entryMain_menuList--current');
+      $clicked.addClass('entryMain_menuList--current');
+      this.renderSelected($target, category);
     }
 
   }; //entryApp END.

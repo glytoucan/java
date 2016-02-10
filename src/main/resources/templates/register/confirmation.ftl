@@ -108,7 +108,7 @@
       <td>Original Glycan Sequence</td>
       <td>Sequence</td>
       <td>Image</td>
-      <td>ID</td>
+      <td>Accession number</td>
     </tr>
 
 <#items as newItem>

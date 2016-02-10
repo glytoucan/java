@@ -105,6 +105,9 @@
 				<li class="entryMain_menuList">
 					<span class="entryMain_menuText" data-stanza="relation_unicarbkb" data-category="UniCarbKB">UniCarbKB</span>
 				</li>
+				<li class="entryMain_menuList">
+					<span class="entryMain_menuText" data-stanza="relation_pubchem" data-category="PubChem">PubChem</span>
+				</li>
 			</ul>
 		</div><!--/.entryMain_menu-->
 		<div class="entryMain_left">
