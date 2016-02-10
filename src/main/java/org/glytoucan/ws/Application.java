@@ -14,6 +14,10 @@ import org.glycoinfo.rdf.dao.SparqlEntityFactory;
 import org.glycoinfo.rdf.glycan.GlycoSequenceSelectSparql;
 import org.glycoinfo.rdf.scint.ClassHandler;
 import org.glycoinfo.rdf.scint.InsertScint;
+import org.glycoinfo.rdf.dao.virt.SparqlDAOVirtSesameImpl;
+import org.glycoinfo.rdf.dao.virt.VirtRepositoryConnectionFactory;
+import org.glycoinfo.rdf.dao.virt.VirtSesameConnectionFactory;
+import org.glycoinfo.rdf.dao.virt.VirtSesameTransactionManager;
 import org.glycoinfo.rdf.scint.SelectScint;
 import org.glycoinfo.rdf.service.GlycanProcedure;
 import org.glycoinfo.rdf.service.UserProcedure;
@@ -49,10 +53,6 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import jp.bluetree.rdf.sesame.virtuoso.SparqlDAOVirtSesameImpl;
-import jp.bluetree.rdf.sesame.virtuoso.VirtRepositoryConnectionFactory;
-import jp.bluetree.rdf.sesame.virtuoso.VirtSesameConnectionFactory;
-import jp.bluetree.rdf.sesame.virtuoso.VirtSesameTransactionManager;
 import virtuoso.sesame2.driver.VirtuosoRepository;
 
 @SpringBootApplication
