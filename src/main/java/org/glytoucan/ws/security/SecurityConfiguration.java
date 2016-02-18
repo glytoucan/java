@@ -6,6 +6,7 @@ import static org.springframework.http.HttpMethod.POST;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.oauth2.client.filter.OAuth2ClientContextFilter;
@@ -65,7 +66,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 //    	http.csrf().disable();
-    	http.csrf().ignoringAntMatchers("/glycans/**").ignoringAntMatchers("/Structures/Accession**");
+    	http.csrf().ignoringAntMatchers("/img/**").ignoringAntMatchers("/glycans/**").ignoringAntMatchers("/Structures/Accession**");
         http.addFilterAfter(oAuth2ClientContextFilter(), AbstractPreAuthenticatedProcessingFilter.class)
                 .addFilterAfter(openIdConnectAuthenticationFilter(), OAuth2ClientContextFilter.class)
                 .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint())
@@ -79,5 +80,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(GET, "/Users/**").authenticated()
                 .antMatchers(GET, "/Registries/**").authenticated()
                 .antMatchers(POST, "/Registries/**").authenticated();
+    }
+    
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/sitemap.xml").antMatchers("/img/**").antMatchers("/glycans/**").antMatchers("/Structures/Accession**");
     }
 }
