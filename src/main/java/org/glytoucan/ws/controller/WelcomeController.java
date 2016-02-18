@@ -12,11 +12,15 @@ import org.glytoucan.client.config.GlycanQueryConfig;
 import org.glytoucan.model.GlycanList;
 import org.glytoucan.model.spec.GlycanQuerySpec;
 import org.glytoucan.model.spec.GlycanSpec;
+import org.glytoucan.ws.model.XmlUrl;
+import org.glytoucan.ws.model.XmlUrlSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.knappsack.swagger4springweb.annotation.ApiExclude;
 
@@ -52,37 +56,47 @@ public class WelcomeController {
 		return "redirect:/?errorMessage=something happened with signin";
 	}
 
-	@RequestMapping(value = "/sitemap.xml", produces="application/xml")
-    public String sitemap(Model model) {
-		
-		
-	   Map<String, Object> map = new HashMap<String, Object>();
-	   Map<String, Object> results = glycanQueryRest.getListStructures(map);
-	   String limit = "10000";
-	   map.put(GlycanQuerySpec.LIMIT, limit);
-	   
-	   GlycanList list = (GlycanList)results.get(GlycanSpec.MESSAGE);
-	   
-	   int offset = 0;
+	@RequestMapping(value = "/sitemap.xml", method = RequestMethod.GET, produces="application/xml")
+	@ResponseBody
+	public XmlUrlSet main() {
+		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> results = glycanQueryRest.getListStructures(map);
+		String limit = "10000";
+		map.put(GlycanQuerySpec.LIMIT, limit);
 
-	   ArrayList<String> accs = new ArrayList<String>();
+		GlycanList list = (GlycanList) results.get(GlycanSpec.MESSAGE);
 
-	   while(list.getGlycans() != null && list.getGlycans().size() > 0) {
-	   
-		   logger.debug(list.getGlycans());
-		   for (Object gly: list.getGlycans()) {
-			   String acc = (String) gly;
-			   accs.add(acc);
-			   logger.debug("acc:>" + acc);
-		   }
-		  
-		   offset += 10000;
-		   map.put(GlycanQuerySpec.OFFSET, offset + "");
-		   results = glycanQueryRest.getListStructures(map);
-		   list = (GlycanList)results.get(GlycanSpec.MESSAGE);
-	   }
+		int offset = 0;
 
-	   model.addAttribute("listAccs", accs);
-	   return "sitemap";
+		ArrayList<String> accs = new ArrayList<String>();
+
+		// http://${hostname}/
+		XmlUrlSet xmlUrlSet = new XmlUrlSet();
+		create(xmlUrlSet, "", XmlUrl.Priority.HIGH);
+
+		while (list.getGlycans() != null && list.getGlycans().size() > 0) {
+
+			logger.debug(list.getGlycans());
+			for (Object gly : list.getGlycans()) {
+				String acc = (String) gly;
+				create(xmlUrlSet, "/Structures/Glycans/" + acc, XmlUrl.Priority.MEDIUM);
+
+				accs.add(acc);
+
+				logger.debug("acc:>" + acc);
+			}
+
+			offset += 10000;
+			map.put(GlycanQuerySpec.OFFSET, offset + "");
+			results = glycanQueryRest.getListStructures(map);
+			list = (GlycanList) results.get(GlycanSpec.MESSAGE);
+		}
+
+
+		return xmlUrlSet;
+	}
+
+	private void create(XmlUrlSet xmlUrlSet, String link, XmlUrl.Priority priority) {
+		xmlUrlSet.addUrl(new XmlUrl("http://beta.glytoucan.org" + link, priority));
 	}
 }
