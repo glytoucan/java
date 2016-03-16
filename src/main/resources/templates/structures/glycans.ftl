@@ -102,9 +102,11 @@
 				<li class="entryMain_menuList">
 					<span class="entryMain_menuText" data-stanza="relation_unicarbdb" data-category="UniCarb-DB">UniCarb-DB</span>
 				</li>
+				<!--
 				<li class="entryMain_menuList">
 					<span class="entryMain_menuText" data-stanza="relation_unicarbkb" data-category="UniCarbKB">UniCarbKB</span>
 				</li>
+				-->
 				<li class="entryMain_menuList">
 					<span class="entryMain_menuText" data-stanza="relation_pubchem" data-category="PubChem">PubChem</span>
 				</li>
