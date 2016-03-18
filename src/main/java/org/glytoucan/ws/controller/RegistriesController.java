@@ -27,7 +27,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.glycoinfo.client.GlyspaceClient;
-import org.glycoinfo.conversion.util.DetectFormat;
+import org.glycoinfo.convert.util.DetectFormat;
 import org.glycoinfo.rdf.SparqlException;
 import org.glycoinfo.rdf.dao.SparqlEntity;
 import org.glycoinfo.rdf.service.GlycanProcedure;
