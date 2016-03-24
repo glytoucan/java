@@ -225,7 +225,7 @@ var menu = [
 			// Copy this glycan ID
 			var cTxt = d.name;
 			copyTextToClipboard(cTxt);
-			alert("Copy this glycan ID \"" + d.name + "\" in Clipboard");
+			// alert("Copy this glycan ID \"" + d.name + "\" in Clipboard");
 		}
 	},
 	{
@@ -597,7 +597,7 @@ d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData) {
 	        if (d3.event.defaultPrevented) return; // click suppressed
 	        d = toggleChildren(d);
 	        update(d);
-	        //centerNode(d);
+	        centerNode(d);
 	    }
 
 	    function update(source) {
@@ -708,7 +708,6 @@ d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData) {
 	                   return "translate(-120,-30)";
 	                else return "translate(10,-10)";
 	              })
-	              .on('contextmenu', d3.contextMenu(menu))
 	              .on("mouseover", function (d) {
 	                  d3.select(this).attr("width", 200)
 	                                 .attr("height", 100)
@@ -773,7 +772,8 @@ d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData) {
 	                   });
 	                   text3.remove();
 	                    //.attr("class",orderlist[0]);
-	              });
+	              })
+	              .on('contextmenu', d3.contextMenu(menu));
 
 
 	        // phantom node to give us mouseover in a radius around it
@@ -781,7 +781,7 @@ d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData) {
 	            .attr('class', 'ghostCircle')
 	            .attr("r", 30)
 	            .attr("opacity", 0.2) // change this to zero to hide the target area
-	        .style("fill", "red")
+	        	.style("fill", "red")
 	            .attr('pointer-events', 'mouseover')
 	            .on("mouseover", function(node) {
 	                overCircle(node);
@@ -875,7 +875,7 @@ d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData) {
 			                          else if (d.size == null){text_name = null;}
 			                          else{text_name = d.name;};
 
-			                            text2 = nodeEnter.append("text")
+			                            text2 = node.append("text")
 			                            .attr("x", function(d) {
 			                                return d.children || d._children ? -10 : 10;
 			                            })
