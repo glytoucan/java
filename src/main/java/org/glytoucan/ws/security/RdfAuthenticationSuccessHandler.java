@@ -14,9 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.glycoinfo.rdf.SelectSparql;
 import org.glycoinfo.rdf.SparqlException;
 import org.glycoinfo.rdf.dao.SparqlEntity;
-import org.glycoinfo.rdf.scint.SelectScint;
 import org.glycoinfo.rdf.service.UserProcedure;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -38,7 +38,7 @@ public class RdfAuthenticationSuccessHandler extends
 	@Autowired(required=false)
 	JavaMailSender mailSender;
 
-	String[] requiredFields = {SelectScint.PRIMARY_KEY, "email", "givenName", "familyName", "verifiedEmail"};
+	String[] requiredFields = {SelectSparql.PRIMARY_KEY, "email", "givenName", "familyName", "verifiedEmail"};
 
 	/**
 	 * 

@@ -11,13 +11,13 @@ import org.glycoinfo.rdf.SelectSparql;
 import org.glycoinfo.rdf.SparqlException;
 import org.glycoinfo.rdf.dao.SparqlDAO;
 import org.glycoinfo.rdf.dao.SparqlEntityFactory;
-import org.glycoinfo.rdf.glycan.GlycoSequenceSelectSparql;
-import org.glycoinfo.rdf.scint.ClassHandler;
-import org.glycoinfo.rdf.scint.InsertScint;
 import org.glycoinfo.rdf.dao.virt.SparqlDAOVirtSesameImpl;
 import org.glycoinfo.rdf.dao.virt.VirtRepositoryConnectionFactory;
 import org.glycoinfo.rdf.dao.virt.VirtSesameConnectionFactory;
 import org.glycoinfo.rdf.dao.virt.VirtSesameTransactionManager;
+import org.glycoinfo.rdf.glycan.GlycoSequenceSelectSparql;
+import org.glycoinfo.rdf.scint.ClassHandler;
+import org.glycoinfo.rdf.scint.InsertScint;
 import org.glycoinfo.rdf.scint.SelectScint;
 import org.glycoinfo.rdf.service.GlycanProcedure;
 import org.glycoinfo.rdf.service.UserProcedure;
@@ -226,9 +226,9 @@ public class Application extends SpringBootServletInitializer {
     
 	@Bean(name = "selectscintperson")
 	SelectScint getSelectPersonScint() throws SparqlException {
-		SelectScint select = new SelectScint();
+		SelectScint select = new SelectScint("schema", "http://schema.org/", "Person");
 		
-		select.setClassHandler(getPersonClassHandler());
+//		select.setClassHandler(getPersonClassHandler());
 		return select;
 	}
 
@@ -241,8 +241,7 @@ public class Application extends SpringBootServletInitializer {
 
 	@Bean(name = "selectscintregisteraction")
 	SelectScint getSelectRegisterActionScint() throws SparqlException {
-		SelectScint select = new SelectScint();
-		select.setClassHandler(getRegisterActionClassHandler());
+		SelectScint select = new SelectScint("schema", "http://schema.org/", "RegisterAction");
 		return select;
 	}
 
