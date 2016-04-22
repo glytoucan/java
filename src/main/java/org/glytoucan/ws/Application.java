@@ -150,11 +150,6 @@ public class Application extends SpringBootServletInitializer {
         return application.sources(Application.class);
     }
         
-//    @Bean
-//    public ServerProperties getServerProperties() {
-//        return new ServerCustomization();
-//    }
-//    
 	@Bean
 	VirtSesameConnectionFactory getSesameConnectionFactory() {
 		return new VirtRepositoryConnectionFactory(getRepository());
@@ -234,8 +229,7 @@ public class Application extends SpringBootServletInitializer {
 
 	@Bean(name = "insertscintperson")
 	InsertScint getInsertPersonScint() throws SparqlException {
-		InsertScint insert = new InsertScint(graph + "/schema/users");
-		insert.setClassHandler(getPersonClassHandler());
+		InsertScint insert = new InsertScint(graph + "/schema/users", "schema", "http://schema.org/", "Person");
 		return insert;
 	}
 
@@ -247,13 +241,12 @@ public class Application extends SpringBootServletInitializer {
 
 	@Bean(name = "insertscintregisteraction")
 	InsertScint getInsertRegisterActionScint() throws SparqlException {
-		InsertScint insert = new InsertScint(graph + "/schema/users");
-		insert.setClassHandler(getRegisterActionClassHandler());
+		InsertScint insert = new InsertScint(graph + "/schema/users", "schema", "http://schema.org/", "RegisterAction");
 		return insert;
 	}
 
 	ClassHandler getPersonClassHandler() throws SparqlException {
-		ClassHandler ch = new ClassHandler("schema", "http://schema.org/", "Person");
+		ClassHandler ch = new ClassHandler();
 		ch.setSparqlDAO(getSparqlDAO());
 		return ch; 
 	}
