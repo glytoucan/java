@@ -2,8 +2,9 @@
 <#import "/spring.ftl" as spring />
 <html lang="ja">
 <head>
-	<title>Glycan Repository</title>
+<title>${description}</title>
 <#include "../header.html">
+<meta name="description" content="${description}" />
 </head>
 <body>
 <a name="top"></a><!--link for page top-->

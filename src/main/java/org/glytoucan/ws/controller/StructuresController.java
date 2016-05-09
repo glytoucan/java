@@ -160,6 +160,7 @@ public class StructuresController {
 		try {
 			if (StringUtils.isNotBlank(accessionNumber) && accessionNumber.startsWith("G") && glycanProcedure.checkExists(accessionNumber)) {
      			model.addAttribute("accNum", accessionNumber);
+     			model.addAttribute("description", "Glycan Entry " + accessionNumber + "");
 				return "structures/glycans";
 			}
 		} catch (SparqlException e) {
