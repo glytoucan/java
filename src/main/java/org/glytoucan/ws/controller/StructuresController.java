@@ -42,6 +42,9 @@ public class StructuresController {
 	
 	@Autowired
 	GlycanProcedure glycanProcedure;
+	
+//	@Autowired
+//	LogClient logClient;
 
 	@RequestMapping()
 	public String def(Model model) {
@@ -159,6 +162,7 @@ public class StructuresController {
 	public String glycans(@PathVariable String accessionNumber, Model model, RedirectAttributes redirectAttrs)  {
 		try {
 			if (StringUtils.isNotBlank(accessionNumber) && accessionNumber.startsWith("G") && glycanProcedure.checkExists(accessionNumber)) {
+//				logClient.insertDefaultLog("glycan entry page for " + accessionNumber + " requested.");
      			model.addAttribute("accNum", accessionNumber);
      			model.addAttribute("description", "Glycan Entry " + accessionNumber + "");
 				return "structures/glycans";

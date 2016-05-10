@@ -34,7 +34,6 @@ import org.glycoinfo.rdf.service.GlycanProcedure;
 import org.glycoinfo.rdf.service.UserProcedure;
 import org.glyspace.registry.utils.ImageGenerator;
 import org.glytoucan.ws.model.SequenceInput;
-import org.glytoucan.ws.security.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -47,6 +46,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.github.fromi.openidconnect.security.UserInfo;
 import com.knappsack.swagger4springweb.annotation.ApiExclude;
 import com.wordnik.swagger.annotations.ApiOperation;
 

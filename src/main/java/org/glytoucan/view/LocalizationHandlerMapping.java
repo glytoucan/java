@@ -16,7 +16,6 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.glytoucan.ws.security.UserInfo;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.servlet.ModelAndView;
@@ -25,6 +24,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.fromi.openidconnect.security.UserInfo;
 
 public class LocalizationHandlerMapping extends HandlerInterceptorAdapter {
 	public static final String LANGUAGE = "language";
@@ -231,7 +231,7 @@ public class LocalizationHandlerMapping extends HandlerInterceptorAdapter {
 			logger.debug(modelAndView.getModel().keySet());
 			try {
 				if (SecurityContextHolder.getContext().getAuthentication()
-						.getPrincipal() instanceof UserInfo) {
+						.getPrincipal() instanceof UserInfo){
 					UserInfo userInfo = (UserInfo) SecurityContextHolder
 							.getContext().getAuthentication().getPrincipal();
 					if (null != userInfo && userInfo.getVerifiedEmail() != null

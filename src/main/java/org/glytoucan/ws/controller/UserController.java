@@ -1,12 +1,9 @@
 package org.glytoucan.ws.controller;
-import java.util.List;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.glycoinfo.rdf.SparqlException;
 import org.glycoinfo.rdf.dao.SparqlEntity;
 import org.glycoinfo.rdf.service.UserProcedure;
-import org.glytoucan.ws.security.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -14,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.github.fromi.openidconnect.security.UserInfo;
 import com.knappsack.swagger4springweb.annotation.ApiExclude;
 
 @Controller
@@ -29,7 +27,7 @@ public class UserController {
 	public String profile(Model model, RedirectAttributes redirectAttrs) {
 //    	redirectAttrs.addFlashAttribute("infoMessage", "Logged In");
 		if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof UserInfo) {
-			UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			UserInfo userInfo = (UserInfo)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			if (userInfo == null) {
 				redirectAttrs.addAttribute("warningMessage", "Could not retrieve user information.  Please Login");
 				return "redirect:/signout";
