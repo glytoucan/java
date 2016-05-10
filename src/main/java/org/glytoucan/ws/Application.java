@@ -53,6 +53,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jp.bluetree.log.client.LogClient;
 import virtuoso.sesame2.driver.VirtuosoRepository;
 
 @SpringBootApplication
@@ -297,5 +298,10 @@ public class Application extends SpringBootServletInitializer {
 	@Bean
 	SparqlEntityFactory sparqlEntityFactory() {
 		return new SparqlEntityFactory();
+	}
+	
+	@Bean
+	LogClient logClient() {
+		return new LogClient();
 	}
 }

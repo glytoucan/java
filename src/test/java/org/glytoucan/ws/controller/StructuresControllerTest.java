@@ -14,6 +14,7 @@ import java.io.UnsupportedEncodingException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.glycoinfo.rdf.service.GlycanProcedure;
+import org.glycoinfo.rdf.service.impl.GlycanProcedureConfig;
 import org.glytoucan.ws.Application;
 import org.glytoucan.ws.model.SequenceInput;
 import org.junit.Before;
@@ -29,7 +30,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = { Application.class })
+@SpringApplicationConfiguration(classes = { Application.class, GlycanProcedureConfig.class })
 @WebAppConfiguration
 public class StructuresControllerTest {
 	public static Log logger = (Log) LogFactory
@@ -295,6 +296,33 @@ LIN
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}	
+	}
+	
+	@Test
+	public void testRegisterediLinearCode() throws UnsupportedEncodingException {
+		String id = "G00029MO";
+		String sequence = "GNb2(Ab4GNb4)Ma3(Ab4GNb2(Fa3(Ab4)GNb6)Ma6)Mb4GNb4GN";
+		logger.debug("sequence:>" + sequence + "<");
+
+		SequenceInput si = new SequenceInput();
+		si.setId(id);
+		si.setSequence(sequence);
+		si.setResultSequence("WURCS=2.0/4,6,5/[u2122h_2*NCC/3=O][a2122h-1b_1-5_2*NCC/3=O][a1122h-1b_1-5][a1122h-1a_1-5]/1-2-3-4-2-4/a4-b1_b4-c1_c3-d1_c6-f1_e1-d2|d4");
+		si.setImage("/glycans/" + id + "/image?style=extended&format=png&notation=cfg");
+		try {
+			mockMvc.perform(
+					post("/Structures/structure").contentType(
+							MediaType.APPLICATION_FORM_URLENCODED).param(
+							"sequence", sequence))
+					.andExpect(status().isOk())
+					.andExpect(view().name("structures/structure"))
+					.andExpect(model().attribute("sequence", hasProperty("sequence", is(sequence))))
+			        .andExpect(model().attribute("sequence", hasProperty("id", is(id))))
+			        .andExpect(model().attribute("sequence", hasProperty("resultSequence", is(si.getResultSequence()))))
+			        .andExpect(model().attribute("sequence", hasProperty("image", is(si.getImage()))));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
 }

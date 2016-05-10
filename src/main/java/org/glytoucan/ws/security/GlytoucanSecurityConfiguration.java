@@ -4,32 +4,31 @@ import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.oauth2.client.filter.OAuth2ClientContextFilter;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
+import com.github.fromi.openidconnect.security.OpenIDConnectAuthenticationFilter;
+import com.github.fromi.openidconnect.security.SecurityConfiguration;
+
 @Configuration
 @EnableWebSecurity
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+@Order(90)
+@ComponentScan(basePackages="com.github.fromi.openidconnect.security")
+public class GlytoucanSecurityConfiguration extends SecurityConfiguration {
 
     private final String LOGIN_URL = "/signin";
 
-    @Bean
-    public AuthenticationEntryPoint authenticationEntryPoint() {
-        return new LoginUrlAuthenticationEntryPoint(LOGIN_URL);
-    }
-    
     @Bean
     public AuthenticationSuccessHandler successHandler() {
     	return new RdfAuthenticationSuccessHandler();
@@ -42,20 +41,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     	return suafh;
     }
 
-    
     @Bean
     public OpenIDConnectAuthenticationFilter openIdConnectAuthenticationFilter() {
-    	OpenIDConnectAuthenticationFilter open = new OpenIDConnectAuthenticationFilter(LOGIN_URL);
+    	OpenIDConnectAuthenticationFilter open = new GlytoucanConnectAuthenticationFilter(LOGIN_URL);
     	open.setAuthenticationSuccessHandler(successHandler());
     	open.setAuthenticationFailureHandler(failureHandler());
         return open;
     }
 
-    @Bean
-    public OAuth2ClientContextFilter oAuth2ClientContextFilter() {
-        return new OAuth2ClientContextFilter();
-    }
-    
     private CsrfTokenRepository csrfTokenRepository() 
     { 
         HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository(); 
