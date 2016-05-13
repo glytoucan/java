@@ -61,7 +61,7 @@ import jp.bluetree.log.client.LogClient;
 import virtuoso.sesame2.driver.VirtuosoRepository;
 
 @SpringBootApplication
-@Import(value = { GlycanProcedureConfig.class, UserProcedureConfig.class, ContributorProcedureConfig.class, org.glytoucan.client.Application.class, GlycanConfig.class })
+@Import(value = { GlycanProcedureConfig.class, UserProcedureConfig.class, ContributorProcedureConfig.class, GlycanConfig.class, SoapConfiguration.class })
 // http://stackoverflow.com/questions/31307883/springfox-dependency-breaking-my-spring-context
 @EnableAutoConfiguration(exclude = {HypermediaAutoConfiguration.class})
 public class Application extends SpringBootServletInitializer {
