@@ -28,6 +28,10 @@ import org.glycoinfo.rdf.service.impl.UserProcedureConfig;
 import org.glycoinfo.rdf.utils.TripleStoreProperties;
 import org.glycomedb.residuetranslator.ResidueTranslator;
 import org.glyspace.registry.utils.ImageGenerator;
+import org.glytoucan.client.GlycanConfig;
+import org.glytoucan.client.GlycoSequenceClient;
+import org.glytoucan.client.config.GlycanQueryConfig;
+import org.glytoucan.client.config.SoapConfiguration;
 import org.glytoucan.ws.api.D3SequenceSelectSparql_isomer;
 import org.glytoucan.ws.api.D3SequenceSelectSparql_motif;
 import org.openrdf.repository.Repository;
@@ -57,7 +61,7 @@ import jp.bluetree.log.client.LogClient;
 import virtuoso.sesame2.driver.VirtuosoRepository;
 
 @SpringBootApplication
-@Import(value = { GlycanProcedureConfig.class, UserProcedureConfig.class, ContributorProcedureConfig.class })
+@Import(value = { GlycanProcedureConfig.class, UserProcedureConfig.class, ContributorProcedureConfig.class, org.glytoucan.client.Application.class, GlycanConfig.class })
 // http://stackoverflow.com/questions/31307883/springfox-dependency-breaking-my-spring-context
 @EnableAutoConfiguration(exclude = {HypermediaAutoConfiguration.class})
 public class Application extends SpringBootServletInitializer {
@@ -300,8 +304,9 @@ public class Application extends SpringBootServletInitializer {
 		return new SparqlEntityFactory();
 	}
 	
-	@Bean
-	LogClient logClient() {
-		return new LogClient();
-	}
+//	@Bean
+//	LogClient logClient() {
+//		return new LogClient();
+//	}
+	
 }

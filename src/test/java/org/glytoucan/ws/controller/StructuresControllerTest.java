@@ -1,6 +1,7 @@
 package org.glytoucan.ws.controller;
 
 import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -324,5 +325,15 @@ LIN
 			e.printStackTrace();
 		}
 	}
+	
+	 @Test
+	  public void testStructureEntryPage() throws Exception {
+	    mockMvc.perform(get("/Structures/Glycans/G00051MO"))
+	        .andExpect(status().isOk())
+	        .andExpect(view().name("structures/glycans"))
+	        .andExpect(
+	            model().attribute("description",
+	                containsString("G00051MO")));
+	  }
 	
 }

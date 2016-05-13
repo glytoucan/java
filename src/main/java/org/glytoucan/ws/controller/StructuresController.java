@@ -17,6 +17,8 @@ import org.glycoinfo.convert.error.ConvertFormatException;
 import org.glycoinfo.rdf.SparqlException;
 import org.glycoinfo.rdf.dao.SparqlEntity;
 import org.glycoinfo.rdf.service.GlycanProcedure;
+import org.glytoucan.client.GlycoSequenceClient;
+import org.glytoucan.client.soap.GlycoSequenceDetailResponse;
 import org.glytoucan.ws.model.SequenceInput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -45,6 +47,9 @@ public class StructuresController {
 	
 //	@Autowired
 //	LogClient logClient;
+	
+	@Autowired
+	GlycoSequenceClient glycoSequenceClient;
 
 	@RequestMapping()
 	public String def(Model model) {
@@ -163,8 +168,10 @@ public class StructuresController {
 		try {
 			if (StringUtils.isNotBlank(accessionNumber) && accessionNumber.startsWith("G") && glycanProcedure.checkExists(accessionNumber)) {
 //				logClient.insertDefaultLog("glycan entry page for " + accessionNumber + " requested.");
+			    GlycoSequenceDetailResponse response = glycoSequenceClient.detailRequest(accessionNumber);
+			    logger.debug(response.getDescription());
      			model.addAttribute("accNum", accessionNumber);
-     			model.addAttribute("description", "Glycan Entry " + accessionNumber + "");
+     			model.addAttribute("description", response.getDescription());
 				return "structures/glycans";
 			}
 		} catch (SparqlException e) {
