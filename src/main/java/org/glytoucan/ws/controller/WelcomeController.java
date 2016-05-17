@@ -92,11 +92,10 @@ public class WelcomeController {
 			list = (GlycanList) results.get(GlycanSpec.MESSAGE);
 		}
 
-
 		return xmlUrlSet;
 	}
 
 	private void create(XmlUrlSet xmlUrlSet, String link, XmlUrl.Priority priority) {
-		xmlUrlSet.addUrl(new XmlUrl("http://beta.glytoucan.org" + link, priority));
+		xmlUrlSet.addUrl(new XmlUrl("https://glytoucan.org" + link, priority));
 	}
 }
