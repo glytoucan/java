@@ -3,6 +3,7 @@ package org.glytoucan.ws.security;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -27,7 +28,7 @@ import com.github.fromi.openidconnect.security.SecurityConfiguration;
 @ComponentScan(basePackages="com.github.fromi.openidconnect.security")
 public class GlytoucanSecurityConfiguration extends SecurityConfiguration {
 
-    private final String LOGIN_URL = "/signin";
+    private final String LOGIN_URL = "/login";
 
     @Bean
     public AuthenticationSuccessHandler successHandler() {
@@ -78,5 +79,21 @@ public class GlytoucanSecurityConfiguration extends SecurityConfiguration {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/sitemap.xml").antMatchers("/img/**").antMatchers("/glycans/**").antMatchers("/Structures/Accession**");
+    }
+    
+//    @Value("${api.contributor.id}")
+//    private String username;
+//
+//    @Value("${api.key}")
+//    private String hash;
+
+    @Bean(name="api.contributor.id")
+    public String apiContributorId() {
+      return "test";      
+    }
+
+    @Bean(name="api.key")
+    public String apiKey() {
+      return "testKey";
     }
 }
