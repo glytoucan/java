@@ -41,7 +41,7 @@
 			</thead>
 			<tbody>
 				<tr>
-					<td>${sequence.id}</td>
+					<td><a href="/Structures/Glycans/${sequence.id}" target="_blank">${sequence.id}</a></td>
 					<td width="60%"><img src="${sequence.image}"><p></td>
 				</tr>
 			</tbody>
