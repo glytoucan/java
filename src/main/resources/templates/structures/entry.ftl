@@ -5,7 +5,7 @@
 	<title>${description}</title>
 	<#include "../header.html">
 	<meta name="description" content="${description}" />
-	<link rel="stylesheet" type="text/css" href="/css/entry.css">
+	<link rel="stylesheet" type="text/css" href="/assets/css/entry.css">
 	<link rel="import" href="http://localhost:8080/stanza/summary/">
 	<link rel="import" href="http://localhost:8080/stanza/structure/">
 	<link rel="import" href="http://localhost:8080/stanza/wurcs/">
@@ -83,7 +83,7 @@
 
 </div><!--end contents-->
 	<script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
-	<script type="text/javascript" src="/js/webcomponentsjs/webcomponents.min.js"></script>
-	<script type="text/javascript" src="/js/entry.js"></script>	
+	<script src="/assets/components/webcomponentsjs/webcomponents.min.js"></script>
+	<script type="text/javascript" src="/assets/js/entry.js"></script>	
 </body>
 </html>
