@@ -163,7 +163,7 @@ public class StructuresController {
         }
     }
 	
-	@RequestMapping(value="/Glycans/{accessionNumber}", method=RequestMethod.GET)
+	@RequestMapping(value="/Entry/{accessionNumber}", method=RequestMethod.GET)
 	public String glycans(@PathVariable String accessionNumber, Model model, RedirectAttributes redirectAttrs)  {
 		try {
 			if (StringUtils.isNotBlank(accessionNumber) && accessionNumber.startsWith("G") && glycanProcedure.checkExists(accessionNumber)) {
@@ -199,4 +199,24 @@ public class StructuresController {
 		redirectAttrs.addFlashAttribute("errorMessage", "error message");
 		return "redirect:/Structures/test";
 	}
+
+	@RequestMapping(value="/Glycans/{accessionNumber}", method=RequestMethod.GET)
+	public String entry(@PathVariable String accessionNumber, Model model, RedirectAttributes redirectAttrs)  {
+		try {
+			if (StringUtils.isNotBlank(accessionNumber) && accessionNumber.startsWith("G") && glycanProcedure.checkExists(accessionNumber)) {
+//				logClient.insertDefaultLog("glycan entry page for " + accessionNumber + " requested.");
+			    GlycoSequenceDetailResponse response = glycoSequenceClient.detailRequest(accessionNumber);
+			    logger.debug(response.getDescription());
+     			model.addAttribute("accNum", accessionNumber);
+     			model.addAttribute("description", response.getDescription());
+				return "structures/entry";
+			}
+		} catch (SparqlException e) {
+			e.printStackTrace();
+			redirectAttrs.addFlashAttribute("errorMessage", "Currently under maintence please try again in a few minutes");
+			return "redirect:/";
+		}
+		redirectAttrs.addFlashAttribute("errorMessage", "This accession number does not exist");
+		return "redirect:/";
+    }
 }
