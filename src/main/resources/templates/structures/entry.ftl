@@ -25,7 +25,7 @@
 
 	<article class="entryNew">
 		<section class="entryNew_summary">
-			<h1 class="entryNew_heading">G00051MO</h1>
+			<h1 class="entryNew_heading">${accNum}</h1>
 			<togostanza-summary acc="${accNum}" notation="cfg"></togostanza-summary>
 		</section>
 		<div class="entryNew_content">
