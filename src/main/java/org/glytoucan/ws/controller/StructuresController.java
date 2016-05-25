@@ -163,7 +163,7 @@ public class StructuresController {
         }
     }
 	
-	@RequestMapping(value="/Entry/{accessionNumber}", method=RequestMethod.GET)
+	@RequestMapping(value="/Glycans/{accessionNumber}", method=RequestMethod.GET)
 	public String glycans(@PathVariable String accessionNumber, Model model, RedirectAttributes redirectAttrs)  {
 		try {
 			if (StringUtils.isNotBlank(accessionNumber) && accessionNumber.startsWith("G") && glycanProcedure.checkExists(accessionNumber)) {
@@ -200,7 +200,7 @@ public class StructuresController {
 		return "redirect:/Structures/test";
 	}
 
-	@RequestMapping(value="/Glycans/{accessionNumber}", method=RequestMethod.GET)
+	@RequestMapping(value="/Entry/{accessionNumber}", method=RequestMethod.GET)
 	public String entry(@PathVariable String accessionNumber, Model model, RedirectAttributes redirectAttrs)  {
 		try {
 			if (StringUtils.isNotBlank(accessionNumber) && accessionNumber.startsWith("G") && glycanProcedure.checkExists(accessionNumber)) {
