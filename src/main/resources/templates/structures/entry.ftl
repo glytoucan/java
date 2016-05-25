@@ -6,14 +6,14 @@
 	<#include "../header.html">
 	<meta name="description" content="${description}" />
 	<link rel="stylesheet" type="text/css" href="/assets/css/entry.css">
-	<link rel="import" href="http://localhost:8080/stanza/summary/">
-	<link rel="import" href="http://localhost:8080/stanza/structure/">
-	<link rel="import" href="http://localhost:8080/stanza/wurcs/">
-	<link rel="import" href="http://localhost:8080/stanza/glycoct/">
-	<link rel="import" href="http://localhost:8080/stanza/motif/">
-	<link rel="import" href="http://localhost:8080/stanza/species/">
-	<link rel="import" href="http://localhost:8080/stanza/literature/">
-	<link rel="import" href="http://localhost:8080/stanza/external/">
+	<link rel="import" href="/stanza/summary/">
+	<link rel="import" href="/stanza/structure/">
+	<link rel="import" href="/stanza/wurcs/">
+	<link rel="import" href="/stanza/glycoct/">
+	<link rel="import" href="/stanza/motif/">
+	<link rel="import" href="/stanza/species/">
+	<link rel="import" href="/stanza/literature/">
+	<link rel="import" href="/stanza/external/">
 </head>
 <body>
 <!--link for page top-->
