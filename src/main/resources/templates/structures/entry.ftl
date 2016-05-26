@@ -10,6 +10,7 @@
 	<link rel="import" href="/stanza/structure/">
 	<link rel="import" href="/stanza/wurcs/">
 	<link rel="import" href="/stanza/glycoct/">
+	<link rel="import" href="/stanza/iupac/">
 	<link rel="import" href="/stanza/motif/">
 	<link rel="import" href="/stanza/species/">
 	<link rel="import" href="/stanza/literature/">
@@ -36,6 +37,7 @@
 						<ol class="entryNav_ol entryNav_ol-sub">
 							<li><a href="#wurcs">WURCS</a></li>
 							<li><a href="#glycoct">GlycoCT</a></li>
+							<li><a href="#iupac">IUPAC</a></li>
 						</ol>
 					</li>
 					<li><a href="#motif">Glycan Motif</a></li>
@@ -55,6 +57,8 @@
 					<togostanza-wurcs acc="${accNum}"></togostanza-wurcs>
 					<h2 id="glycoct" class="entryNew_heading entryNew_heading-2nd">GlycoCT</h2>
 					<togostanza-glycoct acc="${accNum}"></togostanza-glycoct>
+					<h2 id="iupac" class="entryNew_heading entryNew_heading-2nd">IUPAC</h2>
+					<togostanza-iupac acc="${accNum}"></togostanza-iupac>
 				</section>
 				<section id="motif" class="entryNew_section">
 					<h1 class="entryNew_heading">Glycan Motif</h1>
