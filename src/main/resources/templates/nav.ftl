@@ -63,7 +63,7 @@
 <#if user??>
 				<li class="globalNavItem"><a class="globalNavItem_btn" href="/Users/profile"><span class="globalNavItem_text">${profile}</span></a></li>
 <#else>
-				<li class="globalNavItem"><a class="globalNavItem_btn" href="/signin"><span class="globalNavItem_text"><img src="/img/signin.png" /></span></a></li>
+				<li class="globalNavItem"><a class="globalNavItem_btn" href="/login"><span class="globalNavItem_text"><img src="/img/signin.png" /></span></a></li>
 </#if>
 		</ul>
 <!-- Accession Number search form -->
