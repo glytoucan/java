@@ -1,0 +1,8 @@
+logs
+target
+.classpath
+.project
+.settings
+bin
+debug.log
+hs_err_pid*.log

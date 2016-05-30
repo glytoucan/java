@@ -60,9 +60,10 @@ public class WelcomeController {
 	@ResponseBody
 	public XmlUrlSet main() {
 		Map<String, Object> map = new HashMap<String, Object>();
-		Map<String, Object> results = glycanQueryRest.getListStructures(map);
 		String limit = "10000";
+		map.put(GlycanQuerySpec.OFFSET, "0");
 		map.put(GlycanQuerySpec.LIMIT, limit);
+		Map<String, Object> results = glycanQueryRest.getListStructures(map);
 
 		GlycanList list = (GlycanList) results.get(GlycanSpec.MESSAGE);
 
