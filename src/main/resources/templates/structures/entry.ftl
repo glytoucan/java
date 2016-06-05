@@ -27,7 +27,7 @@
 	<article class="entryNew">
 		<section class="entryNew_summary">
 			<h1 class="entryNew_heading">${accNum}</h1>
-			<togostanza-summary acc="${accNum}" notation="cfg"></togostanza-summary>
+			<togostanza-summary acc="${accNum}" notation="${imageNotation}"></togostanza-summary>
 		</section>
 		<div class="entryNew_content">
 			<nav class="entryNav">
@@ -49,7 +49,7 @@
 			<div class="entryNew_right">
 				<section id="structure" class="entryNew_section">
 					<h1 class="entryNew_heading">Structure</h1>
-					<togostanza-structure acc="${accNum}" notation="cfg"></togostanza-structure>
+					<togostanza-structure acc="${accNum}" notation="${imageNotation}"></togostanza-structure>
 				</section>
 				<section id="descriptors" class="entryNew_section">
 					<h1 class="entryNew_heading">Computed Descriptors</h1>
@@ -62,7 +62,7 @@
 				</section>
 				<section id="motif" class="entryNew_section">
 					<h1 class="entryNew_heading">Glycan Motif</h1>
-					<togostanza-motif acc="${accNum}" notation="cfg"></togostanza-motif>
+					<togostanza-motif acc="${accNum}" notation="${imageNotation}"></togostanza-motif>
 				</section>
 				<section id="species" class="entryNew_section">
 					<h1 class="entryNew_heading">Species</h1>
