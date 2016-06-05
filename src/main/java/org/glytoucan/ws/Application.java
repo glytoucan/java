@@ -3,8 +3,8 @@ package org.glytoucan.ws;
 import java.io.IOException;
 import java.util.Arrays;
 
-import org.eurocarbdb.application.glycanbuilder.GlycanRendererAWT;
-import org.eurocarbdb.application.glycoworkbench.GlycanWorkspace;
+import org.eurocarbdb.application.glycanbuilder.BuilderWorkspace;
+import org.eurocarbdb.application.glycanbuilder.renderutil.GlycanRendererAWT;
 import org.eurocarbdb.resourcesdb.Config;
 import org.eurocarbdb.resourcesdb.io.MonosaccharideConverter;
 import org.glycoinfo.rdf.SelectSparql;
@@ -290,8 +290,8 @@ public class Application extends SpringBootServletInitializer {
     }
     
     @Bean
-    GlycanWorkspace glycanWorkspace() {
-    	return new GlycanWorkspace(glycanRenderer());
+    BuilderWorkspace glycanWorkspace() {
+    	return new BuilderWorkspace(glycanRenderer());
     }
     
 	@Bean
