@@ -6,6 +6,8 @@
 	<#include "../header.html">
 	<meta name="description" content="${description}" />
 	<link rel="stylesheet" type="text/css" href="/assets/css/entry.css">
+	<script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+	<script src="/assets/components/webcomponentsjs/webcomponents.min.js"></script>
 	<link rel="import" href="/stanza/summary/">
 	<link rel="import" href="/stanza/structure/">
 	<link rel="import" href="/stanza/wurcs/">
@@ -86,8 +88,6 @@
 
 
 </div><!--end contents-->
-	<script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
-	<script src="/assets/components/webcomponentsjs/webcomponents.min.js"></script>
 	<script type="text/javascript" src="/assets/js/entry.js"></script>	
 </body>
 </html>
