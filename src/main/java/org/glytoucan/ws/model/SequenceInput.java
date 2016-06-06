@@ -1,12 +1,12 @@
 package org.glytoucan.ws.model;
 
-import org.hibernate.validator.constraints.NotEmpty;
+//import org.hibernate.validator.constraints.NotEmpty;
 
 import com.wordnik.swagger.annotations.ApiModel;
 
 @ApiModel (value="Sequence Input", description="Structure Sequence")
 public class SequenceInput {
-	@NotEmpty
+//	@NotEmpty
 	String sequence;
     
     String resultSequence;

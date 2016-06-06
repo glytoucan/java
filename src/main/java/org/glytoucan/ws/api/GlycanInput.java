@@ -4,7 +4,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.hibernate.validator.constraints.NotEmpty;
+//import org.hibernate.validator.constraints.NotEmpty;
 
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
@@ -24,7 +24,7 @@ public class GlycanInput {
 	 * @return the structure
 	 */
 	@XmlJavaTypeAdapter(value=CDATAAdapter.class)
-	@NotEmpty
+//	@NotEmpty
 	//@Structure
 	@ApiModelProperty (value="Glycan sequence", required=true)
 	public String getSequence() {
