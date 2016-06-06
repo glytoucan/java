@@ -26,8 +26,7 @@ import org.glycoinfo.rdf.service.impl.GlycanProcedureConfig;
 import org.glycoinfo.rdf.service.impl.MailService;
 import org.glycoinfo.rdf.service.impl.UserProcedureConfig;
 import org.glycoinfo.rdf.utils.TripleStoreProperties;
-import org.glycomedb.residuetranslator.ResidueTranslator;
-import org.glyspace.registry.utils.ImageGenerator;
+import org.glycoinfo.vision.generator.ImageGenerator;
 import org.glytoucan.client.GlycanConfig;
 import org.glytoucan.client.GlycoSequenceClient;
 import org.glytoucan.client.config.GlycanQueryConfig;
@@ -274,10 +273,10 @@ public class Application extends SpringBootServletInitializer {
 		return glycan;
 	}
 	
-    @Bean
-    ResidueTranslator residueTranslator() throws IOException {
-    	return new ResidueTranslator();
-    }
+//    @Bean
+//    ResidueTranslator residueTranslator() throws IOException {
+//    	return new ResidueTranslator();
+//    }
 
     @Bean
     ImageGenerator imageGenerator() {

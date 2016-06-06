@@ -38,8 +38,8 @@ import org.glycoinfo.rdf.glycan.GlycoSequence;
 import org.glycoinfo.rdf.glycan.Saccharide;
 import org.glycoinfo.rdf.service.GlycanProcedure;
 import org.glycoinfo.rdf.service.UserProcedure;
-import org.glyspace.registry.importers.GWSImporter;
-import org.glyspace.registry.utils.ImageGenerator;
+import org.glycoinfo.vision.generator.ImageGenerator;
+import org.glycoinfo.vision.importers.GWSImporter;
 import org.glytoucan.ws.api.Confirmation;
 import org.glytoucan.ws.api.Glycan;
 import org.glytoucan.ws.api.GlycanInput;
@@ -1015,7 +1015,7 @@ public class GlycanController {
     	
     	logger.debug("image for " + accessionNumber + " sequence:>" + sequence + "<");
     	
-    	byte[] bytes = imageGenerator.getImage(sequence, format, notation, style);
+    	byte[] bytes = imageGenerator.getGlycoCTImage(sequence, format, notation, style);
 
 				
 		HttpHeaders headers = new HttpHeaders();

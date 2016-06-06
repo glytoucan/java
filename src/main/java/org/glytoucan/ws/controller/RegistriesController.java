@@ -32,7 +32,7 @@ import org.glycoinfo.rdf.SparqlException;
 import org.glycoinfo.rdf.dao.SparqlEntity;
 import org.glycoinfo.rdf.service.GlycanProcedure;
 import org.glycoinfo.rdf.service.UserProcedure;
-import org.glyspace.registry.utils.ImageGenerator;
+import org.glycoinfo.vision.generator.ImageGenerator;
 import org.glytoucan.ws.model.SequenceInput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
