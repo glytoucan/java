@@ -26,13 +26,13 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.glycoinfo.client.GlyspaceClient;
 import org.glycoinfo.convert.util.DetectFormat;
 import org.glycoinfo.rdf.SparqlException;
 import org.glycoinfo.rdf.dao.SparqlEntity;
 import org.glycoinfo.rdf.service.GlycanProcedure;
 import org.glycoinfo.rdf.service.UserProcedure;
 import org.glycoinfo.vision.generator.ImageGenerator;
+import org.glytoucan.model.spec.GlycanClientQuerySpec;
 import org.glytoucan.ws.model.SequenceInput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -64,6 +64,9 @@ public class RegistriesController {
 
 	@Autowired
 	UserProcedure userProcedure;
+	
+	@Autowired
+	GlycanClientQuerySpec gtcClient;
 
 	@RequestMapping("/graphical")
 	public String graphical(Model model, RedirectAttributes redirectAttrs) {
@@ -225,8 +228,7 @@ public class RegistriesController {
 	private String convertSequenceToImage(String imageSequence)
 			throws KeyManagementException, NoSuchAlgorithmException,
 			KeyStoreException, IOException {
-		GlyspaceClient gsClient = new GlyspaceClient();
-		return gsClient.getImage("http://localhost", imageSequence);
+		return gtcClient.getImage("http://localhost", imageSequence);
 		// byte[] bytes = null;
 		// try {
 		// bytes = imageGenerator.getImage(imageSequence, "png", "cfg",

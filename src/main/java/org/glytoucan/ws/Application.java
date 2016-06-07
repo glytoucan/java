@@ -28,9 +28,12 @@ import org.glycoinfo.rdf.service.impl.UserProcedureConfig;
 import org.glycoinfo.rdf.utils.TripleStoreProperties;
 import org.glycoinfo.vision.generator.ImageGenerator;
 import org.glytoucan.client.GlycanConfig;
+import org.glytoucan.client.GlycanQueryRest;
+import org.glytoucan.client.GlycanRest;
 import org.glytoucan.client.GlycoSequenceClient;
 import org.glytoucan.client.config.GlycanQueryConfig;
 import org.glytoucan.client.config.SoapConfiguration;
+import org.glytoucan.model.spec.GlycanClientQuerySpec;
 import org.glytoucan.ws.api.D3SequenceSelectSparql_isomer;
 import org.glytoucan.ws.api.D3SequenceSelectSparql_motif;
 import org.openrdf.repository.Repository;
@@ -301,6 +304,11 @@ public class Application extends SpringBootServletInitializer {
 	@Bean
 	SparqlEntityFactory sparqlEntityFactory() {
 		return new SparqlEntityFactory();
+	}
+	
+	@Bean
+	GlycanClientQuerySpec glycanClientQuerySpec() {
+	  return new GlycanQueryRest();
 	}
 	
 //	@Bean

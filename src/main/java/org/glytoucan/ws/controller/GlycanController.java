@@ -499,107 +499,107 @@ public class GlycanController {
 //		return list;
 //	}
 	
-	@RequestMapping(value = "/list", method = RequestMethod.GET, produces={"application/xml", "application/json"})
-	@ApiOperation (value="Lists all the glycans", response=GlycanList.class, notes="payload option can be omitted to get only the glycan ids or set to 'full' to get glycan objects. 'exhibit' option allows to get glycan objects conforming to SIMILE Exhibit Json"
-			+ " format.")
-	@ApiResponses (value ={@ApiResponse(code=200, message="Success"), 
-			@ApiResponse(code=500, message="Internal Server Error")})
-	public @ResponseBody GlycanList listGlycans (
-			@ApiParam(required=false, value="payload: id (default) or full") 
-			@RequestParam(required=false, value="payload", defaultValue="id")
-			String payload, @ApiParam(required=true, value="limit: the limit to rows returned") 
-			@RequestParam(required=true, value="limit", defaultValue="100")
-			String limit, @ApiParam(required=false, value="offset: offset off of first row to retrieve") 
-			@RequestParam(required=false, value="offset", defaultValue="100")
-			String offset) throws ParseException, SparqlException {
-		GlycanList list = new GlycanList();
-		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-		String imageURL;
-		String requestURI = request.getRequestURL().toString();
-		List<Glycan> glycanList = new ArrayList<Glycan>();
-		List<SparqlEntity> glycans = glycanProcedure.getGlycans(offset, limit);
-		for (SparqlEntity sparqlEntity : glycans) {
-			Glycan glycan = copyGlycan(sparqlEntity);
-			logger.debug("adding:>" + glycan + "<");
-			glycanList.add(glycan);
-		}
-		if (payload != null && (payload.equalsIgnoreCase("full"))) {
-			list.setGlycans(glycanList.toArray());
-		}
-		else {
-			List<String> ids = new ArrayList<String>();
-			for (SparqlEntity sparqlEntity : glycans) {
-				ids.add(sparqlEntity.getValue(GlycoSequence.AccessionNumber));
-			}
-			list.setGlycans(ids.toArray());
-		}
-		return list;
-	}
+//	@RequestMapping(value = "/list", method = RequestMethod.GET, produces={"application/xml", "application/json"})
+//	@ApiOperation (value="Lists all the glycans", response=GlycanList.class, notes="payload option can be omitted to get only the glycan ids or set to 'full' to get glycan objects. 'exhibit' option allows to get glycan objects conforming to SIMILE Exhibit Json"
+//			+ " format.")
+//	@ApiResponses (value ={@ApiResponse(code=200, message="Success"), 
+//			@ApiResponse(code=500, message="Internal Server Error")})
+//	public @ResponseBody GlycanList listGlycans (
+//			@ApiParam(required=false, value="payload: id (default) or full") 
+//			@RequestParam(required=false, value="payload", defaultValue="id")
+//			String payload, @ApiParam(required=true, value="limit: the limit to rows returned") 
+//			@RequestParam(required=true, value="limit", defaultValue="100")
+//			String limit, @ApiParam(required=false, value="offset: offset off of first row to retrieve") 
+//			@RequestParam(required=false, value="offset", defaultValue="100")
+//			String offset) throws ParseException, SparqlException {
+//		GlycanList list = new GlycanList();
+//		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+//		String imageURL;
+//		String requestURI = request.getRequestURL().toString();
+//		List<Glycan> glycanList = new ArrayList<Glycan>();
+//		List<SparqlEntity> glycans = glycanProcedure.getGlycans(offset, limit);
+//		for (SparqlEntity sparqlEntity : glycans) {
+//			Glycan glycan = copyGlycan(sparqlEntity);
+//			logger.debug("adding:>" + glycan + "<");
+//			glycanList.add(glycan);
+//		}
+//		if (payload != null && (payload.equalsIgnoreCase("full"))) {
+//			list.setGlycans(glycanList.toArray());
+//		}
+//		else {
+//			List<String> ids = new ArrayList<String>();
+//			for (SparqlEntity sparqlEntity : glycans) {
+//				ids.add(sparqlEntity.getValue(GlycoSequence.AccessionNumber));
+//			}
+//			list.setGlycans(ids.toArray());
+//		}
+//		return list;
+//	}
 	
 	
 	// sample sparql : https://bitbucket.org/issaku/virtuoso/wiki/G00030MO%20(order%20by%20manual)
-	@RequestMapping(value = "/sparql/substructure", method = RequestMethod.GET, produces={"application/json"})
-    @ApiOperation(value="Returns the select SPARQL used to find a substructure in the wurcs RDF ontology.", 
-    			response=SelectSparql.class)
-    @ApiResponses(value ={@ApiResponse(code=200, message="Found match(es)"), 
-    				@ApiResponse(code=400, message="Illegal argument - Glycan should be valid"),
-    				@ApiResponse(code=404, message="Cannot generate"),
-    				@ApiResponse(code=500, message="Internal Server Error")})
-	public @ResponseBody SelectSparql substructureSearch (
-			@RequestParam(required=true, value="sequence", defaultValue="WURCS")
-			@ApiParam(required=true, value="Glycan sequence", name="sequence") 
-			String sequence,
-			@RequestParam(required=true, value="format", defaultValue="wurcs")
-			@ApiParam(required=true, value="Glycan format - currently only wurcs via GET", name="format") 
-			String format) throws SugarImporterException, GlycoVisitorException, SparqlException {
-		logger.debug("Substructure search");
-		logger.debug("sequence:" + sequence);
-		logger.debug("format:" + format);
-		
-		// if glycoct:
-		if (format != null && format.equals("glycoct")) {
-			// if it's not valid, would have thrown an exception.
-	
-			// convert to wurcs
-			SugarImporter t_objImporterGlycoCT = new SugarImporterGlycoCTCondensed();
-	
-			Sugar sugar = t_objImporterGlycoCT.parse(sequence);
-			// GlycoCT must be validated by GlycoVisitorValidation
-			GlycoVisitorValidation validation = new GlycoVisitorValidation();
-			validation.start(sugar);
-			if ( validation.getErrors().size() > 0 ) {
-				logger.error("Errors:");
-				for ( String err : validation.getErrors() ) {
-					logger.error( err );
-				}
-				logger.warn("Warnings:");
-				for ( String warn : validation.getWarnings() ) {
-					logger.warn( warn );
-				}
-				logger.warn("\n");
-			}
-//			SugarExporterWURC t_exporter3 = new SugarExporterWURCS();
-//			t_exporter3.start(sugar);
-//			sequence = t_exporter3.getWURCSCompress();
-		}
-		
-		// if wurcs:
-		// validate the structure
-		
-		// wurcs to sparql
-		SparqlEntity se = new SparqlEntity();
-		se.setValue(GlycoSequence.Sequence, sequence);
-		SelectSparql selectSparql = substructureSearchSparql;
-		selectSparql.setSparqlEntity(se);
-		
-		String where = selectSparql.getWhere();
-		selectSparql.setWhere(where.replace('\n', ' '));
-		String sparql = selectSparql.getSparql();
-		selectSparql.setSparql(sparql.replace('\n', ' '));
-		logger.debug("GlycanController result:>" + selectSparql.getSparql() + "<");
-
-		return selectSparql;
-	}
+//	@RequestMapping(value = "/sparql/substructure", method = RequestMethod.GET, produces={"application/json"})
+//    @ApiOperation(value="Returns the select SPARQL used to find a substructure in the wurcs RDF ontology.", 
+//    			response=SelectSparql.class)
+//    @ApiResponses(value ={@ApiResponse(code=200, message="Found match(es)"), 
+//    				@ApiResponse(code=400, message="Illegal argument - Glycan should be valid"),
+//    				@ApiResponse(code=404, message="Cannot generate"),
+//    				@ApiResponse(code=500, message="Internal Server Error")})
+//	public @ResponseBody SelectSparql substructureSearch (
+//			@RequestParam(required=true, value="sequence", defaultValue="WURCS")
+//			@ApiParam(required=true, value="Glycan sequence", name="sequence") 
+//			String sequence,
+//			@RequestParam(required=true, value="format", defaultValue="wurcs")
+//			@ApiParam(required=true, value="Glycan format - currently only wurcs via GET", name="format") 
+//			String format) throws SugarImporterException, GlycoVisitorException, SparqlException {
+//		logger.debug("Substructure search");
+//		logger.debug("sequence:" + sequence);
+//		logger.debug("format:" + format);
+//		
+//		// if glycoct:
+//		if (format != null && format.equals("glycoct")) {
+//			// if it's not valid, would have thrown an exception.
+//	
+//			// convert to wurcs
+//			SugarImporter t_objImporterGlycoCT = new SugarImporterGlycoCTCondensed();
+//	
+//			Sugar sugar = t_objImporterGlycoCT.parse(sequence);
+//			// GlycoCT must be validated by GlycoVisitorValidation
+//			GlycoVisitorValidation validation = new GlycoVisitorValidation();
+//			validation.start(sugar);
+//			if ( validation.getErrors().size() > 0 ) {
+//				logger.error("Errors:");
+//				for ( String err : validation.getErrors() ) {
+//					logger.error( err );
+//				}
+//				logger.warn("Warnings:");
+//				for ( String warn : validation.getWarnings() ) {
+//					logger.warn( warn );
+//				}
+//				logger.warn("\n");
+//			}
+////			SugarExporterWURC t_exporter3 = new SugarExporterWURCS();
+////			t_exporter3.start(sugar);
+////			sequence = t_exporter3.getWURCSCompress();
+//		}
+//		
+//		// if wurcs:
+//		// validate the structure
+//		
+//		// wurcs to sparql
+//		SparqlEntity se = new SparqlEntity();
+//		se.setValue(GlycoSequence.Sequence, sequence);
+//		SelectSparql selectSparql = substructureSearchSparql;
+//		selectSparql.setSparqlEntity(se);
+//		
+//		String where = selectSparql.getWhere();
+//		selectSparql.setWhere(where.replace('\n', ' '));
+//		String sparql = selectSparql.getSparql();
+//		selectSparql.setSparql(sparql.replace('\n', ' '));
+//		logger.debug("GlycanController result:>" + selectSparql.getSparql() + "<");
+//
+//		return selectSparql;
+//	}
 	
 //	@RequestMapping(value = "/search/composition", method = RequestMethod.POST, consumes={"application/xml", "application/json"}, produces={"application/xml", "application/json"})
 //    @ApiOperation(value="Searches for glycan structures with the given composition", 

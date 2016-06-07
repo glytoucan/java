@@ -11,7 +11,6 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.glycoinfo.client.GlyspaceClient;
 import org.glycoinfo.convert.error.ConvertException;
 import org.glycoinfo.convert.error.ConvertFormatException;
 import org.glycoinfo.rdf.SparqlException;
@@ -19,6 +18,7 @@ import org.glycoinfo.rdf.dao.SparqlEntity;
 import org.glycoinfo.rdf.service.GlycanProcedure;
 import org.glytoucan.client.GlycoSequenceClient;
 import org.glytoucan.client.soap.GlycoSequenceDetailResponse;
+import org.glytoucan.model.spec.GlycanClientQuerySpec;
 import org.glytoucan.ws.model.SequenceInput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -50,6 +50,9 @@ public class StructuresController {
 	
 	@Autowired
 	GlycoSequenceClient glycoSequenceClient;
+	
+	@Autowired
+	GlycanClientQuerySpec gtcClient;
 
 	@RequestMapping()
 	public String def(Model model) {
@@ -125,11 +128,10 @@ public class StructuresController {
     		logger.debug("search found:>" + id + "<");
     		if (null != id && id.equals(GlycanProcedure.NotRegistered)) {
 				sequence.setId(GlycanProcedure.NotRegistered);
-				GlyspaceClient gsClient = new GlyspaceClient();
 				try {
 	    			String imageSequence = sequence.getSequence().replaceAll("(?:\\r\\n|\\n)", "\\\\n");
 
-					sequence.setImage(gsClient.getImage("http://beta.glytoucan.org", imageSequence));
+					sequence.setImage(gtcClient.getImage("http://beta.glytoucan.org", imageSequence));
 				} catch (KeyManagementException | NoSuchAlgorithmException
 						| KeyStoreException | IOException e) {
 					redirectAttrs.addFlashAttribute("errorMessage", "system error");

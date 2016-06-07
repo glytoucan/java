@@ -10,8 +10,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.glytoucan.client.config.GlycanQueryConfig;
 import org.glytoucan.model.GlycanList;
-import org.glytoucan.model.spec.GlycanQuerySpec;
-import org.glytoucan.model.spec.GlycanSpec;
+import org.glytoucan.model.spec.GlycanClientQuerySpec;
+import org.glytoucan.model.spec.GlycanClientRegisterSpec;
 import org.glytoucan.ws.model.XmlUrl;
 import org.glytoucan.ws.model.XmlUrlSet;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class WelcomeController {
 	Log logger = LogFactory.getLog(WelcomeController.class);
 
 	@Autowired
-	GlycanQuerySpec glycanQueryRest;
+	GlycanClientQuerySpec glycanQueryRest;
 
 	@RequestMapping("/")
 	public String welcome(Model model) {
@@ -61,11 +61,11 @@ public class WelcomeController {
 	public XmlUrlSet main() {
 		Map<String, Object> map = new HashMap<String, Object>();
 		String limit = "10000";
-		map.put(GlycanQuerySpec.OFFSET, "0");
-		map.put(GlycanQuerySpec.LIMIT, limit);
+		map.put(GlycanClientQuerySpec.OFFSET, "0");
+		map.put(GlycanClientQuerySpec.LIMIT, limit);
 		Map<String, Object> results = glycanQueryRest.getListStructures(map);
 
-		GlycanList list = (GlycanList) results.get(GlycanSpec.MESSAGE);
+		GlycanList list = (GlycanList) results.get(GlycanClientRegisterSpec.MESSAGE);
 
 		int offset = 0;
 
@@ -88,9 +88,9 @@ public class WelcomeController {
 			}
 
 			offset += 10000;
-			map.put(GlycanQuerySpec.OFFSET, offset + "");
+			map.put(GlycanClientQuerySpec.OFFSET, offset + "");
 			results = glycanQueryRest.getListStructures(map);
-			list = (GlycanList) results.get(GlycanSpec.MESSAGE);
+			list = (GlycanList) results.get(GlycanClientRegisterSpec.MESSAGE);
 		}
 
 		return xmlUrlSet;
