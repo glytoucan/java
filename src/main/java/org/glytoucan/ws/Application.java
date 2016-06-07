@@ -306,11 +306,6 @@ public class Application extends SpringBootServletInitializer {
 		return new SparqlEntityFactory();
 	}
 	
-	@Bean
-	GlycanClientQuerySpec glycanClientQuerySpec() {
-	  return new GlycanQueryRest();
-	}
-	
 //	@Bean
 //	LogClient logClient() {
 //		return new LogClient();

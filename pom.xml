@@ -276,20 +276,6 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>org.eclipse.jetty</groupId>
-				<artifactId>jetty-maven-plugin</artifactId>
-				<configuration>
-					<httpConnector>
-						<!--host>localhost</host -->
-						<port>9091</port>
-					</httpConnector>
-					<scanIntervalSeconds>10</scanIntervalSeconds>
-					<webApp>
-						<contextPath>/rdf</contextPath>
-					</webApp>
-				</configuration>
-			</plugin>
-			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>

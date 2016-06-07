@@ -17,10 +17,12 @@ import org.glycoinfo.rdf.SparqlException;
 import org.glycoinfo.rdf.dao.SparqlEntity;
 import org.glycoinfo.rdf.service.GlycanProcedure;
 import org.glytoucan.client.GlycoSequenceClient;
+import org.glytoucan.client.config.GlycanQueryConfig;
 import org.glytoucan.client.soap.GlycoSequenceDetailResponse;
 import org.glytoucan.model.spec.GlycanClientQuerySpec;
 import org.glytoucan.ws.model.SequenceInput;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -39,6 +41,7 @@ import com.wordnik.swagger.annotations.ApiResponses;
 @Controller
 @ApiExclude
 @RequestMapping("/Structures")
+@Import(GlycanQueryConfig.class)
 public class StructuresController {
 	Log logger = LogFactory.getLog(StructuresController.class);
 	
