@@ -5,6 +5,7 @@ import java.net.URLEncoder;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpSession;
 
@@ -134,7 +135,14 @@ public class StructuresController {
 				try {
 	    			String imageSequence = sequence.getSequence().replaceAll("(?:\\r\\n|\\n)", "\\\\n");
 
-					sequence.setImage(gtcClient.getImage("http://beta.glytoucan.org", imageSequence));
+	    			
+	    	    HashMap<String, Object> data = new HashMap<String, Object>();
+	    	    data.put(GlycanClientQuerySpec.IMAGE_FORMAT, "png");
+	    	    data.put(GlycanClientQuerySpec.IMAGE_NOTATION, "cfg");
+	    	    data.put(GlycanClientQuerySpec.IMAGE_STYLE, "extended");
+	    	    data.put(GlycanClientQuerySpec.SEQUENCE, imageSequence); 
+	    	    
+					sequence.setImage(gtcClient.getImage(data));
 				} catch (KeyManagementException | NoSuchAlgorithmException
 						| KeyStoreException | IOException e) {
 					redirectAttrs.addFlashAttribute("errorMessage", "system error");

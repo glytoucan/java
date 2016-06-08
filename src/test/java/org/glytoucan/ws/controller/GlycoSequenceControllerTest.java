@@ -30,7 +30,7 @@ public class GlycoSequenceControllerTest {
 		GlycoSequence gs = glycoSequenceController.retrieve("G00030MO");
 		logger.debug(gs.getSequence() + gs.getPrimaryId());
 		assertEquals("G00030MO", gs.getPrimaryId());
-		assertEquals("WURCS%3D2.0%2F4%2C7%2C6%2F%5Bu2122h_2*NCC%2F3%3DO%5D%5Ba2122h-1b_1-5_2*NCC%2F3%3DO%5D%5Ba1122h-1b_1-5%5D%5Ba1122h-1a_1-5%5D%2F1-2-3-4-2-4-2%2Fa4-b1_b4-c1_c3-d1_c6-f1_e1-d2%7Cd4_g1-f2%7Cf4", gs.getSequence());
+		assertEquals("WURCS[=2.0/4,7,6/[u2122h_2*NCC/3=O][a2122h-1b_1-5_2*NCC/3=O][a1122h-1b_1-5][a1122h-1a_1-5]/1-2-3-4-2-4-2/a4-b1_b4-c1_c3-d1_c6-f1_e1-d2|d4_g1-f2|]f4", gs.getSequence());
 	}
 	
 //	@Test

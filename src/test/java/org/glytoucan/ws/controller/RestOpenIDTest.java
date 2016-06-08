@@ -40,12 +40,12 @@ public class RestOpenIDTest {
     public void securedPageRedirectsToLoginPage() {
         given().redirects().follow(false).when().get("/Registries/index").then()
                 .statusCode(HttpStatus.SC_MOVED_TEMPORARILY)
-                .header("Location", endsWith("/signin"));
+                .header("Location", endsWith("/login"));
     }
 
     @Test
     public void loginPageRedirectsToGoogle() {
-        given().redirects().follow(false).when().get("/signin").then()
+        given().redirects().follow(false).when().get("/login").then()
                 .statusCode(HttpStatus.SC_MOVED_TEMPORARILY)
                 .header("Location", startsWith("https://accounts.google.com/o/oauth2/auth"));
     }

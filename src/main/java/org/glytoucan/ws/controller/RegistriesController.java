@@ -15,6 +15,7 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -228,23 +229,13 @@ public class RegistriesController {
 	private String convertSequenceToImage(String imageSequence)
 			throws KeyManagementException, NoSuchAlgorithmException,
 			KeyStoreException, IOException {
-		return gtcClient.getImage("http://localhost", imageSequence);
-		// byte[] bytes = null;
-		// try {
-		// bytes = imageGenerator.getImage(imageSequence, "png", "cfg",
-		// "extended");
-		// } catch (Exception e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-		//
-		// ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-		//
-		// BufferedImage bufimage = ImageIO.read(bais);
-		//
-		// String image = encodeToString(bufimage, "png");
-		//
-		// return "data:image/png;base64," + image;
+	  HashMap<String, Object> data = new HashMap<String, Object>();
+	  data.put(GlycanClientQuerySpec.IMAGE_FORMAT, "png");
+	  data.put(GlycanClientQuerySpec.IMAGE_NOTATION, "cfg");
+	  data.put(GlycanClientQuerySpec.IMAGE_STYLE, "extended");
+	  data.put(GlycanClientQuerySpec.SEQUENCE, imageSequence); 
+	  
+		return gtcClient.getImage(data);
 	}
 
 	@RequestMapping(value = "/complete", method = RequestMethod.POST)

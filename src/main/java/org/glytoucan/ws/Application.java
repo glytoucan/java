@@ -29,7 +29,7 @@ import org.glycoinfo.rdf.utils.TripleStoreProperties;
 import org.glycoinfo.vision.generator.ImageGenerator;
 import org.glytoucan.client.GlycanConfig;
 import org.glytoucan.client.GlycanQueryRest;
-import org.glytoucan.client.GlycanRest;
+import org.glytoucan.client.GlycanRegisterRest;
 import org.glytoucan.client.GlycoSequenceClient;
 import org.glytoucan.client.config.GlycanQueryConfig;
 import org.glytoucan.client.config.SoapConfiguration;
@@ -71,7 +71,7 @@ public class Application extends SpringBootServletInitializer {
 	private static final String graph = "http://rdf.glytoucan.org";
 
 	@Bean
-	@Scope(value="request", proxyMode=ScopedProxyMode.TARGET_CLASS)
+//	@Scope(value="request", proxyMode=ScopedProxyMode.TARGET_CLASS)
 	SparqlDAO getSparqlDAO() {
 		return new SparqlDAOVirtSesameImpl();
 	}
