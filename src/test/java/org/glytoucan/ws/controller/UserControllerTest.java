@@ -41,5 +41,4 @@ public class UserControllerTest {
 		String results = userC.profile(map, redMap);
 		logger.debug(results);
 	}
-
 }

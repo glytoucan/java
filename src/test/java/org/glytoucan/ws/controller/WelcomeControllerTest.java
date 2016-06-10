@@ -1,8 +1,14 @@
 package org.glytoucan.ws.controller;
 
 import static org.junit.Assert.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.hamcrest.Matchers.containsString;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -23,14 +29,19 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.ExtendedModelMap;
-
+import org.springframework.web.context.WebApplicationContext;
 import org.junit.Assert;
+import org.junit.Before;
 
 @SpringApplicationConfiguration(classes = { Application.class })
 @RunWith(SpringJUnit4ClassRunner.class)
 @ComponentScan(basePackages = { "org.glytoucan.ws" })
 @EnableAutoConfiguration
+@WebAppConfiguration
 public class WelcomeControllerTest {
   private static final Log logger = LogFactory.getLog(WelcomeControllerTest.class);
 
@@ -39,6 +50,16 @@ public class WelcomeControllerTest {
 	
 	@Autowired
 	SparqlDAO sparqlDao;
+
+	@Autowired
+  private WebApplicationContext wac;
+	
+  private MockMvc mockMvc;
+  
+  @Before
+  public void setup() {
+    this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
+  }
 
 	@Test
 	public void testWelcome() throws Exception {
@@ -72,6 +93,25 @@ public class WelcomeControllerTest {
     SparqlEntity se = countSE.iterator().next();
     String count = se.getValue("count");
     
-    Assert.assertEquals(count, result.getXmlUrls().size());
+    Assert.assertTrue(result.getXmlUrls().size() > 40000);
 	}
+	
+  @Test
+  public void testSitemapHostname() throws Exception {
+    XmlUrlSet result = welcome.main();
+    Collection<XmlUrl> xmlurl = result.getXmlUrls();
+    for (Iterator iterator = xmlurl.iterator(); iterator.hasNext();) {
+      XmlUrl xmlUrl2 = (XmlUrl) iterator.next();
+      String loc = xmlUrl2.getLoc();
+      logger.debug("loc:>" + loc);
+      loc.contains("https://glytoucan.org");
+    }
+  }
+	 @Test
+	  public void testConnect() throws Exception {
+	   mockMvc.perform(get("/connect.jsp?url=http://stanza.glytoucan.org/stanza/motif_list?&notation=cfg&page=motif_list"))
+     .andExpect(status().isOk())
+     .andExpect(content().string(containsString("/Structures/Glycans/G00055MO")));
+//     .andExpect(content(). string("/Structures/Glycans/G00055MO"));
+	  }
 }

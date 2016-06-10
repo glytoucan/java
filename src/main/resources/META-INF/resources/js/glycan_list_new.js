@@ -50,7 +50,7 @@ $(function () { // wrapper function
       $.ajax({
         type: 'GET',
         //url: stanza_url + stanza_name + "?" + params,
-        url: '/connect.jsp',
+        url: '/connect',
         data: {
           url: stanza_url + stanza_name + "?" + params
         },
