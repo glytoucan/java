@@ -81,4 +81,32 @@ public class UserController {
 		
 		return "redirect:/Users/profile";
 	}
+	
+	 @RequestMapping("/structure")
+	  public String structure(Model model, RedirectAttributes redirectAttrs) {
+	    if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof UserInfo) {
+	      UserInfo userInfo = (UserInfo)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	      if (userInfo == null) {
+	        redirectAttrs.addAttribute("warningMessage", "Could not retrieve user information.  Please Login");
+	        return "redirect:/signout";
+	      }
+	      SparqlEntity userData = null;
+	      try {
+	        userData = userProcedure.getById(userInfo.getId());
+	      } catch (SparqlException e) {
+	        redirectAttrs.addAttribute("warningMessage", "Could not retrieve user information.  Please Login");
+	        return "redirect:/signout";
+	      };
+	      if (null == userData) {
+	        redirectAttrs.addAttribute("warningMessage", "Could not retrieve user information.  Please Login");
+	        return "redirect:/signout";
+	      }
+	      
+        logger.debug("userId:>" + userData.getValue(UserProcedure.CONTRIBUTOR_ID) + "<");
+	      logger.debug(userData);
+	      model.addAttribute("userId", userData.getValue(UserProcedure.CONTRIBUTOR_ID));
+	    }
+	    
+	      return "users/my_structure";
+	  }
 }

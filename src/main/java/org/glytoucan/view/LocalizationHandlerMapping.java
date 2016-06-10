@@ -216,6 +216,8 @@ public class LocalizationHandlerMapping extends HandlerInterceptorAdapter {
 				return;
 			}
 
+			
+			try {
 			JsonNode pageNode = article.get(controller).get(page);
 			Map contextMap = null;
 			try {
@@ -227,6 +229,9 @@ public class LocalizationHandlerMapping extends HandlerInterceptorAdapter {
 			}
 			logger.debug(pageNode);
 			modelAndView.addAllObjects(contextMap);
+			} catch (java.lang.NullPointerException npe) {
+			  logger.debug("this page does not exist in localization:" + controller + "/" + page);
+			}
 
 			logger.debug(modelAndView.getModel().keySet());
 			try {
