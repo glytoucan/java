@@ -17,7 +17,7 @@
   <div class="container" style="padding:20px 0">
 
 	<h1 class="page-header">My Structure</h1>
-	<togostanza-myStructure userId="${userId}" notation="${imageNotation}"></togostanza-myStructure>
+	<togostanza-myStructure userId="${contributorUserId}" notation="${imageNotation}"></togostanza-myStructure>
 
 
   </div><!--end container-->

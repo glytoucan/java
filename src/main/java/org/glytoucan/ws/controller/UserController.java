@@ -104,7 +104,10 @@ public class UserController {
 	      
         logger.debug("userId:>" + userData.getValue(UserProcedure.CONTRIBUTOR_ID) + "<");
 	      logger.debug(userData);
-	      model.addAttribute("userId", userData.getValue(UserProcedure.CONTRIBUTOR_ID));
+	      model.addAttribute("contributorUserId", userData.getValue(UserProcedure.CONTRIBUTOR_ID));
+	    } else {
+        redirectAttrs.addAttribute("warningMessage", "Could not retrieve user information.  Please Login");
+	      return "redirect:/";
 	    }
 	    
 	      return "users/my_structure";
