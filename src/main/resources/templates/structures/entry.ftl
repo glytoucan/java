@@ -61,9 +61,9 @@
 					<togostanza-wurcs acc="${accNum}"></togostanza-wurcs>
 					<h2 id="glycoct" class="entryNew_heading entryNew_heading-2nd">GlycoCT</h2>
 					<togostanza-glycoct acc="${accNum}"></togostanza-glycoct>
-					<h2 id="iupacCondensed" class="entryNew_heading entryNew_heading-2nd">IUPAC</h2>
+					<h2 id="iupacCondensed" class="entryNew_heading entryNew_heading-2nd">IUPAC Condensed</h2>
 					<togostanza-iupacCondensed acc="${accNum}"></togostanza-iupacCondensed>
-					<h2 id="iupacExtended" class="entryNew_heading entryNew_heading-2nd">IUPAC</h2>
+					<h2 id="iupacExtended" class="entryNew_heading entryNew_heading-2nd">IUPAC Extended</h2>
 					<togostanza-iupacExtended acc="${accNum}"></togostanza-iupacExtended>
 				</section>
 				<section id="motif" class="entryNew_section">
