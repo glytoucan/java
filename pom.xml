@@ -41,8 +41,7 @@
 		<dependency>
 			<groupId>org.glycoinfo</groupId>
 			<artifactId>batch</artifactId>
-			<version>0.3.2-SNAPSHOT</version>
-			<type>jar</type>
+			<version>0.3.3-SNAPSHOT</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>spring-jdbc</artifactId>

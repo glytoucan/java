@@ -187,7 +187,7 @@ public class StructuresController {
      			model.addAttribute("description", response.getDescription());
 				return "structures/glycans";
 			}
-		} catch (SparqlException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			redirectAttrs.addFlashAttribute("errorMessage", "Currently under maintence please try again in a few minutes");
 			return "redirect:/";
