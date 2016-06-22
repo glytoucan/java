@@ -235,7 +235,7 @@ public class RegistriesController {
 	  data.put(GlycanClientQuerySpec.IMAGE_STYLE, "extended");
 	  data.put(GlycanClientQuerySpec.SEQUENCE, imageSequence); 
 	  
-		return gtcClient.getImage(data);
+		return gtcClient.getImageBase64(data);
 	}
 
 	@RequestMapping(value = "/complete", method = RequestMethod.POST)

@@ -62,10 +62,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jp.bluetree.log.client.LogClient;
 import virtuoso.sesame2.driver.VirtuosoRepository;
 
-@SpringBootApplication
+//http://stackoverflow.com/questions/31307883/springfox-dependency-breaking-my-spring-context
+@SpringBootApplication(exclude=org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration.class)
 @Import(value = { GlycanProcedureConfig.class, UserProcedureConfig.class, ContributorProcedureConfig.class, GlycanConfig.class, SoapConfiguration.class })
-// http://stackoverflow.com/questions/31307883/springfox-dependency-breaking-my-spring-context
-@EnableAutoConfiguration(exclude = {HypermediaAutoConfiguration.class})
 public class Application extends SpringBootServletInitializer {
 	
 	private static final String graph = "http://rdf.glytoucan.org";
@@ -76,13 +75,6 @@ public class Application extends SpringBootServletInitializer {
 		return new SparqlDAOVirtSesameImpl();
 	}
 	
-	@Bean(name = "glycoSequenceSelectSparql")
-	SelectSparql getSelectSparql() {
-		SelectSparql select = new GlycoSequenceSelectSparql();
-		select.setFrom("FROM <http://rdf.glytoucan.org/sequence/wurcs>\nFROM <http://rdf.glytoucan.org>");
-		return select;
-	}
-
 	@Bean(name = "d3SequenceSelectSparql_motif")
 	SelectSparql getd3SelectSparql_motif() {
 		SelectSparql select = new D3SequenceSelectSparql_motif();

@@ -142,7 +142,7 @@ public class StructuresController {
 	    	    data.put(GlycanClientQuerySpec.IMAGE_STYLE, "extended");
 	    	    data.put(GlycanClientQuerySpec.SEQUENCE, imageSequence); 
 	    	    
-					sequence.setImage(gtcClient.getImage(data));
+					sequence.setImage(gtcClient.getImageBase64(data));
 				} catch (KeyManagementException | NoSuchAlgorithmException
 						| KeyStoreException | IOException e) {
 					redirectAttrs.addFlashAttribute("errorMessage", "system error");

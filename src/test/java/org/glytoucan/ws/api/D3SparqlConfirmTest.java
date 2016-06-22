@@ -9,7 +9,6 @@ import org.glycoinfo.rdf.SelectSparqlBean;
 import org.glycoinfo.rdf.dao.SparqlEntity;
 import org.glycoinfo.rdf.glycan.GlycoSequenceSelectSparql;
 import org.glycoinfo.rdf.glycan.Saccharide;
-import org.glytoucan.ws.controller.GlycoSequenceController;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

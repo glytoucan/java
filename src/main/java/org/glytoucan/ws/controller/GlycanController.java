@@ -8,12 +8,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -40,6 +42,7 @@ import org.glycoinfo.rdf.service.GlycanProcedure;
 import org.glycoinfo.rdf.service.UserProcedure;
 import org.glycoinfo.vision.generator.ImageGenerator;
 import org.glycoinfo.vision.importers.GWSImporter;
+import org.glytoucan.model.spec.GlycanClientQuerySpec;
 import org.glytoucan.ws.api.Confirmation;
 import org.glytoucan.ws.api.Glycan;
 import org.glytoucan.ws.api.GlycanInput;
@@ -137,6 +140,9 @@ public class GlycanController {
 	
 //	@Value("${documentation.services.basePath}")
 	String serverBasePath;
+	
+	 @Autowired
+	  GlycanClientQuerySpec gtcClient;
 	
 //	public void setGlycanManager(GlycanManager glycanManager) {
 //		this.glycanManager = glycanManager;
@@ -1002,20 +1008,29 @@ public class GlycanController {
     		@RequestParam("style") 
     		String style
     		) throws Exception {
+      
+      
+      HashMap<String, Object> data = new HashMap<String, Object>();
+      data.put(GlycanClientQuerySpec.IMAGE_FORMAT, format);
+      data.put(GlycanClientQuerySpec.IMAGE_NOTATION, notation);
+      data.put(GlycanClientQuerySpec.IMAGE_STYLE, style);
+      data.put(GlycanClientQuerySpec.ID, accessionNumber);
+      byte[] bytes = gtcClient.getImage(data);
+      
 //		SparqlEntity se = sparqlEntityFactory.create();
-    	SparqlEntity se = new SparqlEntity();
-		se.setValue(Saccharide.PrimaryId, accessionNumber);
-		
-		SparqlEntityFactory.set(se);
-//		sparqlEntityFactory.set(se);
-//		logger.debug("sparqlEntityFactory:>" + sparqlEntityFactory + "<");
-		logger.debug("SparqlEntity:>" + se + "<");
-    	SparqlEntity glycanEntity = glycanProcedure.searchByAccessionNumber(accessionNumber);
-    	String sequence = glycanEntity.getValue("GlycoCTSequence");
-    	
-    	logger.debug("image for " + accessionNumber + " sequence:>" + sequence + "<");
-    	
-    	byte[] bytes = imageGenerator.getGlycoCTImage(sequence, format, notation, style);
+//    	SparqlEntity se = new SparqlEntity();
+//		se.setValue(Saccharide.PrimaryId, accessionNumber);
+//		
+//		SparqlEntityFactory.set(se);
+////		sparqlEntityFactory.set(se);
+////		logger.debug("sparqlEntityFactory:>" + sparqlEntityFactory + "<");
+//		logger.debug("SparqlEntity:>" + se + "<");
+//    	SparqlEntity glycanEntity = glycanProcedure.searchByAccessionNumber(accessionNumber);
+//    	String sequence = glycanEntity.getValue("GlycoCTSequence");
+//    	
+//    	logger.debug("image for " + accessionNumber + " sequence:>" + sequence + "<");
+//    	
+//    	byte[] bytes = imageGenerator.getGlycoCTImage(sequence, format, notation, style);
 
 				
 		HttpHeaders headers = new HttpHeaders();
