@@ -39,7 +39,7 @@ public class WelcomeController {
   Log logger = LogFactory.getLog(WelcomeController.class);
 
   
-  @Value("${hostname:https://glytoucan.org}")
+  @Value("${sitemapHostname:https://glytoucan.org}")
   String serverBasePath;
 
   @Autowired
