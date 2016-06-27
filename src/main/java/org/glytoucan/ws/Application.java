@@ -1,6 +1,5 @@
 package org.glytoucan.ws;
 
-import java.io.IOException;
 import java.util.Arrays;
 
 import org.eurocarbdb.application.glycanbuilder.BuilderWorkspace;
@@ -17,7 +16,6 @@ import org.glycoinfo.rdf.dao.virt.VirtSesameConnectionFactory;
 import org.glycoinfo.rdf.dao.virt.VirtSesameTransactionManager;
 import org.glycoinfo.rdf.glycan.D3SequenceSelectSparql_isomer;
 import org.glycoinfo.rdf.glycan.D3SequenceSelectSparql_motif;
-import org.glycoinfo.rdf.glycan.GlycoSequenceSelectSparql;
 import org.glycoinfo.rdf.scint.ClassHandler;
 import org.glycoinfo.rdf.scint.InsertScint;
 import org.glycoinfo.rdf.scint.SelectScint;
@@ -30,25 +28,16 @@ import org.glycoinfo.rdf.service.impl.UserProcedureConfig;
 import org.glycoinfo.rdf.utils.TripleStoreProperties;
 import org.glycoinfo.vision.generator.ImageGenerator;
 import org.glytoucan.client.GlycanConfig;
-import org.glytoucan.client.GlycanQueryRest;
-import org.glytoucan.client.GlycanRegisterRest;
-import org.glytoucan.client.GlycoSequenceClient;
-import org.glytoucan.client.config.GlycanQueryConfig;
 import org.glytoucan.client.config.SoapConfiguration;
-import org.glytoucan.model.spec.GlycanClientQuerySpec;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryException;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.hateoas.HypermediaAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.BufferedImageHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -59,7 +48,6 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import jp.bluetree.log.client.LogClient;
 import virtuoso.sesame2.driver.VirtuosoRepository;
 
 //http://stackoverflow.com/questions/31307883/springfox-dependency-breaking-my-spring-context
