@@ -179,7 +179,7 @@ public class StructuresController {
 	@RequestMapping(value="/Glycans/{accessionNumber}", method=RequestMethod.GET)
 	public String glycans(@PathVariable String accessionNumber, Model model, RedirectAttributes redirectAttrs)  {
 		try {
-			if (StringUtils.isNotBlank(accessionNumber) && accessionNumber.startsWith("G") && glycanProcedure.checkExists(accessionNumber)) {
+			if (StringUtils.isNotBlank(accessionNumber) && accessionNumber.startsWith("G")) {
 //				logClient.insertDefaultLog("glycan entry page for " + accessionNumber + " requested.");
 			    GlycoSequenceDetailResponse response = glycoSequenceClient.detailRequest(accessionNumber);
 			    logger.debug(response.getDescription());
@@ -216,7 +216,7 @@ public class StructuresController {
 	@RequestMapping(value="/Entry/{accessionNumber}", method=RequestMethod.GET)
 	public String entry(@PathVariable String accessionNumber, Model model, RedirectAttributes redirectAttrs)  {
 		try {
-			if (StringUtils.isNotBlank(accessionNumber) && accessionNumber.startsWith("G") && glycanProcedure.checkExists(accessionNumber)) {
+			if (StringUtils.isNotBlank(accessionNumber) && accessionNumber.startsWith("G")) {
 //				logClient.insertDefaultLog("glycan entry page for " + accessionNumber + " requested.");
 			    GlycoSequenceDetailResponse response = glycoSequenceClient.detailRequest(accessionNumber);
 			    logger.debug(response.getDescription());
