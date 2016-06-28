@@ -47,7 +47,7 @@ public class HtmlTests {
 	@Test
 	public void testD3() {
 		ResponseEntity<String> entity = new TestRestTemplate().getForEntity(
-				"http://localhost:{port}/D3/G00030MO", String.class, this.port);
+				"http://localhost:{port}/D3_dndTree/G00030MO", String.class, this.port);
 		assertThat(entity.getStatusCode(), is(HttpStatus.OK));
 		assertThat(entity.getBody(), containsString("ID: G00030MO"));
 	}

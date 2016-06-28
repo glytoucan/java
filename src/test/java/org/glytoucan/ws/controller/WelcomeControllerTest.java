@@ -109,9 +109,9 @@ public class WelcomeControllerTest {
   }
 	 @Test
 	  public void testConnect() throws Exception {
-	   mockMvc.perform(get("/connect.jsp?url=http://stanza.glytoucan.org/stanza/motif_list?&notation=cfg&page=motif_list"))
+	   mockMvc.perform(get("/connect?url=http://stanza.glytoucan.org/stanza/motif_list?&notation=cfg&page=motif_list"))
      .andExpect(status().isOk())
-     .andExpect(content().string(containsString("/Structures/Glycans/G00055MO")));
+     .andExpect(content().string(containsString("/glycans/G00055MO")));
 //     .andExpect(content(). string("/Structures/Glycans/G00055MO"));
 	  }
 }
