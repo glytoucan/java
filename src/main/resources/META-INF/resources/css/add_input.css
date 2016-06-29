@@ -1,0 +1,25 @@
+@charset "UTF-8";
+/* CSS Document */
+
+.registriesInput_add {
+	margin: 0 0 50px;
+	text-align: center;
+}
+
+.registriesInput_addBtn {
+	display: block;
+	width: 372px;
+	padding: 5px;
+}
+
+.registriesInput_group {
+	position: relative;
+}
+
+.registriesInput_remove {
+	position: absolute;
+	bottom: 12px;
+	right: 17px;
+	font-size: 12px;
+	color: #787878;
+}

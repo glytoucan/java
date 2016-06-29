@@ -30,6 +30,8 @@ import org.apache.commons.logging.LogFactory;
 import org.glycoinfo.convert.util.DetectFormat;
 import org.glycoinfo.rdf.SparqlException;
 import org.glycoinfo.rdf.dao.SparqlEntity;
+import org.glycoinfo.rdf.glycan.Contributor;
+import org.glycoinfo.rdf.service.ContributorProcedure;
 import org.glycoinfo.rdf.service.GlycanProcedure;
 import org.glycoinfo.rdf.service.UserProcedure;
 import org.glycoinfo.vision.generator.ImageGenerator;
@@ -64,7 +66,10 @@ public class RegistriesController {
 	ImageGenerator imageGenerator;
 
 	@Autowired
-	UserProcedure userProcedure;
+	ContributorProcedure contributorProcedure;
+	
+  @Autowired
+  UserProcedure userProcedure;
 	
 	@Autowired
 	GlycanClientQuerySpec gtcClient;
@@ -85,24 +90,51 @@ public class RegistriesController {
 	}
 
 	@RequestMapping("/confirmation")
-	public String confirmation(Model model,
-			@ModelAttribute("sequence") SequenceInput sequence,
-			RedirectAttributes redirectAttrs) throws SparqlException {
-		logger.debug(sequence);
-		List<SequenceInput> list = new ArrayList<SequenceInput>();
-		List<SequenceInput> listRegistered = new ArrayList<SequenceInput>();
-		List<SequenceInput> listErrors = new ArrayList<SequenceInput>();
+  public String confirmation(HttpServletRequest request, RedirectAttributes redirectAttrs) throws SparqlException {
+    String sequence1 = request.getParameter("sequence");
+    
+    if (StringUtils.isEmpty(sequence1)) {
+      logger.debug("no input sequence");
+      redirectAttrs.addFlashAttribute("errorMessage",
+          "Please input a sequence");
+      return "redirect:/Registries/index";
+    }
+    
+    logger.debug("sequence1>"+sequence1);
 
-		String result = processMultiple(sequence, list, listRegistered,
-				listErrors, "/Registries/index", "register/confirmation",
-				redirectAttrs);
+    String[] sequence2 = request.getParameterValues("sequence-2");
 
-		model.addAttribute("listRegistered", listRegistered);
-		model.addAttribute("listErrors", listErrors);
-		model.addAttribute("listNew", list);
+    
+    SequenceInput sequenceInput = new SequenceInput();
+    String sequence=sequence1.trim();
 
-		return result;
-	}
+    if (null != sequence2) {
+      for (int i = 0; i < sequence2.length; i++) {
+        logger.debug("sequence2>"+sequence2[i]);
+        sequence += "\r\n";
+        sequence += sequence2[i].trim();
+      }
+    }
+    logger.debug("input sequences:>"+sequence);
+    
+    sequenceInput.setFrom(sequence);
+    sequenceInput.setSequence(sequence);
+
+    List<SequenceInput> list = new ArrayList<SequenceInput>();
+    List<SequenceInput> listRegistered = new ArrayList<SequenceInput>();
+    List<SequenceInput> listErrors = new ArrayList<SequenceInput>();
+
+    
+    String result = processMultiple(sequenceInput, list, listRegistered,
+        listErrors, "/Registries/index", "register/confirmation",
+        redirectAttrs);
+
+    request.setAttribute("listRegistered", listRegistered);
+    request.setAttribute("listErrors", listErrors);
+    request.setAttribute("listNew", list);
+
+    return result;
+  }
 
 	private String processMultiple(SequenceInput sequence,
 			List<SequenceInput> list, List<SequenceInput> listRegistered,
@@ -268,10 +300,15 @@ public class RegistriesController {
 				&& userInfo.getVerifiedEmail().equals("true")
 				&& StringUtils.isNotBlank(userInfo.getGivenName())) {
 			logger.debug("user is verified:>" + userInfo.getGivenName());
-			userId = userProcedure.getIdByEmail(userInfo.getEmail());
-//			glycanProcedure.setContributorId(userId);
+		  SparqlEntity seUserId = contributorProcedure.searchContributor(userInfo.getGivenName());
+		  if (null != seUserId)
+		    userId = seUserId.getValue(Contributor.ID);
+		  if (null == userId) {
+		    // there is a chance the user modified the given name so contributor id could not be retrieved.
+		    userId = userProcedure.getIdByEmail(userInfo.getEmail());
+		  }
 		} else {
-			return "redirect:/signin?errorMessage=Please sign in with a verified email address.  Check Profile for details.";
+			return "redirect:/signin?errorMessage=Please sign in with a verified email address or check our Given Name on Google Accounts.  Please refer to Profile page for details.";
 		}
 
 		String[] checked = request.getParameterValues("checked");

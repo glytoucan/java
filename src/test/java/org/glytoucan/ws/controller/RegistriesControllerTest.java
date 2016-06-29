@@ -4,11 +4,14 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.notNullValue;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -23,11 +26,15 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
+
+import com.github.fromi.openidconnect.security.UserInfo;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -88,33 +95,33 @@ public class RegistriesControllerTest {
 	@Test
 	public void testRegisterG00031MOG01132OH() throws Exception {
 		String id = "G00031MO";
-		String sequence = "RES\\n" + 
-	"1b:a-dgal-HEX-1:5\\n" + 
-				"2s:n-acetyl\\n" + 
-				"3b:b-dgal-HEX-1:5\\n" + 
-				"LIN\\n" + 
-				"1:1d(2+1)2n\\n" + 
+		String sequence = "RES\n" + 
+	"1b:a-dgal-HEX-1:5\n" + 
+				"2s:n-acetyl\n" + 
+				"3b:b-dgal-HEX-1:5\n" + 
+				"LIN\n" + 
+				"1:1d(2+1)2n\n" + 
 				"2:1o(3+1)3d";
 		
 		String id2 = "G01132OH";
-		String sequence2 = "RES\\n"
-				+ "1b:x-dgal-HEX-1:5\\n"
-				+ "2s:n-acetyl\\n"
-				+ "3b:b-dgal-HEX-1:5\\n"
-				+ "4b:a-dgal-HEX-1:5\\n"
-				+ "5s:n-acetyl\\n"
-				+ "6b:b-dgal-HEX-1:5\\n"
-				+ "7b:b-dglc-HEX-1:5\\n"
-				+ "8s:n-acetyl\\n"
-				+ "9s:sulfate\\n"
-				+ "LIN\\n"
-				+ "1:1d(2+1)2n\\n"
-				+ "2:1o(3+1)3d\\n"
-				+ "3:3o(4+1)4d\\n"
-				+ "4:4d(2+1)5n\\n"
-				+ "5:4o(3+1)6d\\n"
-				+ "6:1o(6+1)7d\\n"
-				+ "7:7d(2+1)8n\\n"
+		String sequence2 = "RES\n"
+				+ "1b:x-dgal-HEX-1:5\n"
+				+ "2s:n-acetyl\n"
+				+ "3b:b-dgal-HEX-1:5\n"
+				+ "4b:a-dgal-HEX-1:5\n"
+				+ "5s:n-acetyl\n"
+				+ "6b:b-dgal-HEX-1:5\n"
+				+ "7b:b-dglc-HEX-1:5\n"
+				+ "8s:n-acetyl\n"
+				+ "9s:sulfate\n"
+				+ "LIN\n"
+				+ "1:1d(2+1)2n\n"
+				+ "2:1o(3+1)3d\n"
+				+ "3:3o(4+1)4d\n"
+				+ "4:4d(2+1)5n\n"
+				+ "5:4o(3+1)6d\n"
+				+ "6:1o(6+1)7d\n"
+				+ "7:7d(2+1)8n\n"
 				+ "8:7o(6+1)9n";
 		
 		logger.debug("sequence:>" + sequence + "<");
@@ -189,46 +196,49 @@ public class RegistriesControllerTest {
 	@Test
 	public void testRegisterNewAndG00031MO() throws Exception {
 		String id = "G00031MO";
-		String sequence = "RES\\n" + 
-	"1b:a-dgal-HEX-1:5\\n" + 
-				"2s:n-acetyl\\n" + 
-				"3b:b-dgal-HEX-1:5\\n" + 
-				"LIN\\n" + 
-				"1:1d(2+1)2n\\n" + 
-				"2:1o(3+1)3d";
+		String sequence = "RES\r\n" + 
+	"1b:a-dgal-HEX-1:5\r\n" + 
+				"2s:n-acetyl\r\n" + 
+				"3b:b-dgal-HEX-1:5\r\n" + 
+				"LIN\r\n" + 
+				"1:1d(2+1)2n\r\n" + 
+				"2:1o(3+1)3d\r\n";
 		
 		String id2 = "";
-		String sequence2 = "RES\\n"
-				+ "1b:x-dman-HEX-1:5\\n"
-				+ "2b:x-dgal-HEX-1:5\\n"
-				+ "3s:n-acetyl\\n"
-				+ "LIN\\n"
-				+ "1:1o(-1+1)2d\\n"
-				+ "2:2d(2+1)3n";
+		String sequence2 = "RES\r\n"
+				+ "1b:x-dman-HEX-1:5\r\n"
+				+ "2b:x-dgal-HEX-1:5\r\n"
+				+ "3s:n-acetyl\r\n"
+				+ "LIN\r\n"
+				+ "1:1o(-1+1)2d\r\n"
+				+ "2:2d(2+1)3n\r\n";
 		
 		logger.debug("sequence:>" + sequence + "<");
 		logger.debug("sequence2:>" + sequence2 + "<");
+		// convert to how they will be stored
+		String sequenceResult = sequence.replaceAll("(?:\r\n|\n)", "\\\\n");
+		String sequence2Result = sequence2.replaceAll("(?:\r\n|\n)", "\\\\n");
 
 		SequenceInput si = new SequenceInput();
 		si.setId(id);
-		si.setSequence(sequence);
+		si.setSequence(sequenceResult);
 		si.setResultSequence("WURCS=2.0/2,2,1/[a2112h-1a_1-5_2*NCC/3=O][a2112h-1b_1-5]/1-2/a3-b1");
-		si.setImage("/glyspace/service/glycans/" + id + "/image?style=extended&format=png&notation=cfg");
+		si.setImage("/glycans/" + id + "/image?style=extended&format=png&notation=cfg");
 		SequenceInput si2 = new SequenceInput();
 //		SequenceInput [sequence=RES\n1b:x-dman-HEX-1:5\n2b:x-dgal-HEX-1:5\n3s:n-acetyl\nLIN\n1:1o(-1+1)2d\n2:2d(2+1)3n, resultSequence=, image=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALoAAABSCAIAAABse1lJAAADkUlEQVR42u3bv0sbYRjA8aeDrU3TNmArKUQMmLZRrpiWFDIU6pAhgy0OFjpkSCGDQxbhBimhKGRwUEghg4UOLh0EoVIyBBQOCoVCBgcHR/8EhwwZHNLnjLUdLJprc28av1/eWeXez7333g+lRXThhENAcCG4EFwILgQXgguHgOBCcCG4EFwILgQXDgHBheBCcCG4EFwILhwCggvBheBCcCG4EFw4BAQXggvBheBCXezo6KgPuci/yM9jUa/Xi8ViOp1u/2rLsjKZTKlU2t/f7x0ru7u7iUTClJjucjn++d6Hb1wcxxHrhkSuyZuwlGOyMSGfLfk0Lqtj8npYhgfUjc5TL6wr8Xh8ZWWlP1eX3ueiE2Dbtty7KktR+f7k7PHtsdgjMjRgcJ7a1Wo15dK3F6Me56LHXZ6HJHVLtif/aOV0fHkk44FCoWCQy8LCwuLiYn9udXufi869PLvtLh7nWmkPJ6FiDK4xuVxueXkZLga4VKtVd7OiAi5o5ecaEw6HTe1j8vn82toaXPzm4l6Gxq67O9mOrLSHPaI7XyOzpUuL2avhJeWie0b3VsiDleOdbyQSMXJ3rX92MpmEi99cdFWX+YhHLjpeDJVKJf9nq9FoBIPBZrMJF1+56O2o+1jFM5fiqKnr0dTU1NbWFlx85SJXpONN7u/jfcyyLCMTVi6X9f4ILmdz6WKerej4+FDMFQgEeAng6+oyODgoX/9idanc18uZqVM8lUrt7OzAxT8usdjxiyHPXN5F0+m0KS66y56bm4OLf1yy2ay8HfXO5dXdYrFoiovew0ejUbj4x2Vzc1Oe3vTMRRener1u8PlHKBQ6ODiAi09cms2mnqDy4YEXLktR3T20jKaXQhUPF//eGa2vr8t4oIP3i+2xPanOHMcxy8W2bSPvGi/1G+nZ2Vl5eaejx/+ZTEanqmW6QqFg5EuGS82l0WjoZcUVc5E1xklMT0/PzMwY/DrptFwuV6lU4OL313QqRteYZDJ5zj5mdUy3t3pO94KV9sbLyF6bb3VP9jE6Ae5H3Xp3vTFx8gTPSbjvleYjugJZllWtVlu9kV6GTL2X5j8Bfp2yeq+RzWZ1FXGf+YoEg8F4PJ7P52u1Wi8sKu0ODw/D4fDe3l6/caHuiTH1q+FCcCG4EFwILgQXIrgQXAguBBeCC8GFCC4EF4ILwYXgQnAhggvBheBCcCG4EFyI4EJwIbgQXOh/6geJSrubc4F5CgAAAABJRU5ErkJggg==, id=null]
 		si2.setId(null);
-		si2.setSequence(sequence2);
+		si2.setSequence(sequence2Result);
 		si2.setResultSequence("WURCS=2.0/2,2,1/[a1122h-1x_1-5][a2112h-1x_1-5_2*NCC/3=O]/1-2/a?-b1");
 		si2.setImage("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALoAAABSCAIAAABse1lJAAADkUlEQVR42u3bv0sbYRjA8aeDrU3TNmArKUQMmLZRrpiWFDIU6pAhgy0OFjpkSCGDQxbhBimhKGRwUEghg4UOLh0EoVIyBBQOCoVCBgcHR/8EhwwZHNLnjLUdLJprc28av1/eWeXez7333g+lRXThhENAcCG4EFwILgQXgguHgOBCcCG4EFwILgQXDgHBheBCcCG4EFwILhwCggvBheBCcCG4EFw4BAQXggvBheBCXezo6KgPuci/yM9jUa/Xi8ViOp1u/2rLsjKZTKlU2t/f7x0ru7u7iUTClJjucjn++d6Hb1wcxxHrhkSuyZuwlGOyMSGfLfk0Lqtj8npYhgfUjc5TL6wr8Xh8ZWWlP1eX3ueiE2Dbtty7KktR+f7k7PHtsdgjMjRgcJ7a1Wo15dK3F6Me56LHXZ6HJHVLtif/aOV0fHkk44FCoWCQy8LCwuLiYn9udXufi869PLvtLh7nWmkPJ6FiDK4xuVxueXkZLga4VKtVd7OiAi5o5ecaEw6HTe1j8vn82toaXPzm4l6Gxq67O9mOrLSHPaI7XyOzpUuL2avhJeWie0b3VsiDleOdbyQSMXJ3rX92MpmEi99cdFWX+YhHLjpeDJVKJf9nq9FoBIPBZrMJF1+56O2o+1jFM5fiqKnr0dTU1NbWFlx85SJXpONN7u/jfcyyLCMTVi6X9f4ILmdz6WKerej4+FDMFQgEeAng6+oyODgoX/9idanc18uZqVM8lUrt7OzAxT8usdjxiyHPXN5F0+m0KS66y56bm4OLf1yy2ay8HfXO5dXdYrFoiovew0ejUbj4x2Vzc1Oe3vTMRRener1u8PlHKBQ6ODiAi09cms2mnqDy4YEXLktR3T20jKaXQhUPF//eGa2vr8t4oIP3i+2xPanOHMcxy8W2bSPvGi/1G+nZ2Vl5eaejx/+ZTEanqmW6QqFg5EuGS82l0WjoZcUVc5E1xklMT0/PzMwY/DrptFwuV6lU4OL313QqRteYZDJ5zj5mdUy3t3pO94KV9sbLyF6bb3VP9jE6Ae5H3Xp3vTFx8gTPSbjvleYjugJZllWtVlu9kV6GTL2X5j8Bfp2yeq+RzWZ1FXGf+YoEg8F4PJ7P52u1Wi8sKu0ODw/D4fDe3l6/caHuiTH1q+FCcCG4EFwILgQXIrgQXAguBBeCC8GFCC4EF4ILwYXgQnAhggvBheBCcCG4EFyI4EJwIbgQXOh/6geJSrubc4F5CgAAAABJRU5ErkJggg==");
 
 			mockMvc.perform(
 					post("/Registries/confirmation").with(csrf()).with(user("test")).contentType(
 							MediaType.APPLICATION_FORM_URLENCODED).param(
-							"sequence", sequence+"\\n"+sequence2))
+							"sequence", sequence).param("sequence-2", sequence2))
 					.andExpect(status().isOk())
 					.andExpect(view().name("register/confirmation"))
-					.andExpect(model().attribute("listRegistered", contains(si)))
-					.andExpect(model().attribute("listNew", contains(si2)));
+					.andExpect(request().attribute("listRegistered", contains(si)))
+					.andExpect(request().attribute("listNew", contains(si2)));
 	}
 
 	@Test
@@ -347,6 +357,7 @@ LIN
 	
 
 	@Test
+	@Transactional
 	public void testRegisterNew2() throws Exception {
 		String sequence = "RES\\n" + 
 		    "1b:x-dgal-HEX-1:5\\n" + 
@@ -384,11 +395,12 @@ LIN
 
 		logger.debug("sequence:>" + sequence + "<");
 		SequenceInput si = new SequenceInput();
-		si.setId(null);
-		si.setSequence(sequence);
-		si.setResultSequence("WURCS=2.0/8,11,10/[a2112h-1x_1-5_2*NCC/3=O][a1122h-1x_1-5][a2112h-1x_1-5][a1221m-1x_1-5][a221h-1x_1-5][Aad21122h-2x_2-6_5*NCCO/3=O][Aad21122h-2x_2-6_5*NCC/3=O][a2122h-1x_1-5_2*NCC/3=O]/1-2-3-4-5-3-5-6-7-8-1/a?-b1_b?-c1_c?-d1_c?-j1_d?-e1_d?-h2_e?-f1_f?-g1_h?-i2_j?-k1");
-			mockMvc.perform(
-					post("/Registries/complete").with(csrf()).with(user("test")).contentType(
+		UserInfo userinfo = new UserInfo("testid", "testname", "Administrator", "", "", "https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg", null, "glytoucan@gmail.com", "true");
+		String resultSequence = "WURCS=2.0/8,11,10/[a2112h-1x_1-5_2*NCC/3=O][a1122h-1x_1-5][a2112h-1x_1-5][a1221m-1x_1-5][a221h-1x_1-5][Aad21122h-2x_2-6_5*NCCO/3=O][Aad21122h-2x_2-6_5*NCC/3=O][a2122h-1x_1-5_2*NCC/3=O]/1-2-3-4-5-3-5-6-7-8-1/a?-b1_b?-c1_c?-d1_c?-j1_d?-e1_d?-h2_e?-f1_f?-g1_h?-i2_j?-k1";
+		String image = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALoAAABSCAIAAABse1lJAAADkUlEQVR42u3bv0sbYRjA8aeDrU3TNmArKUQMmLZRrpiWFDIU6pAhgy0OFjpkSCGDQxbhBimhKGRwUEghg4UOLh0EoVIyBBQOCoVCBgcHR/8EhwwZHNLnjLUdLJprc28av1/eWeXez7333g+lRXThhENAcCG4EFwILgQXgguHgOBCcCG4EFwILgQXDgHBheBCcCG4EFwILhwCggvBheBCcCG4EFw4BAQXggvBheBCXezo6KgPuci/yM9jUa/Xi8ViOp1u/2rLsjKZTKlU2t/f7x0ru7u7iUTClJjucjn++d6Hb1wcxxHrhkSuyZuwlGOyMSGfLfk0Lqtj8npYhgfUjc5TL6wr8Xh8ZWWlP1eX3ueiE2Dbtty7KktR+f7k7PHtsdgjMjRgcJ7a1Wo15dK3F6Me56LHXZ6HJHVLtif/aOV0fHkk44FCoWCQy8LCwuLiYn9udXufi869PLvtLh7nWmkPJ6FiDK4xuVxueXkZLga4VKtVd7OiAi5o5ecaEw6HTe1j8vn82toaXPzm4l6Gxq67O9mOrLSHPaI7XyOzpUuL2avhJeWie0b3VsiDleOdbyQSMXJ3rX92MpmEi99cdFWX+YhHLjpeDJVKJf9nq9FoBIPBZrMJF1+56O2o+1jFM5fiqKnr0dTU1NbWFlx85SJXpONN7u/jfcyyLCMTVi6X9f4ILmdz6WKerej4+FDMFQgEeAng6+oyODgoX/9idanc18uZqVM8lUrt7OzAxT8usdjxiyHPXN5F0+m0KS66y56bm4OLf1yy2ay8HfXO5dXdYrFoiovew0ejUbj4x2Vzc1Oe3vTMRRener1u8PlHKBQ6ODiAi09cms2mnqDy4YEXLktR3T20jKaXQhUPF//eGa2vr8t4oIP3i+2xPanOHMcxy8W2bSPvGi/1G+nZ2Vl5eaejx/+ZTEanqmW6QqFg5EuGS82l0WjoZcUVc5E1xklMT0/PzMwY/DrptFwuV6lU4OL313QqRteYZDJ5zj5mdUy3t3pO94KV9sbLyF6bb3VP9jE6Ae5H3Xp3vTFx8gTPSbjvleYjugJZllWtVlu9kV6GTL2X5j8Bfp2yeq+RzWZ1FXGf+YoEg8F4PJ7P52u1Wi8sKu0ODw/D4fDe3l6/caHuiTH1q+FCcCG4EFwILgQXIrgQXAguBBeCC8GFCC4EF4ILwYXgQnAhggvBheBCcCG4EFyI4EJwIbgQXOh/6geJSrubc4F5CgAAAABJRU5ErkJggg==";
+		
+		mockMvc.perform(
+					post("/Registries/complete").with(csrf()).with(user(userinfo)).contentType(
 							MediaType.APPLICATION_FORM_URLENCODED)
 							.param("checked", "on")
 							.param("resultSequence", "WURCS=2.0/8,11,10/[a2112h-1x_1-5_2*NCC/3=O][a1122h-1x_1-5][a2112h-1x_1-5][a1221m-1x_1-5][a221h-1x_1-5][Aad21122h-2x_2-6_5*NCCO/3=O][Aad21122h-2x_2-6_5*NCC/3=O][a2122h-1x_1-5_2*NCC/3=O]/1-2-3-4-5-3-5-6-7-8-1/a?-b1_b?-c1_c?-d1_c?-j1_d?-e1_d?-h2_e?-f1_f?-g1_h?-i2_j?-k1")
@@ -396,10 +408,71 @@ LIN
 							.param("image", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALoAAABSCAIAAABse1lJAAADkUlEQVR42u3bv0sbYRjA8aeDrU3TNmArKUQMmLZRrpiWFDIU6pAhgy0OFjpkSCGDQxbhBimhKGRwUEghg4UOLh0EoVIyBBQOCoVCBgcHR/8EhwwZHNLnjLUdLJprc28av1/eWeXez7333g+lRXThhENAcCG4EFwILgQXgguHgOBCcCG4EFwILgQXDgHBheBCcCG4EFwILhwCggvBheBCcCG4EFw4BAQXggvBheBCXezo6KgPuci/yM9jUa/Xi8ViOp1u/2rLsjKZTKlU2t/f7x0ru7u7iUTClJjucjn++d6Hb1wcxxHrhkSuyZuwlGOyMSGfLfk0Lqtj8npYhgfUjc5TL6wr8Xh8ZWWlP1eX3ueiE2Dbtty7KktR+f7k7PHtsdgjMjRgcJ7a1Wo15dK3F6Me56LHXZ6HJHVLtif/aOV0fHkk44FCoWCQy8LCwuLiYn9udXufi869PLvtLh7nWmkPJ6FiDK4xuVxueXkZLga4VKtVd7OiAi5o5ecaEw6HTe1j8vn82toaXPzm4l6Gxq67O9mOrLSHPaI7XyOzpUuL2avhJeWie0b3VsiDleOdbyQSMXJ3rX92MpmEi99cdFWX+YhHLjpeDJVKJf9nq9FoBIPBZrMJF1+56O2o+1jFM5fiqKnr0dTU1NbWFlx85SJXpONN7u/jfcyyLCMTVi6X9f4ILmdz6WKerej4+FDMFQgEeAng6+oyODgoX/9idanc18uZqVM8lUrt7OzAxT8usdjxiyHPXN5F0+m0KS66y56bm4OLf1yy2ay8HfXO5dXdYrFoiovew0ejUbj4x2Vzc1Oe3vTMRRener1u8PlHKBQ6ODiAi09cms2mnqDy4YEXLktR3T20jKaXQhUPF//eGa2vr8t4oIP3i+2xPanOHMcxy8W2bSPvGi/1G+nZ2Vl5eaejx/+ZTEanqmW6QqFg5EuGS82l0WjoZcUVc5E1xklMT0/PzMwY/DrptFwuV6lU4OL313QqRteYZDJ5zj5mdUy3t3pO94KV9sbLyF6bb3VP9jE6Ae5H3Xp3vTFx8gTPSbjvleYjugJZllWtVlu9kV6GTL2X5j8Bfp2yeq+RzWZ1FXGf+YoEg8F4PJ7P52u1Wi8sKu0ODw/D4fDe3l6/caHuiTH1q+FCcCG4EFwILgQXIrgQXAguBBeCC8GFCC4EF4ILwYXgQnAhggvBheBCcCG4EFyI4EJwIbgQXOh/6geJSrubc4F5CgAAAABJRU5ErkJggg==")
 							)
 					.andExpect(status().isOk())
-					.andExpect(view().name("register/confirmation"))
-					.andExpect(model().attribute("listNew", contains(si)));
+					.andExpect(view().name("register/complete"))
+					.andExpect(request().attribute("origList", contains(sequence)))
+					.andExpect(request().attribute("registeredList", contains(resultSequence)))
+          .andExpect(request().attribute("imageList", contains(image)))
+          .andExpect(request().attribute("resultList", notNullValue()))
+					;
 	}
-
-
 	
+	 @Test
+	  @Transactional
+	  public void testRegisterNewUser() throws Exception {
+	    String sequence = "RES\\n" + 
+	        "1b:x-dgal-HEX-1:5\\n" + 
+	        "2b:x-dman-HEX-1:5\\n" + 
+	        "3b:x-dgal-HEX-1:5\\n" + 
+	        "4b:x-dglc-HEX-1:5\\n" + 
+	        "5b:x-dgal-HEX-1:5\\n" + 
+	        "6s:n-acetyl\\n" + 
+	        "7s:n-acetyl\\n" + 
+	        "8b:x-lgal-HEX-1:5|6:d\\n" + 
+	        "9b:x-llyx-PEN-1:5\\n" + 
+	        "10b:x-dgal-HEX-1:5\\n" + 
+	        "11b:x-llyx-PEN-1:5\\n" + 
+	        "12b:x-dgro-dgal-NON-2:6|1:a|2:keto|3:d\\n" + 
+	        "13b:x-dgro-dgal-NON-2:6|1:a|2:keto|3:d\\n" + 
+	        "14s:n-acetyl\\n" + 
+	        "15s:n-glycolyl\\n" + 
+	        "16s:n-acetyl\\n" + 
+	        "LIN\\n" + 
+	        "1:1o(-1+1)2d\\n" + 
+	        "2:2o(-1+1)3d\\n" + 
+	        "3:3o(-1+1)4d\\n" + 
+	        "4:4o(-1+1)5d\\n" + 
+	        "5:5d(2+1)6n\\n" + 
+	        "6:4d(2+1)7n\\n" + 
+	        "7:3o(-1+1)8d\\n" + 
+	        "8:8o(-1+1)9d\\n" + 
+	        "9:9o(-1+1)10d\\n" + 
+	        "10:10o(-1+1)11d\\n" + 
+	        "11:8o(-1+2)12d\\n" + 
+	        "12:12o(-1+2)13d\\n" + 
+	        "13:13d(5+1)14n\\n" + 
+	        "14:12d(5+1)15n\\n" + 
+	        "15:1d(2+1)16n";
+
+	    logger.debug("sequence:>" + sequence + "<");
+	    SequenceInput si = new SequenceInput();
+	    UserInfo userinfo = new UserInfo("testid", "testname", "Johnny", "", "", "https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg", null, "glytoucan@gmail.com", "true");
+	    String resultSequence = "WURCS=2.0/8,11,10/[a2112h-1x_1-5_2*NCC/3=O][a1122h-1x_1-5][a2112h-1x_1-5][a1221m-1x_1-5][a221h-1x_1-5][Aad21122h-2x_2-6_5*NCCO/3=O][Aad21122h-2x_2-6_5*NCC/3=O][a2122h-1x_1-5_2*NCC/3=O]/1-2-3-4-5-3-5-6-7-8-1/a?-b1_b?-c1_c?-d1_c?-j1_d?-e1_d?-h2_e?-f1_f?-g1_h?-i2_j?-k1";
+	    String image = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALoAAABSCAIAAABse1lJAAADkUlEQVR42u3bv0sbYRjA8aeDrU3TNmArKUQMmLZRrpiWFDIU6pAhgy0OFjpkSCGDQxbhBimhKGRwUEghg4UOLh0EoVIyBBQOCoVCBgcHR/8EhwwZHNLnjLUdLJprc28av1/eWeXez7333g+lRXThhENAcCG4EFwILgQXgguHgOBCcCG4EFwILgQXDgHBheBCcCG4EFwILhwCggvBheBCcCG4EFw4BAQXggvBheBCXezo6KgPuci/yM9jUa/Xi8ViOp1u/2rLsjKZTKlU2t/f7x0ru7u7iUTClJjucjn++d6Hb1wcxxHrhkSuyZuwlGOyMSGfLfk0Lqtj8npYhgfUjc5TL6wr8Xh8ZWWlP1eX3ueiE2Dbtty7KktR+f7k7PHtsdgjMjRgcJ7a1Wo15dK3F6Me56LHXZ6HJHVLtif/aOV0fHkk44FCoWCQy8LCwuLiYn9udXufi869PLvtLh7nWmkPJ6FiDK4xuVxueXkZLga4VKtVd7OiAi5o5ecaEw6HTe1j8vn82toaXPzm4l6Gxq67O9mOrLSHPaI7XyOzpUuL2avhJeWie0b3VsiDleOdbyQSMXJ3rX92MpmEi99cdFWX+YhHLjpeDJVKJf9nq9FoBIPBZrMJF1+56O2o+1jFM5fiqKnr0dTU1NbWFlx85SJXpONN7u/jfcyyLCMTVi6X9f4ILmdz6WKerej4+FDMFQgEeAng6+oyODgoX/9idanc18uZqVM8lUrt7OzAxT8usdjxiyHPXN5F0+m0KS66y56bm4OLf1yy2ay8HfXO5dXdYrFoiovew0ejUbj4x2Vzc1Oe3vTMRRener1u8PlHKBQ6ODiAi09cms2mnqDy4YEXLktR3T20jKaXQhUPF//eGa2vr8t4oIP3i+2xPanOHMcxy8W2bSPvGi/1G+nZ2Vl5eaejx/+ZTEanqmW6QqFg5EuGS82l0WjoZcUVc5E1xklMT0/PzMwY/DrptFwuV6lU4OL313QqRteYZDJ5zj5mdUy3t3pO94KV9sbLyF6bb3VP9jE6Ae5H3Xp3vTFx8gTPSbjvleYjugJZllWtVlu9kV6GTL2X5j8Bfp2yeq+RzWZ1FXGf+YoEg8F4PJ7P52u1Wi8sKu0ODw/D4fDe3l6/caHuiTH1q+FCcCG4EFwILgQXIrgQXAguBBeCC8GFCC4EF4ILwYXgQnAhggvBheBCcCG4EFyI4EJwIbgQXOh/6geJSrubc4F5CgAAAABJRU5ErkJggg==";
+	    
+	    mockMvc.perform(
+	          post("/Registries/complete").with(csrf()).with(user(userinfo)).contentType(
+	              MediaType.APPLICATION_FORM_URLENCODED)
+	              .param("checked", "on")
+	              .param("resultSequence", "WURCS=2.0/8,11,10/[a2112h-1x_1-5_2*NCC/3=O][a1122h-1x_1-5][a2112h-1x_1-5][a1221m-1x_1-5][a221h-1x_1-5][Aad21122h-2x_2-6_5*NCCO/3=O][Aad21122h-2x_2-6_5*NCC/3=O][a2122h-1x_1-5_2*NCC/3=O]/1-2-3-4-5-3-5-6-7-8-1/a?-b1_b?-c1_c?-d1_c?-j1_d?-e1_d?-h2_e?-f1_f?-g1_h?-i2_j?-k1")
+	              .param("sequence", sequence)
+	              .param("image", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALoAAABSCAIAAABse1lJAAADkUlEQVR42u3bv0sbYRjA8aeDrU3TNmArKUQMmLZRrpiWFDIU6pAhgy0OFjpkSCGDQxbhBimhKGRwUEghg4UOLh0EoVIyBBQOCoVCBgcHR/8EhwwZHNLnjLUdLJprc28av1/eWeXez7333g+lRXThhENAcCG4EFwILgQXgguHgOBCcCG4EFwILgQXDgHBheBCcCG4EFwILhwCggvBheBCcCG4EFw4BAQXggvBheBCXezo6KgPuci/yM9jUa/Xi8ViOp1u/2rLsjKZTKlU2t/f7x0ru7u7iUTClJjucjn++d6Hb1wcxxHrhkSuyZuwlGOyMSGfLfk0Lqtj8npYhgfUjc5TL6wr8Xh8ZWWlP1eX3ueiE2Dbtty7KktR+f7k7PHtsdgjMjRgcJ7a1Wo15dK3F6Me56LHXZ6HJHVLtif/aOV0fHkk44FCoWCQy8LCwuLiYn9udXufi869PLvtLh7nWmkPJ6FiDK4xuVxueXkZLga4VKtVd7OiAi5o5ecaEw6HTe1j8vn82toaXPzm4l6Gxq67O9mOrLSHPaI7XyOzpUuL2avhJeWie0b3VsiDleOdbyQSMXJ3rX92MpmEi99cdFWX+YhHLjpeDJVKJf9nq9FoBIPBZrMJF1+56O2o+1jFM5fiqKnr0dTU1NbWFlx85SJXpONN7u/jfcyyLCMTVi6X9f4ILmdz6WKerej4+FDMFQgEeAng6+oyODgoX/9idanc18uZqVM8lUrt7OzAxT8usdjxiyHPXN5F0+m0KS66y56bm4OLf1yy2ay8HfXO5dXdYrFoiovew0ejUbj4x2Vzc1Oe3vTMRRener1u8PlHKBQ6ODiAi09cms2mnqDy4YEXLktR3T20jKaXQhUPF//eGa2vr8t4oIP3i+2xPanOHMcxy8W2bSPvGi/1G+nZ2Vl5eaejx/+ZTEanqmW6QqFg5EuGS82l0WjoZcUVc5E1xklMT0/PzMwY/DrptFwuV6lU4OL313QqRteYZDJ5zj5mdUy3t3pO94KV9sbLyF6bb3VP9jE6Ae5H3Xp3vTFx8gTPSbjvleYjugJZllWtVlu9kV6GTL2X5j8Bfp2yeq+RzWZ1FXGf+YoEg8F4PJ7P52u1Wi8sKu0ODw/D4fDe3l6/caHuiTH1q+FCcCG4EFwILgQXIrgQXAguBBeCC8GFCC4EF4ILwYXgQnAhggvBheBCcCG4EFyI4EJwIbgQXOh/6geJSrubc4F5CgAAAABJRU5ErkJggg==")
+	              )
+	          .andExpect(status().isOk())
+	          .andExpect(view().name("register/complete"))
+	          .andExpect(request().attribute("origList", contains(sequence)))
+	          .andExpect(request().attribute("registeredList", contains(resultSequence)))
+	          .andExpect(request().attribute("imageList", contains(image)))
+	          .andExpect(request().attribute("resultList", notNullValue()))
+	          ;
+	  }
 }
