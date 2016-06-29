@@ -4,7 +4,9 @@
 <head>
 	<title>Glycan Repository</title>
 <#include "../header.html">
-<link rel="canonical" href="https://glytoucan.org/Structures" />
+<link rel="canonical" href="${hostname}/Registries/index" />
+<link rel="stylesheet" type="text/css" href="/css/add_input.css" />
+<script type="text/javascript" src="/js/registries_input.js"></script>
 </head>
 <body>
 <a name="top"></a><!--link for page top-->
@@ -32,6 +34,9 @@
 				${Left[0]}
 <@spring.formTextarea 'sequence.sequence' 'id="sequence" placeholder="Sequence" cols="20" rows="15" style="width: 370px; height: 600px;"' />
 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                <div class="registriesInput_add">
+                    <span class="registriesInput_addBtn btn">${add!"Add"} ${another!"Another"}</span>
+                </div>
 				<div class="submit">
 					<input class="btn btn-primary" type="submit" value="${submit}" />
 					<button type="reset" class="btn">${clear}</button>

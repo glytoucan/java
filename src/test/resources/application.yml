@@ -13,7 +13,14 @@ spring:
         graph: graph
 app:
   docs: http://localhost:8080
-
+logging:
+  file: boot.log
+  path: /tmp/glytoucan/spring
+  level:
+    org.springframework: 'OFF'
+    org.glycoinfo: 'DEBUG' 
+    org.glytoucan: 'DEBUG' 
+    ROOT: ERROR
 google:
   oauth2:
     clientId: something.apps.googleusercontent.com

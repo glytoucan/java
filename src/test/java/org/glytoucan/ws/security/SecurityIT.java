@@ -62,7 +62,7 @@ public class SecurityIT {
 
     @Test
     public void securedPageRedirectsToLoginPage() {
-        given().redirects().follow(false).when().get("/test").then()
+        given().redirects().follow(false).when().get("/Registries/index").then()
                 .statusCode(HttpStatus.SC_MOVED_TEMPORARILY)
                 .header("Location", endsWith("/login"));
     }

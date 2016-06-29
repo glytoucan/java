@@ -4,6 +4,8 @@ import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -43,10 +45,10 @@ public class StructuresControllerTest {
 
 	private MockMvc mockMvc;
 
-	@Before
-	public void setup() {
-		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
-	}
+  @Before
+  public void setup() {
+    this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).apply(springSecurity()).build();
+  }
 
 	@Test
 	public void testStructureSearchStart() throws Exception {
@@ -71,13 +73,12 @@ public class StructuresControllerTest {
 		SequenceInput si = new SequenceInput();
 		si.setId("G00031MO");
 		si.setSequence(sequence);
-		si.setResultSequence(URLEncoder.encode("WURCS=2.0/2,2,1/[22112h-1a_1-5_2*NCC/3=O][a2112h-1b_1-5]/1-2/a3-b1", "UTF-8"));
-//		si.setResultSequence("WURCS%3D2.0%2F2%2C2%2C1%2F%5B22112h-1a_1-5_2*NCC%2F3%3DO%5D%5B12112h-1b_1-5%5D%2F1-2%2Fa3-b1");
+		si.setResultSequence("WURCS%3D2.0%2F2%2C2%2C1%2F%5Ba2112h-1a_1-5_2*NCC%2F3%3DO%5D%5Ba2112h-1b_1-5%5D%2F1-2%2Fa3-b1");
 		
 		si.setImage("/glycans/G00031MO/image?style=extended&format=png&notation=cfg");
 		try {
 			mockMvc.perform(
-					post("/Structures/structure").contentType(
+					post("/Structures/structure").with(csrf()).contentType(
 							MediaType.APPLICATION_FORM_URLENCODED).param(
 							"sequence", sequence))
 					.andExpect(status().isOk())
@@ -197,7 +198,7 @@ LIN
 		
 		try {
 			mockMvc.perform(
-					post("/Structures/structure").contentType(
+					post("/Structures/structure").with(csrf()).contentType(
 							MediaType.APPLICATION_FORM_URLENCODED).param(
 							"sequence", sequence))
 					.andExpect(status().isOk())
@@ -243,7 +244,7 @@ LIN
 		si.setImage("/glycans/" + id + "/image?style=extended&format=png&notation=cfg");
 		try {
 			mockMvc.perform(
-					post("/Structures/structure").contentType(
+					post("/Structures/structure").with(csrf()).contentType(
 							MediaType.APPLICATION_FORM_URLENCODED).param(
 							"sequence", sequence))
 					.andExpect(status().isOk())
@@ -289,7 +290,7 @@ LIN
 		si.setImage("/glycans/" + id + "/image?style=extended&format=png&notation=cfg");
 		try {
 			mockMvc.perform(
-					post("/Structures/structure").contentType(
+					post("/Structures/structure").with(csrf()).contentType(
 							MediaType.APPLICATION_FORM_URLENCODED).param(
 							"sequence", sequence))
 					.andExpect(status().isOk())
@@ -316,7 +317,7 @@ LIN
 		si.setImage("/glycans/" + id + "/image?style=extended&format=png&notation=cfg");
 		try {
 			mockMvc.perform(
-					post("/Structures/structure").contentType(
+					post("/Structures/structure").with(csrf()).contentType(
 							MediaType.APPLICATION_FORM_URLENCODED).param(
 							"sequence", sequence))
 					.andExpect(status().isOk())
