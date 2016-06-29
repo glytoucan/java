@@ -170,7 +170,7 @@
 <#else>
 </#list>
 
-  <div class="submit"><input  class="btn" type="submit" value="Download"/></div>
+  <div class="submit"><input  class="btn btn-warning" type="submit" value="Download"/></div>
 </form>
 
 </#if>
