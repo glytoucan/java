@@ -168,35 +168,45 @@ public class RegistriesController {
 			}
 
 			logger.debug("search results:>" + searchResults + "<");
+//      String imageSequence = null, imageString=null;
+      String resultSequence = null;
 
 			for (Iterator<SparqlEntity> iterator = searchResults.iterator(); iterator
 					.hasNext();) {
 				SparqlEntity sparqlEntity = (SparqlEntity) iterator.next();
 
+				sparqlEntity.getValue(GlycanProcedure.ResultSequence);
+				
+				// time to fill in this result sequence input
 				SequenceInput si = new SequenceInput();
 
-				si.setSequence(sparqlEntity
-						.getValue(GlycanProcedure.FromSequence));
-				String imageSequence = si.getSequence().replaceAll(
-						"(?:\\r\\n|\\n)", "\\\\n");
-				si.setSequence(imageSequence);
-
-				String resultSequence = null;
-				// try {
-				// resultSequence =
-				// URLEncoder.encode(sparqlEntity.getValue(GlycoSequenceToWurcsSelectSparql.Sequence),
-				// "UTF-8");
-				// } catch (UnsupportedEncodingException e) {
-				// e.printStackTrace();
-				resultSequence = sparqlEntity
-						.getValue(GlycanProcedure.ResultSequence);
-
-				// }
-				if (StringUtils.isBlank(resultSequence))
-					resultSequence = sparqlEntity
-							.getValue(GlycanProcedure.Sequence);
-				si.setResultSequence(resultSequence);
-
+        resultSequence = sparqlEntity
+            .getValue(GlycanProcedure.ResultSequence);
+        if (StringUtils.isBlank(resultSequence) || resultSequence
+            .startsWith(GlycanProcedure.CouldNotConvertHeader))
+          resultSequence = sparqlEntity
+              .getValue(GlycanProcedure.Sequence);
+        si.setResultSequence(resultSequence);
+        // if the result is blank, or most likely could not be converted, still try to get an image using the original...
+        if (StringUtils.isNotBlank(resultSequence) && !resultSequence
+            .startsWith(GlycanProcedure.CouldNotConvertHeader)) {
+          logger.debug("imageSequence:>" + resultSequence + "<");
+          // generate an image, wurcs.  If this fails, blow up back to user showing the weird sequence
+          try {
+            si.setImage(convertSequenceToImage(resultSequence));
+          } catch (KeyManagementException | NoSuchAlgorithmException | KeyStoreException | IOException e1) {
+            redirectAttrs.addFlashAttribute("errorMessage",
+                "system error:" + resultSequence);
+            logger.error(e1.getMessage());
+            return "redirect:" + error;
+          }
+        } else
+          si.setImage("");
+				
+        String fromSequence = sparqlEntity
+            .getValue(GlycanProcedure.FromSequence);
+        si.setSequence(fromSequence);
+        
 				String id = sparqlEntity
 						.getValue(GlycanProcedure.AccessionNumber);
 
@@ -204,47 +214,14 @@ public class RegistriesController {
 						&& resultSequence
 								.startsWith(GlycanProcedure.CouldNotConvertHeader)) {
 					si.setId(GlycanProcedure.CouldNotConvert);
-					// String imageSequence =
-					// si.getSequence().replaceAll("(?:\\r\\n|\\n)", "\\\\n");
-
-					logger.debug("imageSequence:>" + imageSequence + "<");
-
-					try {
-						si.setImage(convertSequenceToImage(imageSequence));
-
-					} catch (KeyManagementException | NoSuchAlgorithmException
-							| KeyStoreException | IOException e) {
-						redirectAttrs.addFlashAttribute("errorMessage",
-								"system error");
-						logger.error(e.getMessage());
-						e.printStackTrace();
-						return "redirect:" + error;
-					}
-
 					logger.debug("adding to error:>" + si);
 					listErrors.add(si);
 				} else if (StringUtils.isNotEmpty(id)
 						&& id.equals(GlycanProcedure.NotRegistered)) {
-					// String imageSequence =
-					// si.getSequence().replaceAll("(?:\\r\\n|\\n)", "\\\\n");
-
-					logger.debug("imageSequence:>" + imageSequence + "<");
-
-					try {
-						si.setImage(convertSequenceToImage(imageSequence));
-
-					} catch (KeyManagementException | NoSuchAlgorithmException
-							| KeyStoreException | IOException e) {
-						redirectAttrs.addFlashAttribute("errorMessage",
-								"system error");
-						logger.error(e.getMessage());
-						e.printStackTrace();
-						return "redirect:" + error;
-					}
 					logger.debug("adding to new:>" + si);
 					list.add(si);
 				} else {
-					si.setResultSequence(resultSequence);
+				  // registered
 					si.setId(id);
 					si.setImage(sparqlEntity.getValue(GlycanProcedure.Image));
 					logger.debug("adding to old:>" + si);
