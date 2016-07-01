@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.glytoucan</groupId>
 	<artifactId>web</artifactId>
 
 	<parent>
 		<groupId>org.glytoucan</groupId>
-		<artifactId>pom-site</artifactId>
+		<artifactId>pom</artifactId>
 		<version>1.2.1-SNAPSHOT</version>
-		<relativePath>../pom-site/pom.xml</relativePath>
 	</parent>
 
 	<properties>
@@ -320,23 +318,6 @@
 		</pluginRepository>
 	</pluginRepositories>
 
-	<profiles>
-		<profile>
-			<id>dev</id>
-			<activation>
-				<activeByDefault></activeByDefault>
-			</activation>
-			<!-- <properties> -->
-			<!-- <spring.mainClass>org.springframework.boot.loader.PropertiesLauncher</spring.mainClass> -->
-			<!-- </properties> -->
-		</profile>
-		<profile>
-			<id>test</id>
-			<properties>
-				<spring.mainClass>org.glycoinfo.batch.mass.MassCalculatorSparqlBatch</spring.mainClass>
-			</properties>
-		</profile>
-	</profiles>
 
 	<dependencyManagement>
 		<dependencies>
