@@ -6,3 +6,5 @@ target
 bin
 debug.log
 hs_err_pid*.log
+boot.log*
+pom.xml.versionsBackup

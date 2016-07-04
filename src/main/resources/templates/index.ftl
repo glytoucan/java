@@ -88,7 +88,7 @@
 		</div><!--/.topPageMain_right-->
 	</div><!--/.topPageMain-->
 	
-	<#include "footer.html">
+	<#include "footer.html" parse="true">
 
 </div> <!-- contents -->
 </body>
