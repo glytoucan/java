@@ -6,6 +6,7 @@ import org.eurocarbdb.application.glycanbuilder.BuilderWorkspace;
 import org.eurocarbdb.application.glycanbuilder.renderutil.GlycanRendererAWT;
 import org.eurocarbdb.resourcesdb.Config;
 import org.eurocarbdb.resourcesdb.io.MonosaccharideConverter;
+import org.glycoinfo.convert.GlyConvertConfig;
 import org.glycoinfo.rdf.SelectSparql;
 import org.glycoinfo.rdf.SparqlException;
 import org.glycoinfo.rdf.dao.SparqlDAO;
@@ -55,7 +56,7 @@ import virtuoso.sesame2.driver.VirtuosoRepository;
 
 //http://stackoverflow.com/questions/31307883/springfox-dependency-breaking-my-spring-context
 @SpringBootApplication(exclude=org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration.class)
-@Import(value = { GlycanProcedureConfig.class, UserProcedureConfig.class, ContributorProcedureConfig.class, GlycanConfig.class, SoapConfiguration.class })
+@Import(value = { GlycanProcedureConfig.class, UserProcedureConfig.class, ContributorProcedureConfig.class, GlycanConfig.class, SoapConfiguration.class, GlyConvertConfig.class })
 public class Application  {
 //	extends SpringBootServletInitializer
 	private static final String graph = "http://rdf.glytoucan.org";
