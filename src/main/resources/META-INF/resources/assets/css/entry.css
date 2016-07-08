@@ -1,18 +1,5 @@
 @charset "UTF-8";
 
-/**/
-body {
-	margin: 0;
-}
-
-header, footer {
-	height: 80px;
-	padding: 20px 0 0;
-	background: #DDD;
-	text-align: center;
-}
-/**/
-
 .entryNew {
 	position: relative;
 	width: 1000px;
@@ -44,6 +31,7 @@ header, footer {
 
 .entryNav--stuck {
 	position: fixed;
+	top: 50px;
 }
 
 .entryNav_ol {

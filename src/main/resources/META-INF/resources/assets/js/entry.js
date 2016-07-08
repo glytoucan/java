@@ -21,14 +21,14 @@
     },
 
     onScroll: function () {
-      var scroll = document.body.scrollTop;
+      var scroll = document.documentElement.scrollTop || document.body.scrollTop;
       var navOffset = this.calcOffset(this.entryContent);
-      if ((navOffset.top - scroll) < 0 && !this.entryNav.classList.contains('entryNav--stuck')) {
+      if ((navOffset.top - 50 - scroll) < 0 && !this.entryNav.classList.contains('entryNav--stuck')) {
         this.entryNav.classList.add('entryNav--stuck');
         this.entryNav.style.left = navOffset.left + 'px';
         return;
       }
-      if ((navOffset.top - scroll) >= 0 && this.entryNav.classList.contains('entryNav--stuck')) {
+      if ((navOffset.top - 50 - scroll) >= 0 && this.entryNav.classList.contains('entryNav--stuck')) {
         this.entryNav.classList.remove('entryNav--stuck');
         this.entryNav.style.left = '0';
       }
