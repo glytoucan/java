@@ -1,6 +1,8 @@
 package org.glytoucan.web.controller;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.net.URLEncoder;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
@@ -20,8 +22,11 @@ import org.glycoinfo.rdf.service.GlycanProcedure;
 import org.glytoucan.client.GlycoSequenceClient;
 import org.glytoucan.client.config.GlycanQueryConfig;
 import org.glytoucan.client.soap.GlycoSequenceDetailResponse;
+import org.glytoucan.client.soap.GlycoSequenceSearchResponse;
+import org.glytoucan.client.soap.ResponseMessage;
 import org.glytoucan.model.spec.GlycanClientQuerySpec;
 import org.glytoucan.web.model.SequenceInput;
+import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Controller;
@@ -46,8 +51,8 @@ import com.wordnik.swagger.annotations.ApiResponses;
 public class StructuresController {
 	Log logger = LogFactory.getLog(StructuresController.class);
 	
-	@Autowired
-	GlycanProcedure glycanProcedure;
+//	@Autowired
+//	GlycanProcedure glycanProcedure;
 	
 //	@Autowired
 //	LogClient logClient;
@@ -110,28 +115,23 @@ public class StructuresController {
     		logger.debug("text1>" + sequence.getSequence() + "<");
 
 //    		glycanProcedure.setSequence(sequence.getSequence());
-    		SparqlEntity se;
-    		try {
-    			se = glycanProcedure.searchBySequence(sequence.getSequence());
-    			
-			} catch (SparqlException e) {
-				logger.error("sparqlException:>" + e.getMessage());
-				redirectAttrs.addFlashAttribute("errorMessage", e.getMessage());
-				return "redirect:/Structures/" + sequence.getFrom();
-			} catch (ConvertFormatException e) {
-				logger.error("ConvertFormatException:>" + e.getMessage());
-				redirectAttrs.addFlashAttribute("errorMessage", "The format could not be determined, please refer to manual for supported formats.  Details:" + e.getMessage());
-				return "redirect:/Structures/" + sequence.getFrom();
-			} catch (ConvertException e) {
-				logger.error("ConvertException:>" + e.getMessage());
-				redirectAttrs.addFlashAttribute("errorMessage", "convert exception:>" + e.getMessage());
-				return "redirect:/Structures/"  + sequence.getFrom();
-			}
-
-    		String id = se.getValue(GlycanProcedure.AccessionNumber);
+    	    GlycoSequenceSearchResponse response = glycoSequenceClient.textSearchRequest(sequence.getSequence() );
+    	    Assert.assertNotNull(response);
+    	    
+    	    logger.debug(response);
+    	    logger.debug(response.getAccessionNumber());
+    	    ResponseMessage rm = response.getResponseMessage();
+    	    logger.debug(rm);
+    	    logger.debug(rm.getErrorCode());
+    	    if (BigInteger.ZERO.compareTo(rm.getErrorCode()) != 0) {
+            logger.error("ResponseMessage error:>" + rm.getMessage());
+            redirectAttrs.addFlashAttribute("errorMessage", rm.getMessage());
+            return "redirect:/Structures/" + sequence.getFrom();
+    	    }
+    		String id = response.getAccessionNumber();
     		logger.debug("search found:>" + id + "<");
     		if (null != id && id.equals(GlycanProcedure.NotRegistered)) {
-				sequence.setId(GlycanProcedure.NotRegistered);
+    		  sequence.setId(GlycanProcedure.NotRegistered);
 				try {
 	    			String imageSequence = sequence.getSequence().replaceAll("(?:\\r\\n|\\n)", "\\\\n");
 
@@ -152,7 +152,7 @@ public class StructuresController {
 				}
     		} else {
     			sequence.setId(id);
-    			sequence.setImage(se.getValue(GlycanProcedure.Image));
+    			sequence.setImage(response.getImage());
     		}
     		logger.debug("image:>" + sequence.getImage());
     		
@@ -160,10 +160,10 @@ public class StructuresController {
 			try {
 //				resultSequence = URLEncoder.encode(se.getValue(GlycoSequenceToWurcsSelectSparql.Sequence), "UTF-8");
 //				WURCS=2.0/2,2,1/[22112h-1a_1-5_2*NCC/3=O][12112h-1b_1-5]/1-2/a3-b1
-				resultSequence = URLEncoder.encode(se.getValue(GlycanProcedure.Sequence), "UTF-8");
+				resultSequence = URLEncoder.encode(response.getSequence(), "UTF-8");
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
-				resultSequence = se.getValue(GlycanProcedure.Sequence);
+				resultSequence = response.getSequence();
 			}
     		sequence.setResultSequence(resultSequence);
 //    		sequence.setResultSequence(se.getValue(GlycoSequence.Sequence));
@@ -172,7 +172,7 @@ public class StructuresController {
 //    		model.addAttribute("image", sequence.getImage());
 //    		model.addAttribute("wurcs", sequence.getResultSequence());
     		
-            return "structures/structure";
+           return "structures/structure";
         }
     }
 	

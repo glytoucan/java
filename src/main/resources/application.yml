@@ -21,6 +21,7 @@ logging:
     org.springframework: 'OFF'
     org.glycoinfo: 'DEBUG' 
     org.glytoucan: 'DEBUG' 
+    org.glytoucan.web.view: 'ERROR'
     ROOT: ERROR
 
 server:
