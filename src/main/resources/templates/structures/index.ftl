@@ -124,20 +124,20 @@ ${Title[0]}
 				<!-- Sort -->
 				<p class="glResultSort-text">${sort}</p>
 				<select class="glResultSort_key">
+					<!-- Date Entered -->
+					<option class="glResultSort_val" selected="selected" value="ContributionTime">${dateEntered}</option>
 					<!-- Mass -->
 					<option class="glResultSort_val" value="Mass">${mass}</option>
 					<!-- Contributor -->
 					<option class="glResultSort_val" value="Contributor">${contributor}</option>
-					<!-- Date Entered -->
-					<option class="glResultSort_val" value="ContributionTime">${dateEntered}</option>
 					<!-- Accession Number -->
-					<option class="glResultSort_val" selected="selected" value="AccessionNumber">${accessionNumber}</option>
+					<option class="glResultSort_val" value="AccessionNumber">${accessionNumber}</option>
 				</select>
 				<select class="glResultSort_order">
 					<!-- Up -->
-					<option class="glResultSort_val" selected="selected" value="ASC">${up}</option>
+					<option class="glResultSort_val" value="ASC">${up}</option>
 					<!-- Down -->
-					<option class="glResultSort_val" value="DESC">${down}</option>
+					<option class="glResultSort_val" selected="selected" value="DESC">${down}</option>
 				</select>
 			</div><!--/.glResultSort-->
 
