@@ -10,6 +10,7 @@ import org.glycoinfo.rdf.SelectSparql;
 import org.glycoinfo.rdf.SparqlException;
 import org.glycoinfo.rdf.dao.SparqlDAO;
 import org.glycoinfo.rdf.dao.SparqlEntity;
+import org.glycoinfo.rdf.glycan.Glycosidic_topology;
 import org.glycoinfo.rdf.glycan.Saccharide;
 import org.glycoinfo.rdf.utils.TripleStoreProperties;
 import org.glytoucan.web.api.D3_Tree_json;
@@ -63,7 +64,7 @@ public class D3Controller {
 	@Qualifier(value = "d3SequenceSelectSparql_isomer")
 	private SelectSparql selectD3Sparql_isomer;
 
-	public void setSelectD3Sparql(SelectSparql read) {
+	public void setSelectD3Sparql_isomer(SelectSparql read) {
 		this.selectD3Sparql_isomer = read;
 	}
 
@@ -100,32 +101,32 @@ public class D3Controller {
 	public SelectSparql getSelectD3Sparql_super() {
 		return selectD3Sparql_super;
 	}
-	
-	@Autowired
-	@Qualifier(value = "d3SequenceSelectSparql_subsumes")
-	private SelectSparql selectD3Sparql_subsumes;
-
-	public void setSelectD3Sparql(SelectSparql read) {
-		this.selectD3Sparql_subsumes = read;
-	}
-
-	public SelectSparql getSelectD3Sparql_subsumes() {
-		return selectD3Sparql_subsumes;
-	}
-	
-	@Autowired
-	@Qualifier(value = "d3SequenceSelectSparql_subsumedby")
-	private SelectSparql selectD3Sparql_subsumedby;
-
-	public void setSelectD3Sparql(SelectSparql read) {
-		this.selectD3Sparql_subsumedby = read;
-	}
-
-	public SelectSparql getSelectD3Sparql_subsumedby() {
-		return selectD3Sparql_subsumedby;
-	}
-
 	*/
+	
+	@Autowired
+	@Qualifier(value = "d3SequenceSelectSparql_topology")
+	private SelectSparql selectD3Sparql_topology;
+
+	public void setSelectD3Sparql_topology(SelectSparql read) {
+		this.selectD3Sparql_topology = read;
+	}
+
+	public SelectSparql getSelectD3Sparql_topology() {
+		return selectD3Sparql_topology;
+	}
+	
+	@Autowired
+	@Qualifier(value = "d3SequenceSelectSparql_topologyby")
+	private SelectSparql selectD3Sparql_topologyby;
+
+	public void setSelectD3Sparql_topologyby(SelectSparql read) {
+		this.selectD3Sparql_topologyby = read;
+	}
+
+	public SelectSparql getSelectD3Sparql_topologyby() {
+		return selectD3Sparql_topologyby;
+	}
+
 
 	private final AtomicLong counter = new AtomicLong();
 
@@ -139,12 +140,14 @@ public class D3Controller {
 		/*List<SparqlEntity> list = new ArrayList<SparqlEntity>();*/
 		List<SparqlEntity> list_motif = null;
 		List<SparqlEntity> list_isomer = null;
+		List<SparqlEntity> list_topology = null;
+		List<SparqlEntity> list_topologyby = null;
+		
 		/*
 		 List<SparqlEntity> list_sub = null;
-		 List<SparqlEntity> list_super = null;
-		 List<SparqlEntity> list_subsumes = null;
-		 List<SparqlEntity> list_subsumedby = null;
+		 List<SparqlEntity> list_super = null; 
 		*/
+		
 		try {
 			/* motif*/
 			SelectSparql motif_ss = getSelectD3Sparql_motif();
@@ -165,6 +168,26 @@ public class D3Controller {
 			isomer_ss.setSparqlEntity(isomer_se);	
 			logger.debug(isomer_ss.getSparql());
 			list_isomer = sparqlDAO.query(isomer_ss);
+			
+			// topology
+			SelectSparql topology_ss = getSelectD3Sparql_topology();
+			SparqlEntity topology_se = topology_ss.getSparqlEntity();
+			if (null == topology_ss.getSparqlEntity())
+				topology_se = new SparqlEntity();
+			topology_se.setValue(Glycosidic_topology.PrimaryId_1, primaryId);
+			topology_ss.setSparqlEntity(topology_se);
+			logger.debug(topology_ss.getSparql());
+			list_topology = sparqlDAO.query(topology_ss);
+			
+			// topologyby
+			SelectSparql topologyby_ss = getSelectD3Sparql_topologyby();
+			SparqlEntity topologyby_se = topologyby_ss.getSparqlEntity();
+			if (null == topologyby_ss.getSparqlEntity())
+				topologyby_se = new SparqlEntity();
+			topologyby_se.setValue(Glycosidic_topology.PrimaryId_2, primaryId);
+			topologyby_ss.setSparqlEntity(topologyby_se);
+			logger.debug(topologyby_ss.getSparql());
+			list_topologyby = sparqlDAO.query(topologyby_ss);		
 			
 			/* sub
 			SelectSparql sub_ss = getSelectD3Sparql_sub();
@@ -188,28 +211,6 @@ public class D3Controller {
 			list_super = sparqlDAO.query(super_ss);
 			*/
 			
-			/* subsumes
-			SelectSparql subsumes_ss = getSelectD3Sparql_subsumes();
-			SparqlEntity subsumes_se = subsumes_ss.getSparqlEntity();
-			if (null == subsumes_ss.getSparqlEntity())
-				subsumes_se = new SparqlEntity();
-			subsumes_se.setValue(Saccharide.PrimaryId, primaryId);
-			subsumes_ss.setSparqlEntity(subsumes_se);
-			logger.debug(subsumes_ss.getSparql());
-			list_subsumes = sparqlDAO.query(subsumes_ss);
-			*/
-			
-			/* subsumedby
-			SelectSparql subsumedby_ss = getSelectD3Sparql_subsumedby();
-			SparqlEntity subsumedby_se = subsumedby_ss.getSparqlEntity();
-			if (null == subsumedby_ss.getSparqlEntity())
-				subsumedby_se = new SparqlEntity();
-			subsumedby_se.setValue(Saccharide.PrimaryId, primaryId);
-			subsumedby_ss.setSparqlEntity(subsumedby_se);
-			logger.debug(subsumedby_ss.getSparql());
-			list_subsumedby = sparqlDAO.query(subsumedby_ss);
-			*/
-			
 		} catch (SparqlException e) {
 			D3_Tree_json a = new D3_Tree_json();
 			a.setName("sorry");
@@ -217,11 +218,12 @@ public class D3Controller {
 		}
 		SparqlEntity motif_se = null;
 		SparqlEntity isomer_se = null;
+		SparqlEntity topology_se = null;
+		SparqlEntity topologyby_se = null;
+		
 		/*
 		SparqlEntity sub_se = null;
 		SparqlEntity super_se = null;
-		SparqlEntity subsumes_se = null;
-		SparqlEntity subsumedby_se = null;
 		*/
 
 		D3_Tree_json a = new D3_Tree_json();
@@ -322,6 +324,77 @@ public class D3Controller {
 					b_list.add(b2);
 				}
 			}
+			
+			// topology
+			j = 0;
+			k = 0;
+			c2.setName("test_TreeJson");
+			if (list_topology != null) {
+				for (SparqlEntity i : list_topology) {
+					TreeSequence c1 = new TreeSequence();
+					topology_se = list_topology.get(j);
+					String topologyName = topology_se.getValue("topology_id");
+					c1.setName(topologyName);
+					c1.setSize(5);
+					if (c1.getName().length() == 0) {
+						check++;
+						logger.debug("check="+ check);
+						c1.setName("None");
+						c_list5.add(c1);
+						b5.setName("has_topology");
+						b5.setChildren(c_list5);
+						b_list.add(b5);
+						break;
+					} else {
+						b5.setName("has_topology");
+						c_list5.add(c1);
+						k++;
+					}
+					c2.setName(c1.getName());
+					j++;
+				}
+				if (k != 0) {
+					logger.debug("clist5がblistに");
+					b5.setChildren(c_list5);
+					b_list.add(b5);
+				}
+			}
+
+			//topologyby
+			j = 0;
+			k = 0;
+			c2.setName("test_TreeJson");
+			if (list_topologyby != null) {
+				for (SparqlEntity i : list_topologyby) {
+					TreeSequence c1 = new TreeSequence();
+					topologyby_se = list_topologyby.get(j);
+					String topologyByName = topologyby_se.getValue("id");
+					c1.setName(topologyByName);
+					c1.setSize(6);
+					if (c1.getName().length() == 0) {
+						check++;
+						logger.debug("check="+ check);
+						c1.setName("None");
+						c_list6.add(c1);
+						b6.setName("topology_contained_by");
+						b6.setChildren(c_list6);
+						b_list.add(b6);
+						break;
+					} else {
+						b6.setName("topology_contained_by");
+						c_list6.add(c1);
+						k++;
+					}
+					c2.setName(c1.getName());
+					j++;
+				}
+				if (k != 0) {
+					logger.debug("clist6がblistに");
+					b6.setChildren(c_list6);
+					b_list.add(b6);
+				}
+			}
+			
 			/* super
 			j = 0;
 			k = 0;
@@ -381,63 +454,7 @@ public class D3Controller {
 			}
 			*/
 			
-			/* subsumes
-			j = 0;
-			k = 0;
-			c2.setName("test_TreeJson");
-			if (list_subsumes != null) {
-				for (SparqlEntity i : list_subsumes) {
-					TreeSequence c1 = new TreeSequence();
-					subsumes_se = list_subsumes.get(j);
-					String subsumeName = subsumes_se.getValue("subsume");
-					c1.setName(subsumeName);
-					c1.setSize(5);
-					if (c1.getName().length() == 0) {
-						break;
-					} else {
-						b5.setName("subsumes");
-						c_list5.add(c1);
-						k++;
-					}
-					c2.setName(c1.getName());
-					j++;
-				}
-				if (k != 0) {
-					logger.debug("clist5がblistに");
-					b5.setChildren(c_list5);
-					b_list.add(b5);
-				}
-			}
-			*/
-
-			/* subsumedby
-			j = 0;
-			k = 0;
-			c2.setName("test_TreeJson");
-			if (list_subsumedby != null) {
-				for (SparqlEntity i : list_subsumedby) {
-					TreeSequence c1 = new TreeSequence();
-					subsumedby_se = list.get(j);
-					String subBName = subsumedby_se.getValue("subsumeB");
-					c1.setName(subBName);
-					c1.setSize(6);
-					if (c1.getName().length() == 0) {
-						break;
-					} else {
-						b6.setName("subsumed_by");
-						c_list6.add(c1);
-						k++;
-					}
-					c2.setName(c1.getName());
-					j++;
-				}
-				if (k != 0) {
-					logger.debug("clist6がblistに");
-					b6.setChildren(c_list6);
-					b_list.add(b6);
-				}
-			}
-			*/
+			
 			
 			/*logger.debug("list" + list + "<");*/
 
@@ -759,7 +776,7 @@ public class D3Controller {
 				if (c1.getName().length() == 0) {
 					break;
 				} else {
-					b5.setName("subsumes");
+					b5.setName("topology");
 					if (c1.getName().equals(c2.getName())) { // c1Name.equals(c2Name)
 						break;
 					} else {
@@ -790,7 +807,7 @@ public class D3Controller {
 				if (c1.getName().length() == 0) {
 					break;
 				} else {
-					b6.setName("subsumed_by");
+					b6.setName("topology_by");
 					if (c1.getName().equals(c2.getName())) { // c1Name.equals(c2Name)
 						break;
 					} else {
