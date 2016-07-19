@@ -10,6 +10,7 @@
 	<script src="/assets/components/webcomponentsjs/webcomponents.min.js"></script>
 	<link rel="import" href="/stanza/summary/">
 	<link rel="import" href="/stanza/structure/">
+	<link rel="import" href="/stanza/grabVisualizer/">
 	<link rel="import" href="/stanza/wurcs/">
 	<link rel="import" href="/stanza/glycoct/">
 	<link rel="import" href="/stanza/iupacCondensed/">
@@ -36,6 +37,7 @@
 			<nav class="entryNav">
 				<ol class="entryNav_ol">
 					<li><a href="#structure">Structure (Image)</a></li>
+					<li><a href="#grab">GRAB visualizer</a></li>
 					<li><a href="#descriptors">Computed Descriptors</a>
 						<ol class="entryNav_ol entryNav_ol-sub">
 							<li><a href="#wurcs">WURCS</a></li>
@@ -53,7 +55,12 @@
 			<div class="entryNew_right">
 				<section id="structure" class="entryNew_section">
 					<h1 class="entryNew_heading">Structure</h1>
-					<togostanza-structure acc="${accNum}" notation="${imageNotation}"></togostanza-structure>
+					<togostanza-structure acc="${accNum}"></togostanza-structure>
+				</section>
+				<section id="grab" class="entryNew_section">
+					<h1 class="entryNew_heading">GRAB visualizer</h1>
+					<togostanza-grabVisualizer acc="${accNum}"></togostanza-grabVisualizer>
+					<!-- <a class="entryNew_heading-2nd btn btn-primary" href="/D3_dndTree/${accNum}" role="button">Viewer</a> -->
 				</section>
 				<section id="descriptors" class="entryNew_section">
 					<h1 class="entryNew_heading">Computed Descriptors</h1>
