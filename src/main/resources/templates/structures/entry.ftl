@@ -8,7 +8,19 @@
 	<link rel="stylesheet" type="text/css" href="/assets/css/entry.css">
 	<script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
 	<script src="/assets/components/webcomponentsjs/webcomponents.min.js"></script>
-	<link rel="import" href="/stanza/summary/">
+	<link rel="import" href="http://test.stanza.glycoinfo.org/stanza/summary/">
+	<!-- <link rel="import" href="http://test.stanza.glycoinfo.org/stanza/structure/"> -->
+	<link rel="import" href="http://test.stanza.glycoinfo.org/stanza/grabVisualizer/">
+	<link rel="import" href="http://test.stanza.glycoinfo.org/stanza/wurcs/">
+	<link rel="import" href="http://test.stanza.glycoinfo.org/stanza/glycoct/">
+	<link rel="import" href="http://test.stanza.glycoinfo.org/stanza/iupacCondensed/">
+	<link rel="import" href="http://test.stanza.glycoinfo.org/stanza/iupacExtended/">
+	<link rel="import" href="http://test.stanza.glycoinfo.org/stanza/motif/">
+	<link rel="import" href="http://test.stanza.glycoinfo.org/stanza/species/">
+	<link rel="import" href="http://test.stanza.glycoinfo.org/stanza/literature/">
+	<link rel="import" href="http://test.stanza.glycoinfo.org/stanza/external/">
+
+<!-- 	<link rel="import" href="/stanza/summary/">
 	<link rel="import" href="/stanza/structure/">
 	<link rel="import" href="/stanza/grabVisualizer/">
 	<link rel="import" href="/stanza/wurcs/">
@@ -19,6 +31,7 @@
 	<link rel="import" href="/stanza/species/">
 	<link rel="import" href="/stanza/literature/">
 	<link rel="import" href="/stanza/external/">
+ -->	
 </head>
 <body>
 <!--link for page top-->
