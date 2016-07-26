@@ -36,7 +36,7 @@
 		<div class="entryNew_content">
 			<nav class="entryNav">
 				<ol class="entryNav_ol">
-					<li><a href="#structure">Structure (Image)</a></li>
+					<!-- <li><a href="#structure">Structure (Image)</a></li> -->
 					<li><a href="#grab">GRAB visualizer</a></li>
 					<li><a href="#descriptors">Computed Descriptors</a>
 						<ol class="entryNav_ol entryNav_ol-sub">
@@ -53,11 +53,11 @@
 				</ol>
 			</nav>
 			<div class="entryNew_right">
-				<section id="structure" class="entryNew_section">
+<!-- 				<section id="structure" class="entryNew_section">
 					<h1 class="entryNew_heading">Structure</h1>
 					<togostanza-structure acc="${accNum}"></togostanza-structure>
 				</section>
-				<section id="grab" class="entryNew_section">
+ -->				<section id="grab" class="entryNew_section">
 					<h1 class="entryNew_heading">GRAB visualizer</h1>
 					<togostanza-grabVisualizer acc="${accNum}"></togostanza-grabVisualizer>
 					<!-- <a class="entryNew_heading-2nd btn btn-primary" href="/D3_dndTree/${accNum}" role="button">Viewer</a> -->
