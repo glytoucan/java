@@ -37,7 +37,7 @@
 			<nav class="entryNav">
 				<ol class="entryNav_ol">
 					<!-- <li><a href="#structure">Structure (Image)</a></li> -->
-					<li><a href="#grab">GRAB visualizer</a></li>
+					<li><a href="#grab">Glycan RDF Asociation Browser(GRAB)</a></li>
 					<li><a href="#descriptors">Computed Descriptors</a>
 						<ol class="entryNav_ol entryNav_ol-sub">
 							<li><a href="#wurcs">WURCS</a></li>
@@ -58,7 +58,7 @@
 					<togostanza-structure acc="${accNum}"></togostanza-structure>
 				</section>
  -->				<section id="grab" class="entryNew_section">
-					<h1 class="entryNew_heading">GRAB visualizer</h1>
+					<h1 class="entryNew_heading">Glycan RDF Asociation Browser(GRAB)</h1>
 					<togostanza-grabVisualizer acc="${accNum}"></togostanza-grabVisualizer>
 					<!-- <a class="entryNew_heading-2nd btn btn-primary" href="/D3_dndTree/${accNum}" role="button">Viewer</a> -->
 				</section>
