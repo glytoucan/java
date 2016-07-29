@@ -19,7 +19,6 @@
 	<link rel="import" href="/stanza/species/">
 	<link rel="import" href="/stanza/literature/">
 	<link rel="import" href="/stanza/external/">
- -->	
 </head>
 <body>
 <!--link for page top-->
