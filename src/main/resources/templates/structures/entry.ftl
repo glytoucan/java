@@ -9,7 +9,7 @@
 	<script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
 	<script src="/assets/components/webcomponentsjs/webcomponents.min.js"></script>
 	<link rel="import" href="/stanza/summary/">
-	<link rel="import" href="/stanza/structure/">
+	<!-- <link rel="import" href="/stanza/structure/"> -->
 	<link rel="import" href="/stanza/grabVisualizer/">
 	<link rel="import" href="/stanza/wurcs/">
 	<link rel="import" href="/stanza/glycoct/">
