@@ -259,34 +259,22 @@ LIN
 	}
 
 	@Test
-	public void testRegisteredGlycoCTG00029MOHybrid() throws UnsupportedEncodingException {
-		String id = "G00029MO";
-		String sequence = "RES\\n"
-				+ "1b:x-dglc-HEX-x:x\\n"
-				+ "2s:n-acetyl\\n"
-				+ "3b:b-dglc-HEX-1:5\\n"
-				+ "4s:n-acetyl\\n"
-				+ "5b:b-dman-HEX-1:5\\n"
-				+ "6b:a-dman-HEX-1:5\\n"
-				+ "7b:b-dglc-HEX-1:5\\n"
-				+ "8s:n-acetyl\\n"
-				+ "9b:a-dman-HEX-1:5\\n"
-				+ "LIN\\n"
-				+ "1:1d(2+1)2n\\n"
-				+ "2:1o(4+1)3d\\n"
-				+ "3:3d(2+1)4n\\n"
-				+ "4:3o(4+1)5d\\n"
-				+ "5:5o(3+1)6d\\n"
-				+ "6:6o(2|4+1)7d\\n"
-				+ "7:7d(2+1)8n\\n"
-				+ "8:5o(6+1)9d\\n";
+	public void testRegisteredGlycoCTG00031MOHybrid() throws UnsupportedEncodingException {
+		String id = "G00031MO";
+		String sequence = "RES\\n" +
+				"1b:a-dgal-HEX-1:5\\n" +
+				"2s:n-acetyl\\n" +
+				"3b:b-dgal-HEX-1:5\\n" +
+				"LIN\\n" +
+				"1:1d(2+1)2n\\n" +
+				"2:1o(3+1)3d";
 		logger.debug("sequence:>" + sequence + "<");
 
 		SequenceInput si = new SequenceInput();
 		si.setId(id);
 		si.setSequence(sequence);
 //		si.setResultSequence("WURCS=2.0/4,6,5/[u2122h_2*NCC/3=O][a2122h-1b_1-5_2*NCC/3=O][a1122h-1b_1-5][a1122h-1a_1-5]/1-2-3-4-2-4/a4-b1_b4-c1_c3-d1_c6-f1_e1-d2|d4");
-		si.setResultSequence("WURCS%3D2.0%2F4%2C6%2C5%2F%5Bu2122h_2*NCC%2F3%3DO%5D%5Ba2122h-1b_1-5_2*NCC%2F3%3DO%5D%5Ba1122h-1b_1-5%5D%5Ba1122h-1a_1-5%5D%2F1-2-3-4-2-4%2Fa4-b1_b4-c1_c3-d1_c6-f1_e1-d2%7Cd4");
+		si.setResultSequence("WURCS%3D2.0%2F2%2C2%2C1%2F%5Ba2112h-1a_1-5_2*NCC%2F3%3DO%5D%5Ba2112h-1b_1-5%5D%2F1-2%2Fa3-b1");
 		si.setImage("/glycans/" + id + "/image?style=extended&format=png&notation=cfg");
 		try {
 			mockMvc.perform(
@@ -335,7 +323,7 @@ LIN
 	  public void testStructureEntryPage() throws Exception {
 	    mockMvc.perform(get("/Structures/Glycans/G00051MO"))
 	        .andExpect(status().isOk())
-	        .andExpect(view().name("structures/glycans"))
+	        .andExpect(view().name("structures/entry"))
 	        .andExpect(
 	            model().attribute("description",
 	                containsString("G00051MO")));
