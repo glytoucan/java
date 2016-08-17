@@ -222,10 +222,13 @@ public class StructuresController {
 			if (StringUtils.isNotBlank(accessionNumber) && accessionNumber.startsWith("G")) {
 //				logClient.insertDefaultLog("glycan entry page for " + accessionNumber + " requested.");
 			    GlycoSequenceDetailResponse response = glycoSequenceClient.detailRequest(accessionNumber);
-			    logger.debug(response.getDescription());
-     			model.addAttribute("accNum", accessionNumber);
-     			model.addAttribute("description", response.getDescription());
-				return "structures/entry";
+			    ResponseMessage rm = response.getResponseMessage();
+			    if (rm.getErrorCode().intValue() == 0) {
+			    	logger.debug(response.getDescription());
+			    	model.addAttribute("accNum", accessionNumber);
+			    	model.addAttribute("description", response.getDescription());
+			    	return "structures/glycans";
+			    }
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
