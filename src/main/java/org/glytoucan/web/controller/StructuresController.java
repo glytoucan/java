@@ -227,7 +227,7 @@ public class StructuresController {
 			    	logger.debug(response.getDescription());
 			    	model.addAttribute("accNum", accessionNumber);
 			    	model.addAttribute("description", response.getDescription());
-			    	return "structures/glycans";
+			    	return "structures/entry";
 			    }
 			}
 		} catch (Exception e) {
