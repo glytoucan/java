@@ -329,4 +329,14 @@ LIN
 	                containsString("G00051MO")));
 	  }
 	
+	 
+	 @Test
+	  public void testInvalidEntryPage() throws Exception {
+	    mockMvc.perform(get("/Structures/Glycans/GTESTING"))
+	        .andExpect(status().isOk())
+	        .andExpect(view().name("structures/entry"))
+	        .andExpect(
+	            model().attribute("description",
+	                containsString("Invalid")));
+	  }
 }
