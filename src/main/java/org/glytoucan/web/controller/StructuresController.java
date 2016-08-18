@@ -195,7 +195,7 @@ public class StructuresController {
 			redirectAttrs.addFlashAttribute("errorMessage", "Currently under maintence please try again in a few minutes");
 			return "redirect:/";
 		}
-		redirectAttrs.addFlashAttribute("errorMessage", "This accession number does not exist");
+		redirectAttrs.addFlashAttribute("errorMessage", "Accession number \"" + accessionNumber + "\" does not exist");
 		return "redirect:/";
     }
 
@@ -235,7 +235,7 @@ public class StructuresController {
 			redirectAttrs.addFlashAttribute("errorMessage", "Currently under maintence please try again in a few minutes");
 			return "redirect:/";
 		}
-		redirectAttrs.addFlashAttribute("errorMessage", "This accession number does not exist");
+		redirectAttrs.addFlashAttribute("errorMessage", "Accession number \"" + accessionNumber + "\" does not exist");
 		return "redirect:/";
     }
 }
