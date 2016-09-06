@@ -188,7 +188,7 @@
 		<dependency>
 			<groupId>jp.bluetree</groupId>
 			<artifactId>spring-google-openidconnect</artifactId>
-			<version>1.1-SNAPSHOT</version>
+			<version>1.2-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.validation</groupId>
@@ -198,6 +198,11 @@
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.glytoucan</groupId>
+			<artifactId>admin</artifactId>
+            <version>1.2.4-TOCO-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 
