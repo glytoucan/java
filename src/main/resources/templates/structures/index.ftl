@@ -31,6 +31,7 @@ ${Title[0]}
 			<span class="incSearch_list">${showFullListOf}&nbsp;
 				<span class="incSearch_showList" data-category="motif">${motifs}</span>&nbsp;/&nbsp;
 				<span class="incSearch_showList" data-category="monosaccharide">${monosaccharides}</span>
+				<span class="incSearch_showList" data-category="database">Databases</span>
 			</span>
 			<!-- no suggestion -->
 			<span class="incSearch_notfound">(${noneFound})</span>
@@ -43,16 +44,19 @@ ${Title[0]}
 				<span class="listBox_tabBtn listBox_tabBtn--current" data-category="motif">${motifs}</span>
 				<!-- Monosaccharides -->
 				<span class="listBox_tabBtn" data-category="monosaccharide">${monosaccharides}</span>
+				<!-- Databases -->
+				<span class="listBox_tabBtn" data-category="database">Databases</span>
 			</div>
 			<div class="listBox_listArea">
-				<ul class="listBox_ul listBox_ul-motif listBox_ul--show"></ul>
-				<ul class="listBox_ul listBox_ul-monosaccharide"></ul>
+				<ul class="listBox_ul listBox_ul-motif listBox_ul--show" data-category="motif"></ul>
+				<ul class="listBox_ul listBox_ul-monosaccharide" data-category="monosaccharide"></ul>
+				<ul class="listBox_ul listBox_ul-database" data-category="database"></ul>
+			</div>
 			</div>
 		</div>
 
 		<div class="searchSuggest searchSuggest--blank js_searchSuggest">
-			<ul class="searchSuggest_ul">
-			</ul>
+			<ul class="searchSuggest_ul"></ul>
 		</div><!--/.searchSuggest-->
 		<div class="adoptedSearch adoptedSearch--empty">
 			<!--Motif and Monosaccharide-->
@@ -84,6 +88,12 @@ ${Title[0]}
 				<input class="massRange_num massRange_num-max" disabled="disabled" type="text" size="6" value="" />
 			</div>
 		</div><!--/.massRange-->
+
+		<div class="linkedDb">
+			<p class="linkedDb_title">Linked DB</p>
+			<p class="linkedDb_default linkedDb_default--show">(No condition)</p>
+			<div class="linkedDb_items"></div>
+		</div><!--/.linkedDb-->
 	</div><!--/.glSearchWrapper-->
 	<div class="glResult glResult--listview clearfix">
 
@@ -108,6 +118,10 @@ ${Title[0]}
 			</div>
 			<div class="glCurrentStatus_category glCurrentStatus_category-mass">
 				<p class="glCurrentStatus_title glCurrentStatus_title-03">Mass range</p>
+				<div class="glCurrentStatus_detail"></div>
+			</div>
+			<div class="glCurrentStatus_category glCurrentStatus_category-database">
+				<p class="glCurrentStatus_title glCurrentStatus_title-04">Linked DB</p>
 				<div class="glCurrentStatus_detail"></div>
 			</div>
 		</div>
@@ -165,7 +179,7 @@ ${Title[0]}
 					<th class="glResultStructure_acc">${accessionNumber}</th>
 					<th>GlycoCT</th>
 				</tr>
-		</thead>
+			</thead>
 			<tbody class="glResultStructure_body"></tbody>
 		</table><!--/.glResultStructure-->
 		<div class="glResultPager">
