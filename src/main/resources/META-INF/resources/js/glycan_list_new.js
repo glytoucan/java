@@ -261,8 +261,8 @@ $(function () { // wrapper function
         motif: Object.keys(this.current_items.motif).join('__'),
         monosaccharide: monosaccharide_list.join('__'),
         database: Object.keys(this.current_items.database).join('__'),
-        order: this.$sortDirec.val(),
-        orderkey: this.$sortKey.val(),
+        order: this.$sortDirec.val() || 'ContributionTime',
+        orderkey: this.$sortKey.val() || 'DESC',
         offset: offset,
         lang: this.language
       };
