@@ -74,10 +74,12 @@ public class SecurityIT {
                 .header("Location", startsWith("https://accounts.google.com/o/oauth2/auth"));
     }
     
-    @Test
+//    @Test
     public void testToken() {
     	
     	DefaultOAuth2ClientContext defaultContext = new DefaultOAuth2ClientContext();
+    	String password="";
+      DefaultOAuth2AccessToken defToken = new DefaultOAuth2AccessToken(password);
     	defaultContext.setAccessToken(defToken);
     	OAuth2RestOperations rest = new OAuth2RestTemplate(googleOAuth2Details(), defaultContext);
         final ResponseEntity<UserInfo> userInfoResponseEntity = rest.getForEntity("https://www.googleapis.com/oauth2/v2/userinfo", UserInfo.class);
