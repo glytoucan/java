@@ -17,11 +17,13 @@ import org.apache.commons.logging.LogFactory;
 import org.glycoinfo.rdf.SelectSparql;
 import org.glycoinfo.rdf.SparqlException;
 import org.glycoinfo.rdf.dao.SparqlEntity;
-import org.glycoinfo.rdf.service.UserProcedure;
+import org.glytoucan.admin.exception.UserException;
+import org.glytoucan.admin.service.UserProcedure;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
@@ -69,6 +71,8 @@ public class RdfAuthenticationSuccessHandler extends
 		
 		// newly registered user
         UserInfo userInfo = (UserInfo) authentication.getPrincipal();
+        OAuth2AccessToken token = (OAuth2AccessToken)authentication.getCredentials();
+		logger.debug("token:>" + token.getValue());
         
 		logger.debug("userinfo:>" + userInfo);
 		Map<String, String> objectAsMap;
@@ -81,7 +85,7 @@ public class RdfAuthenticationSuccessHandler extends
 		objectAsMap.remove("picture");
 		objectAsMap.remove("link");
 
-		SparqlEntity sparqlentity = new SparqlEntity(userInfo.getId());
+		SparqlEntity sparqlentity = new SparqlEntity(userInfo.getEmail());
 
 		sparqlentity.putAll(objectAsMap);
 		
@@ -93,9 +97,17 @@ public class RdfAuthenticationSuccessHandler extends
 			logger.error("fail");
 		}
 		
+		// if admin user, request to generate key.
+		
+
+		// if successful, store key in memory.
+		
+
+		// use in memory key going forward for all user-related tasks.
 		try {
+// first step, 			
 			userProcedure.add(sparqlentity);
-		} catch (SparqlException e) {
+		} catch (UserException e) {
 			e.printStackTrace();
 			throw new ServletException(e);
 		}

@@ -111,6 +111,8 @@ public class WelcomeController {
 
 		while (list.getGlycans() != null && list.getGlycans().size() > 0 && count < 5) {
 
+			logger.debug("OFFSET:>" + offset + "<");
+			
 			logger.debug(list.getGlycans());
 			for (Object gly : list.getGlycans()) {
 				String acc = (String) gly;

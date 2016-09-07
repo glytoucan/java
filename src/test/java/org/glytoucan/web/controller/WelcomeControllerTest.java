@@ -71,9 +71,14 @@ public class WelcomeControllerTest {
   @Autowired
   GlycanProcedure glycanProcedure;
   
+  private static int iTotal = 0;
+  
   @Before
   public void setup() {
     this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
+    SparqlEntity countSE = glycanProcedure.getCount();
+    String total = countSE.getValue("total");
+    iTotal = Integer.parseInt(total);
   }
 
 	@Test
@@ -88,9 +93,6 @@ public class WelcomeControllerTest {
 	public void testSitemapIndex() throws SparqlException {
 	  XmlSiteMapSet result = welcome.sitemapIndex();
 	    Assert.assertNotNull(result);
-	    SparqlEntity countSE = glycanProcedure.getCount();
-	    String total = countSE.getValue("total");
-	    int iTotal = Integer.parseInt(total);
 	    int num = (int)Math.ceil(iTotal/50000);
 	    logger.debug("NUM:>" + num);
 	    logger.debug("result.getXmlSiteMaps().size():>" + result.getXmlSiteMaps().size());
@@ -205,6 +207,11 @@ public class WelcomeControllerTest {
     Assert.assertNotNull(result);
     logger.debug(result);
     Assert.assertTrue(result.getXmlUrls().size() <= 50000);
+
+    int resultRows = iTotal - 50000;
+    
+    Assert.assertTrue(result.getXmlUrls().size() == resultRows);
+
 	}
 
 	

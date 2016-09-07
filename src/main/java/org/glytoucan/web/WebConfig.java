@@ -14,7 +14,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
   private static final Log logger = LogFactory.getLog(WebConfig.class);
   
-  @Value("${gtc.version}")
+  @Value("${gtc.version:1.2.4-TOCO-SNAPSHOT}")
   private String gtcVersion;
 
   @Override

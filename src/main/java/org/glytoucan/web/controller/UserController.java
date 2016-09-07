@@ -1,9 +1,14 @@
 package org.glytoucan.web.controller;
+import java.util.Date;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.glycoinfo.rdf.SelectSparql;
 import org.glycoinfo.rdf.SparqlException;
 import org.glycoinfo.rdf.dao.SparqlEntity;
-import org.glycoinfo.rdf.service.UserProcedure;
+import org.glycoinfo.rdf.utils.NumberGenerator;
+import org.glytoucan.admin.exception.UserException;
+import org.glytoucan.admin.service.UserProcedure;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -34,8 +39,8 @@ public class UserController {
 			}
 			SparqlEntity userData = null;
 			try {
-				userData = userProcedure.getById(userInfo.getId());
-			} catch (SparqlException e) {
+				userData = userProcedure.getById(userInfo.getEmail());
+			} catch (UserException e) {
 				redirectAttrs.addAttribute("warningMessage", "Could not retrieve user information.  Please Login");
 				return "redirect:/signout";
 			};
@@ -66,8 +71,8 @@ public class UserController {
 			}
 			String hash = null;
 			try {
-				hash = userProcedure.generateHash(userInfo.getId());
-			} catch (SparqlException e) {
+				hash = userProcedure.generateHash(userInfo.getEmail());
+			} catch (UserException e) {
 				redirectAttrs.addAttribute("warningMessage", "Could not retrieve user information.  Please Login");
 				return "redirect:/signout";
 			};
@@ -92,8 +97,8 @@ public class UserController {
 	      }
 	      SparqlEntity userData = null;
 	      try {
-	        userData = userProcedure.getById(userInfo.getId());
-	      } catch (SparqlException e) {
+	        userData = userProcedure.getById(userInfo.getEmail());
+	      } catch (UserException e) {
 	        redirectAttrs.addAttribute("warningMessage", "Could not retrieve user information.  Please Login");
 	        return "redirect:/signout";
 	      };

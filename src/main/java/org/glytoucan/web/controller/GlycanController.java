@@ -39,9 +39,9 @@ import org.glycoinfo.rdf.dao.SparqlEntityFactory;
 import org.glycoinfo.rdf.glycan.GlycoSequence;
 import org.glycoinfo.rdf.glycan.Saccharide;
 import org.glycoinfo.rdf.service.GlycanProcedure;
-import org.glycoinfo.rdf.service.UserProcedure;
 import org.glycoinfo.vision.generator.ImageGenerator;
 import org.glycoinfo.vision.importers.GWSImporter;
+import org.glytoucan.admin.service.UserProcedure;
 import org.glytoucan.model.spec.GlycanClientQuerySpec;
 import org.glytoucan.web.api.Confirmation;
 import org.glytoucan.web.api.Glycan;
@@ -124,7 +124,7 @@ public class GlycanController {
 //	EmailManager emailManager;
 //	
 //	@Autowired
-	UserProcedure userManager;
+//	UserProcedure userManager;
 //	
 	@Autowired
 	ImageGenerator imageGenerator;

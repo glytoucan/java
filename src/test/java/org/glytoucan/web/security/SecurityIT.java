@@ -77,8 +77,6 @@ public class SecurityIT {
     @Test
     public void testToken() {
     	
-    	
-    	DefaultOAuth2AccessToken defToken = new DefaultOAuth2AccessToken("ya29.qQKucenHaUWeYJudz1MN5XpFyC4LAM0cvbqohRyVmVi7ai8uq0KW4khewbKuyaLhWO-jfcI");
     	DefaultOAuth2ClientContext defaultContext = new DefaultOAuth2ClientContext();
     	defaultContext.setAccessToken(defToken);
     	OAuth2RestOperations rest = new OAuth2RestTemplate(googleOAuth2Details(), defaultContext);

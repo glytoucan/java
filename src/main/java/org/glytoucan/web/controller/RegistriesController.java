@@ -33,8 +33,10 @@ import org.glycoinfo.rdf.dao.SparqlEntity;
 import org.glycoinfo.rdf.glycan.Contributor;
 import org.glycoinfo.rdf.service.ContributorProcedure;
 import org.glycoinfo.rdf.service.GlycanProcedure;
-import org.glycoinfo.rdf.service.UserProcedure;
+import org.glycoinfo.rdf.service.exception.ContributorException;
 import org.glycoinfo.vision.generator.ImageGenerator;
+import org.glytoucan.admin.exception.UserException;
+import org.glytoucan.admin.service.UserProcedure;
 import org.glytoucan.model.spec.GlycanClientQuerySpec;
 import org.glytoucan.web.model.SequenceInput;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,8 +70,8 @@ public class RegistriesController {
 	@Autowired
 	ContributorProcedure contributorProcedure;
 	
-  @Autowired
-  UserProcedure userProcedure;
+    @Autowired
+    UserProcedure userProcedure;
 	
 	@Autowired
 	GlycanClientQuerySpec gtcClient;
@@ -268,7 +270,7 @@ public class RegistriesController {
 			+ "        glycan:in_glycan_database  glytoucan:database_glytoucan ;"
 			+ "        glytoucan:contributor      <http://rdf.glytoucan/contributor/userId/1> ;"
 			+ "        glytoucan:date_registered  \"2014-10-20 06:47:31.204\"^^xsd:dateTimeStamp .")
-	public String complete(HttpServletRequest request) throws SparqlException {
+	public String complete(HttpServletRequest request) {
 
 		UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
@@ -277,12 +279,21 @@ public class RegistriesController {
 				&& userInfo.getVerifiedEmail().equals("true")
 				&& StringUtils.isNotBlank(userInfo.getGivenName())) {
 			logger.debug("user is verified:>" + userInfo.getGivenName());
-		  SparqlEntity seUserId = contributorProcedure.searchContributor(userInfo.getGivenName());
+		  SparqlEntity seUserId;
+		try {
+			seUserId = contributorProcedure.searchContributor(userInfo.getGivenName());
+		} catch (ContributorException e) {
+			return "redirect:/signin?errorMessage=Please sign in with a verified email address.";
+		}
 		  if (null != seUserId)
 		    userId = seUserId.getValue(Contributor.ID);
 		  if (null == userId) {
 		    // there is a chance the user modified the given name so contributor id could not be retrieved.
-		    userId = userProcedure.getIdByEmail(userInfo.getEmail());
+		    try {
+				userId = userProcedure.getIdByEmail(userInfo.getEmail());
+			} catch (UserException e) {
+				return "redirect:/signin?errorMessage=Please sign in with a verified email address.";
+			}
 		  }
 		} else {
 			return "redirect:/signin?errorMessage=Please sign in with a verified email address or check our Given Name on Google Accounts.  Please refer to Profile page for details.";
@@ -305,7 +316,12 @@ public class RegistriesController {
 			String check = checked[i];
 			if (StringUtils.isNotBlank(check) && check.equals("on")) {
 				logger.debug("registering:" + resultSequence[i] + "<");
-				String id = glycanProcedure.register(origSequence[i], userId);
+				String id;
+				try {
+					id = glycanProcedure.register(origSequence[i], userId);
+				} catch (SparqlException e) {
+					return "redirect:/signin?errorMessage=There was a problem with a structure.  Details:" + e.getMessage();
+				}
 				registerList.add(resultSequence[i]);
 				origList.add(origSequence[i]);
 				imageList.add(image[i]);
