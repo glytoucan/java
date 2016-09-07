@@ -23,13 +23,14 @@ import org.glycoinfo.rdf.scint.ClassHandler;
 import org.glycoinfo.rdf.scint.InsertScint;
 import org.glycoinfo.rdf.scint.SelectScint;
 import org.glycoinfo.rdf.service.GlycanProcedure;
-import org.glycoinfo.rdf.service.UserProcedure;
 import org.glycoinfo.rdf.service.impl.ContributorProcedureConfig;
 import org.glycoinfo.rdf.service.impl.GlycanProcedureConfig;
 import org.glycoinfo.rdf.service.impl.MailService;
-import org.glycoinfo.rdf.service.impl.UserProcedureConfig;
 import org.glycoinfo.rdf.utils.TripleStoreProperties;
 import org.glycoinfo.vision.generator.ImageGenerator;
+import org.glytoucan.admin.service.UserProcedure;
+import org.glytoucan.admin.service.UserProcedureConfig;
+import org.glytoucan.admin.service.UserProcedureRdf;
 import org.glytoucan.client.GlycanConfig;
 import org.glytoucan.client.config.SoapConfiguration;
 import org.glytoucan.web.view.LocalizationHandlerMapping;
@@ -222,7 +223,7 @@ public class Application  {
 	
 	@Bean(name = "userProcedure")
 	UserProcedure getUserProcedure() throws SparqlException {
-		UserProcedure user = new org.glycoinfo.rdf.service.impl.UserProcedure();
+		UserProcedure user = new UserProcedureRdf();
 		return user;
 	}
     
