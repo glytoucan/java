@@ -52,7 +52,6 @@ ${Title[0]}
 				<ul class="listBox_ul listBox_ul-monosaccharide" data-category="monosaccharide"></ul>
 				<ul class="listBox_ul listBox_ul-database" data-category="database"></ul>
 			</div>
-			</div>
 		</div>
 
 		<div class="searchSuggest searchSuggest--blank js_searchSuggest">
