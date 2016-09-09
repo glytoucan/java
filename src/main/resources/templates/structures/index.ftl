@@ -30,7 +30,7 @@ ${Title[0]}
 			<!--Show full list of Motifs / Monosaccharides -->
 			<span class="incSearch_list">${showFullListOf}&nbsp;
 				<span class="incSearch_showList" data-category="motif">${motifs}</span>&nbsp;/&nbsp;
-				<span class="incSearch_showList" data-category="monosaccharide">${monosaccharides}</span>
+				<span class="incSearch_showList" data-category="monosaccharide">${monosaccharides}</span>&nbsp;/&nbsp;
 				<span class="incSearch_showList" data-category="database">Databases</span>
 			</span>
 			<!-- no suggestion -->
@@ -142,7 +142,7 @@ ${Title[0]}
 					<!-- Mass -->
 					<option class="glResultSort_val" value="Mass">${mass}</option>
 					<!-- Contributor -->
-					<option class="glResultSort_val" value="Contributor">${contributor}</option>
+					<!-- <option class="glResultSort_val" value="Contributor">${contributor}</option> -->
 					<!-- Accession Number -->
 					<option class="glResultSort_val" value="AccessionNumber">${accessionNumber}</option>
 				</select>
