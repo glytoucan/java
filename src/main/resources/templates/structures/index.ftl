@@ -141,10 +141,6 @@ ${Title[0]}
 					<option class="glResultSort_val" selected="selected" value="ContributionTime">${dateEntered}</option>
 					<!-- Mass -->
 					<option class="glResultSort_val" value="Mass">${mass}</option>
-					<!-- Contributor -->
-					<!-- <option class="glResultSort_val" value="Contributor">${contributor}</option> -->
-					<!-- Accession Number -->
-					<option class="glResultSort_val" value="AccessionNumber">${accessionNumber}</option>
 				</select>
 				<select class="glResultSort_order">
 					<!-- Up -->
