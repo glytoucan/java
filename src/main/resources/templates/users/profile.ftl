@@ -18,7 +18,7 @@
 <tbody>
 <tr>
 <td>${username}</td>
-<td>${userProfile.Name}</td>
+<td>${userProfile.givenName}</td>
 </tr>
 <tr>
 <td>${email}</td>
@@ -26,7 +26,7 @@
 </tr>
 <tr>
 <td>Contributor Id</td>
-<td>${userProfile.alternateName}</td>
+<td>${userProfile.externalId}</td>
 </tr>
 <tr>
 <td>Verified Email</td>
