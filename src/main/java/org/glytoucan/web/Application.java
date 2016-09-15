@@ -28,11 +28,9 @@ import org.glycoinfo.rdf.service.impl.GlycanProcedureConfig;
 import org.glycoinfo.rdf.service.impl.MailService;
 import org.glycoinfo.rdf.utils.TripleStoreProperties;
 import org.glycoinfo.vision.generator.ImageGenerator;
-import org.glytoucan.admin.service.UserProcedure;
-import org.glytoucan.admin.service.UserProcedureConfig;
-import org.glytoucan.admin.service.UserProcedureRdf;
-import org.glytoucan.client.GlycanConfig;
-import org.glytoucan.client.config.SoapConfiguration;
+import org.glytoucan.admin.client.config.UserClientConfig;
+import org.glytoucan.client.config.ClientConfiguration;
+import org.glytoucan.client.config.ContributorConfig;
 import org.glytoucan.web.view.LocalizationHandlerMapping;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryException;
@@ -59,7 +57,7 @@ import virtuoso.sesame2.driver.VirtuosoRepository;
 
 //http://stackoverflow.com/questions/31307883/springfox-dependency-breaking-my-spring-context
 @SpringBootApplication(exclude=org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration.class)
-@Import(value = { GlycanProcedureConfig.class, UserProcedureConfig.class, ContributorProcedureConfig.class, GlycanConfig.class, SoapConfiguration.class, GlyConvertConfig.class })
+@Import(value = { GlycanProcedureConfig.class, ContributorProcedureConfig.class, ClientConfiguration.class, GlyConvertConfig.class, UserClientConfig.class, ContributorConfig.class })
 public class Application  {
 //	extends SpringBootServletInitializer
 	private static final String graph = "http://rdf.glytoucan.org";
@@ -221,12 +219,6 @@ public class Application  {
 	    return registrationBean;
 	}
 	
-	@Bean(name = "userProcedure")
-	UserProcedure getUserProcedure() throws SparqlException {
-		UserProcedure user = new UserProcedureRdf();
-		return user;
-	}
-    
 	@Bean(name = "selectscintperson")
 	SelectScint getSelectPersonScint() throws SparqlException {
 		SelectScint select = new SelectScint("schema", "http://schema.org/", "Person");

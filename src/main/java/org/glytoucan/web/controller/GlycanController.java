@@ -41,7 +41,6 @@ import org.glycoinfo.rdf.glycan.Saccharide;
 import org.glycoinfo.rdf.service.GlycanProcedure;
 import org.glycoinfo.vision.generator.ImageGenerator;
 import org.glycoinfo.vision.importers.GWSImporter;
-import org.glytoucan.admin.service.UserProcedure;
 import org.glytoucan.model.spec.GlycanClientQuerySpec;
 import org.glytoucan.web.api.Confirmation;
 import org.glytoucan.web.api.Glycan;

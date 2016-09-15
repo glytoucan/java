@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>org.glytoucan</groupId>
 		<artifactId>pom</artifactId>
-		<version>1.2.4-TOCO-SNAPSHOT</version>
+		<version>1.2.5-TOCO-SNAPSHOT</version>
 	</parent>
 
 	<properties>
@@ -39,7 +39,7 @@
 		<dependency>
 			<groupId>org.glycoinfo</groupId>
 			<artifactId>batch</artifactId>
-			<version>0.3.5-SNAPSHOT</version>
+			<version>0.3.6-SNAPSHOT</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>spring-jdbc</artifactId>
@@ -201,8 +201,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.glytoucan</groupId>
-			<artifactId>admin</artifactId>
-      <version>1.2.4-TOCO-SNAPSHOT</version>
+			<artifactId>adminClient</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 

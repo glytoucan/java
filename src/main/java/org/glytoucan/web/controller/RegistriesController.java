@@ -35,12 +35,16 @@ import org.glycoinfo.rdf.service.ContributorProcedure;
 import org.glycoinfo.rdf.service.GlycanProcedure;
 import org.glycoinfo.rdf.service.exception.ContributorException;
 import org.glycoinfo.vision.generator.ImageGenerator;
-import org.glytoucan.admin.exception.UserException;
-import org.glytoucan.admin.service.UserProcedure;
+import org.glytoucan.admin.client.UserClient;
+import org.glytoucan.admin.model.Authentication;
+import org.glytoucan.admin.model.User;
+import org.glytoucan.admin.model.UserDetailsRequest;
+import org.glytoucan.admin.model.UserDetailsResponse;
 import org.glytoucan.model.spec.GlycanClientQuerySpec;
 import org.glytoucan.web.model.SequenceInput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -70,11 +74,11 @@ public class RegistriesController {
 	@Autowired
 	ContributorProcedure contributorProcedure;
 	
-    @Autowired
-    UserProcedure userProcedure;
-	
 	@Autowired
 	GlycanClientQuerySpec gtcClient;
+	
+	@Autowired
+	UserClient userClient;
 
 	@RequestMapping("/graphical")
 	public String graphical(Model model, RedirectAttributes redirectAttrs) {
@@ -270,7 +274,7 @@ public class RegistriesController {
 			+ "        glycan:in_glycan_database  glytoucan:database_glytoucan ;"
 			+ "        glytoucan:contributor      <http://rdf.glytoucan/contributor/userId/1> ;"
 			+ "        glytoucan:date_registered  \"2014-10-20 06:47:31.204\"^^xsd:dateTimeStamp .")
-	public String complete(HttpServletRequest request) {
+	public String complete(HttpServletRequest request, RedirectAttributes redirectAttrs) {
 
 		UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
@@ -288,12 +292,37 @@ public class RegistriesController {
 		  if (null != seUserId)
 		    userId = seUserId.getValue(Contributor.ID);
 		  if (null == userId) {
+		    
+		    
 		    // there is a chance the user modified the given name so contributor id could not be retrieved.
-		    try {
-				userId = userProcedure.getIdByEmail(userInfo.getEmail());
-			} catch (UserException e) {
-				return "redirect:/signin?errorMessage=Please sign in with a verified email address.";
-			}
+//		    try {
+//				userId = userProcedure.getIdByEmail(userInfo.getEmail());
+//			} catch (UserException e) {
+//				return "redirect:/signin?errorMessage=Please sign in with a verified email address.";
+//			}
+		    
+		     OAuth2AccessToken token = (OAuth2AccessToken)SecurityContextHolder.getContext().getAuthentication().getCredentials();
+		      logger.debug("token:>" + token.getValue());
+		      
+//		      SparqlEntity userData = null;
+//		      try {
+		        UserDetailsRequest req = new UserDetailsRequest();
+		        Authentication auth = new Authentication();
+		        auth.setId(userInfo.getEmail());
+		        auth.setId(token.getValue());
+		        req.setAuthentication(auth);
+		        UserDetailsResponse response =  userClient.userDetailsRequest(req);
+//		        userData = userProcedure.getIdByEmail(userInfo.getEmail());
+		        if (null == response || null == response.getUser()) {
+		          redirectAttrs.addAttribute("warningMessage", "Could not retrieve user information.  Please Login");
+		          return "redirect:/signout";
+		        }
+		        User user = response.getUser();
+//		      };
+		      if (null == user.getGivenName()) {
+		        redirectAttrs.addAttribute("warningMessage", "Could not retrieve user information.  Please Login");
+		        return "redirect:/signout";
+		      }
 		  }
 		} else {
 			return "redirect:/signin?errorMessage=Please sign in with a verified email address or check our Given Name on Google Accounts.  Please refer to Profile page for details.";

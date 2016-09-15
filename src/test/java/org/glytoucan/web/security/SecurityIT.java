@@ -76,7 +76,6 @@ public class SecurityIT {
     
 //    @Test
     public void testToken() {
-    	
     	DefaultOAuth2ClientContext defaultContext = new DefaultOAuth2ClientContext();
     	String password="";
       DefaultOAuth2AccessToken defToken = new DefaultOAuth2AccessToken(password);

@@ -19,7 +19,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.glytoucan.client.GlycoSequenceClient;
 import org.glytoucan.client.config.GlycanQueryConfig;
-import org.glytoucan.client.soap.GlycoSequenceCountResponse;
+import org.glytoucan.client.model.GlycoSequenceCountResponse;
 import org.glytoucan.model.GlycanList;
 import org.glytoucan.model.spec.GlycanClientQuerySpec;
 import org.glytoucan.model.spec.GlycanClientRegisterSpec;
