@@ -1,5 +1,5 @@
+'use strict';
 $(function () { // wrapper function
-  'use strict';
 
   var ITEM_PER_PAGE = 20;
 
@@ -162,7 +162,8 @@ $(function () { // wrapper function
 
       this.motifList = {};
       this.monosaccharideList = {};
-      this.current_items = {motif: {}, monosaccharide: {}};
+      this.databaseList = {};
+      this.current_items = {motif: {}, monosaccharide: {}, database: {}};
       this.$listBox.draggable({handle: '.listBox_title, .listBox_tab'});
 
       this.mass_enable = false;
@@ -187,6 +188,7 @@ $(function () { // wrapper function
       this.$listBox = this.$app.find('.listBox');
 
       this.$massRange = this.$app.find('.massRange');
+      this.$linkedDb = this.$app.find('.linkedDb');
 
       this.$totalNum = this.$app.find('.glResultTotal_num');
       this.$viewSwitch = this.$app.find('.glResultSwitch');
@@ -223,6 +225,8 @@ $(function () { // wrapper function
       this.$massRange.on('change', '.massEnable_checkbox', this.toggleMass.bind(this));
       this.$massRange.on('change', '.massRange_num', this.inputMass.bind(this));
 
+      this.$linkedDb.on('click', '.linkedDb_item_remove', this.removeDatabase.bind(this));
+
       this.$sortKey.on('change', this.doSort.bind(this));
       this.$sortDirec.on('change', this.doSort.bind(this));
       this.$viewSwitch.on('click', '.glResultSwitch_text', this.mainSwitch.bind(this));
@@ -247,7 +251,7 @@ $(function () { // wrapper function
       var offset = (this.page - 1) * 20;
       var monosaccharide_list = [], i, item, keys;
       keys = Object.keys(this.current_items.monosaccharide);
-      for( i = 0; i < keys.length; i += 1) {
+      for (i = 0; i < keys.length; i += 1) {
         item = this.current_items.monosaccharide[keys[i]];
         monosaccharide_list.push(item.name + '_Min_' + item.min + '_Max_' + item.max);
       }
@@ -256,8 +260,9 @@ $(function () { // wrapper function
         massmax: this.mass_range.max,
         motif: Object.keys(this.current_items.motif).join('__'),
         monosaccharide: monosaccharide_list.join('__'),
-        order: this.$sortDirec.val(),
-        orderkey: this.$sortKey.val(),
+        database: Object.keys(this.current_items.database).join('__'),
+        order: this.$sortDirec.val() || 'DESC',
+        orderkey: this.$sortKey.val() || 'ContributionTime',
         offset: offset,
         lang: this.language
       };
@@ -287,7 +292,7 @@ $(function () { // wrapper function
         }
         _this.mass_range.current_min = mass_res_min;
         _this.mass_range.current_max = mass_res_max;
-        _this.updateList(data_set[5], data_set[6]);
+        _this.updateList(data_set[5], data_set[6], data_set[7]);
         _this.updateCurrent();
       }, function (err) {
         console.log(err);
@@ -298,7 +303,7 @@ $(function () { // wrapper function
 
     renderMain: function (count_data, list_data, wurcs_data, structure_data) {
       var _this = this;
-      var total = Number.isNaN(count_data) ? 0 : parseInt(count_data, 10);
+      var total = count_data === undefined || Number.isNaN(count_data) ? 0 : parseInt(count_data, 10);
       this.$totalNum.text(total);
       this.count = total;
       this.$pager.html(util.set_pager(parseInt(this.page, 10), total));
@@ -325,10 +330,10 @@ $(function () { // wrapper function
         structure_data = '<tr><td colspan="2">' + _this.$resultNothing.text() + '</td></tr>';
       }
       this.$resultWurcs.children('tbody').html(wurcs_data);
-      this.$resultWurcs.find('code').each(function () {
-        var wurcs_decoded = decodeURIComponent($(this).text());
-        $(this).text(wurcs_decoded);
-      });
+      // this.$resultWurcs.find('code').each(function () {
+      //   var wurcs_decoded = decodeURIComponent($(this).text());
+      //   $(this).text(wurcs_decoded);
+      // });
       if (wurcs_data === '') {
         wurcs_data = '<tr><td colspan="2">' + _this.$resultNothing.text() + '</td></tr>';
       }
@@ -337,26 +342,27 @@ $(function () { // wrapper function
         util.getImg($(this), _this.notation);
       });
 
-      if (this.mass_enable || Object.keys(this.current_items.motif).length > 0 || Object.keys(this.current_items.monosaccharide).length > 0) {
+      if (this.mass_enable || Object.keys(this.current_items.motif).length > 0 || Object.keys(this.current_items.monosaccharide).length > 0 || Object.keys(this.current_items.database).length > 0) {
         this.$currentStatus.addClass('glCurrentStatus--show');
       } else {
         this.$currentStatus.removeClass('glCurrentStatus--show');
       }
     },
 
-    updateList: function(motif_data, monosaccharide_data) {
+    updateList: function (motif_data, monosaccharide_data, db_data) {
       var _this = this;
 
+      var name, num, max, min, current;
       var keys, i, item;
+      this.$listBox.find('.listBox_listArea').find('ul').html('');
+
+      //Motif
       keys = Object.keys(this.motifList);
       for (i = 0; i < keys.length; i += 1) {
         item = this.motifList[keys[i]];
         item.exist = false;
       }
-
-      this.$listBox.find('.listBox_listArea').find('ul').html('');
       var $motif_list = $(motif_data);
-      var name, num, max, min, current;
       $motif_list.children('li').each(function () {
         name = $(this).children('.listBox_itemName').text();
         num = parseInt($(this).children('.listBox_itemNum').text().replace(/\(|\)/g, ''), 10);
@@ -368,12 +374,12 @@ $(function () { // wrapper function
       });
       this.$listBox.find('.listBox_ul-motif').html($motif_list.html());
 
+      //Monosaccharide
       keys = Object.keys(this.monosaccharideList);
       for (i = 0; i < keys.length; i += 1) {
         item = this.monosaccharideList[keys[i]];
         item.exist = false;
       }
-
       var $mono_list = $(monosaccharide_data).addClass('listBox_ul-monosaccharide');
       $mono_list.children('li').each(function () {
         name = $(this).children('.listBox_itemName').text();
@@ -395,8 +401,25 @@ $(function () { // wrapper function
         $(this).data('min', min);
         $(this).data('max', max);
       });
-
       this.$listBox.find('.listBox_ul-monosaccharide').html($mono_list.html());
+
+      //Database
+      keys = Object.keys(this.databaseList);
+      for (i = 0; i < keys.length; i += 1) {
+        item = this.databaseList[keys[i]];
+        item.exist = false;
+      }
+      var $database_list = $(db_data);
+      $database_list.children('li').each(function () {
+        name = $(this).children('.listBox_itemName').text();
+        num = parseInt($(this).children('.listBox_itemNum').text().replace(/\(|\)/g, ''), 10);
+        current = _this.current_items.database[name] === undefined ? false : true;
+        _this.databaseList[name] = {name: name, num: num, current: current, exist: true};
+        if (current) {
+          $(this).addClass('listBox_name--disabled');
+        }
+      });
+      this.$listBox.find('.listBox_ul-database').html($database_list.html());
     },
 
     mainSwitch: function (e) {
@@ -440,6 +463,7 @@ $(function () { // wrapper function
       this.toggleMass();
       this.current_items.motif = {};
       this.current_items.monosaccharide = {};
+      this.current_items.database = {};
       this.$adoptedList.find('ul').remove();
       this.$adoptedList.find('.adoptedSearch_group').addClass('adoptedSearch_group--empty');
       this.page = 1;
@@ -454,7 +478,7 @@ $(function () { // wrapper function
       this.$listBox.find('.listBox_ul-' + category).addClass('listBox_ul--show');
       this.$listBox.find('.listBox_tabBtn').each(function () {
         $(this).removeClass('listBox_tabBtn--current');
-        if($(this).data('category') === category) {
+        if ($(this).data('category') === category) {
           $(this).addClass('listBox_tabBtn--current');
         }
       });
@@ -465,7 +489,7 @@ $(function () { // wrapper function
       this.$listBox.find('.listBox_ul').addClass('listBox_ul--show');
     },
 
-    switchList: function(e) {
+    switchList: function (e) {
       var $clicked = $(e.currentTarget);
       if ($clicked.hasClass('listBox_tabBtn--current')) {
         return;
@@ -482,13 +506,8 @@ $(function () { // wrapper function
       if ($clicked.hasClass('listBox_name--disabled')) {
         return;
       }
-      var category, name;
-      if ($clicked.parent('ul').hasClass('listBox_ul-motif')) {
-        category = 'motif';
-      } else {
-        category = 'monosaccharide';
-      }
-      name = $clicked.children('.listBox_itemName').text();
+      var category = $clicked.parent('ul.listBox_ul').data('category');
+      var name = $clicked.children('.listBox_itemName').text();
       this.addCondition(category, name);
     },
 
@@ -610,6 +629,8 @@ $(function () { // wrapper function
         this.addMotifView(item_name);
       } else if (category === 'monosaccharide') {
         this.addMonoView(item_name);
+      } else if (category === 'database') {
+        this.addDatabaseView(item_name);
       }
       this.getMain();
     },
@@ -624,6 +645,22 @@ $(function () { // wrapper function
       } else if (this.current_items.monosaccharide[target_name] !== undefined) {
         delete this.current_items.monosaccharide[target_name];
         this.removeAdoptedItem(target_name, 'monosaccharide');
+      }
+      this.page = 1;
+      this.getMain();
+    },
+
+    removeDatabase: function (e) {
+      var $clicked = $(e.target);
+      var $target = $clicked.parent('.linkedDb_item');
+      var target_name = $target.children('span.linkedDb_item_name').text();
+      if (this.current_items.database[target_name] === undefined) {
+        return;
+      }
+      delete this.current_items.database[target_name];
+      $target.remove();
+      if (Object.keys(this.current_items.database).length === 0) {
+        this.$linkedDb.find('.linkedDb_default').addClass('linkedDb_default--show');
       }
       this.page = 1;
       this.getMain();
@@ -677,6 +714,18 @@ $(function () { // wrapper function
         $el.append($li);
         $target.append($el);
         $target.removeClass('adoptedSearch_group--empty');
+      }
+    },
+
+    addDatabaseView: function (name) {
+      var $target = this.$linkedDb.find('.linkedDb_items');
+      var item = this.current_items.database[name];
+      var $el = $('<div class="linkedDb_item" data-name="' + name + '"><span class="linkedDb_item_name">' + item.name + '</span><span class="linkedDb_item_remove">Remove</span>');
+      if ($target.append($el));
+      if ($target.find('.linkedDb_item').length > 0) {
+        this.$linkedDb.find('.linkedDb_default').removeClass('linkedDb_default--show');
+      } else {
+        this.$linkedDb.find('.linkedDb_default').addClass('linkedDb_default--show');
       }
     },
 
@@ -772,8 +821,9 @@ $(function () { // wrapper function
 
     updateCurrent: function () {
       this.$currentStatus.find('.glCurrentStatus_detail').html('');
+      var i, item, motif_names = [], mono_names = [], db_names = [];
+
       var keys = Object.keys(this.current_items.motif);
-      var i, item, motif_names = [], mono_names = [];
       for (i = 0; i < keys.length; i += 1) {
         item = this.current_items.motif[keys[i]];
         motif_names.push(item.name);
@@ -786,6 +836,13 @@ $(function () { // wrapper function
         mono_names.push(item.name + '(' + item.current_min + '〜' + item.current_max + ')');
       }
       this.$currentStatus.find('.glCurrentStatus_category-monosaccharide').children('.glCurrentStatus_detail').text(mono_names.join(', '));
+
+      var keys = Object.keys(this.current_items.database);
+      for (i = 0; i < keys.length; i += 1) {
+        item = this.current_items.database[keys[i]];
+        db_names.push(item.name);
+      }
+      this.$currentStatus.find('.glCurrentStatus_category-database').children('.glCurrentStatus_detail').text(db_names.join(', '));
 
       var mass_text;
       if (this.mass_enable && this.count > 0) {
