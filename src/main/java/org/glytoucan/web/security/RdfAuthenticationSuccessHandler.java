@@ -31,6 +31,7 @@ import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -93,7 +94,7 @@ public class RdfAuthenticationSuccessHandler extends
     }
     
     org.glytoucan.admin.model.Authentication auth = new org.glytoucan.admin.model.Authentication();
-    auth.setId("1");
+    auth.setId(adminEmail);
     auth.setApiKey(adminKey);
 
     if (adminEmail.equals(userInfo.getEmail()) && StringUtils.isBlank(adminKey)) {
@@ -141,10 +142,10 @@ public class RdfAuthenticationSuccessHandler extends
       
       if (null == adminKey)
         throw new ServletException("please wait until admin has logged in");
-// contributor add Contributor
+// add Contributor limited to admin 
       Map<String, Object>  map = new HashMap<String, Object>();
       map.put(ContributorRest.NAME, userInfo.getGivenName());
-      map.put(ContributorRest.USERNAME, "1");
+      map.put(ContributorRest.USERNAME, adminEmail);
       map.put(ContributorRest.API_KEY, adminKey);
       
       Map<String, Object>  results = contributorRest.register(map);
@@ -174,4 +175,9 @@ public class RdfAuthenticationSuccessHandler extends
   
   @Value("${admin.key: }")
   private String adminKey;
+  
+//  @Bean(name="adminKey")
+//  public String getAdminKey() {
+//    return adminKey;
+//  }
 }

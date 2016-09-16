@@ -16,6 +16,8 @@ import org.glytoucan.admin.model.UserDetailsRequest;
 import org.glytoucan.admin.model.UserDetailsResponse;
 import org.glytoucan.admin.model.UserGenerateKeyRequest;
 import org.glytoucan.admin.model.UserGenerateKeyResponse;
+import org.glytoucan.admin.model.UserKeyRequest;
+import org.glytoucan.admin.model.UserKeyResponse;
 //import org.glytoucan.admin.service.UserProcedure;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -67,9 +69,9 @@ public class UserController {
 //			try {
 			  UserDetailsRequest request = new UserDetailsRequest();
 			  Authentication auth = new Authentication();
-			  auth.setId("1");
-      logger.debug("adminKey:>" + adminKey);
-        auth.setApiKey(adminKey);
+			  auth.setId(userInfo.getEmail());
+//      logger.debug("adminKey:>" + adminKey);
+        auth.setApiKey(token.getValue());
 			  request.setAuthentication(auth);
 			  request.setPrimaryId(userInfo.getEmail());
 			  UserDetailsResponse response =  userClient.userDetailsRequest(request);
@@ -85,13 +87,22 @@ public class UserController {
 				return "redirect:/signout";
 			}
 			
+			UserKeyRequest ukRequest = new UserKeyRequest();
+			ukRequest.setAuthentication(auth);
+			ukRequest.setPrimaryId(userInfo.getEmail());
+			UserKeyResponse ukResponse = userClient.getKey(ukRequest);
+			if (null != ukResponse && !StringUtils.isBlank(ukResponse.getKey())) {
+			  user.setMembershipNumber(ukResponse.getKey());
+			}
+			
 			logger.debug(user);
 			model.addAttribute("userProfile", user);
 			
 			// TODO: check for verified email in RDF
 	        if (userInfo.getVerifiedEmail()!=null && userInfo.getVerifiedEmail().equals("true")) {
 	        	model.addAttribute("verifiedEmail", true);
-	        }
+	        } else
+	          model.addAttribute("verifiedEmail", false);
 		}
 		
     	return "users/profile";
@@ -107,20 +118,24 @@ public class UserController {
 			}
 			String hash = null;
 			
-      OAuth2AccessToken token = (OAuth2AccessToken)SecurityContextHolder.getContext().getAuthentication().getCredentials();
-      logger.debug("token:>" + token.getValue());
-      
 //      SparqlEntity userData = null;
 //      try {
-        UserGenerateKeyRequest request = new UserGenerateKeyRequest();
-        Authentication auth = new Authentication();
-        auth.setId(userInfo.getEmail());
-        auth.setId(token.getValue());
-        request.setAuthentication(auth);
-        UserGenerateKeyResponse response =  userClient.generateKey(request);
+      OAuth2AccessToken token = (OAuth2AccessToken)SecurityContextHolder.getContext().getAuthentication().getCredentials();
+      if (token == null || StringUtils.isBlank(token.getValue())) {
+        redirectAttrs.addAttribute("warningMessage", "Could not retrieve user information.  Please Login");
+        return "redirect:/signout";
+      }
+      
+      UserGenerateKeyRequest request = new UserGenerateKeyRequest();
+      Authentication auth = new Authentication();
+      auth.setId(userInfo.getEmail());
+      auth.setApiKey(token.getValue());
+      request.setAuthentication(auth);
+      request.setPrimaryId(userInfo.getEmail());
+      UserGenerateKeyResponse response =  userClient.generateKey(request);
 
         
-        hash = response.getKey();
+      hash = response.getKey();
 //			try {
 //				hash = userProcedure.generateHash(userInfo.getEmail());
 //			} catch (UserException e) {

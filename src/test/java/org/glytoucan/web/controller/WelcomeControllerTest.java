@@ -210,7 +210,7 @@ public class WelcomeControllerTest {
 
     int resultRows = iTotal - 50000;
     
-    Assert.assertTrue(result.getXmlUrls().size() == resultRows);
+    Assert.assertEquals(result.getXmlUrls().size(), resultRows);
 
 	}
 
