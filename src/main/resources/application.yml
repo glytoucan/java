@@ -14,19 +14,8 @@ spring:
     port: 25
 app:
   docs: http://localhost:8080
-logging:
-  file: boot.log
-  path: /tmp/glytoucan/spring
-  level:
-    org.springframework: 'OFF'
-    org.glycoinfo: 'DEBUG' 
-    org.glytoucan: 'DEBUG' 
-    org.glytoucan.web.view: 'ERROR'
-    ROOT: ERROR
-
 server:
   port: 80
-
 google:
   oauth2:
     clientId: 1
@@ -49,11 +38,17 @@ multipart:
   location: /upload
   max-file-size: 5Mb
   max-request-size: 10Mb
-  
 ---
 spring:
-  profiles: dev
+  profiles: development
   triplestore:
     url: jdbc:virtuoso://test.ts.glytoucan.org:1111 
-server:
-    port: 8080
+logging:
+  file: boot.log
+  path: /tmp/glytoucan/spring
+  level:
+    org.springframework: 'OFF'
+    org.glycoinfo: 'DEBUG' 
+    org.glytoucan: 'DEBUG' 
+    org.glytoucan.web.view: 'ERROR'
+    ROOT: ERROR

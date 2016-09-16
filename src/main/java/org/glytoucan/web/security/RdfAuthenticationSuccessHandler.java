@@ -4,6 +4,7 @@ package org.glytoucan.web.security;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -12,15 +13,25 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.glycoinfo.rdf.SelectSparql;
-import org.glycoinfo.rdf.SparqlException;
-import org.glycoinfo.rdf.dao.SparqlEntity;
-import org.glytoucan.admin.exception.UserException;
-import org.glytoucan.admin.service.UserProcedure;
+import org.glytoucan.admin.client.UserClient;
+import org.glytoucan.admin.model.ErrorCode;
+import org.glytoucan.admin.model.User;
+import org.glytoucan.admin.model.UserGenerateKeyRequest;
+import org.glytoucan.admin.model.UserGenerateKeyResponse;
+import org.glytoucan.admin.model.UserKeyRequest;
+import org.glytoucan.admin.model.UserKeyResponse;
+import org.glytoucan.admin.model.UserRegisterRequest;
+import org.glytoucan.client.ContributorRest;
+import org.glytoucan.client.model.RegisterContributorResponse;
+import org.glytoucan.model.Message;
+import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -36,31 +47,21 @@ public class RdfAuthenticationSuccessHandler extends
 			.getLog(RdfAuthenticationSuccessHandler.class);
 
 	@Autowired
-	@Qualifier(value = "userProcedure")
-	UserProcedure userProcedure;
+	ContributorRest contributorRest;
+
+	@Autowired
+	UserClient userClient;
 	
 	@Autowired(required=false)
 	JavaMailSender mailSender;
 
-	String[] requiredFields = {SelectSparql.PRIMARY_KEY, "email", "givenName", "familyName", "verifiedEmail"};
+	String[] requiredFields = {"email", "givenName", "familyName", "verifiedEmail"};
 
 	/**
 	 * 
-	 * Newly registered user, store data into RDF.
+	 * Redesigned.  Focusing on future user registrations, security, privacy, and the ability to host the web front end separate from the web services.
 	 * 
-	 * This is an important method as the Contributor information was pre-existing and yet the authentication method was handled outside of RDF.
-	 * 
-	 * This has changed with rdf glytoucan.  So in order to make use of/map the previously created Contributor linkages, it's necessary to associate
-	 * a newly logged in Google user to the pre-existing Contributor class.  When newly registering, all that is necessary would then be the Contributor ID. 
-	 * 
-	 * In order to retrieve the ID (to registered), it is assumed the user would be logged in, thus the email address should be available.
-	 * The email address would then be used to reference the id by the mapping data created by this method.
-	 * 
-	 * mapping process is found here:
-	 * org.glycoinfo.rdf.service.impl.UserProcedure line 168:
-	 * 		contributorProcedure.setName(getSparqlEntity().getValue(org.glycoinfo.rdf.service.UserProcedure.givenName) + " " + getSparqlEntity().getValue(org.glycoinfo.rdf.service.UserProcedure.familyName));
-	 * 
-	 * The previously registered foaf name was a First name, blank space, and last name.  So if the exact same words are used in google, it will be mapped automatically.
+	 * The procedural flow is explained in the Admin API documentation.
 	 * 
 	 * @see org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler#onAuthenticationSuccess(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.springframework.security.core.Authentication)
 	 */
@@ -72,7 +73,10 @@ public class RdfAuthenticationSuccessHandler extends
 		// newly registered user
         UserInfo userInfo = (UserInfo) authentication.getPrincipal();
         OAuth2AccessToken token = (OAuth2AccessToken)authentication.getCredentials();
-		logger.debug("token:>" + token.getValue());
+
+        
+        logger.debug("token:>" + token.getValue());
+        logger.debug("adminKey:>" + adminKey);
         
 		logger.debug("userinfo:>" + userInfo);
 		Map<String, String> objectAsMap;
@@ -84,54 +88,96 @@ public class RdfAuthenticationSuccessHandler extends
 		}
 		objectAsMap.remove("picture");
 		objectAsMap.remove("link");
-
-		SparqlEntity sparqlentity = new SparqlEntity(userInfo.getEmail());
-
-		sparqlentity.putAll(objectAsMap);
 		
-		sparqlentity.remove("id");
+    if (!objectAsMap.keySet().containsAll(Arrays.asList(requiredFields))) {
+      logger.error("fail");
+    }
+    
+    org.glytoucan.admin.model.Authentication auth = new org.glytoucan.admin.model.Authentication();
+    auth.setId(adminEmail);
+    auth.setApiKey(adminKey);
 
-		Set<String> columns = sparqlentity.getColumns();
-		logger.debug("columns:>" + columns + "<");
-		if (!columns.containsAll(Arrays.asList(requiredFields))) {
-			logger.error("fail");
-		}
-		
-		// if admin user, request to generate key.
-		
+    if (adminEmail.equals(userInfo.getEmail()) && StringUtils.isBlank(adminKey)) {
+      logger.debug("admin key is blank");
+      if (null == token || StringUtils.isBlank(token.getValue()))
+        throw new ServletException("invalid authentication: blank token");
 
-		// if successful, store key in memory.
-		
+      UserKeyRequest ukr = new UserKeyRequest();
+      auth.setApiKey(token.getValue());
+      ukr.setAuthentication(auth);
+      ukr.setPrimaryId(adminEmail);
 
-		// use in memory key going forward for all user-related tasks.
-		try {
-// first step, 			
-			userProcedure.add(sparqlentity);
-		} catch (UserException e) {
-			e.printStackTrace();
-			throw new ServletException(e);
-		}
-//        MimeMessagePreparator preparator = new MimeMessagePreparator() {
-//
-//        	public void prepare(MimeMessage mimeMessage) throws Exception {
-//
-//                mimeMessage.setRecipient(Message.RecipientType.TO,
-//                        new InternetAddress(userInfo.getEmail()));
-//                mimeMessage.setFrom(new InternetAddress("admin@glytoucan.org"));
-//                mimeMessage.setSubject("registration:" + userInfo.getGivenName() + " " + userInfo.getEmail());
-//                mimeMessage.setText(
-//                        "new user info:\nFirst Name:" + userInfo.getGivenName() + "\nLast Name:"
-//                            + userInfo.getFamilyName() + "\nemail:" + userInfo.getEmail() + "\nverified:" + userInfo.getVerifiedEmail());
-//            }
-//        };
-//
-//        try {
-//            this.mailSender.send(preparator);
-//        }
-//        catch (MailException ex) {
-//            logger.error(ex.getMessage());
-//        }
-        // pass processing back to SavedRequestAware parent.
+      UserKeyResponse userKey = userClient.getKey(ukr);
+      
+      logger.debug("error code:>" + userKey.getResponseMessage().getErrorCode());
+      logger.debug("user key response:>" + userKey.getKey());
+      if (userKey.getResponseMessage().getErrorCode().equals(ErrorCode.AUTHENTICATION_FAILURE.toString()))
+        throw new ServletException("authentication failure " + userKey.getResponseMessage().getErrorCode());        
+      
+      if (StringUtils.isEmpty(userKey.getKey())) {
+        // generate User
+        UserRegisterRequest urr = new UserRegisterRequest();
+        urr.setAuthentication(auth);
+        User user = new User();
+        user.setEmail(userInfo.getEmail());
+        user.setGivenName(userInfo.getGivenName());
+        user.setFamilyName(userInfo.getFamilyName());
+        user.setEmailVerified(userInfo.getVerifiedEmail());
+        user.setExternalId("1");
+        urr.setUser(user);
+        
+        userClient.register(urr);
+        
+        UserGenerateKeyRequest req = new UserGenerateKeyRequest();
+        req.setAuthentication(auth);
+        req.setPrimaryId(adminEmail);
+        UserGenerateKeyResponse ugkr = userClient.generateKey(req);
+        if (ugkr.getResponseMessage().getErrorCode().equals("0"))
+          adminKey = ugkr.getKey();
+      } else
+        adminKey=userKey.getKey();
+      logger.debug("admin key is:>" + adminKey);
+      auth.setApiKey(adminKey);
+    } else {
+      
+      if (null == adminKey)
+        throw new ServletException("please wait until admin has logged in");
+// add Contributor limited to admin 
+      Map<String, Object>  map = new HashMap<String, Object>();
+      map.put(ContributorRest.NAME, userInfo.getGivenName());
+      map.put(ContributorRest.USERNAME, adminEmail);
+      map.put(ContributorRest.API_KEY, adminKey);
+      
+      Map<String, Object>  results = contributorRest.register(map);
+      
+      RegisterContributorResponse result = (RegisterContributorResponse) results.get(ContributorRest.MESSAGE);
+      logger.debug("contributor" + result.getContributorId() +  " successfully created");
+
+  
+      UserRegisterRequest urr = new UserRegisterRequest();
+      urr.setAuthentication(auth);
+      User user = new User();
+      user.setEmail(userInfo.getEmail());
+      user.setGivenName(userInfo.getGivenName());
+      user.setFamilyName(userInfo.getFamilyName());
+      user.setEmailVerified(userInfo.getVerifiedEmail());
+      user.setExternalId(result.getContributorId());
+      urr.setUser(user);
+      
+      userClient.register(urr);
+    
+    }
 		super.onAuthenticationSuccess(request, response, authentication);
 	}
+	
+  @Value("${admin.email:glytoucan@gmail.com}")
+  private String adminEmail;
+  
+  @Value("${admin.key: }")
+  private String adminKey;
+  
+//  @Bean(name="adminKey")
+//  public String getAdminKey() {
+//    return adminKey;
+//  }
 }

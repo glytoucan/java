@@ -67,7 +67,7 @@ public class WelcomeControllerTest {
   private WebApplicationContext wac;
 	
   private MockMvc mockMvc;
-  
+
   @Autowired
   GlycanProcedure glycanProcedure;
   
@@ -91,7 +91,7 @@ public class WelcomeControllerTest {
 	
 	@Test
 	public void testSitemapIndex() throws SparqlException {
-	  XmlSiteMapSet result = welcome.sitemapIndex();
+  	  XmlSiteMapSet result = welcome.sitemapIndex();
 	    Assert.assertNotNull(result);
 	    int num = (int)Math.ceil(iTotal/50000);
 	    logger.debug("NUM:>" + num);
@@ -210,7 +210,7 @@ public class WelcomeControllerTest {
 
     int resultRows = iTotal - 50000;
     
-    Assert.assertTrue(result.getXmlUrls().size() == resultRows);
+    Assert.assertEquals(result.getXmlUrls().size(), resultRows);
 
 	}
 

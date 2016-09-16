@@ -19,15 +19,18 @@ import org.glycoinfo.convert.error.ConvertFormatException;
 import org.glycoinfo.rdf.SparqlException;
 import org.glycoinfo.rdf.dao.SparqlEntity;
 import org.glycoinfo.rdf.service.GlycanProcedure;
+import org.glytoucan.admin.client.config.AdminServerConfiguration;
 import org.glytoucan.client.GlycoSequenceClient;
+import org.glytoucan.client.config.ClientConfiguration;
 import org.glytoucan.client.config.GlycanQueryConfig;
-import org.glytoucan.client.soap.GlycoSequenceDetailResponse;
-import org.glytoucan.client.soap.GlycoSequenceSearchResponse;
-import org.glytoucan.client.soap.ResponseMessage;
+import org.glytoucan.client.model.GlycoSequenceDetailResponse;
+import org.glytoucan.client.model.GlycoSequenceSearchResponse;
+import org.glytoucan.client.model.ResponseMessage;
 import org.glytoucan.model.spec.GlycanClientQuerySpec;
 import org.glytoucan.web.model.SequenceInput;
 import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -47,7 +50,7 @@ import com.wordnik.swagger.annotations.ApiResponses;
 @Controller
 @ApiExclude
 @RequestMapping("/Structures")
-@Import(GlycanQueryConfig.class)
+@Import({GlycanQueryConfig.class, ClientConfiguration.class})
 public class StructuresController {
 	Log logger = LogFactory.getLog(StructuresController.class);
 	
@@ -58,6 +61,7 @@ public class StructuresController {
 //	LogClient logClient;
 	
 	@Autowired
+	@Qualifier("glycoSequenceClient")
 	GlycoSequenceClient glycoSequenceClient;
 	
 	@Autowired
