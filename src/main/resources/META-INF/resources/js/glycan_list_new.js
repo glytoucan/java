@@ -466,6 +466,8 @@ $(function () { // wrapper function
       this.current_items.database = {};
       this.$adoptedList.find('ul').remove();
       this.$adoptedList.find('.adoptedSearch_group').addClass('adoptedSearch_group--empty');
+      this.$linkedDb.find('.linkedDb_items').html('');
+      this.$linkedDb.find('.linkedDb_default').addClass('linkedDb_default--show');
       this.page = 1;
       this.getMain();
     },
