@@ -13,7 +13,7 @@
 
 <div class="container">
 <h1 class="page-header">
-${Title[0]}
+<a href="/Structures">${Title[0]}</a>
 <a class="userGuide" href="${Title[2]}" target="_blank">
 <img class="icon_userGuide clearfix" src="/img/icon_userGuide.png" height="48" width="24" alt="" />
 <span class="text_userGuide"><img src="/img/text_userGuide.png" height="40" width="80" alt="" /></span>
