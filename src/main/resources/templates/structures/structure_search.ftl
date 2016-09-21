@@ -84,36 +84,39 @@
 		<div class="span12">
 			<h id="tabs"></h>
 			<ul class="nav nav-tabs">
+				<!-- GlycoCT condenxed -->
 				<li class="active"><a href="#A" data-toggle="tab">
-						
-						
-<#assign BottomTitle = BottomTitle>
-<#assign BottomTitleKeys = BottomTitle?keys>
-<#-- list BottomTitleKeys as key>${key} = ${BottomTitle[key]}; </#list -->
-${BottomTitle[BottomTitleKeys[0]]}
+					<#assign BottomTitle = BottomTitle>
+					<#assign BottomTitleKeys = BottomTitle?keys>
+					<#-- list BottomTitleKeys as key>${key} = ${BottomTitle[key]}; </#list -->
+					${BottomTitle[BottomTitleKeys[0]]}
 				</a></li>
 				<!-- LineraCode -->
 				<li><a href="#E" data-toggle="tab">
-${BottomTitle[BottomTitleKeys[2]]}
+					${BottomTitle[BottomTitleKeys[2]]}
 				</a></li>
 				<!-- KCF -->
 				<li><a href="#H" data-toggle="tab">
-${BottomTitle[BottomTitleKeys[5]]}
+					${BottomTitle[BottomTitleKeys[5]]}
 				</a></li>
+				<!-- WURCS -->
+				<li><a href="#I" data-toggle="tab">
+					${BottomTitle[BottomTitleKeys[6]]}
+				</a></li>
+				
 			</ul>
 			<div class="tabbable">
 				<div class="tab-content">
 					<div class="tab-pane active" id="A">
 						<p>
-<#assign Bottom = Bottom>
-<#assign BottomKeys = Bottom?keys>
-<#-- list BottomKeys as key>${key} = ${Bottom[key]}; </#list -->
-${Bottom[BottomKeys[0]]}
+							<#assign Bottom = Bottom>
+							<#assign BottomKeys = Bottom?keys>
+							<#-- list BottomKeys as key>${key} = ${Bottom[key]}; </#list -->
+							${Bottom[BottomKeys[0]]}
 							<a href="http://www.ncbi.nlm.nih.gov/pubmed/18436199">${Bottom[BottomKeys[6]]}</a>
 							<br>
-<#assign BottomFigure = BottomFigure>
-<#assign BottomFigureKeys = BottomFigure?keys>
-
+							<#assign BottomFigure = BottomFigure>
+							<#assign BottomFigureKeys = BottomFigure?keys>
 							${BottomFigure[BottomFigureKeys[0]]}
 						</p>
 					</div>
@@ -155,6 +158,14 @@ ${Bottom[BottomKeys[0]]}
 								<a href="http://books.google.co.jp/books?id=u_eA0voGL6UC&lpg=PA32&ots=3-YMFHBj8D&dq=glycome%20informatics%20Aoki%20KCF&hl=ja&pg=PA31#v=onepage&q&f=false">${Bottom[BottomKeys[6]]}</a>
 							<br>
 							${BottomFigure[BottomFigureKeys[5]]}
+						</p>
+					</div>
+					<div class="tab-pane" id="I">
+						<p>
+							${Bottom[BottomKeys[7]]}
+								<a href="http://www.wurcs-wg.org/about.php">${Bottom[BottomKeys[6]]}</a>
+							<br>
+							${BottomFigure[BottomFigureKeys[6]]}
 						</p>
 					</div>
 				</div>
