@@ -91,22 +91,22 @@
 					<#-- list BottomTitleKeys as key>${key} = ${BottomTitle[key]}; </#list -->
 					${BottomTitle[BottomTitleKeys[0]]}
 				</a></li>
-				<!-- LineraCode -->
-				<li><a href="#E" data-toggle="tab">
-					${BottomTitle[BottomTitleKeys[2]]}
-				</a></li>
-				<!-- KCF -->
-				<li><a href="#H" data-toggle="tab">
-					${BottomTitle[BottomTitleKeys[5]]}
-				</a></li>
 				<!-- WURCS -->
 				<li><a href="#I" data-toggle="tab">
 					${BottomTitle[BottomTitleKeys[6]]}
 				</a></li>
-				
+				<!-- LineraCode -->
+				<!-- <li><a href="#E" data-toggle="tab"> -->
+					<!-- ${BottomTitle[BottomTitleKeys[2]]} -->
+				<!-- </a></li> -->
+				<!-- KCF -->
+				<!-- <li><a href="#H" data-toggle="tab"> -->
+					<!-- ${BottomTitle[BottomTitleKeys[5]]} -->
+				<!-- </a></li> -->
 			</ul>
 			<div class="tabbable">
 				<div class="tab-content">
+					<!-- GlycoCT description -->
 					<div class="tab-pane active" id="A">
 						<p>
 							<#assign Bottom = Bottom>
@@ -120,6 +120,7 @@
 							${BottomFigure[BottomFigureKeys[0]]}
 						</p>
 					</div>
+					<!-- IUPAC description -->
 					<div class="tab-pane" id="D">
 						<p>
 							${Bottom[BottomKeys[1]]}
@@ -128,6 +129,7 @@
 							${BottomFigure[BottomFigureKeys[1]]}
 						</p>
 					</div>
+					<!-- Linear Code description -->
 					<div class="tab-pane" id="E">
 						<p>
 							${Bottom[BottomKeys[2]]}
@@ -136,6 +138,7 @@
 							${BottomFigure[BottomFigureKeys[2]]}
 						</p>
 					</div>
+					<!-- BCSDB format description -->
 					<div class="tab-pane" id="F">
 						<p>
 							${Bottom[BottomKeys[3]]}
@@ -144,6 +147,7 @@
 							${BottomFigure[BottomFigureKeys[3]]}
 						</p>
 					</div>
+					<!-- LINUCS format description -->
 					<div class="tab-pane" id="G">
 						<p>
 							${Bottom[BottomKeys[4]]}
@@ -152,6 +156,7 @@
 							${BottomFigure[BottomFigureKeys[4]]}
 						</p>
 					</div>
+					<!-- KCF format description -->
 					<div class="tab-pane" id="H">
 						<p>
 							${Bottom[BottomKeys[5]]}
@@ -160,6 +165,7 @@
 							${BottomFigure[BottomFigureKeys[5]]}
 						</p>
 					</div>
+					<!-- WURCS description-->
 					<div class="tab-pane" id="I">
 						<p>
 							${Bottom[BottomKeys[7]]}
