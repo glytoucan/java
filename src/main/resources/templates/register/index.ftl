@@ -22,18 +22,19 @@
 	</a>
 </h1>
 <br>
+
 <div class="container-fluid">
 	<div class="row-fluid">
+		<!-- Input text form -->
 		<div class="span6">
-
 			<form class="well" action="/Registries/confirmation"
 				id="confirmationForm" method="post" accept-charset="utf-8">
 				<div style="display: none;">
 					<input type="hidden" name="_method" value="POST" />
 				</div>
 				${Left[0]}
-<@spring.formTextarea 'sequence.sequence' 'id="sequence" placeholder="Sequence" cols="20" rows="15" style="width: 370px; height: 400px;"' />
-<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+				<@spring.formTextarea 'sequence.sequence' 'id="sequence" placeholder="Sequence" cols="20" rows="15" style="width: 370px; height: 400px;"' />
+				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                 <div class="registriesInput_add">
                     <span class="registriesInput_addBtn btn">${add!"Add"} ${another!"Another"}</span>
                 </div>
@@ -44,6 +45,8 @@
 			</form>
 		</div>
 
+		<!-- Explanation of sequence format -->
+		<!--
 		<div class="span6">
 			<div class="panel ">
 				<div class="panel-heading">
@@ -55,6 +58,24 @@
 				</div>
 			</div>
 		</div>
+		-->
+		<div class="span12">
+			<h id="tabs"></h>
+			<ul class="nav nav-tabs">
+				<!-- GlycoCT condenxed -->
+				<li class="active"><a href="#A" data-toggle="tab">
+					<#assign RightTitle = RightTitle>
+					<#assign RightTitleKeys = RightTitle?keys>
+					<#-- list RightTitleKeys as key>${key} = ${RightTitle[key]}; </#list -->
+					${RightTitle[RightTitleKeys[0]]}
+				</a></li>
+				<!-- WURCS -->
+				<li><a href="#B" data-toggle="tab">
+					${RightTitle[RightTitleKeys[2]]}
+				</a></li>
+			</ul>
+		</div>
+
 	</div>
 </div>
 </div>
