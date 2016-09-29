@@ -84,7 +84,7 @@
 		<div class="span12">
 			<h id="tabs"></h>
 			<ul class="nav nav-tabs">
-				<!-- GlycoCT condenxed -->
+				<!-- GlycoCT condensed -->
 				<li class="active"><a href="#A" data-toggle="tab">
 					<#assign BottomTitle = BottomTitle>
 					<#assign BottomTitleKeys = BottomTitle?keys>
@@ -106,7 +106,7 @@
 			</ul>
 			<div class="tabbable">
 				<div class="tab-content">
-					<!-- GlycoCT description -->
+					<!-- GlycoCT condensed description -->
 					<div class="tab-pane active" id="A">
 						<p>
 							<#assign Bottom = Bottom>

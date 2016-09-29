@@ -59,21 +59,41 @@
 			</div>
 		</div>
 		-->
-		<div class="span12">
+		<div class="span6">
 			<h id="tabs"></h>
 			<ul class="nav nav-tabs">
-				<!-- GlycoCT condenxed -->
+				<!-- GlycoCT condensed -->
 				<li class="active"><a href="#A" data-toggle="tab">
-					<#assign RightTitle = RightTitle>
-					<#assign RightTitleKeys = RightTitle?keys>
-					<#-- list RightTitleKeys as key>${key} = ${RightTitle[key]}; </#list -->
-					${RightTitle[RightTitleKeys[0]]}
+					${RightTitle[1]}
 				</a></li>
 				<!-- WURCS -->
 				<li><a href="#B" data-toggle="tab">
-					${RightTitle[RightTitleKeys[2]]}
+					${RightTitle[2]}
 				</a></li>
 			</ul>
+			<div class="tabbable">
+				<div class="tab-content">
+					<!-- GlycoCT condensed description -->
+					<div class="tab-pane active" id="A">
+						<p>
+							${Right[1]}
+							<a href="http://www.ncbi.nlm.nih.gov/pubmed/18436199">More details</a>
+							<br>
+							${RightFigure[1]}
+						</p>
+					</div>
+					<!-- GlycoCT condensed description -->
+					<div class="tab-pane" id="B">
+						<p>
+							${Right[2]}
+							<a href="http://www.wurcs-wg.org/about.php">More details</a>
+							<br>
+							${RightFigure[2]}
+						</p>
+					</div>
+				</div>
+			</dvi>
+			
 		</div>
 
 	</div>
