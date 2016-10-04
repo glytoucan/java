@@ -17,6 +17,9 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.glytoucan.client.AuthenticatedApi;
+import org.glytoucan.client.GlycanQueryRest;
+import org.glytoucan.client.GlycanRegisterRest;
 import org.glytoucan.client.GlycoSequenceClient;
 import org.glytoucan.client.config.GlycanQueryConfig;
 import org.glytoucan.client.model.GlycoSequenceCountResponse;
@@ -100,7 +103,7 @@ public class WelcomeController {
 		map.put(GlycanClientQuerySpec.LIMIT, limit);
 		Map<String, Object> results = glycanQueryRest.getListStructures(map);
 
-		GlycanList list = (GlycanList) results.get(GlycanClientRegisterSpec.MESSAGE);
+		GlycanList list = (GlycanList) results.get(GlycanRegisterRest.MESSAGE);
 
 		ArrayList<String> accs = new ArrayList<String>();
 
@@ -126,7 +129,7 @@ public class WelcomeController {
 			offset += 10000;
 			map.put(GlycanClientQuerySpec.OFFSET, offset + "");
 			results = glycanQueryRest.getListStructures(map);
-			list = (GlycanList) results.get(GlycanClientRegisterSpec.MESSAGE);
+			list = (GlycanList) results.get(GlycanRegisterRest.MESSAGE);
 			
 			count++;
 		}
