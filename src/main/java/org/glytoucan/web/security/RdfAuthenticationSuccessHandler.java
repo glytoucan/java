@@ -145,6 +145,7 @@ public class RdfAuthenticationSuccessHandler extends
 // add Contributor limited to admin 
       Map<String, Object>  map = new HashMap<String, Object>();
       map.put(ContributorRest.NAME, userInfo.getGivenName());
+      map.put(ContributorRest.EMAIL, userInfo.getEmail());
       map.put(ContributorRest.USERNAME, adminEmail);
       map.put(ContributorRest.API_KEY, adminKey);
       
