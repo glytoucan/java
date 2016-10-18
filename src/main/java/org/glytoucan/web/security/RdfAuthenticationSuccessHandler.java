@@ -123,7 +123,7 @@ public class RdfAuthenticationSuccessHandler extends
         user.setGivenName(userInfo.getGivenName());
         user.setFamilyName(userInfo.getFamilyName());
         user.setEmailVerified(userInfo.getVerifiedEmail());
-        user.setExternalId("1");
+        user.setExternalId("815e7cbca52763e5c3fbb5a4dccc176479a50e2367f920843c4c35dca112e33d");
         urr.setUser(user);
         
         userClient.register(urr);
@@ -140,7 +140,7 @@ public class RdfAuthenticationSuccessHandler extends
       auth.setApiKey(adminKey);
     } else {
       
-      if (null == adminKey)
+      if (StringUtils.isBlank(adminKey))
         throw new ServletException("please wait until admin has logged in");
 // add Contributor limited to admin 
       Map<String, Object>  map = new HashMap<String, Object>();
