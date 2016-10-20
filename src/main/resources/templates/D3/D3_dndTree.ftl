@@ -93,47 +93,50 @@
        display: none;
   }
 
-/*	div.menu{
-   float: left;
-   width: 15%;
-}
-div.blockb{
- float: right;
- width: 85%;
-}*/
+/* 画面の枠設定（この方法はしなかった）	
+	div.menu{
+	   float: left;
+	   width: 15%;
+	}
+	div.blockb{
+	 float: right;
+	 width: 85%;
+	}
+*/
 
-div.menu a {
-	font-size:30px;
-    font-family:sans-serif;
-    color: black;
-}
-
-div.menu ul{
-margin: 0;
-padding: 0;
-list-style-type: none;
-}
-div.menu li{
-display: inline;
-padding: 0;
-margin: 0;
-}
-div.menu li a{
-display: block;
-width: 150px;
-padding: 3px;
-margin: 10px 0px 10px 0px;
-text-decoration: none;
-border: outset 3px #C2CBBD;
-background-color: #C2CBBD;
-text-align: center;
-color: #000000;
-font-size: 14px;
-}
-div.menu li a:hover{
-border: inset 3px #95A38D;
-background-color: #95A38D;
-}
+/* Side menu styles */
+	div.menu a {
+		font-size:30px;
+	    font-family:sans-serif;
+	    color: black;
+	}
+	
+	div.menu ul{
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	}
+	div.menu li{
+	display: inline;
+	padding: 0;
+	margin: 0;
+	}
+	div.menu li a{
+	display: block;
+	width: 150px;
+	padding: 3px;
+	margin: 10px 0px 10px 0px;
+	text-decoration: none;
+	border: outset 3px #C2CBBD;
+	background-color: #C2CBBD;
+	text-align: center;
+	color: #000000;
+	font-size: 14px;
+	}
+	div.menu li a:hover{
+	border: inset 3px #95A38D;
+	background-color: #95A38D;
+	}
 
 </style>
 
@@ -146,18 +149,19 @@ background-color: #95A38D;
 <!-- ID: ${ID} -->
 <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
 <script src="https://d3js.org/d3.v3.min.js"></script>
-<div style="float:left;" class="menu">
- 	 <ul>
- 	 <br><font size="6" color="black">${ID}</font><br>
- 	 <li><a href="/D3_dndTree/${ID}">All data</a></li>
-<!-- 	 <li><a href="/D3_motif_isomer/${ID}">Motif and Isomer</a></li>
- 	 <li><a href="/D3_structure/${ID}">Superstructure and Substructure</a></li>
- 	 <li><a href="/D3_subsumed/${ID}">Topology and Topology_contained_by</a></li>	-->
- 	 <li><a href="/Structures/Glycans/${ID}">Return</a></li>
 
-  </div>
-
-<div style="float:left;" class="blockb">
+<!-- side menu -->
+	<div style="float:left;" class="menu">
+	 	 <ul>
+	 	 <br><font size="6" color="black">${ID}</font><br>
+	 	 <li><a href="/D3_dndTree/${ID}">All data</a></li>
+	<!-- <li><a href="/D3_motif_isomer/${ID}">Motif and Isomer</a></li>
+	 	 <li><a href="/D3_structure/${ID}">Superstructure and Substructure</a></li>
+	 	 <li><a href="/D3_subsumed/${ID}">Topology and Topology_contained_by</a></li>	-->
+	 	 <li><a href="/Structures/Glycans/${ID}">Return</a></li>
+	</div>
+	<div style="float:left;" class="blockb">
+	
 <script>
 d3.contextMenu = function (menu, openCallback) {
 

@@ -44,4 +44,10 @@ public class D3ViewController {
 		model.addAttribute("ID", ID);
 		return "D3/D3_dndTree";
     }
+	
+	@RequestMapping(value = "/GRAB_Graph/{ID}")
+	public String findPet_graph(@PathVariable String ID, Model model) {
+		model.addAttribute("ID", ID);
+		return "D3/GRAB_Graph";
+    }
 }
