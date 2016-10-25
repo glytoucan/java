@@ -3,18 +3,12 @@
 <html lang="ja">
 <head>
 	<title>GRAB Graph visualization</title>
-<#include "../header.html">
 
 <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
 
 <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
 <script src="http://cytoscape.github.io/cytoscape.js/api/cytoscape.js-latest/cytoscape.min.js"></script>
 
-<!-- for testing with local version of cytoscape.js -->
-<!--<script src="../cytoscape.js/build/cytoscape.js"></script>-->
-
-<script src="https://cdn.rawgit.com/cytoscape/cytoscape.js-cose-bilkent/1.0.5/cytoscape-cose-bilkent.js"></script>
-<script data-require="d3@3.5.3" data-semver="3.5.3" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.js"></script>
 <!-- ID: ${ID} -->
 <style>
 	body {
@@ -24,13 +18,14 @@
 
 	#cy {
 		width: 100%;
-		height: 100%;
-		position: absolute;
+		height: auto;
+		height: 90%; 
+		position: relative;
 		left: 0;
 		top: 0;
 		bottom: 0;
 		right: 0;
-		z-index: 999;
+		z-index: 999; 
 		background: #f2f2f2;
 	}
 
@@ -39,6 +34,14 @@
 		font-size: 1em;
 		font-weight: bold;
 	}
+	
+	#footer{
+		width:100%;
+		position:fixed;
+		bottom:0;
+		z-index: 1000;
+	}
+	
 /* cytoscape-context-menu styles */
 	#cy-context-menus-cxt-menu {
 			display:none;
@@ -93,7 +96,6 @@
 	}
 </style>
 
-</script>
 <script>
 	$.getJSON(("/Graph/Graphretrieve?primaryId=${ID}"),function(GRABElements){
 		var cy = window.cy = cytoscape({
@@ -139,28 +141,22 @@
 						//"z-index":"20",
 						"background-image" : function(ele){
 							if (ele.id() == "subsumedby"){
-								return "./Subsumedby_picture.png";
+								return "/img/Subsumedby_picture.png";
 							} else if (ele.id() == "subsumes"){
-								return "./Subsumes_picture.png";
+								return "/img/Subsumes_picture.png";
 							} else if (ele.id() == "superstructure"){
-								return "./Superstructure_picture.png";
+								return "/img/Superstructure_picture.png";
 							} else if (ele.id() == "substructure"){
-								return "./Substructure_picture.png";
+								return "/img/Substructure_picture.png";
 							} else {
 								//console.log("https://glytoucan.org/glycans/" + ele.id() + "/image?style=extended&format=png&notation=cfg");
-								return "http://beta.glytoucan.org/glycans/" + ele.id() + "/image?style=extended&format=png&notation=cfg";
-								//Image from origin 'https://glytoucan.org' has been blocked from loading by Cross-Origin Resource Sharing policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. Origin 'http://localhost:8888' is therefore not allowed access.
+								return "/glycans/" + ele.id() + "/image?style=extended&format=png&notation=cfg";
 							}
 						},
 						"backgroud-width": "50px",
 						"backgroud-height": "20px",
 						"background-fit": "contain",
 						"background-clip" : "none",
-						"selected":false,
-						"selectable":false,
-						"locked":false,
-						"grabbed":false,
-						"grabbable":false
 				})
 				.selector('edge')
 					.css({
@@ -278,10 +274,26 @@
 								return "20px";
 							}
 							else return "40px";
+						},
+						"background-image" : function(ele){
+							if (ele.id() == "subsumedby"){
+								return "/img/Subsumedby_picture.png";
+							} else if (ele.id() == "subsumes"){
+								return "/img/Subsumes_picture.png";
+							} else if (ele.id() == "superstructure"){
+								return "/img/Superstructure_picture.png";
+							} else if (ele.id() == "substructure"){
+								return "/img/Substructure_picture.png";
+							} else {
+								//console.log("/glycans/" + ele.id("id") + "/image?style=extended&format=png&notation=cfg");
+								return "/glycans/" + ele.id("id") + "/image?style=extended&format=png&notation=cfg";
+							}
 						}
 					})
 					
 		});
+		
+		var isUserGrabbingN1 = cy.nodes().ungrabify();
 		
 		cy.on('mouseover', 'node', function(e){
 				var sel = e.cyTarget;
@@ -325,8 +337,6 @@
 								selector: 'node',
 								onClickFunction: function (event) {
 									var sel = event.cyTarget.id();
-									// Copy this glycan ID
-									//console.log("sel:"+sel);
 									copyTextToClipboard(sel);
 								},
 							},
@@ -337,9 +347,7 @@
 								onClickFunction: function (event) {
 									var sel = event.cyTarget.id();
 									if ( sel != null) {
-										// link to this glycan's relation
-										//location.href = "/D3_dndTree/" + d.name;
-										location.href = "/D3_dndTree/" + sel;
+										location.href = "/GRAB_Graph/" + sel;
 									}
 								},
 							},
@@ -349,11 +357,8 @@
 								selector: 'node',
 								onClickFunction: function (event) {
 									var sel = event.cyTarget.id();
-									// Open this glycan\'s entry page
 										if (sel != null) {
-											// New Tab: link to this glycan's entry page
-											//window.open('/Structures/Glycans/'+ d.name);
-											window.open('https://glytoucan.org/Structures/Glycans/'+ sel);
+											window.open('/Structures/Glycans/'+ sel);
 										}
 								}
 							},
@@ -363,11 +368,8 @@
 								selector: 'node',
 								onClickFunction: function (event) {
 									var sel = event.cyTarget.id();
-									// Open this glycan\'s entry page
 										if (sel != null) {
-											// New Tab: link to this glycan's entry page
-											//window.open('/glycans/'+ sel + '/image?style=extended&format=png&notation=cfg');
-											window.open('https://glytoucan.org/glycans/' +sel+ '/image?style=extended&format=png&notation=cfg');
+											window.open('/glycans/' +sel+ '/image?style=extended&format=png&notation=cfg');
 										}
 								}
 							}
@@ -804,12 +806,16 @@
 
 <body>
 <a name="top"></a><!--link for page top-->
-<#include "../nav.ftl">
-<#include "../errormessage.ftl">
-		<h1>cytoscape-cose-bilkent demo (compound)</h1>
-    <div id="cy">
-<#include "../footer.html">
+<div id="contents">
+	<header>
+		<#include "../header.html">
+	</header>
+	<#include "../nav.ftl">
+	<#include "../errormessage.ftl">
+    <div id="cy"></div>
+	<footer id ="footer">
+		<#include "../footer.html">
+	</footer>
 </div>
-
 </body>
 </html>

@@ -179,10 +179,15 @@ public class GRABGraphController {
 		try {
 			// subsumes
 			int j = 0;
+			int sparqlCount = 0;
 			int count = 1;
 			int x = 0;
 			int y = 0;	
 			if (list_subsumes != null) {
+				for (SparqlEntity k : list_subsumes) {
+					subsumes_se = list_subsumes.get(j);
+					sparqlCount++;
+				}
 				for (SparqlEntity i : list_subsumes) {
 					subsumes_se = list_subsumes.get(j);
 					String subsumesName = subsumes_se.getValue("subsumes_id");
@@ -203,11 +208,16 @@ public class GRABGraphController {
 					
 					x = -170 + (j /5 * -70); 
 					y = j % 5;
-					int yy[] = {0,50,-50,100,-100};
+					int yy[] = {-100,-50,0,50,100};
+					if (sparqlCount < 5){
+						yy[0] = 0;
+						yy[1] = 50;
+						yy[2] = -50;
+						yy[3] = 100;
+						yy[4] = -100;
+					} 
 					nodePosSeq.setX(x); //計算
 					nodePosSeq.setY(yy[y]);
-					nodePosSeq.setX(-170); //計算
-					nodePosSeq.setY(0);
 					nodeData.setdata(nodeIdSeq);
 					nodeData.setposition(nodePosSeq);
 					nodeData_list.add(nodeData);
@@ -222,14 +232,21 @@ public class GRABGraphController {
 					count++;
 					j++;
 				}
+				logger.debug("count:"+count);
 			}
 
 			//subsumedby
 			j = 0;
+			sparqlCount = 0;
 			count = 1;
 			x = 0;
 			y = 0;	
 			if (list_subsumedby != null) {
+				for (SparqlEntity k : list_subsumedby) {
+					subsumedby_se = list_subsumedby.get(j);
+					sparqlCount++;
+				}
+				logger.debug("subsumedby:"+sparqlCount);
 				for (SparqlEntity i : list_subsumedby) {
 					subsumedby_se = list_subsumedby.get(j);
 					String subsumedByName = subsumedby_se.getValue("id");
@@ -250,7 +267,14 @@ public class GRABGraphController {
 					
 					x = 170 + (j / 5 * 70); 
 					y = j % 5;
-					int yy[] = {0,50,-50,100,-100};
+					int yy[] = {-100,-50,0,50,100};
+					if (sparqlCount < 5){
+						yy[0] = 0;
+						yy[1] = 50;
+						yy[2] = -50;
+						yy[3] = 100;
+						yy[4] = -100;
+					} 
 					nodePosSeq.setX(x); //計算
 					nodePosSeq.setY(yy[y]);					
 					nodeData.setdata(nodeIdSeq);
@@ -268,14 +292,21 @@ public class GRABGraphController {
 					count++;
 					j++;
 				}
+				logger.debug("count:"+count);
+				logger.debug("j:"+j);
 			}
 			
 			/* super
 			j = 0;
 			count = 1;
+			sparqlCount = 0;
 			x = 0;
 			y = 0;	
 			if (list_super != null) {
+				for (SparqlEntity k : list_super) {
+					super_se = list_super.get(j);
+					sparqlCount++;
+				}
 				for (SparqlEntity i : list_super) {
 					super_se = list_super.get(j);
 					String superName = super_se.getValue("superS"); //sparqlのカラム名に変更する
@@ -295,7 +326,14 @@ public class GRABGraphController {
 					nodeIdSeq.setParent("superstructure_box");
 					
 					x = j % 10;
-					int xx[] = {0,70,-70, 140, -140};
+					int xx[] = {-140, -70, 0, 70, 140};
+					if (sparqlCount < 5){
+						xx[0] = 0;
+						xx[1] = 70;
+						xx[2] = -70;
+						xx[3] = 140;
+						xx[4] = -140;
+					} 
 					y = -200 + (j / 5 * -50); 		
 					nodePosSeq.setX(xx[x]); //計算
 					nodePosSeq.setY(y);
@@ -319,10 +357,15 @@ public class GRABGraphController {
 			
 			/* sub
 			j = 0;
+			sparqlCount = 0;
 			count = 1;
 			x = 0;
 			y = 0;	
 			if (list_sub != null) {
+				for (SparqlEntity k : list_sub) {
+					sub_se = list_sub.get(j);
+					sparqlCount++;
+				}
 				for (SparqlEntity i : list_sub) {
 					sub_se = list_sub.get(j);
 					String subName = sub_se.getValue("subS"); //sparqlのカラム名に変更する
@@ -342,7 +385,14 @@ public class GRABGraphController {
 					nodeIdSeq.setParent("substructure_box");
 					
 					x = j % 10;
-					int xx[] = {0,70,-70, 140, -140};
+					int xx[] = {-140, -70, 0, 70, 140};
+					if (sparqlCount < 5){
+						xx[0] = 0;
+						xx[1] = 70;
+						xx[2] = -70;
+						xx[3] = 140;
+						xx[4] = -140;
+					} 
 					y = 200 + (j /5 * 50); 		
 					nodePosSeq.setX(xx[x]); //計算
 					nodePosSeq.setY(y);
