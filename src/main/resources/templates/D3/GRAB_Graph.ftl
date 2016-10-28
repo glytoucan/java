@@ -8,6 +8,7 @@
 
 <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
 <script src="http://cytoscape.github.io/cytoscape.js/api/cytoscape.js-latest/cytoscape.min.js"></script>
+<link data-require="fontawesome@4.1.0" data-semver="4.2.0" rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" />
 
 <!-- ID: ${ID} -->
 <style>
@@ -94,6 +95,228 @@
 	.cy-context-menus-divider {
 		border-bottom:1px solid #A0A0A0;
 	}
+	
+	/* panzoom */
+      .cy-panzoom {
+      	position: absolute;
+      	font-size: 12px;
+      	color: #fff;
+      	font-family: arial, helvetica, sans-serif;
+      	line-height: 1;
+      	color: #666;
+      	font-size: 11px;
+      	z-index: 99999;
+      	box-sizing: content-box;
+      }
+
+      .cy-panzoom-zoom-button {
+      	cursor: pointer;
+      	padding: 3px;
+      	text-align: center;
+      	position: absolute;
+      	border-radius: 3px;
+      	width: 10px;
+      	height: 10px;
+      	left: 16px;
+      	background: #fff;
+      	border: 1px solid #999;
+      	margin-left: -1px;
+      	margin-top: -1px;
+      	z-index: 1;
+      	box-sizing: content-box;
+      }
+
+      .cy-panzoom-zoom-button:active,
+      .cy-panzoom-slider-handle:active,
+      .cy-panzoom-slider-handle.active {
+      	background: #ddd;
+      	box-sizing: content-box;
+      }
+
+      .cy-panzoom-pan-button {
+      	position: absolute;
+      	z-index: 1;
+      	height: 16px;
+      	width: 16px;
+      	box-sizing: content-box;
+      }
+
+      .cy-panzoom-reset {
+      	top: 55px;
+      	box-sizing: content-box;
+      }
+
+      .cy-panzoom-zoom-in {
+      	top: 80px;
+      	box-sizing: content-box;
+      }
+
+      .cy-panzoom-zoom-out {
+      	top: 197px;
+      	box-sizing: content-box;
+      }
+
+      .cy-panzoom-pan-up {
+      	top: 0;
+      	left: 50%;
+      	margin-left: -5px;
+      	width: 0;
+      	height: 0;
+      	border-left: 5px solid transparent;
+      	border-right: 5px solid transparent;
+      	border-bottom: 5px solid #666;
+      	box-sizing: content-box;
+      }
+
+      .cy-panzoom-pan-down {
+      	bottom: 0;
+      	left: 50%;
+      	margin-left: -5px;
+      	width: 0;
+      	height: 0;
+      	border-left: 5px solid transparent;
+      	border-right: 5px solid transparent;
+      	border-top: 5px solid #666;
+      	box-sizing: content-box;
+      }
+
+      .cy-panzoom-pan-left {
+      	top: 50%;
+      	left: 0;
+      	margin-top: -5px;
+      	width: 0;
+      	height: 0;
+      	border-top: 5px solid transparent;
+      	border-bottom: 5px solid transparent;
+      	border-right: 5px solid #666;
+      	box-sizing: content-box;
+      }
+
+      .cy-panzoom-pan-right {
+      	top: 50%;
+      	right: 0;
+      	margin-top: -5px;
+      	width: 0;
+      	height: 0;
+      	border-top: 5px solid transparent;
+      	border-bottom: 5px solid transparent;
+      	border-left: 5px solid #666;
+      	box-sizing: content-box;
+      }
+
+      .cy-panzoom-pan-indicator {
+      	position: absolute;
+      	left: 0;
+      	top: 0;
+      	width: 8px;
+      	height: 8px;
+      	border-radius: 8px;
+      	background: #000;
+      	border-radius: 8px;
+      	margin-left: -5px;
+      	margin-top: -5px;
+      	display: none;
+      	z-index: 999;
+      	opacity: 0.6;
+      	box-sizing: content-box;
+      }
+
+      .cy-panzoom-slider {
+      	position: absolute;
+      	top: 97px;
+      	left: 17px;
+      	height: 100px;
+      	width: 15px;
+      	box-sizing: content-box;
+      }
+
+      .cy-panzoom-slider-background {
+      	position: absolute;
+      	top: 0;
+      	width: 2px;
+      	height: 100px;
+      	left: 5px;
+      	background: #fff;
+      	border-left: 1px solid #999;
+      	border-right: 1px solid #999;
+      	box-sizing: content-box;
+      }
+
+      .cy-panzoom-slider-handle {
+      	position: absolute;
+      	width: 16px;
+      	height: 8px;
+      	background: #fff;
+      	border: 1px solid #999;
+      	border-radius: 2px;
+      	margin-left: -2px;
+      	z-index: 999;
+      	line-height: 8px;
+      	cursor: default;
+      	box-sizing: content-box;
+      }
+
+      .cy-panzoom-slider-handle .icon {
+      	margin: 0 4px;
+      	line-height: 10px;
+      	box-sizing: content-box;
+      }
+
+      .cy-panzoom-no-zoom-tick {
+      	position: absolute;
+      	background: #666;
+      	border: 1px solid #fff;
+      	border-radius: 2px;
+      	margin-left: -1px;
+      	width: 8px;
+      	height: 2px;
+      	left: 3px;
+      	z-index: 1;
+      	margin-top: 3px;
+      	box-sizing: content-box;
+      }
+
+      .cy-panzoom-panner {
+      	position: absolute;
+      	left: 5px;
+      	top: 5px;
+      	height: 40px;
+      	width: 40px;
+      	background: #fff;
+      	border: 1px solid #999;
+      	border-radius: 40px;
+      	margin-left: -1px;
+      	box-sizing: content-box;
+      }
+
+      .cy-panzoom-panner-handle {
+      	position: absolute;
+      	left: 0;
+      	top: 0;
+      	outline: none;
+      	height: 40px;
+      	width: 40px;
+      	position: absolute;
+      	z-index: 999;
+      	box-sizing: content-box;
+      }
+
+      .cy-panzoom-zoom-only .cy-panzoom-slider,
+      .cy-panzoom-zoom-only .cy-panzoom-panner {
+      	display: none;
+      }
+
+      .cy-panzoom-zoom-only .cy-panzoom-reset {
+      	top: 20px;
+      }
+
+      .cy-panzoom-zoom-only .cy-panzoom-zoom-in {
+      	top: 45px;
+      }
+
+      .cy-panzoom-zoom-only .cy-panzoom-zoom-out {
+      	top: 70px;
+      }
 </style>
 
 <script>
@@ -295,19 +518,148 @@
 		
 		var isUserGrabbingN1 = cy.nodes().ungrabify();
 		
-		cy.on('mouseover', 'node', function(e){
-				var sel = e.cyTarget;
-				//cy.elements().difference(sel.outgoers()).not(sel).addClass('highlight');
-				sel.addClass('addLabel').addClass('addLabel');
-				sel.addClass('addImage').addClass('addImage');
-		});
-		cy.on('mouseout', 'node', function(e){
-				var sel = e.cyTarget;
-				//cy.elements().removeClass('highlight');
-				sel.removeClass('addLabel').removeClass('addLabel');
-				sel.removeClass('addImage').removeClass('addImage');
-		});
+						var _ua = (function(u){
+			  return {
+			    Tablet:(u.indexOf("windows") != -1 && u.indexOf("touch") != -1 && u.indexOf("tablet pc") == -1)
+			      || u.indexOf("ipad") != -1
+			      || (u.indexOf("android") != -1 && u.indexOf("mobile") == -1)
+			      || (u.indexOf("firefox") != -1 && u.indexOf("tablet") != -1)
+			      || u.indexOf("kindle") != -1
+			      || u.indexOf("silk") != -1
+			      || u.indexOf("playbook") != -1,
+			    Mobile:(u.indexOf("windows") != -1 && u.indexOf("phone") != -1)
+			      || u.indexOf("iphone") != -1
+			      || u.indexOf("ipod") != -1
+			      || (u.indexOf("android") != -1 && u.indexOf("mobile") != -1)
+			      || (u.indexOf("firefox") != -1 && u.indexOf("mobile") != -1)
+			      || u.indexOf("blackberry") != -1
+			  }
+			})(window.navigator.userAgent.toLowerCase());
 
+				if(_ua.Mobile || _ua.Tablet){
+					cy.on('touchstart', 'node', function(e){
+							var sel = e.cyTarget;
+							sel.addClass('addLabel').addClass('addLabel');
+							sel.addClass('addImage').addClass('addImage');
+					});
+					cy.on('touchend', 'node', function(e){
+							var sel = e.cyTarget;
+							sel.removeClass('addLabel').removeClass('addLabel');
+							sel.removeClass('addImage').removeClass('addImage');
+					});
+					// contextMenus
+					cy.on('taphold', 'node',function(e){
+						cy.contextMenus({
+								menuItems: [
+										{
+												id: 'Copy this glycan ID',
+												title: 'Copy this glycan ID',
+												selector: 'node',
+												onClickFunction: function (event) {
+													var sel = event.cyTarget.id();
+													copyTextToClipboard(sel);
+												},
+											},
+											{
+												id: 'Center on this glycan',
+												title: 'Center on this glycan',
+												selector: 'node',
+												onClickFunction: function (event) {
+													var sel = event.cyTarget.id();
+													if ( sel != null) {
+														location.href = "/D3_dndTree/" + sel;
+													}
+												},
+											},
+											{
+												id: 'Open this glycan\'s entry page',
+												title: 'Open this glycan\'s entry page',
+												selector: 'node',
+												onClickFunction: function (event) {
+													var sel = event.cyTarget.id();
+														if (sel != null) {
+															window.open('https://glytoucan.org/Structures/Glycans/'+ sel);
+														}
+												}
+											},
+											{
+												id: 'Show this glycan image',
+												title: 'Show this glycan image',
+												selector: 'node',
+												onClickFunction: function (event) {
+													var sel = event.cyTarget.id();
+														if (sel != null) {
+															window.open('https://glytoucan.org/glycans/' +sel+ '/image?style=extended&format=png&notation=cfg');
+														}
+												}
+											}
+										]
+									});
+				});
+				}else{
+					cy.on('mouseover', 'node', function(e){
+	            var sel = e.cyTarget;
+	            sel.addClass('addLabel').addClass('addLabel');
+	            sel.addClass('addImage').addClass('addImage');
+	        });
+	        cy.on('mouseout', 'node', function(e){
+	            var sel = e.cyTarget;
+	            sel.removeClass('addLabel').removeClass('addLabel');
+	            sel.removeClass('addImage').removeClass('addImage');
+	        });
+					// contextMenus
+					cy.contextMenus({
+	            menuItems: [
+	                {
+	                    id: 'Copy this glycan ID',
+	                    title: 'Copy this glycan ID',
+	                    selector: 'node',
+	                    onClickFunction: function (event) {
+	                      var sel = event.cyTarget.id();
+	                      copyTextToClipboard(sel);
+	                    },
+	                  },
+	                  {
+	                    id: 'Center on this glycan',
+	                    title: 'Center on this glycan',
+	                    selector: 'node',
+	                    onClickFunction: function (event) {
+	                      var sel = event.cyTarget.id();
+	                      if ( sel != null) {
+	                        location.href = "/D3_dndTree/" + sel;
+	                			}
+	                    },
+	                  },
+	                  {
+	                    id: 'Open this glycan\'s entry page',
+	                    title: 'Open this glycan\'s entry page',
+	                    selector: 'node',
+	                    onClickFunction: function (event) {
+	                      var sel = event.cyTarget.id();
+	                  			if (sel != null) {
+	                          window.open('https://glytoucan.org/Structures/Glycans/'+ sel);
+	                  			}
+	                    }
+	                  },
+	                  {
+	                    id: 'Show this glycan image',
+	                    title: 'Show this glycan image',
+	                    selector: 'node',
+	                    onClickFunction: function (event) {
+	                      var sel = event.cyTarget.id();
+	                  			if (sel != null) {
+	                          window.open('https://glytoucan.org/glycans/' +sel+ '/image?style=extended&format=png&notation=cfg');
+	                  			}
+	                    }
+	                  }
+	                ]
+	              });
+				};
+		
+		cy.panzoom({
+			// options here...
+		});
+				
 		// var selectAllOfTheSameType = function(ele) {
 		//     cy.elements().unselect();
 		//     if(ele.isNode()) {
@@ -325,56 +677,8 @@
 				copyArea.select();
 				document.execCommand("copy");
 				copyArea.remove();
-		}
-
-		// demo your core ext
-		//TODO exception of name of glycan concerned
-		cy.contextMenus({
-				menuItems: [
-						{
-								id: 'Copy this glycan ID',
-								title: 'Copy this glycan ID',
-								selector: 'node',
-								onClickFunction: function (event) {
-									var sel = event.cyTarget.id();
-									copyTextToClipboard(sel);
-								},
-							},
-							{
-								id: 'Center on this glycan',
-								title: 'Center on this glycan',
-								selector: 'node',
-								onClickFunction: function (event) {
-									var sel = event.cyTarget.id();
-									if ( sel != null) {
-										location.href = "/GRAB_Graph/" + sel;
-									}
-								},
-							},
-							{
-								id: 'Open this glycan\'s entry page',
-								title: 'Open this glycan\'s entry page',
-								selector: 'node',
-								onClickFunction: function (event) {
-									var sel = event.cyTarget.id();
-										if (sel != null) {
-											window.open('/Structures/Glycans/'+ sel);
-										}
-								}
-							},
-							{
-								id: 'Show this glycan image',
-								title: 'Show this glycan image',
-								selector: 'node',
-								onClickFunction: function (event) {
-									var sel = event.cyTarget.id();
-										if (sel != null) {
-											window.open('/glycans/' +sel+ '/image?style=extended&format=png&notation=cfg');
-										}
-								}
-							}
-						]
-					});
+		};
+		
 	});
 	
 	// cytoscape-context-menus.js
@@ -800,6 +1104,580 @@
 	  }
 	
 	})();
+
+	//panzoom 
+      ;(function(){ 'use strict';
+
+        // registers the extension on a cytoscape lib ref
+        var register = function( cytoscape, $ ){
+          if( !cytoscape ){ return; } // can't register if cytoscape unspecified
+
+          $.fn.cyPanzoom = $.fn.cytoscapePanzoom = function( options ){
+            panzoom.apply( this, [ options, $ ] );
+
+            return this; // chainability
+          };
+
+          // if you want a core extension
+          cytoscape('core', 'panzoom', function( options ){ // could use options object, but args are up to you
+            var cy = this;
+
+            panzoom.apply( cy.container(), [ options, $ ] );
+
+            return this; // chainability
+          });
+
+        };
+
+        var defaults = {
+          zoomFactor: 0.05, // zoom factor per zoom tick
+          zoomDelay: 45, // how many ms between zoom ticks
+          minZoom: 0.1, // min zoom level
+          maxZoom: 10, // max zoom level
+          fitPadding: 50, // padding when fitting
+          panSpeed: 10, // how many ms in between pan ticks
+          panDistance: 10, // max pan distance per tick
+          panDragAreaSize: 75, // the length of the pan drag box in which the vector for panning is calculated (bigger = finer control of pan speed and direction)
+          panMinPercentSpeed: 0.25, // the slowest speed we can pan by (as a percent of panSpeed)
+          panInactiveArea: 8, // radius of inactive area in pan drag box
+          panIndicatorMinOpacity: 0.5, // min opacity of pan indicator (the draggable nib); scales from this to 1.0
+          zoomOnly: false, // a minimal version of the ui only with zooming (useful on systems with bad mousewheel resolution)
+          fitSelector: undefined, // selector of elements to fit
+          animateOnFit: function(){ // whether to animate on fit
+            return false;
+          },
+          fitAnimationDuration: 1000, // duration of animation on fit
+
+          // icon class names
+          sliderHandleIcon: 'fa fa-minus',
+          zoomInIcon: 'fa fa-plus',
+          zoomOutIcon: 'fa fa-minus',
+          resetIcon: 'fa fa-expand'
+        };
+
+        var panzoom = function( params, $ ){
+          var options = $.extend(true, {}, defaults, params);
+          var fn = params;
+
+          var functions = {
+            destroy: function(){
+              var $this = $(this);
+              var $pz = $this.find(".cy-panzoom");
+
+              $pz.data('winbdgs').forEach(function( l ){
+                $(window).unbind( l.evt, l.fn );
+              });
+
+              $pz.data('cybdgs').forEach(function( l ){
+                $this.cytoscape('get').off( l.evt, l.fn );
+              });
+
+              $pz.remove();
+            },
+
+            init: function(){
+              var browserIsMobile = 'ontouchstart' in window;
+
+              return $(this).each(function(){
+                var $container = $(this);
+
+                var winbdgs = [];
+                var $win = $(window);
+
+                var windowBind = function( evt, fn ){
+                  winbdgs.push({ evt: evt, fn: fn });
+
+                  $win.bind( evt, fn );
+                };
+
+                var windowUnbind = function( evt, fn ){
+                  for( var i = 0; i < winbdgs.length; i++ ){
+                    var l = winbdgs[i];
+
+                    if( l.evt === evt && l.fn === fn ){
+                      winbdgs.splice( i, 1 );
+                      break;
+                    }
+                  }
+
+                  $win.unbind( evt, fn );
+                };
+
+                var cybdgs = [];
+                var cy = $container.cytoscape('get');
+
+                var cyOn = function( evt, fn ){
+                  cybdgs.push({ evt: evt, fn: fn });
+
+                  cy.on( evt, fn );
+                };
+
+                var cyOff = function( evt, fn ){
+                  for( var i = 0; i < cybdgs.length; i++ ){
+                    var l = cybdgs[i];
+
+                    if( l.evt === evt && l.fn === fn ){
+                      cybdgs.splice( i, 1 );
+                      break;
+                    }
+                  }
+
+                  cy.off( evt, fn );
+                };
+
+                var $panzoom = $('<div class="cy-panzoom"></div>');
+                $container.prepend( $panzoom );
+
+                $panzoom.css('position', 'absolute'); // must be absolute regardless of stylesheet
+
+                $panzoom.data('winbdgs', winbdgs);
+                $panzoom.data('cybdgs', cybdgs);
+
+                if( options.zoomOnly ){
+                  $panzoom.addClass("cy-panzoom-zoom-only");
+                }
+
+                // add base html elements
+                /////////////////////////
+
+                var $zoomIn = $('<div class="cy-panzoom-zoom-in cy-panzoom-zoom-button"><span class="icon '+ options.zoomInIcon +'"></span></div>');
+                $panzoom.append( $zoomIn );
+
+                var $zoomOut = $('<div class="cy-panzoom-zoom-out cy-panzoom-zoom-button"><span class="icon ' + options.zoomOutIcon + '"></span></div>');
+                $panzoom.append( $zoomOut );
+
+                var $reset = $('<div class="cy-panzoom-reset cy-panzoom-zoom-button"><span class="icon ' + options.resetIcon + '"></span></div>');
+                $panzoom.append( $reset );
+
+                var $slider = $('<div class="cy-panzoom-slider"></div>');
+                $panzoom.append( $slider );
+
+                $slider.append('<div class="cy-panzoom-slider-background"></div>');
+
+                var $sliderHandle = $('<div class="cy-panzoom-slider-handle"><span class="icon ' + options.sliderHandleIcon + '"></span></div>');
+                $slider.append( $sliderHandle );
+
+                var $noZoomTick = $('<div class="cy-panzoom-no-zoom-tick"></div>');
+                $slider.append( $noZoomTick );
+
+                var $panner = $('<div class="cy-panzoom-panner"></div>');
+                $panzoom.append( $panner );
+
+                var $pHandle = $('<div class="cy-panzoom-panner-handle"></div>');
+                $panner.append( $pHandle );
+
+                var $pUp = $('<div class="cy-panzoom-pan-up cy-panzoom-pan-button"></div>');
+                var $pDown = $('<div class="cy-panzoom-pan-down cy-panzoom-pan-button"></div>');
+                var $pLeft = $('<div class="cy-panzoom-pan-left cy-panzoom-pan-button"></div>');
+                var $pRight = $('<div class="cy-panzoom-pan-right cy-panzoom-pan-button"></div>');
+                $panner.append( $pUp ).append( $pDown ).append( $pLeft ).append( $pRight );
+
+                var $pIndicator = $('<div class="cy-panzoom-pan-indicator"></div>');
+                $panner.append( $pIndicator );
+
+                // functions for calculating panning
+                ////////////////////////////////////
+
+                function handle2pan(e){
+                  var v = {
+                    x: e.originalEvent.pageX - $panner.offset().left - $panner.width()/2,
+                    y: e.originalEvent.pageY - $panner.offset().top - $panner.height()/2
+                  }
+
+                  var r = options.panDragAreaSize;
+                  var d = Math.sqrt( v.x*v.x + v.y*v.y );
+                  var percent = Math.min( d/r, 1 );
+
+                  if( d < options.panInactiveArea ){
+                    return {
+                      x: NaN,
+                      y: NaN
+                    };
+                  }
+
+                  v = {
+                    x: v.x/d,
+                    y: v.y/d
+                  };
+
+                  percent = Math.max( options.panMinPercentSpeed, percent );
+
+                  var vnorm = {
+                    x: -1 * v.x * (percent * options.panDistance),
+                    y: -1 * v.y * (percent * options.panDistance)
+                  };
+
+                  return vnorm;
+                }
+
+                function donePanning(){
+                  clearInterval(panInterval);
+                  windowUnbind("mousemove", handler);
+
+                  $pIndicator.hide();
+                }
+
+                function positionIndicator(pan){
+                  var v = pan;
+                  var d = Math.sqrt( v.x*v.x + v.y*v.y );
+                  var vnorm = {
+                    x: -1 * v.x/d,
+                    y: -1 * v.y/d
+                  };
+
+                  var w = $panner.width();
+                  var h = $panner.height();
+                  var percent = d/options.panDistance;
+                  var opacity = Math.max( options.panIndicatorMinOpacity, percent );
+                  var color = 255 - Math.round( opacity * 255 );
+
+                  $pIndicator.show().css({
+                    left: w/2 * vnorm.x + w/2,
+                    top: h/2 * vnorm.y + h/2,
+                    background: "rgb(" + color + ", " + color + ", " + color + ")"
+                  });
+                }
+
+                function calculateZoomCenterPoint(){
+                  var cy = $container.cytoscape("get");
+                  var pan = cy.pan();
+                  var zoom = cy.zoom();
+
+                  zx = $container.width()/2;
+                  zy = $container.height()/2;
+                }
+
+                var zooming = false;
+                function startZooming(){
+                  zooming = true;
+
+                  calculateZoomCenterPoint();
+                }
+
+
+                function endZooming(){
+                  zooming = false;
+                }
+
+                var zx, zy;
+                function zoomTo(level){
+                  var cy = $container.cytoscape("get");
+
+                  if( !zooming ){ // for non-continuous zooming (e.g. click slider at pt)
+                    calculateZoomCenterPoint();
+                  }
+
+                  cy.zoom({
+                    level: level,
+                    renderedPosition: { x: zx, y: zy }
+                  });
+                }
+
+                var panInterval;
+
+                var handler = function(e){
+                  e.stopPropagation(); // don't trigger dragging of panzoom
+                  e.preventDefault(); // don't cause text selection
+                  clearInterval(panInterval);
+
+                  var pan = handle2pan(e);
+
+                  if( isNaN(pan.x) || isNaN(pan.y) ){
+                    $pIndicator.hide();
+                    return;
+                  }
+
+                  positionIndicator(pan);
+                  panInterval = setInterval(function(){
+                    $container.cytoscape("get").panBy(pan);
+                  }, options.panSpeed);
+                };
+
+                $pHandle.bind("mousedown", function(e){
+                  // handle click of icon
+                  handler(e);
+
+                  // update on mousemove
+                  windowBind("mousemove", handler);
+                });
+
+                $pHandle.bind("mouseup", function(){
+                  donePanning();
+                });
+
+                windowBind("mouseup blur", function(){
+                  donePanning();
+                });
+
+
+
+                // set up slider behaviour
+                //////////////////////////
+
+                $slider.bind('mousedown', function(){
+                  return false; // so we don't pan close to the slider handle
+                });
+
+                var sliderVal;
+                var sliding = false;
+                var sliderPadding = 2;
+
+                function setSliderFromMouse(evt, handleOffset){
+                  if( handleOffset === undefined ){
+                    handleOffset = 0;
+                  }
+
+                  var padding = sliderPadding;
+                  var min = 0 + padding;
+                  var max = $slider.height() - $sliderHandle.height() - 2*padding;
+                  var top = evt.pageY - $slider.offset().top - handleOffset;
+
+                  // constrain to slider bounds
+                  if( top < min ){ top = min }
+                  if( top > max ){ top = max }
+
+                  var percent = 1 - (top - min) / ( max - min );
+
+                  // move the handle
+                  $sliderHandle.css('top', top);
+
+                  var zmin = options.minZoom;
+                  var zmax = options.maxZoom;
+
+                  // assume (zoom = zmax ^ p) where p ranges on (x, 1) with x negative
+                  var x = Math.log(zmin) / Math.log(zmax);
+                  var p = (1 - x)*percent + x;
+
+                  // change the zoom level
+                  var z = Math.pow( zmax, p );
+
+                  // bound the zoom value in case of floating pt rounding error
+                  if( z < zmin ){
+                    z = zmin;
+                  } else if( z > zmax ){
+                    z = zmax;
+                  }
+
+                  zoomTo( z );
+                }
+
+                var sliderMdownHandler, sliderMmoveHandler;
+                $sliderHandle.bind('mousedown', sliderMdownHandler = function( mdEvt ){
+                  var handleOffset = mdEvt.target === $sliderHandle[0] ? mdEvt.offsetY : 0;
+                  sliding = true;
+
+                  startZooming();
+                  $sliderHandle.addClass("active");
+
+                  var lastMove = 0;
+                  windowBind('mousemove', sliderMmoveHandler = function( mmEvt ){
+                    var now = +new Date;
+
+                    // throttle the zooms every 10 ms so we don't call zoom too often and cause lag
+                    if( now > lastMove + 10 ){
+                      lastMove = now;
+                    } else {
+                      return false;
+                    }
+
+                    setSliderFromMouse(mmEvt, handleOffset);
+
+                    return false;
+                  });
+
+                  // unbind when
+                  windowBind('mouseup', function(){
+                    windowUnbind('mousemove', sliderMmoveHandler);
+                    sliding = false;
+
+                    $sliderHandle.removeClass("active");
+                    endZooming();
+                  });
+
+                  return false;
+                });
+
+                $slider.bind('mousedown', function(e){
+                  if( e.target !== $sliderHandle[0] ){
+                    sliderMdownHandler(e);
+                    setSliderFromMouse(e);
+                  }
+                });
+
+                function positionSliderFromZoom(){
+                  var cy = $container.cytoscape("get");
+                  var z = cy.zoom();
+                  var zmin = options.minZoom;
+                  var zmax = options.maxZoom;
+
+                  // assume (zoom = zmax ^ p) where p ranges on (x, 1) with x negative
+                  var x = Math.log(zmin) / Math.log(zmax);
+                  var p = Math.log(z) / Math.log(zmax);
+                  var percent = 1 - (p - x) / (1 - x); // the 1- bit at the front b/c up is in the -ve y direction
+
+                  var min = sliderPadding;
+                  var max = $slider.height() - $sliderHandle.height() - 2*sliderPadding;
+                  var top = percent * ( max - min );
+
+                  // constrain to slider bounds
+                  if( top < min ){ top = min }
+                  if( top > max ){ top = max }
+
+                  // move the handle
+                  $sliderHandle.css('top', top);
+                }
+
+                positionSliderFromZoom();
+
+                cyOn('zoom', function(){
+                  if( !sliding ){
+                    positionSliderFromZoom();
+                  }
+                });
+
+                // set the position of the zoom=1 tick
+                (function(){
+                  var z = 1;
+                  var zmin = options.minZoom;
+                  var zmax = options.maxZoom;
+
+                  // assume (zoom = zmax ^ p) where p ranges on (x, 1) with x negative
+                  var x = Math.log(zmin) / Math.log(zmax);
+                  var p = Math.log(z) / Math.log(zmax);
+                  var percent = 1 - (p - x) / (1 - x); // the 1- bit at the front b/c up is in the -ve y direction
+
+                  if( percent > 1 || percent < 0 ){
+                    $noZoomTick.hide();
+                    return;
+                  }
+
+                  var min = sliderPadding;
+                  var max = $slider.height() - $sliderHandle.height() - 2*sliderPadding;
+                  var top = percent * ( max - min );
+
+                  // constrain to slider bounds
+                  if( top < min ){ top = min }
+                  if( top > max ){ top = max }
+
+                  $noZoomTick.css('top', top);
+                })();
+
+                // set up zoom in/out buttons
+                /////////////////////////////
+
+                function bindButton($button, factor){
+                  var zoomInterval;
+
+                  $button.bind("mousedown", function(e){
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    if( e.button != 0 ){
+                      return;
+                    }
+
+                    var cy = $container.cytoscape("get");
+                    var doZoom = function(){
+                      var zoom = cy.zoom();
+                      var lvl = cy.zoom() * factor;
+
+                      if( lvl < options.minZoom ){
+                        lvl = options.minZoom;
+                      }
+
+                      if( lvl > options.maxZoom ){
+                        lvl = options.maxZoom;
+                      }
+
+                      if( (lvl == options.maxZoom && zoom == options.maxZoom) ||
+                        (lvl == options.minZoom && zoom == options.minZoom)
+                      ){
+                        return;
+                      }
+
+                      zoomTo(lvl);
+                    };
+
+                    startZooming();
+                    doZoom();
+                    zoomInterval = setInterval(doZoom, options.zoomDelay);
+
+                    return false;
+                  });
+
+                  windowBind("mouseup blur", function(){
+                    clearInterval(zoomInterval);
+                    endZooming();
+                  });
+                }
+
+                bindButton( $zoomIn, (1 + options.zoomFactor) );
+                bindButton( $zoomOut, (1 - options.zoomFactor) );
+
+                $reset.bind("mousedown", function(e){
+                  if( e.button != 0 ){
+                    return;
+                  }
+
+                  var cy = $container.cytoscape("get");
+                  var elesToFit = options.fitSelector?cy.elements(options.fitSelector):cy.elements();
+
+                  if( elesToFit.size() === 0 ){
+                    cy.reset();
+                  } else {
+                    var animateOnFit = typeof options.animateOnFit === 'function' ? options.animateOnFit.call() : options.animateOnFit;
+                    if(animateOnFit){
+                      cy.animate({
+                        fit: {
+                          eles: elesToFit,
+                          padding: options.fitPadding
+                        }
+                      }, {
+                        duration: options.fitAnimationDuration
+                      });
+                    }
+                    else{
+                      cy.fit( elesToFit, options.fitPadding );
+                    }
+
+                  }
+
+                  return false;
+                });
+
+
+
+              });
+            }
+          };
+
+          if( functions[fn] ){
+            return functions[fn].apply(this, Array.prototype.slice.call( arguments, 1 ));
+          } else if( typeof fn == 'object' || !fn ) {
+            return functions.init.apply( this, arguments );
+          } else {
+            $.error("No such function `"+ fn +"` for jquery.cytoscapePanzoom");
+          }
+
+          return $(this);
+        };
+
+
+        if( typeof module !== 'undefined' && module.exports ){ // expose as a commonjs module
+          module.exports = register;
+        }
+
+        if( typeof define !== 'undefined' && define.amd ){ // expose as an amd/requirejs module
+          define('cytoscape-panzoom', function(){
+            return register;
+          });
+        }
+
+        if( typeof cytoscape !== 'undefined' && typeof jQuery !== 'undefined' ){ // expose to global cytoscape (i.e. window.cytoscape)
+          register( cytoscape, jQuery );
+        }
+
+      })();
 	
 </script>
 </head>
