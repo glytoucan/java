@@ -518,7 +518,7 @@
 		
 		var isUserGrabbingN1 = cy.nodes().ungrabify();
 		
-						var _ua = (function(u){
+			var _ua = (function(u){
 			  return {
 			    Tablet:(u.indexOf("windows") != -1 && u.indexOf("touch") != -1 && u.indexOf("tablet pc") == -1)
 			      || u.indexOf("ipad") != -1
@@ -547,55 +547,6 @@
 							sel.removeClass('addLabel').removeClass('addLabel');
 							sel.removeClass('addImage').removeClass('addImage');
 					});
-					// contextMenus
-					cy.on('taphold', 'node',function(e){
-						cy.contextMenus({
-								menuItems: [
-										{
-												id: 'Copy this glycan ID',
-												title: 'Copy this glycan ID',
-												selector: 'node',
-												onClickFunction: function (event) {
-													var sel = event.cyTarget.id();
-													copyTextToClipboard(sel);
-												},
-											},
-											{
-												id: 'Center on this glycan',
-												title: 'Center on this glycan',
-												selector: 'node',
-												onClickFunction: function (event) {
-													var sel = event.cyTarget.id();
-													if ( sel != null) {
-														location.href = "/D3_dndTree/" + sel;
-													}
-												},
-											},
-											{
-												id: 'Open this glycan\'s entry page',
-												title: 'Open this glycan\'s entry page',
-												selector: 'node',
-												onClickFunction: function (event) {
-													var sel = event.cyTarget.id();
-														if (sel != null) {
-															window.open('https://glytoucan.org/Structures/Glycans/'+ sel);
-														}
-												}
-											},
-											{
-												id: 'Show this glycan image',
-												title: 'Show this glycan image',
-												selector: 'node',
-												onClickFunction: function (event) {
-													var sel = event.cyTarget.id();
-														if (sel != null) {
-															window.open('https://glytoucan.org/glycans/' +sel+ '/image?style=extended&format=png&notation=cfg');
-														}
-												}
-											}
-										]
-									});
-				});
 				}else{
 					cy.on('mouseover', 'node', function(e){
 	            var sel = e.cyTarget;
@@ -607,54 +558,7 @@
 	            sel.removeClass('addLabel').removeClass('addLabel');
 	            sel.removeClass('addImage').removeClass('addImage');
 	        });
-					// contextMenus
-					cy.contextMenus({
-	            menuItems: [
-	                {
-	                    id: 'Copy this glycan ID',
-	                    title: 'Copy this glycan ID',
-	                    selector: 'node',
-	                    onClickFunction: function (event) {
-	                      var sel = event.cyTarget.id();
-	                      copyTextToClipboard(sel);
-	                    },
-	                  },
-	                  {
-	                    id: 'Center on this glycan',
-	                    title: 'Center on this glycan',
-	                    selector: 'node',
-	                    onClickFunction: function (event) {
-	                      var sel = event.cyTarget.id();
-	                      if ( sel != null) {
-	                        location.href = "/D3_dndTree/" + sel;
-	                			}
-	                    },
-	                  },
-	                  {
-	                    id: 'Open this glycan\'s entry page',
-	                    title: 'Open this glycan\'s entry page',
-	                    selector: 'node',
-	                    onClickFunction: function (event) {
-	                      var sel = event.cyTarget.id();
-	                  			if (sel != null) {
-	                          window.open('https://glytoucan.org/Structures/Glycans/'+ sel);
-	                  			}
-	                    }
-	                  },
-	                  {
-	                    id: 'Show this glycan image',
-	                    title: 'Show this glycan image',
-	                    selector: 'node',
-	                    onClickFunction: function (event) {
-	                      var sel = event.cyTarget.id();
-	                  			if (sel != null) {
-	                          window.open('https://glytoucan.org/glycans/' +sel+ '/image?style=extended&format=png&notation=cfg');
-	                  			}
-	                    }
-	                  }
-	                ]
-	              });
-				};
+	    };
 		
 		cy.panzoom({
 			// options here...
@@ -679,6 +583,53 @@
 				copyArea.remove();
 		};
 		
+		// contextMenus
+		cy.contextMenus({
+	        menuItems: [
+	            {
+	                id: 'Copy this glycan ID',
+	                title: 'Copy this glycan ID',
+	                selector: 'node',
+	                onClickFunction: function (event) {
+	                  var sel = event.cyTarget.id();
+	                  copyTextToClipboard(sel);
+	                },
+	              },
+	              {
+	                id: 'Center on this glycan',
+	                title: 'Center on this glycan',
+	                selector: 'node',
+	                onClickFunction: function (event) {
+	                  var sel = event.cyTarget.id();
+	                  if ( sel != null) {
+	                    location.href = "/GRAB_Graph/" + sel;
+	            			}
+	                },
+	              },
+	              {
+	                id: 'Open this glycan\'s entry page',
+	                title: 'Open this glycan\'s entry page',
+	                selector: 'node',
+	                onClickFunction: function (event) {
+	                  var sel = event.cyTarget.id();
+	              			if (sel != null) {
+	                      window.open('/Structures/Glycans/'+ sel);
+	              			}
+	                }
+	              },
+	              {
+	                id: 'Show this glycan image',
+	                title: 'Show this glycan image',
+	                selector: 'node',
+	                onClickFunction: function (event) {
+	                  var sel = event.cyTarget.id();
+	              			if (sel != null) {
+	                      window.open('/glycans/' +sel+ '/image?style=extended&format=png&notation=cfg');
+	              			}
+	                }
+	              }
+	            ]
+	          });	
 	});
 	
 	// cytoscape-context-menus.js
@@ -816,10 +767,24 @@
 	          adjustCxtMenu(event);
 	          displayComponent($component);
 	        });
+	        cy.on('taphold', cxtCoreFcn = function(event) {
+	          if( event.cyTarget != cy ) {
+	            return;
+	          }
+	
+	          cy.scratch('currentCyEvent', event);
+	          adjustCxtMenu(event);
+	          displayComponent($component);
+	        });
 	      }
 	
 	      if(selector) {
 	        cy.on('cxttap', selector, cxtfcn = function(event) {
+	          cy.scratch('currentCyEvent', event);
+	          adjustCxtMenu(event);
+	          displayComponent($component);
+	        });
+	        cy.on('taphold', selector, cxtfcn = function(event) {
 	          cy.scratch('currentCyEvent', event);
 	          adjustCxtMenu(event);
 	          displayComponent($component);
@@ -955,10 +920,12 @@
 	
 	      if(cxtfcn) {
 	        cy.off('cxttap', selector, cxtfcn);
+	        cy.off('taphold', selector, cxtfcn);
 	      }
 	
 	      if(cxtCoreFcn) {
 	        cy.off('cxttap', cxtCoreFcn);
+	        cy.off('taphold', cxtCoreFcn);
 	      }
 	
 	      if(callOnClickFcn) {
