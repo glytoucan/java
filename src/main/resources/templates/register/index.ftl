@@ -63,18 +63,18 @@
 			<h id="tabs"></h>
 			<ul class="nav nav-tabs">
 				<!-- GlycoCT condensed -->
-				<li class="active"><a href="#A" data-toggle="tab">
+				<li><a href="#A" data-toggle="tab">
 					${RightTitle[1]}
 				</a></li>
 				<!-- WURCS -->
-				<li><a href="#B" data-toggle="tab">
+				<li class="active"><a href="#B" data-toggle="tab">
 					${RightTitle[2]}
 				</a></li>
 			</ul>
 			<div class="tabbable">
 				<div class="tab-content">
 					<!-- GlycoCT condensed description -->
-					<div class="tab-pane active" id="A">
+					<div class="tab-pane" id="A">
 						<p>
 							${Right[1]}
 							<a href="http://www.ncbi.nlm.nih.gov/pubmed/18436199">More details</a>
@@ -82,13 +82,16 @@
 							${RightFigure[1]}
 						</p>
 					</div>
-					<!-- GlycoCT condensed description -->
-					<div class="tab-pane" id="B">
+					<!-- WURCS -->
+					<div class="tab-pane active" id="B">
 						<p>
 							${Right[2]}
 							<a href="http://www.wurcs-wg.org/about.php">More details</a>
 							<br>
-							${RightFigure[2]}
+							<!-- ${RightFigure[2]} -->
+							<br>
+							<img src="/glycans/G22768VO/image?style=extended&format=png&notation=cfg">
+							WURCS=2.0/3,5,4/[a2122h-1b_1-5_2*NCC/3=O][a1122h-1b_1-5][a1122h-1a_1-5]/1-1-2-3-3/a4-b1_b4-c1_c3-d1_c6-e1
 						</p>
 					</div>
 				</div>

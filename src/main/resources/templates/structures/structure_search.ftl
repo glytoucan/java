@@ -85,14 +85,14 @@
 			<h id="tabs"></h>
 			<ul class="nav nav-tabs">
 				<!-- GlycoCT condensed -->
-				<li class="active"><a href="#A" data-toggle="tab">
+				<li><a href="#A" data-toggle="tab">
 					<#assign BottomTitle = BottomTitle>
 					<#assign BottomTitleKeys = BottomTitle?keys>
 					<#-- list BottomTitleKeys as key>${key} = ${BottomTitle[key]}; </#list -->
 					${BottomTitle[BottomTitleKeys[0]]}
 				</a></li>
 				<!-- WURCS -->
-				<li><a href="#I" data-toggle="tab">
+				<li class="active"><a href="#I" data-toggle="tab">
 					${BottomTitle[BottomTitleKeys[6]]}
 				</a></li>
 				<!-- LineraCode -->
@@ -107,7 +107,7 @@
 			<div class="tabbable">
 				<div class="tab-content">
 					<!-- GlycoCT condensed description -->
-					<div class="tab-pane active" id="A">
+					<div class="tab-pane" id="A">
 						<p>
 							<#assign Bottom = Bottom>
 							<#assign BottomKeys = Bottom?keys>
@@ -166,12 +166,15 @@
 						</p>
 					</div>
 					<!-- WURCS description-->
-					<div class="tab-pane" id="I">
+					<div class="tab-pane active" id="I">
 						<p>
 							${Bottom[BottomKeys[7]]}
 								<a href="http://www.wurcs-wg.org/about.php">${Bottom[BottomKeys[6]]}</a>
 							<br>
-							${BottomFigure[BottomFigureKeys[6]]}
+							<!-- ${BottomFigure[BottomFigureKeys[6]]} -->
+							<br>
+							<img src="/glycans/G22768VO/image?style=extended&format=png&notation=cfg">
+							WURCS=2.0/3,5,4/[a2122h-1b_1-5_2*NCC/3=O][a1122h-1b_1-5][a1122h-1a_1-5]/1-1-2-3-3/a4-b1_b4-c1_c3-d1_c6-e1
 						</p>
 					</div>
 				</div>
