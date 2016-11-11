@@ -103,7 +103,8 @@
 			<!-- Count of glycans -->
 			<span class="glResultTotal_num">0</span>
 			<!-- Reset all conditions -->
-			<span class="clearCondition_btn">&laquo; ${resetAllConditions}</span>
+			<span style="font-size:13px;"><a href="/Structures">&laquo; ${resetAllConditions}</a></span>
+			<!-- <span class="clearCondition_btn">&laquo; ${resetAllConditions}</span> -->
 		</div><!--/.glResultTotal-->
 
 		<div class="glCurrentStatus">
