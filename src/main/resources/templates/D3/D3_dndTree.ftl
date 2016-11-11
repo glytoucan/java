@@ -93,16 +93,16 @@
        display: none;
   }
 
-/* 画面の枠設定（この方法はしなかった）	
+/* 画面の枠設定	*/
 	div.menu{
 	   float: left;
-	   width: 15%;
+	   width: 17%;
 	}
 	div.blockb{
 	 float: right;
-	 width: 85%;
+	 width: 83%;
 	}
-*/
+
 
 /* Side menu styles */
 	div.menu a {
@@ -112,30 +112,34 @@
 	}
 	
 	div.menu ul{
-	margin: 0;
-	padding: 0;
-	list-style-type: none;
+		margin: 0;
+		padding: 0;
+		list-style-type: none;
+		-webkit-box-align: center; /* safari, Chrome */
+		line-height: 100%;
 	}
 	div.menu li{
-	display: inline;
-	padding: 0;
-	margin: 0;
+		display: inline;
+		padding: 0;
+		margin: 0;
 	}
 	div.menu li a{
-	display: block;
-	width: 150px;
-	padding: 3px;
-	margin: 10px 0px 10px 0px;
-	text-decoration: none;
-	border: outset 3px #C2CBBD;
-	background-color: #C2CBBD;
-	text-align: center;
-	color: #000000;
-	font-size: 14px;
+		display: block;
+		width: 150px;
+		padding: 3px;
+		margin: 10px 0px 10px 0px;
+		text-decoration: none;
+		border: outset 3px #C2CBBD;
+		background-color: #C2CBBD;
+		text-align: center;
+		color: #000000;
+		font-size: 14px;
+		margin-left: auto;
+		margin-right: auto;
 	}
 	div.menu li a:hover{
-	border: inset 3px #95A38D;
-	background-color: #95A38D;
+		border: inset 3px #95A38D;
+		background-color: #95A38D;
 	}
 
 </style>
@@ -153,14 +157,18 @@
 <!-- side menu -->
 	<div style="float:left;" class="menu">
 	 	 <ul>
-	 	 <br><font size="6" color="black">${ID}</font><br>
-	 	 <li><a href="/D3_dndTree/${ID}">All data</a></li>
-	<!-- <li><a href="/D3_motif_isomer/${ID}">Motif and Isomer</a></li>
-	 	 <li><a href="/D3_structure/${ID}">Superstructure and Substructure</a></li>
-	 	 <li><a href="/D3_subsumed/${ID}">Topology and Topology_contained_by</a></li>	-->
+	 	 <br><br><font size="6" color="black"><center><U>GRAB Tree</U></center></font><br>
+		 <font size="5" color="black"><center>${ID}</center></font>
+	 	 <li><a href="/GRAB_Graph/${ID}">GRAB Graph</a></li>
 	 	 <li><a href="/Structures/Glycans/${ID}">Return</a></li>
+	 	 <font size="1" color="black"><B>GRAB</B> allows users to easily understand the relationships of glycan structures in an informational graphic.</font><br>
+	 	 <font size="1" color="black"><B>GRAB Tree</B> displays multiple relationships in tree format.  Relationships such as motifs, superstructures, substructures, and topology will be displayed as they become available.</font><br>
+	 	 <font size="1" color="black"><B>GRAB Graph</B> displays the relationships in four directions: superstructures (Above), substructures (Below), subsumes (Left), and subsumed by (Right) with the selected glycan at the center.</font><br>
+	 	 <font size="1" color="black"><B>Mouse over function</B>: User can easily check the selected glycan’s structure and accession number.</font><br>
+	 	 <font size="1" color="black"><B>Right-click function</B>: A menu will display where Users can select to display the glycan’s entry page, to show a new GRAB page with the selected glycan, copy the glycan accession number, etc.</font><br>
+	 	 </ul>
 	</div>
-	<div style="float:left;" class="blockb">
+	<div style="float:right;" class="blockb">
 	
 <script>
 d3.contextMenu = function (menu, openCallback) {
@@ -224,12 +232,12 @@ var copyTextToClipboard = function(txt){
 
 var menu = [
 	{
-		title: 'Copy this glycan ID',
+		title: 'Copy this accession number',
 		action: function(elm, d, i) {
-			// Copy this glycan ID
+			// Copy this accession number
 			var cTxt = d.name;
 			copyTextToClipboard(cTxt);
-			// alert("Copy this glycan ID \"" + d.name + "\" in Clipboard");
+			// alert("Copy this accession number \"" + d.name + "\" in Clipboard");
 		}
 	},
 	{

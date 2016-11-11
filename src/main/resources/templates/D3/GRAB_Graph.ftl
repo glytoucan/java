@@ -317,6 +317,53 @@
       .cy-panzoom-zoom-only .cy-panzoom-zoom-out {
       	top: 70px;
       }
+      
+      /* Side menu styles */
+		div.menu a {
+			font-size:30px;
+		    font-family:sans-serif;
+		    color: black;
+		}
+		
+		div.menu ul{
+			margin: 0;
+			padding: 0;
+			list-style-type: none;
+		}
+		div.menu li{
+			display: inline;
+			padding: 0;
+			margin: 0;
+		}
+		div.menu li a{
+			display: block;
+			width: 150px;
+			padding: 2px;
+			margin: 10px 0px 10px 0px;
+			text-decoration: none;
+			border: outset 3px #C2CBBD;
+			background-color: #C2CBBD;
+			text-align: center;
+			color: #000000;
+			font-size: 14px;
+			margin-left: auto;
+			margin-right: auto;
+		}
+		div.menu li a:hover{
+			border: inset 3px #95A38D;
+			background-color: #95A38D;
+		}
+		
+		/* 画面の枠設定	*/
+			div.menu{
+			   float: left;
+			   width: 17%;
+			}
+			div.blockb{
+			 float: right;
+			 width: 83%;
+			}
+
 </style>
 
 <script>
@@ -341,27 +388,17 @@
 
 
 			style: cytoscape.stylesheet()
-				.selector('node')
+				.selector("node")
 					.css({
 						"shape": "rectangle",
 						"width": "50px",
 						"height": "20px",
-						'background-color': '#fff',
-						// "content": function(ele){
-						//   if (ele.id === "subsumedby"|| ele.id ==="subsumed"|| ele.id ==="superstructure"|| ele.id ==="substructure") {
-						//     return "ele.id";
-						//   }
-						//   else return null;
-						// },
-						//"content":"data(id)",
-						 "font-size":"12px",
-						 "text-valign":"center",
-						 "text-halign":"center",
-						 //"text-outline-color":"#000",
-						 //"text-outline-width":"2px",
+						"background-color": "#fff",
+						"font-size":"12px",
+						"text-valign":"center",
+						"text-halign":"center",
 						"color":"#000",
 						"overlay-padding":"6px",
-						//"z-index":"20",
 						"background-image" : function(ele){
 							if (ele.id() == "subsumedby"){
 								return "/img/Subsumedby_picture.png";
@@ -372,7 +409,6 @@
 							} else if (ele.id() == "substructure"){
 								return "/img/Substructure_picture.png";
 							} else {
-								//console.log("https://glytoucan.org/glycans/" + ele.id() + "/image?style=extended&format=png&notation=cfg");
 								return "/glycans/" + ele.id() + "/image?style=extended&format=png&notation=cfg";
 							}
 						},
@@ -381,26 +417,18 @@
 						"background-fit": "contain",
 						"background-clip" : "none",
 				})
-				.selector('edge')
+				.selector("edge")
 					.css({
-						'curve-style': 'bezier',
-						'width': 3,
-						'line-color': '#000',
-						//'opacity': 0.5,
+						"curve-style": "bezier",
+						"width": 3,
+						"line-color": "#000",
 						"target-arrow-shape" : "triangle",
-					//   'target-arrow-shape': function(ele){
-					//     //console.log(ele.id());
-					//     if (ele.id() == "center_to_subsumedby"||ele.id() == "center_to_subsumes"||ele.id() == "center_to_superstructure"||ele.id() == "center_to_substructure"){
-					//       return 'none';
-					//     }
-					//     else return 'triangle';
-					// },
-						'target-arrow-color': '#000',
+						"target-arrow-color": "#000",
 					})
 				.selector(":parent")
 					.css({
-						'background-opacity': 0.333,
-						'background-color': function(ele){
+						"background-opacity": 0.333,
+						"background-color": function(ele){
 							if (ele.id() == "subsumedby_box"){
 								return "#0000FF";
 							} else if (ele.id() == "subsumes_box"){
@@ -410,83 +438,27 @@
 							} else if (ele.id() == "substructure_box"){
 								return "#800080";
 							} else {
-								return '#fff';
+								return "#fff";
 							}
 						}
 					})
-				// .selector('node.highlight') //This class is change all nodes
-				//   .style({
-				//       'border-color': '#FFF',
-				//       'border-width': '2px'
-				//   })
-					// .selector('selected')
-					//   .style({})
-					.selector('node.addLabel') //This class is change the selected node
+					.selector("node.addLabel") //This class is change the selected node
 						.style({
-								//'content':"data(id)",
-								//'opacity': '0.5'
 								"label" : function(ele){
-									//console.log(ele.id());
 									if (ele.id() == "subsumedby"||ele.id() == "subsumes"||ele.id() == "superstructure"||ele.id() == "substructure"||ele.id() == "subsumedby_box"||ele.id() == "subsumes_box"||ele.id() == "superstructure_box"||ele.id() == "substructure_box"){
 										return "";
 									}
 									else return ele.id("id");
 								},
-								// Text need to fit which the glycan concerned
-								// How the way separate?
-								// x > 100 , y >100
 								"text-halign":"center",
 								"text-valign":"bottom",
 								"text-margin-x":"33px",
 								"text-margin-y":"0px",
-								// "text-background-color": function(ele){
-								//   console.log(ele.parent());
-								//   console.log(ele.id());
-								//   if (ele.parent() == "subsumedby_box"){
-								//     return "#0000FF";
-								//   } else if (ele.parent() == "subsumes_box"){
-								//     return "#FF0000";
-								//   } else if (ele.parent() == "superstructure_box"){
-								//     return "#008000";
-								//   } else if (ele.parent() == "substructure_box"){
-								//     return "#800080";
-								//   } else {
-								//     return '#fff';
-								//   }
-								// },
-								//"text-background-shape":"rectangle",
-								// "text-background-opacity":"1.0",
-								// "text-halign" : function(ele){
-								//   console.log(ele.position('x'));
-								//   if (ele.position('x') == 0 && ele.position('y') == 0){
-								//     return "center";
-								//   }
-								//   else return "right";
-								// },
-								// "text-valign" : function(ele){
-								//   if (ele.position('x') == 0 && ele.position('y') == 0){
-								//     return "bottom";
-								//   }
-								//   else return "center";
-								// },
-								// "text-margin-x" : function(ele){
-								//   if (ele.position('x') == 0 && ele.position('y') == 0){
-								//     return "33px";
-								//   }
-								//   else return "5px";
-								// },
-								// "text-margin-y" : function(ele){
-								//   if (ele.position('x') == 0 && ele.position('y') == 0){
-								//     return "0px";
-								//   }
-								//   else return "10px";
-								// },
 								"z-index":"20"
 					})
-				.selector('node.addImage')
+				.selector("node.addImage")
 					.style({
 						"width" : function(ele){
-							//console.log(ele.id());
 							if (ele.id() == "subsumedby"||ele.id() == "subsumes"||ele.id() == "superstructure"||ele.id() == "substructure"||ele.id() == "subsumedby_box"||ele.id() == "subsumes_box"||ele.id() == "superstructure_box"||ele.id() == "substructure_box"){
 								return "50px";
 							}
@@ -508,7 +480,6 @@
 							} else if (ele.id() == "substructure"){
 								return "/img/Substructure_picture.png";
 							} else {
-								//console.log("/glycans/" + ele.id("id") + "/image?style=extended&format=png&notation=cfg");
 								return "/glycans/" + ele.id("id") + "/image?style=extended&format=png&notation=cfg";
 							}
 						}
@@ -518,40 +489,40 @@
 		
 		var isUserGrabbingN1 = cy.nodes().ungrabify();
 		
-			var _ua = (function(u){
-			  return {
-			    Tablet:(u.indexOf("windows") != -1 && u.indexOf("touch") != -1 && u.indexOf("tablet pc") == -1)
-			      || u.indexOf("ipad") != -1
-			      || (u.indexOf("android") != -1 && u.indexOf("mobile") == -1)
-			      || (u.indexOf("firefox") != -1 && u.indexOf("tablet") != -1)
-			      || u.indexOf("kindle") != -1
-			      || u.indexOf("silk") != -1
-			      || u.indexOf("playbook") != -1,
-			    Mobile:(u.indexOf("windows") != -1 && u.indexOf("phone") != -1)
-			      || u.indexOf("iphone") != -1
-			      || u.indexOf("ipod") != -1
-			      || (u.indexOf("android") != -1 && u.indexOf("mobile") != -1)
-			      || (u.indexOf("firefox") != -1 && u.indexOf("mobile") != -1)
-			      || u.indexOf("blackberry") != -1
-			  }
-			})(window.navigator.userAgent.toLowerCase());
+		var _ua = (function(u){
+		  return {
+		    Tablet:(u.indexOf("windows") != -1 && u.indexOf("touch") != -1 && u.indexOf("tablet pc") == -1)
+		      || u.indexOf("ipad") != -1
+		      || (u.indexOf("android") != -1 && u.indexOf("mobile") == -1)
+		      || (u.indexOf("firefox") != -1 && u.indexOf("tablet") != -1)
+		      || u.indexOf("kindle") != -1
+		      || u.indexOf("silk") != -1
+		      || u.indexOf("playbook") != -1,
+		    Mobile:(u.indexOf("windows") != -1 && u.indexOf("phone") != -1)
+		      || u.indexOf("iphone") != -1
+		      || u.indexOf("ipod") != -1
+		      || (u.indexOf("android") != -1 && u.indexOf("mobile") != -1)
+		      || (u.indexOf("firefox") != -1 && u.indexOf("mobile") != -1)
+		      || u.indexOf("blackberry") != -1
+		  }
+		})(window.navigator.userAgent.toLowerCase());
 
-				if(_ua.Mobile || _ua.Tablet){
-					cy.on('touchstart', 'node', function(e){
-							var sel = e.cyTarget;
-							sel.addClass('addLabel').addClass('addLabel');
-							sel.addClass('addImage').addClass('addImage');
-					});
-					cy.on('touchend', 'node', function(e){
-							var sel = e.cyTarget;
-							sel.removeClass('addLabel').removeClass('addLabel');
-							sel.removeClass('addImage').removeClass('addImage');
-					});
-				}else{
-					cy.on('mouseover', 'node', function(e){
-	            var sel = e.cyTarget;
-	            sel.addClass('addLabel').addClass('addLabel');
-	            sel.addClass('addImage').addClass('addImage');
+		if(_ua.Mobile || _ua.Tablet){
+			cy.on('touchstart', 'node', function(e){
+				var sel = e.cyTarget;
+				sel.addClass('addLabel').addClass('addLabel');
+				sel.addClass('addImage').addClass('addImage');
+			});
+			cy.on('touchend', 'node', function(e){
+					var sel = e.cyTarget;
+					sel.removeClass('addLabel').removeClass('addLabel');
+					sel.removeClass('addImage').removeClass('addImage');
+			});
+		}else{
+			cy.on('mouseover', 'node', function(e){
+	        var sel = e.cyTarget;
+	        sel.addClass('addLabel').addClass('addLabel');
+	        sel.addClass('addImage').addClass('addImage');  
 	        });
 	        cy.on('mouseout', 'node', function(e){
 	            var sel = e.cyTarget;
@@ -563,16 +534,6 @@
 		cy.panzoom({
 			// options here...
 		});
-				
-		// var selectAllOfTheSameType = function(ele) {
-		//     cy.elements().unselect();
-		//     if(ele.isNode()) {
-		//         cy.nodes().select();
-		//     }
-		//     else if(ele.isEdge()) {
-		//         cy.edges().select();
-		//     }
-		// };
 
 		var copyTextToClipboard = function(txt){
 				var copyArea = $("<textarea/>");
@@ -587,8 +548,8 @@
 		cy.contextMenus({
 	        menuItems: [
 	            {
-	                id: 'Copy this glycan ID',
-	                title: 'Copy this glycan ID',
+	                id: 'Copy this accession number',
+	                title: 'Copy this accession number',
 	                selector: 'node',
 	                onClickFunction: function (event) {
 	                  var sel = event.cyTarget.id();
@@ -624,12 +585,13 @@
 	                onClickFunction: function (event) {
 	                  var sel = event.cyTarget.id();
 	              			if (sel != null) {
-	                      window.open('/glycans/' +sel+ '/image?style=extended&format=png&notation=cfg');
+	                      		window.open('/glycans/' +sel+ '/image?style=extended&format=png&notation=cfg');
 	              			}
 	                }
 	              }
-	            ]
-	          });	
+	           ]
+	       });
+		
 	});
 	
 	// cytoscape-context-menus.js
@@ -759,35 +721,45 @@
 	
 	      if(coreAsWell) {
 	        cy.on('cxttap', cxtCoreFcn = function(event) {
-	          if( event.cyTarget != cy ) {
-	            return;
-	          }
-	
-	          cy.scratch('currentCyEvent', event);
-	          adjustCxtMenu(event);
-	          displayComponent($component);
-	        });
+	          if (sel.id() != "subsumedby"　&&　sel.id() != "subsumes"　&&　sel.id() != "superstructure"　&&　sel.id() != "substructure"　&&　sel.id() != "subsumedby_box"　&&　sel.id() != "subsumes_box"　&&　sel.id() != "superstructure_box"　&&　sel.id() != "substructure_box"){
+		          
+		          if( event.cyTarget != cy ) {
+		            return;
+		          }
+		
+		          cy.scratch('currentCyEvent', event);
+		          adjustCxtMenu(event);
+		          displayComponent($component);
+		       }
+		    });
 	        cy.on('taphold', cxtCoreFcn = function(event) {
-	          if( event.cyTarget != cy ) {
-	            return;
-	          }
-	
-	          cy.scratch('currentCyEvent', event);
-	          adjustCxtMenu(event);
-	          displayComponent($component);
+	          if (sel.id() != "subsumedby"　&&　sel.id() != "subsumes"　&&　sel.id() != "superstructure"　&&　sel.id() != "substructure"　&&　sel.id() != "subsumedby_box"　&&　sel.id() != "subsumes_box"　&&　sel.id() != "superstructure_box"　&&　sel.id() != "substructure_box"){
+		          if( event.cyTarget != cy ) {
+		            return;
+		          }
+		
+		          cy.scratch('currentCyEvent', event);
+		          adjustCxtMenu(event);
+		          displayComponent($component);
+		       }
 	        });
 	      }
 	
 	      if(selector) {
 	        cy.on('cxttap', selector, cxtfcn = function(event) {
-	          cy.scratch('currentCyEvent', event);
-	          adjustCxtMenu(event);
-	          displayComponent($component);
+	        var sel = event.cyTarget;
+	          if (sel.id() != "subsumedby"　&&　sel.id() != "subsumes"　&&　sel.id() != "superstructure"　&&　sel.id() != "substructure"　&&　sel.id() != "subsumedby_box"　&&　sel.id() != "subsumes_box"　&&　sel.id() != "superstructure_box"　&&　sel.id() != "substructure_box"){
+		          cy.scratch('currentCyEvent', event);
+		          adjustCxtMenu(event);
+		          displayComponent($component);
+		      }
 	        });
 	        cy.on('taphold', selector, cxtfcn = function(event) {
-	          cy.scratch('currentCyEvent', event);
-	          adjustCxtMenu(event);
-	          displayComponent($component);
+	          if (sel.id() != "subsumedby"　&&　sel.id() != "subsumes"　&&　sel.id() != "superstructure"　&&　sel.id() != "substructure"　&&　sel.id() != "subsumedby_box"　&&　sel.id() != "subsumes_box"　&&　sel.id() != "superstructure_box"　&&　sel.id() != "substructure_box"){  
+		          cy.scratch('currentCyEvent', event);
+		          adjustCxtMenu(event);
+		          displayComponent($component);
+		      }
 	        });
 	      }
 	
@@ -1654,10 +1626,27 @@
 <div id="contents">
 	<header>
 		<#include "../header.html">
+		<#include "../nav.ftl">
+		<#include "../errormessage.ftl">
 	</header>
-	<#include "../nav.ftl">
-	<#include "../errormessage.ftl">
+	<!-- side menu -->
+	<div style="float:left;" class="menu">
+	 	 <ul>
+	 	 <br><font size="6" color="black"><center><U>GRAB Graph</U></center></font>
+	 	 <span style="line-height:100%"></span><br>
+		 <font size="5" color="black"><center>${ID}</center></font>
+	 	 <li><a href="/D3_dndTree/${ID}">GRAB Tree</a></li>
+	 	 <li><a href="/Structures/Glycans/${ID}">Return</a></li>
+	 	 <span style="line-height:100%"><font size="1" color="black"><B>GRAB</B> allows users to easily understand the relationships of glycan structures in an informational graphic.</font></span><br>
+	 	 <span style="line-height:100%"><font size="1" color="black"><B>GRAB Tree</B> displays multiple relationships in tree format.  Relationships such as motifs, superstructures, substructures, and topology will be displayed as they become available.</font></span><br>
+	 	 <span style="line-height:100%"><font size="1" color="black"><B>GRAB Graph</B> displays the relationships in four directions: superstructures (Above), substructures (Below), subsumes (Left), and subsumed by (Right) with the selected glycan at the center.</font></span><br>
+	 	 <span style="line-height:100%"><font size="1" color="black"><B>Mouse over function</B>: User can easily check the selected glycan’s structure and accession number.</font></span><br>
+	 	 <span style="line-height:100%"><font size="1" color="black"><B>Right-click function</B>: A menu will display where Users can select to display the glycan’s entry page, to show a new GRAB page with the selected glycan, copy the glycan accession number, etc.</font></span><br>
+	 	 </ul>
+	</div>
+	<div style="float:right;" class="blockb">
     <div id="cy"></div>
+    </div>
 	<footer id ="footer">
 		<#include "../footer.html">
 	</footer>
