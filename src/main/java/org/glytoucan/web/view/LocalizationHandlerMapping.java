@@ -229,7 +229,7 @@ public class LocalizationHandlerMapping extends HandlerInterceptorAdapter {
 				logger.debug(e.getMessage());
 			}
 
-			if (controller != null && (controller.contains("") || controller.contains("D3") || controller.contains("init") || controller.contains("sitemap"))) {
+			if (controller != null && (controller.contains("GRAB_Graph") || controller.contains("D3") || controller.contains("init") || controller.contains("sitemap"))) {
 				logger.debug(modelAndView.getModel().keySet());
 
 				return;
