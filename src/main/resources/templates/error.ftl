@@ -50,44 +50,6 @@
 		</div>
 	</div><!--/.topMainVis-->
 	
-	<div class="topPageMain clearfix">
-		<div class="topPageMain_content">
-			<div class="topPageColumn topPageColumn-01">
-				<p class="topPageColumn_title">${LeftTitle[0]}</p>
-				<p class="topPageColumn_text">${Left[0]}</p>
-			</div>
-			<div class="topPageColumn topPageColumn-02">
-				<p class="topPageColumn_title">${LeftTitle[1]}</p>
-				<p class="topPageColumn_text">${Left[1]}</p>
-			</div>
-			<div class="topPageColumn topPageColumn-03">
-				<p class="topPageColumn_title">${LeftTitle[2]}</p>
-				<p class="topPageColumn_text">${Left[2]}<a href="http://www.glyspace.org" target="_blank">${Left[3]}</a>
-				</p>
-			</div>
-		</div><!--/.topPageMain_content-->
-	
-		<div class="topPageMain_right">
-		<!--	<nav class="topNav">-->
-			<div class="topRight_image">
-			<!--	<p class="topNav_label topNav_label-01">Search</p>
-				<ul class="topNav_items">
-					<li></li>
-				</ul>-->
-				<img src="/img/glytoucan_top.png" alt="glytoucan" width="240" height="250" class="image" />			</div>
-			<div class="topRight_twitterTimeline">
-			<!--	<p class="topNav_label">View All</p>
-				<ul class="topNav_items">
-					<li></li>
-				</ul> -->
-				<a class="twitter-timeline" width="240" height="250" href="https://twitter.com/glytoucan" data-widget-id="524091769575583744" lang="en">Tweets by @glytoucan</a>
-            	<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
-            	</script>
-			</div>
-		    <!--</nav>-->
-		</div><!--/.topPageMain_right-->
-	</div><!--/.topPageMain-->
-	
 	<#include "footer.html">
 
 </div> <!-- contents -->

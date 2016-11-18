@@ -40,15 +40,20 @@ import org.glytoucan.admin.model.Authentication;
 import org.glytoucan.admin.model.User;
 import org.glytoucan.admin.model.UserDetailsRequest;
 import org.glytoucan.admin.model.UserDetailsResponse;
+import org.glytoucan.client.GlycoSequenceClient;
+import org.glytoucan.client.model.GlycoSequenceDetailResponse;
+import org.glytoucan.client.model.ResponseMessage;
 import org.glytoucan.model.spec.GlycanClientQuerySpec;
 import org.glytoucan.web.model.SequenceInput;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -79,6 +84,10 @@ public class RegistriesController {
 	
 	@Autowired
 	UserClient userClient;
+	
+  @Autowired
+	@Qualifier("glycoSequenceClient")
+	GlycoSequenceClient glycoSequenceClient;
 
 	@RequestMapping("/graphical")
 	public String graphical(Model model, RedirectAttributes redirectAttrs) {
@@ -94,7 +103,55 @@ public class RegistriesController {
 								 */) {
 		return "register/index";
 	}
+	
+	 @RequestMapping(value = "/supplement/{accessionNumber}", method = RequestMethod.GET)
+	  public String supplement(@PathVariable String accessionNumber, Model model, RedirectAttributes redirectAttrs) {
+	    try {
+	      if (StringUtils.isNotBlank(accessionNumber) && accessionNumber.startsWith("G")) {
+//	        logClient.insertDefaultLog("glycan entry page for " + accessionNumber + " requested.");
+	          GlycoSequenceDetailResponse response = glycoSequenceClient.detailRequest(accessionNumber);
+	          ResponseMessage rm = response.getResponseMessage();
+	          logger.debug("rm.getErrorCode():>" + rm.getErrorCode() + "<");
+	          if (rm.getErrorCode().intValue() == 0) {
+	            logger.debug(response.getDescription());
+	            model.addAttribute("accNum", accessionNumber);
+	            model.addAttribute("description", response.getDescription());
 
+	            return "register/entry";
+	          }
+	      }
+	    } catch (Exception e) {
+	      e.printStackTrace();
+	      redirectAttrs.addFlashAttribute("errorMessage", "Currently under maintence please try again in a few minutes");
+	      return "redirect:/";
+	    }
+	    redirectAttrs.addFlashAttribute("errorMessage", "Accession number \"" + accessionNumber + "\" does not exist");
+	    return "redirect:/";
+	  }
+
+   @RequestMapping(value = "/supplement/confirmation", method = RequestMethod.POST)
+   public String supplement(@ModelAttribute String accessionNumber, @ModelAttribute String literatureId, RedirectAttributes redirectAttrs) {
+     try {
+       if (StringUtils.isNotBlank(accessionNumber) && accessionNumber.startsWith("G")) {
+//         logClient.insertDefaultLog("glycan entry page for " + accessionNumber + " requested.");
+           GlycoSequenceDetailResponse response = glycoSequenceClient.detailRequest(accessionNumber);
+           ResponseMessage rm = response.getResponseMessage();
+           logger.debug("rm.getErrorCode():>" + rm.getErrorCode() + "<");
+           if (rm.getErrorCode().intValue() == 0) {
+             logger.debug(response.getDescription());
+
+             return "register/entry";
+           }
+       }
+     } catch (Exception e) {
+       e.printStackTrace();
+       redirectAttrs.addFlashAttribute("errorMessage", "Currently under maintence please try again in a few minutes");
+       return "register/entry";
+     }
+     redirectAttrs.addFlashAttribute("errorMessage", "Accession number \"" + accessionNumber + "\" does not exist");
+     return "register/entry";
+   }
+	 
 	@RequestMapping("/confirmation")
   public String confirmation(HttpServletRequest request, RedirectAttributes redirectAttrs) throws SparqlException {
     String sequence1 = request.getParameter("sequence");
