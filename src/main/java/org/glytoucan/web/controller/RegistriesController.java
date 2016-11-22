@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -18,8 +19,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -41,10 +44,12 @@ import org.glytoucan.admin.model.User;
 import org.glytoucan.admin.model.UserDetailsRequest;
 import org.glytoucan.admin.model.UserDetailsResponse;
 import org.glytoucan.client.GlycoSequenceClient;
+import org.glytoucan.client.LiteratureRest;
 import org.glytoucan.client.model.GlycoSequenceDetailResponse;
 import org.glytoucan.client.model.ResponseMessage;
 import org.glytoucan.model.spec.GlycanClientQuerySpec;
 import org.glytoucan.web.model.SequenceInput;
+import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -57,6 +62,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -64,9 +70,16 @@ import com.github.fromi.openidconnect.security.UserInfo;
 import com.knappsack.swagger4springweb.annotation.ApiExclude;
 import com.wordnik.swagger.annotations.ApiOperation;
 
+import jp.bluetree.gov.ncbi.model.Publication;
+import jp.bluetree.gov.ncbi.service.NCBIService;
+import nl.captcha.Captcha;
+
+import static nl.captcha.Captcha.NAME;
+
 @Controller
 @ApiExclude
 @RequestMapping("/Registries")
+@SessionAttributes(NAME)
 public class RegistriesController {
 	Log logger = LogFactory.getLog(RegistriesController.class);
 
@@ -88,6 +101,12 @@ public class RegistriesController {
   @Autowired
 	@Qualifier("glycoSequenceClient")
 	GlycoSequenceClient glycoSequenceClient;
+  
+  @Autowired
+  LiteratureRest litClient;
+  
+  @Autowired
+  NCBIService ncbiService;
 
 	@RequestMapping("/graphical")
 	public String graphical(Model model, RedirectAttributes redirectAttrs) {
@@ -117,7 +136,7 @@ public class RegistriesController {
 	            model.addAttribute("accNum", accessionNumber);
 	            model.addAttribute("description", response.getDescription());
 
-	            return "register/entry";
+	            return "register/literature/entry";
 	          }
 	      }
 	    } catch (Exception e) {
@@ -129,27 +148,91 @@ public class RegistriesController {
 	    return "redirect:/";
 	  }
 
-   @RequestMapping(value = "/supplement/confirmation", method = RequestMethod.POST)
-   public String supplement(@ModelAttribute String accessionNumber, @ModelAttribute String literatureId, RedirectAttributes redirectAttrs) {
+   @RequestMapping(value = "/supplement/{accessionNumber}/confirmation", method = RequestMethod.POST)
+   public String supplementConfirmation(@PathVariable String accessionNumber, @RequestParam String literatureId, Model model, RedirectAttributes redirectAttrs) {
      try {
        if (StringUtils.isNotBlank(accessionNumber) && accessionNumber.startsWith("G")) {
 //         logClient.insertDefaultLog("glycan entry page for " + accessionNumber + " requested.");
            GlycoSequenceDetailResponse response = glycoSequenceClient.detailRequest(accessionNumber);
            ResponseMessage rm = response.getResponseMessage();
            logger.debug("rm.getErrorCode():>" + rm.getErrorCode() + "<");
-           if (rm.getErrorCode().intValue() == 0) {
+           if (rm.getErrorCode().intValue() != 0) {
+             redirectAttrs.addFlashAttribute("error", rm.getMessage());
              logger.debug(response.getDescription());
 
-             return "register/entry";
+             return "register/literature/entry";
+           }
+           Publication pub = ncbiService.getSummary(literatureId);
+           if (null!=pub && StringUtils.isNotBlank(pub.getTitle())) {
+             model.addAttribute("literatureTitle", pub.getTitle());
+             model.addAttribute("accNum", accessionNumber);
+             model.addAttribute("literatureId", literatureId);
+             return "register/literature/confirmation";
            }
        }
      } catch (Exception e) {
        e.printStackTrace();
-       redirectAttrs.addFlashAttribute("errorMessage", "Currently under maintence please try again in a few minutes");
-       return "register/entry";
+       model.addAttribute("errorMessage", "Currently under maintence please try again in a few minutes");
+       return "register/literature/entry";
      }
-     redirectAttrs.addFlashAttribute("errorMessage", "Accession number \"" + accessionNumber + "\" does not exist");
-     return "register/entry";
+     model.addAttribute("errorMessage", "Accession number \"" + accessionNumber + "\" does not exist");
+     return "register/literature/entry";
+   }
+   
+   @RequestMapping(value = "/supplement/{accessionNumber}/complete", method = RequestMethod.POST)
+   public String supplementComplete(@PathVariable String accessionNumber, @RequestParam String literatureId, @RequestParam String captcha, @RequestParam String literatureTitle, Model model, RedirectAttributes redirectAttrs) {
+       model.addAttribute("literatureTitle", literatureTitle);
+       model.addAttribute("accNum", accessionNumber);
+       model.addAttribute("literatureId", literatureId);
+       if (StringUtils.isBlank(captcha)) {
+         model.addAttribute("errorMessage", "Please input the captcha");
+         return "register/literature/confirmation";
+       }
+       
+       Map modelMap = model.asMap();
+       if (null!=modelMap.get(NAME)) {
+         Captcha actualCaptcha = (Captcha) modelMap.get(NAME);
+         logger.debug("CAPTCHA:>" + actualCaptcha.getAnswer());
+         logger.debug("SESSION:>" + modelMap.get(NAME));
+         if (!captcha.equals(actualCaptcha.getAnswer())) {
+           model.addAttribute("errorMessage", "Please check the captcha");
+           return "register/literature/confirmation";
+         }
+       }
+       
+       if (StringUtils.isNotBlank(accessionNumber) && accessionNumber.startsWith("G")) {
+//         logClient.insertDefaultLog("glycan entry page for " + accessionNumber + " requested.");
+           GlycoSequenceDetailResponse response = glycoSequenceClient.detailRequest(accessionNumber);
+           ResponseMessage rm = response.getResponseMessage();
+           logger.debug("rm.getErrorCode():>" + rm.getErrorCode() + "<");
+           if (rm.getErrorCode().intValue() != 0) {
+             model.addAttribute("errorMessage", rm.getMessage());
+             logger.debug(response.getDescription());
+
+             return "register/literature/entry";
+           }
+
+           HashMap<String, Object> map = new HashMap<>();
+//           map.put(LiteratureRest.USERNAME, "815e7cbca52763e5c3fbb5a4dccc176479a50e2367f920843c4c35dca112e33d");
+//           map.put(LiteratureRest.API_KEY, "b83f8b8040a584579ab9bf784ef6275fe47b5694b1adeb82e076289bf17c2632");
+           map.put(LiteratureRest.ACCESSION_NUMBER, accessionNumber);
+           map.put(LiteratureRest.PUBLICATION_ID, literatureId);
+           map.put(LiteratureRest.REMOVE_FLAG, false);
+           Map<String, Object> results = litClient.register(map);
+           
+           ResponseMessage result = (ResponseMessage) results
+               .get(LiteratureRest.MESSAGE);
+           logger.debug(result.getErrorCode());
+           logger.debug(result.getMessage());
+           String accNum = (String) results.get(LiteratureRest.ACCESSION_NUMBER);
+           String id = (String) results.get(LiteratureRest.PUBLICATION_ID);
+
+           if (null!=result && !result.getErrorCode().equals(new BigInteger("0"))) {
+             model.addAttribute("message", literatureId + " added successfully.");
+             return "register/literature/entry";
+           }
+       }
+     return "register/literature/entry";
    }
 	 
 	@RequestMapping("/confirmation")
@@ -359,7 +442,12 @@ public class RegistriesController {
 //			}
 		    
 		     OAuth2AccessToken token = (OAuth2AccessToken)SecurityContextHolder.getContext().getAuthentication().getCredentials();
+		     if (null == token) {
+           redirectAttrs.addAttribute("warningMessage", "Could not retrieve user information.  Please Login");
+           return "redirect:/signout";
+		     }
 		      logger.debug("token:>" + token.getValue());
+		      
 		      
 //		      SparqlEntity userData = null;
 //		      try {

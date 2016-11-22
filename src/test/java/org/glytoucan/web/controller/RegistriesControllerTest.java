@@ -1,16 +1,22 @@
 package org.glytoucan.web.controller;
 
+import static nl.captcha.Captcha.NAME;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.notNullValue;
-
+import static org.junit.Assert.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
+import java.util.UUID;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 
 import org.apache.commons.logging.Log;
@@ -24,9 +30,11 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -50,10 +58,12 @@ public class RegistriesControllerTest {
 	private WebApplicationContext wac;
 
 	private MockMvc mockMvc;
+  private MockHttpSession mockHttpSession;
 
 	@Before
 	public void setup() {
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).apply(springSecurity()).build();
+    mockHttpSession = new MockHttpSession(wac.getServletContext(), UUID.randomUUID().toString());
 	}
 
 	@Test
@@ -65,6 +75,8 @@ public class RegistriesControllerTest {
 						model().attribute("sequence",
 								hasProperty("sequence")));
 	}
+	
+
 
 	@Test
   @Transactional
@@ -482,7 +494,9 @@ LIN
 	    UserInfo userinfo = new UserInfo("testid", "testname", "Johnny", "", "", "https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg", null, "glytoucan@gmail.com", "true");
 	    String resultSequence = "WURCS=2.0/8,11,10/[a2112h-1x_1-5_2*NCC/3=O][a1122h-1x_1-5][a2112h-1x_1-5][a1221m-1x_1-5][a221h-1x_1-5][Aad21122h-2x_2-6_5*NCCO/3=O][Aad21122h-2x_2-6_5*NCC/3=O][a2122h-1x_1-5_2*NCC/3=O]/1-2-3-4-5-3-5-6-7-8-1/a?-b1_b?-c1_c?-d1_c?-j1_d?-e1_d?-h2_e?-f1_f?-g1_h?-i2_j?-k1";
 	    String image = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALoAAABSCAIAAABse1lJAAADkUlEQVR42u3bv0sbYRjA8aeDrU3TNmArKUQMmLZRrpiWFDIU6pAhgy0OFjpkSCGDQxbhBimhKGRwUEghg4UOLh0EoVIyBBQOCoVCBgcHR/8EhwwZHNLnjLUdLJprc28av1/eWeXez7333g+lRXThhENAcCG4EFwILgQXgguHgOBCcCG4EFwILgQXDgHBheBCcCG4EFwILhwCggvBheBCcCG4EFw4BAQXggvBheBCXezo6KgPuci/yM9jUa/Xi8ViOp1u/2rLsjKZTKlU2t/f7x0ru7u7iUTClJjucjn++d6Hb1wcxxHrhkSuyZuwlGOyMSGfLfk0Lqtj8npYhgfUjc5TL6wr8Xh8ZWWlP1eX3ueiE2Dbtty7KktR+f7k7PHtsdgjMjRgcJ7a1Wo15dK3F6Me56LHXZ6HJHVLtif/aOV0fHkk44FCoWCQy8LCwuLiYn9udXufi869PLvtLh7nWmkPJ6FiDK4xuVxueXkZLga4VKtVd7OiAi5o5ecaEw6HTe1j8vn82toaXPzm4l6Gxq67O9mOrLSHPaI7XyOzpUuL2avhJeWie0b3VsiDleOdbyQSMXJ3rX92MpmEi99cdFWX+YhHLjpeDJVKJf9nq9FoBIPBZrMJF1+56O2o+1jFM5fiqKnr0dTU1NbWFlx85SJXpONN7u/jfcyyLCMTVi6X9f4ILmdz6WKerej4+FDMFQgEeAng6+oyODgoX/9idanc18uZqVM8lUrt7OzAxT8usdjxiyHPXN5F0+m0KS66y56bm4OLf1yy2ay8HfXO5dXdYrFoiovew0ejUbj4x2Vzc1Oe3vTMRRener1u8PlHKBQ6ODiAi09cms2mnqDy4YEXLktR3T20jKaXQhUPF//eGa2vr8t4oIP3i+2xPanOHMcxy8W2bSPvGi/1G+nZ2Vl5eaejx/+ZTEanqmW6QqFg5EuGS82l0WjoZcUVc5E1xklMT0/PzMwY/DrptFwuV6lU4OL313QqRteYZDJ5zj5mdUy3t3pO94KV9sbLyF6bb3VP9jE6Ae5H3Xp3vTFx8gTPSbjvleYjugJZllWtVlu9kV6GTL2X5j8Bfp2yeq+RzWZ1FXGf+YoEg8F4PJ7P52u1Wi8sKu0ODw/D4fDe3l6/caHuiTH1q+FCcCG4EFwILgQXIrgQXAguBBeCC8GFCC4EF4ILwYXgQnAhggvBheBCcCG4EFyI4EJwIbgQXOh/6geJSrubc4F5CgAAAABJRU5ErkJggg==";
-	    
+      
+//      OAuth2AccessToken token = (OAuth2AccessToken)SecurityContextHolder.getContext().getAuthentication().getCredentials();
+      
 	    mockMvc.perform(
 	          post("/Registries/complete").with(csrf()).with(user(userinfo)).contentType(
 	              MediaType.APPLICATION_FORM_URLENCODED)
@@ -499,4 +513,42 @@ LIN
 	          .andExpect(request().attribute("resultList", notNullValue()))
 	          ;
 	  }
+	 
+	 @Test
+   public void testRegistriesSupplementLitStart() throws Exception {
+     mockMvc.perform(get("/Registries/supplement/G22768VO").with(csrf()).with(user("test")))
+         .andExpect(status().isOk())
+         .andExpect(view().name("register/literature/entry"));
+   }
+   
+	  @Test
+	  @Transactional
+	  public void testRegisterSupplementG00031MO() throws Exception {
+	      mockMvc.perform(
+	          post("/Registries/supplement/G00031MO/confirmation").with(csrf()).with(user("test")).contentType(
+	              MediaType.APPLICATION_FORM_URLENCODED)
+	          .param("accessionNumber", "G00031MO")
+            .param("publicationId", "7503987"))
+	      .andExpect(status().isOk())
+	      .andExpect(view().name("register/confirmation"))
+	      .andExpect(request().attribute("accessionNumber", contains("G00031MO")));
+	  }
+	  
+	   @Test
+	    @Transactional
+	    public void testRegisterSupplementG00031MOComplete() throws Exception {
+	     
+	     mockHttpSession.putValue(NAME, "123456");
+	     assertThat(mockHttpSession.getAttribute(NAME), is(notNullValue()));
+
+	        mockMvc.perform(
+	            post("/Registries/supplement/G00031MO/complete").session(mockHttpSession).with(csrf()).with(user("test")).contentType(
+	                MediaType.APPLICATION_FORM_URLENCODED)
+              .param("captcha", "123456")
+	            .param("accessionNumber", "G00031MO")
+	            .param("publicationId", "7503987"))
+	        .andExpect(status().isOk())
+	        .andExpect(view().name("register/entry"));
+	    }
+
 }

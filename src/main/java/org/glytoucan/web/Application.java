@@ -27,22 +27,19 @@ import org.glycoinfo.rdf.scint.SelectScint;
 import org.glycoinfo.rdf.service.GlycanProcedure;
 import org.glycoinfo.rdf.service.impl.ContributorProcedureConfig;
 import org.glycoinfo.rdf.service.impl.GlycanProcedureConfig;
+import org.glycoinfo.rdf.service.impl.LiteratureProcedureConfig;
 import org.glycoinfo.rdf.service.impl.MailService;
 import org.glycoinfo.rdf.utils.TripleStoreProperties;
 import org.glycoinfo.vision.generator.ImageGenerator;
 import org.glytoucan.admin.client.config.UserClientConfig;
 import org.glytoucan.client.config.ClientConfiguration;
 import org.glytoucan.client.config.ContributorConfig;
-import org.glytoucan.web.view.LocalizationHandlerMapping;
+import org.glytoucan.client.config.LiteratureConfig;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
-import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
@@ -55,11 +52,12 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jp.bluetree.gov.ncbi.config.EutilsConfig;
 import virtuoso.sesame2.driver.VirtuosoRepository;
 
 //http://stackoverflow.com/questions/31307883/springfox-dependency-breaking-my-spring-context
 @SpringBootApplication(exclude=org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration.class)
-@Import(value = { GlycanProcedureConfig.class, ContributorProcedureConfig.class, ClientConfiguration.class, GlyConvertConfig.class, UserClientConfig.class, ContributorConfig.class })
+@Import(value = { GlycanProcedureConfig.class, ContributorProcedureConfig.class, ClientConfiguration.class, GlyConvertConfig.class, UserClientConfig.class, ContributorConfig.class, LiteratureProcedureConfig.class, EutilsConfig.class, LiteratureConfig.class })
 public class Application  {
 //	extends SpringBootServletInitializer
 	private static final String graph = "http://rdf.glytoucan.org";
@@ -314,32 +312,4 @@ public class Application  {
 	SparqlEntityFactory sparqlEntityFactory() {
 		return new SparqlEntityFactory();
 	}
-	
-//	@Bean
-//	LogClient logClient() {
-//		return new LogClient();
-//	}
-	
-
-  
-//  @Bean(name="gtc.version")
-//  public String gtcVersion() {
-//    return "test";      
-//  }
-
-
-//  @Value("${GTC_VERSION}")
-//  String gtcVersion;
-//  
-//  @Value("${api.hostname")
-//  private String hostname;
-//  
-//  @Bean
-//  public String getGtcVersion() {
-//    return gtcVersion;
-//  }
-//
-//  public void setGtcVersion(String gtcVersion) {
-//    this.gtcVersion = gtcVersion;
-//  }
-}
+} 
