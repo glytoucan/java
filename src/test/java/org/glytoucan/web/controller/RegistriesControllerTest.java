@@ -44,6 +44,9 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.github.fromi.openidconnect.security.UserInfo;
 
+import nl.captcha.Captcha;
+import nl.captcha.backgrounds.GradiatedBackgroundProducer;
+
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
@@ -528,27 +531,39 @@ LIN
 	          post("/Registries/supplement/G00031MO/confirmation").with(csrf()).with(user("test")).contentType(
 	              MediaType.APPLICATION_FORM_URLENCODED)
 	          .param("accessionNumber", "G00031MO")
-            .param("publicationId", "7503987"))
+            .param("literatureId", "7503987"))
 	      .andExpect(status().isOk())
-	      .andExpect(view().name("register/confirmation"))
-	      .andExpect(request().attribute("accessionNumber", contains("G00031MO")));
+	      .andExpect(view().name("register/literature/confirmation"))
+	      .andExpect(request().attribute("accNum", is("G00031MO")))
+	      .andExpect(model().attribute("literatureTitle", is("Binding of the O-antigen of Shigella dysenteriae type 1 and 26 related synthetic fragments to a monoclonal IgM antibody."
+)))
+	      .andExpect(model().attribute("literatureId", is("7503987")));
 	  }
 	  
 	   @Test
 	    @Transactional
 	    public void testRegisterSupplementG00031MOComplete() throws Exception {
 	     
-	     mockHttpSession.putValue(NAME, "123456");
+	     Captcha captcha = new Captcha.Builder(200, 50)
+	          .addText()
+	          .addBackground(new GradiatedBackgroundProducer())
+	            .gimp()
+	            .addNoise()
+	            .addBorder()
+	            .build();
+	     
+	     mockHttpSession.putValue(NAME, captcha);
 	     assertThat(mockHttpSession.getAttribute(NAME), is(notNullValue()));
 
 	        mockMvc.perform(
 	            post("/Registries/supplement/G00031MO/complete").session(mockHttpSession).with(csrf()).with(user("test")).contentType(
 	                MediaType.APPLICATION_FORM_URLENCODED)
-              .param("captcha", "123456")
+              .param("captcha", captcha.getAnswer())
 	            .param("accessionNumber", "G00031MO")
-	            .param("publicationId", "7503987"))
+	            .param("literatureId", "7503987")
+	            .param("literatureTitle", "Binding of the O-antigen of Shigella dysenteriae type 1 and 26 related synthetic fragments to a monoclonal IgM antibody."))
 	        .andExpect(status().isOk())
-	        .andExpect(view().name("register/entry"));
+	        .andExpect(view().name("register/literature/entry"));
 	    }
 
 }
