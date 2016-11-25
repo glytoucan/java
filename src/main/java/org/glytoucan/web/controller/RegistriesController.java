@@ -150,32 +150,26 @@ public class RegistriesController {
 
    @RequestMapping(value = "/supplement/{accessionNumber}/confirmation", method = RequestMethod.POST)
    public String supplementConfirmation(@PathVariable String accessionNumber, @RequestParam String literatureId, Model model, RedirectAttributes redirectAttrs) {
-     try {
-       if (StringUtils.isNotBlank(accessionNumber) && accessionNumber.startsWith("G")) {
+     if (StringUtils.isNotBlank(accessionNumber) && accessionNumber.startsWith("G")) {
 //         logClient.insertDefaultLog("glycan entry page for " + accessionNumber + " requested.");
-           GlycoSequenceDetailResponse response = glycoSequenceClient.detailRequest(accessionNumber);
-           ResponseMessage rm = response.getResponseMessage();
-           logger.debug("rm.getErrorCode():>" + rm.getErrorCode() + "<");
-           if (rm.getErrorCode().intValue() != 0) {
-             redirectAttrs.addFlashAttribute("error", rm.getMessage());
-             logger.debug(response.getDescription());
+         GlycoSequenceDetailResponse response = glycoSequenceClient.detailRequest(accessionNumber);
+         ResponseMessage rm = response.getResponseMessage();
+         logger.debug("rm.getErrorCode():>" + rm.getErrorCode() + "<");
+         if (rm.getErrorCode().intValue() != 0) {
+           redirectAttrs.addFlashAttribute("error", rm.getMessage());
+           logger.debug(response.getDescription());
 
-             return "register/literature/entry";
-           }
-           Publication pub = ncbiService.getSummary(literatureId);
-           if (null!=pub && StringUtils.isNotBlank(pub.getTitle())) {
-             model.addAttribute("literatureTitle", pub.getTitle());
-             model.addAttribute("accNum", accessionNumber);
-             model.addAttribute("literatureId", literatureId);
-             return "register/literature/confirmation";
-           }
-       }
-     } catch (Exception e) {
-       e.printStackTrace();
-       model.addAttribute("errorMessage", "Currently under maintence please try again in a few minutes");
-       return "register/literature/entry";
+           return "register/literature/entry";
+         }
+         Publication pub = ncbiService.getSummary(literatureId);
+         if (null!=pub && StringUtils.isNotBlank(pub.getTitle())) {
+           model.addAttribute("literatureTitle", pub.getTitle());
+           model.addAttribute("accNum", accessionNumber);
+           model.addAttribute("literatureId", literatureId);
+           return "register/literature/confirmation";
+         }
      }
-     model.addAttribute("errorMessage", "Accession number \"" + accessionNumber + "\" does not exist");
+     model.addAttribute("errorMessage", "Your publication ID could not be retrieved.  Please enter an ID such as a pubmed identifier.");
      return "register/literature/entry";
    }
    

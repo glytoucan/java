@@ -82,8 +82,9 @@
 					<togostanza-species acc="${accNum}"></togostanza-species>
 				</section>
 				<section id="literature" class="entryNew_section">
-					<h1 class="entryNew_heading">Literature</h1>
+					<h2 class="entryNew_heading entryNew_heading-2nd"><a href="/Registries/supplement/${accNum}">Register your Publication!</h2>
 					<togostanza-literature acc="${accNum}"></togostanza-literature>
+					<h2 class="entryNew_heading">Literature</h1>
 				</section>
 				<section id="external" class="entryNew_section">
 					<h1 class="entryNew_heading">External ID</h1>
