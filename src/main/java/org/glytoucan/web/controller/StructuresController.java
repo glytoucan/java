@@ -209,9 +209,9 @@ public class StructuresController {
 		return "redirect:/Structures/Glycans/" + aNum;
     }
 	
-	@RequestMapping(value="/test", method = RequestMethod.GET)
-	public String test() {
-		return "structures/test";
+	@RequestMapping(value="/web", method = RequestMethod.GET)
+	public String web() {
+		return "structures/web";
 	}
 	@RequestMapping(value="/testout", method = RequestMethod.GET)
 	public String testout(RedirectAttributes redirectAttrs) {

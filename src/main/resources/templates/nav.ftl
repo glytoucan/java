@@ -43,6 +43,7 @@
 						    <li><a href="/Structures/graphical">${byGraphic}</a></li>
 						    <li><a href="/Structures/structureSearch">${byText}</a></li>
 						    <li><a href="/Motifs/search">${byMotif}</a></li>
+						    <li><a href="/Structures/web">${byWeb}</a></li>
 						</ul>
 					</div>
 				</li>
