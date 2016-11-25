@@ -52,7 +52,7 @@
 						<input type="text" name="literatureId" id="literatureId" placeholder="pubmed id" value="${literatureId!""}" />
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 						<div class="submit">
-							<input class="btn btn-primary" type="submit" value="${submit}" /><button type="reset" class="btn">${clear}</button>
+							<input class="btn btn-primary" type="submit" value="${submit}" /><button type="reset" class="btn">${reset}</button>
 						</div>
 					</form>
 					</div>
