@@ -32,18 +32,20 @@
 			</nav>
 			<div class="entryNew_right">
 				<section id="literature" class="entryNew_section">
-					<h1 class="entryNew_heading">Please confirm your publication:</h1>
+					<h1 class="entryNew_heading">Please confirm the title of your publication id: ${literatureId!""}</h1>
 					<form action="/Registries/supplement/${accNum}/complete" method="post" accept-charset="utf-8">
 					
 					<table>
 					<tbody>
-					<tr><th>Title</th><td>${literatureTitle}</td></tr>
-					<tr><th>ID</th><td>${literatureId!""}</td></tr>
+					<tr><th></th><td>${literatureTitle}</td></tr>
 					</tbody></table>
+					<h1 class="entryNew_heading">To submit, please enter the characters in this image:</h1>
 						<div>
 							<img src="/Captcha/image">
-							<input type="text" name="captcha" id="captcha" value="${captcha!""}" />
 						</div>
+						<div>
+							<input type="text" name="captcha" id="captcha" value="${captcha!""}" />
+						</div
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 						<input type="hidden" name="accessionNumber" value="${accNum}" />
 						<input type="hidden" name="literatureId" value="${literatureId}" />
