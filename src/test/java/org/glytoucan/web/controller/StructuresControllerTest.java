@@ -9,6 +9,7 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
@@ -54,14 +55,34 @@ public class StructuresControllerTest {
 	public void testStructureSearchStart() throws Exception {
 		mockMvc.perform(get("/Structures/structureSearch"))
 				.andExpect(status().isOk())
-				.andExpect(view().name("structures/structure_search"))
-				.andExpect(
-						model().attribute("sequence",
-								hasProperty("sequence", isEmptyOrNullString())));
+				.andExpect(view().name("structures/structure_search"));
 	}
 
+	
+	 @Test
+	  public void testGal() throws Exception {
+	    String sequence = "Gal";
+	    logger.debug("sequence:>" + sequence + "<");
+	    SequenceInput si = new SequenceInput();
+	    si.setId("G68158BT");
+	    si.setSequence(sequence);
+	    si.setResultSequence(URLEncoder.encode("WURCS=2.0/1,1,0/[a2112h-1x_1-5]/1/", "UTF-8"));
+	    
+	    si.setImage("/glycans/G68158BT/image?style=extended&format=png&notation=cfg");
+	      mockMvc.perform(
+	          post("/Structures/structure").with(csrf()).contentType(
+	              MediaType.APPLICATION_FORM_URLENCODED).param(
+	              "sequence", sequence))
+	          .andExpect(status().isOk())
+	          .andExpect(view().name("structures/structure"))
+	          .andExpect(model().attribute("sequenceInput", hasProperty("sequence", is(sequence))))
+	              .andExpect(model().attribute("sequenceInput", hasProperty("id", is("G68158BT"))))
+	              .andExpect(model().attribute("sequenceInput", hasProperty("resultSequence", is(si.getResultSequence()))))
+	              .andExpect(model().attribute("sequenceInput", hasProperty("image", is(si.getImage()))));
+	  }
+	 	
 	@Test
-	public void testRegisteredGlycoCTG00031MO() throws UnsupportedEncodingException {
+	public void testRegisteredGlycoCTG00031MO() throws Exception {
 		String sequence = "RES\n" + 
 	"1b:a-dgal-HEX-1:5\n" + 
 				"2s:n-acetyl\n" + 
@@ -76,24 +97,20 @@ public class StructuresControllerTest {
 		si.setResultSequence("WURCS%3D2.0%2F2%2C2%2C1%2F%5Ba2112h-1a_1-5_2*NCC%2F3%3DO%5D%5Ba2112h-1b_1-5%5D%2F1-2%2Fa3-b1");
 		
 		si.setImage("/glycans/G00031MO/image?style=extended&format=png&notation=cfg");
-		try {
 			mockMvc.perform(
 					post("/Structures/structure").with(csrf()).contentType(
 							MediaType.APPLICATION_FORM_URLENCODED).param(
 							"sequence", sequence))
 					.andExpect(status().isOk())
 					.andExpect(view().name("structures/structure"))
-					.andExpect(model().attribute("sequence", hasProperty("sequence", is(sequence))))
-			        .andExpect(model().attribute("sequence", hasProperty("id", is("G00031MO"))))
-			        .andExpect(model().attribute("sequence", hasProperty("resultSequence", is(si.getResultSequence()))))
-			        .andExpect(model().attribute("sequence", hasProperty("image", is(si.getImage()))));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+					.andExpect(model().attribute("sequenceInput", hasProperty("sequence", is(sequence))))
+			        .andExpect(model().attribute("sequenceInput", hasProperty("id", is("G00031MO"))))
+			        .andExpect(model().attribute("sequenceInput", hasProperty("resultSequence", is(si.getResultSequence()))))
+			        .andExpect(model().attribute("sequenceInput", hasProperty("image", is(si.getImage()))));
 	}
 	
 	@Test
-	public void testUnRegisteredGlycoCTOnHelpText() throws UnsupportedEncodingException {
+	public void testUnRegisteredGlycoCTOnHelpText() throws Exception {
 		
 		/**
 		 * 
@@ -194,27 +211,22 @@ LIN
 //		si.setResultSequence(URLEncoder.encode("WURCS=2.0/2,2,1/[22112h-1a_1-5_2*NCC/3=O][a2112h-1b_1-5]/1-2/a3-b1", "UTF-8"));
 //		si.setResultSequence("WURCS=2.0/6,10,11/[a2112h-1a_1-5_2*NCC/3=O][a2112h-1b_1-5][a2122h-1b_1-5_2*NCC/3=O_6*OSO/3=O/3=O][a1221m-1a_1-5][Aad21122h-2a_2-6_5*NCC/3=O][a2112h-1b_1-5_2*NCC/3=O_6*OSO/3=O/3=O]/1-2-3-4-2-5-6-4-2-5/a3-b1_a6-g1_b3-c1_c3-d1_c4-e1_e3-f2_g3-h1_g4-i1_i3-j2_c1-e3~n_g1-i3~n");
 		si.setResultSequence(URLEncoder.encode("WURCS=2.0/6,10,11/[a2112h-1a_1-5_2*NCC/3=O][a2112h-1b_1-5][a2122h-1b_1-5_2*NCC/3=O_6*OSO/3=O/3=O][a1221m-1a_1-5][Aad21122h-2a_2-6_5*NCC/3=O][a2112h-1b_1-5_2*NCC/3=O_6*OSO/3=O/3=O]/1-2-3-4-2-5-6-4-2-5/a3-b1_a6-g1_b3-c1_c3-d1_c4-e1_e3-f2_g3-h1_g4-i1_i3-j2_c1-e3~n_g1-i3~n", "UTF-8"));
-		si.setImage("data:image/png;base64,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");
+		si.setImage("data:image/png;base64,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");
 		
-		try {
 			mockMvc.perform(
 					post("/Structures/structure").with(csrf()).contentType(
 							MediaType.APPLICATION_FORM_URLENCODED).param(
 							"sequence", sequence))
 					.andExpect(status().isOk())
 					.andExpect(view().name("structures/structure"))
-					.andExpect(model().attribute("sequence", hasProperty("sequence", is(sequence))))
-			        .andExpect(model().attribute("sequence", hasProperty("id", is(GlycanProcedure.NotRegistered))))
-			        .andExpect(model().attribute("sequence", hasProperty("resultSequence", is(si.getResultSequence()))))
-			        .andExpect(model().attribute("sequence", hasProperty("image", is(si.getImage()))));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+					.andExpect(model().attribute("sequenceInput", hasProperty("sequence", is(sequence))))
+			        .andExpect(model().attribute("sequenceInput", hasProperty("id", is(GlycanProcedure.NotRegistered))))
+			        .andExpect(model().attribute("sequenceInput", hasProperty("resultSequence", is(si.getResultSequence()))))
+			        .andExpect(model().attribute("sequenceInput", hasProperty("image", is(si.getImage()))));
 	}
 
-
 	@Test
-	public void testRegisteredGlycoCTG01132OH() throws UnsupportedEncodingException {
+	public void testRegisteredGlycoCTG01132OH() throws Exception {
 		String id = "G01132OH";
 		String sequence = "RES\n"
 				+ "1b:x-dgal-HEX-1:5\n"
@@ -242,24 +254,20 @@ LIN
 		si.setResultSequence(URLEncoder.encode("WURCS=2.0/4,5,4/[a2112h-1x_1-5_2*NCC/3=O][a2112h-1b_1-5][a2112h-1a_1-5_2*NCC/3=O][a2122h-1b_1-5_2*NCC/3=O_6*OSO/3=O/3=O]/1-2-3-2-4/a3-b1_a6-e1_b4-c1_c3-d1", "UTF-8"));
 //		si.setResultSequence("WURCS%3D2.0%2F2%2C2%2C1%2F%5B22112h-1a_1-5_2*NCC%2F3%3DO%5D%5B12112h-1b_1-5%5D%2F1-2%2Fa3-b1");
 		si.setImage("/glycans/" + id + "/image?style=extended&format=png&notation=cfg");
-		try {
 			mockMvc.perform(
 					post("/Structures/structure").with(csrf()).contentType(
 							MediaType.APPLICATION_FORM_URLENCODED).param(
 							"sequence", sequence))
 					.andExpect(status().isOk())
 					.andExpect(view().name("structures/structure"))
-					.andExpect(model().attribute("sequence", hasProperty("sequence", is(sequence))))
-			        .andExpect(model().attribute("sequence", hasProperty("id", is(id))))
-			        .andExpect(model().attribute("sequence", hasProperty("resultSequence", is(si.getResultSequence()))))
-			        .andExpect(model().attribute("sequence", hasProperty("image", is(si.getImage()))));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+					.andExpect(model().attribute("sequenceInput", hasProperty("sequence", is(sequence))))
+			        .andExpect(model().attribute("sequenceInput", hasProperty("id", is(id))))
+			        .andExpect(model().attribute("sequenceInput", hasProperty("resultSequence", is(si.getResultSequence()))))
+			        .andExpect(model().attribute("sequenceInput", hasProperty("image", is(si.getImage()))));
 	}
 
 	@Test
-	public void testRegisteredGlycoCTG00031MOHybrid() throws UnsupportedEncodingException {
+	public void testRegisteredGlycoCTG00031MOHybrid() throws Exception {
 		String id = "G00031MO";
 		String sequence = "RES\\n" +
 				"1b:a-dgal-HEX-1:5\\n" +
@@ -276,48 +284,62 @@ LIN
 //		si.setResultSequence("WURCS=2.0/4,6,5/[u2122h_2*NCC/3=O][a2122h-1b_1-5_2*NCC/3=O][a1122h-1b_1-5][a1122h-1a_1-5]/1-2-3-4-2-4/a4-b1_b4-c1_c3-d1_c6-f1_e1-d2|d4");
 		si.setResultSequence("WURCS%3D2.0%2F2%2C2%2C1%2F%5Ba2112h-1a_1-5_2*NCC%2F3%3DO%5D%5Ba2112h-1b_1-5%5D%2F1-2%2Fa3-b1");
 		si.setImage("/glycans/" + id + "/image?style=extended&format=png&notation=cfg");
-		try {
 			mockMvc.perform(
 					post("/Structures/structure").with(csrf()).contentType(
 							MediaType.APPLICATION_FORM_URLENCODED).param(
 							"sequence", sequence))
 					.andExpect(status().isOk())
 					.andExpect(view().name("structures/structure"))
-					.andExpect(model().attribute("sequence", hasProperty("sequence", is(sequence))))
-			        .andExpect(model().attribute("sequence", hasProperty("id", is(id))))
-			        .andExpect(model().attribute("sequence", hasProperty("resultSequence", is(si.getResultSequence()))))
-			        .andExpect(model().attribute("sequence", hasProperty("image", is(si.getImage()))));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+					.andExpect(model().attribute("sequenceInput", hasProperty("sequence", is(sequence))))
+			        .andExpect(model().attribute("sequenceInput", hasProperty("id", is(id))))
+			        .andExpect(model().attribute("sequenceInput", hasProperty("resultSequence", is(si.getResultSequence()))))
+			        .andExpect(model().attribute("sequenceInput", hasProperty("image", is(si.getImage()))));
 	}
 	
 	@Test
-	public void testRegisterediLinearCode() throws UnsupportedEncodingException {
-		String id = "G00029MO";
+	public void testLinearCode() throws Exception {
+		String id = GlycanProcedure.NotRegistered;
 		String sequence = "GNb2(Ab4GNb4)Ma3(Ab4GNb2(Fa3(Ab4)GNb6)Ma6)Mb4GNb4GN";
 		logger.debug("sequence:>" + sequence + "<");
 
 		SequenceInput si = new SequenceInput();
 		si.setId(id);
 		si.setSequence(sequence);
-		si.setResultSequence("WURCS=2.0/4,6,5/[u2122h_2*NCC/3=O][a2122h-1b_1-5_2*NCC/3=O][a1122h-1b_1-5][a1122h-1a_1-5]/1-2-3-4-2-4/a4-b1_b4-c1_c3-d1_c6-f1_e1-d2|d4");
+		si.setResultSequence("WURCS%3D2.0%2F6%2C13%2C12%2F%5Ba2122h-1x_1-5_2*NCC%2F3%3DO%5D%5Ba2122h-1b_1-5_2*NCC%2F3%3DO%5D%5Ba1122h-1b_1-5%5D%5Ba1122h-1a_1-5%5D%5Ba2112h-1b_1-5%5D%5Ba1221m-1a_1-5%5D%2F1-2-3-4-2-2-5-4-2-5-2-6-5%2Fa4-b1_b4-c1_c3-d1_c6-h1_d2-e1_d4-f1_f4-g1_h2-i1_h6-k1_i4-j1_k3-l1_k4-m1");
 		si.setImage("/glycans/" + id + "/image?style=extended&format=png&notation=cfg");
-		try {
 			mockMvc.perform(
 					post("/Structures/structure").with(csrf()).contentType(
 							MediaType.APPLICATION_FORM_URLENCODED).param(
 							"sequence", sequence))
 					.andExpect(status().isOk())
 					.andExpect(view().name("structures/structure"))
-					.andExpect(model().attribute("sequence", hasProperty("sequence", is(sequence))))
-			        .andExpect(model().attribute("sequence", hasProperty("id", is(id))))
-			        .andExpect(model().attribute("sequence", hasProperty("resultSequence", is(si.getResultSequence()))))
-			        .andExpect(model().attribute("sequence", hasProperty("image", is(si.getImage()))));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+					.andExpect(model().attribute("sequenceInput", hasProperty("sequence", is(sequence))))
+			        .andExpect(model().attribute("sequenceInput", hasProperty("id", is(id))))
+			        .andExpect(model().attribute("sequenceInput", hasProperty("resultSequence", is(si.getResultSequence()))))
+			        .andExpect(model().attribute("sequenceInput", hasProperty("image", is(si.getImage()))));
 	}
+	
+
+  
+  @Test
+  public void testInvalidSearch() throws Exception {
+    String id = GlycanProcedure.NotRegistered;
+    String sequence = "SomethingWeird";
+    logger.debug("sequence:>" + sequence + "<");
+
+    SequenceInput si = new SequenceInput();
+    si.setId(id);
+    si.setSequence(sequence);
+    si.setResultSequence("WURCS%3D2.0%2F6%2C13%2C12%2F%5Ba2122h-1x_1-5_2*NCC%2F3%3DO%5D%5Ba2122h-1b_1-5_2*NCC%2F3%3DO%5D%5Ba1122h-1b_1-5%5D%5Ba1122h-1a_1-5%5D%5Ba2112h-1b_1-5%5D%5Ba1221m-1a_1-5%5D%2F1-2-3-4-2-2-5-4-2-5-2-6-5%2Fa4-b1_b4-c1_c3-d1_c6-h1_d2-e1_d4-f1_f4-g1_h2-i1_h6-k1_i4-j1_k3-l1_k4-m1");
+    si.setImage("/glycans/" + id + "/image?style=extended&format=png&notation=cfg");
+      mockMvc.perform(
+          post("/Structures/structure").with(csrf()).contentType(
+              MediaType.APPLICATION_FORM_URLENCODED).param(
+              "sequence", sequence))
+          .andExpect(status().is3xxRedirection())
+//          .andExpect(view().name("redirect:/Structures/structureSearch"))
+          .andExpect(redirectedUrl("/Structures/structureSearch"));
+  }
 	
 	 @Test
 	  public void testStructureEntryPage() throws Exception {

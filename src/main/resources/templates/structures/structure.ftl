@@ -24,7 +24,7 @@
 	$img = Image of a query
 	$submit_wurcs = WURCS sequence of a query
 -->
-  <div id="substructure_list_app" data-notation="${(imageNotation)!"cfg"}" data-lang="${language}" data-wurcs="${sequence.resultSequence}" >
+  <div id="substructure_list_app" data-notation="${(imageNotation)!"cfg"}" data-lang="${language}" data-wurcs="${sequenceInput.resultSequence}" >
 	<h1 class="page-header">Substructure search results</h1> 
 	<!-- Query accession number and Image -->
 	<div class="page-header">
@@ -41,8 +41,8 @@
 			</thead>
 			<tbody>
 				<tr>
-					<td><a href="/Structures/Glycans/${sequence.id}" target="_blank">${sequence.id}</a></td>
-					<td width="60%"><img src="${sequence.image}"><p></td>
+					<td><a href="/Structures/Glycans/${sequenceInput.id}" target="_blank">${sequenceInput.id}</a></td>
+					<td width="60%"><img src="${sequenceInput.image}"><p></td>
 				</tr>
 			</tbody>
 		</table>

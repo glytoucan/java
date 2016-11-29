@@ -176,9 +176,4 @@ public class RdfAuthenticationSuccessHandler extends
   
   @Value("${admin.key: }")
   private String adminKey;
-  
-//  @Bean(name="adminKey")
-//  public String getAdminKey() {
-//    return adminKey;
-//  }
 }

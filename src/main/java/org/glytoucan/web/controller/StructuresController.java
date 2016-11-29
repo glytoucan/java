@@ -88,7 +88,7 @@ public class StructuresController {
 	}
 	
 	@RequestMapping(value="/structureSearch", method = RequestMethod.GET)
-	public String structureSearch(Model model, @ModelAttribute("sequence") SequenceInput sequence, BindingResult result/*, @RequestParam(value="errorMessage", required=false) String errorMessage*/) {
+	public String structureSearch(Model model, @ModelAttribute("sequenceInput") SequenceInput sequence, BindingResult result/*, @RequestParam(value="errorMessage", required=false) String errorMessage*/) {
 //		logger.debug(errorMessage);
 //		model.addAttribute("errorMessage", errorMessage);
 		return "structures/structure_search";
@@ -106,9 +106,10 @@ public class StructuresController {
 	@ApiResponses(value ={@ApiResponse(code=200, message="Structure added successfully"),
 			@ApiResponse(code=401, message="Unauthorized"),
 			@ApiResponse(code=500, message="Internal Server Error")})
-	public String structure(Model model, @ModelAttribute("sequence") SequenceInput sequence, BindingResult result, RedirectAttributes redirectAttrs, @RequestParam(required=false, value="errorMessage") String errorMessage)  {
+	public String structure(Model model, @ModelAttribute("sequenceInput") SequenceInput sequence, BindingResult result, RedirectAttributes redirectAttrs, @RequestParam(required=false, value="errorMessage") String errorMessage)  {
 		if (StringUtils.isNotBlank(errorMessage))
 			model.addAttribute("errorMessage", errorMessage);
+
 		logger.debug(sequence);
         if (StringUtils.isEmpty(sequence.getSequence())) {
         	
@@ -128,16 +129,16 @@ public class StructuresController {
     	    logger.debug(rm);
     	    logger.debug(rm.getErrorCode());
     	    if (BigInteger.ZERO.compareTo(rm.getErrorCode()) != 0) {
-            logger.error("ResponseMessage error:>" + rm.getMessage());
+            logger.debug("ResponseMessage error:>" + rm.getMessage());
             redirectAttrs.addFlashAttribute("errorMessage", rm.getMessage());
-            return "redirect:/Structures/" + sequence.getFrom();
+            return "redirect:/Structures/structureSearch";
     	    }
     		String id = response.getAccessionNumber();
     		logger.debug("search found:>" + id + "<");
     		if (null != id && id.equals(GlycanProcedure.NotRegistered)) {
     		  sequence.setId(GlycanProcedure.NotRegistered);
 				try {
-	    			String imageSequence = sequence.getSequence().replaceAll("(?:\\r\\n|\\n)", "\\\\n");
+	    			String imageSequence = response.getConvertedSequence().replaceAll("(?:\\r\\n|\\n)", "\\\\n");
 
 	    			
 	    	    HashMap<String, Object> data = new HashMap<String, Object>();
@@ -170,6 +171,7 @@ public class StructuresController {
 				resultSequence = response.getSequence();
 			}
     		sequence.setResultSequence(resultSequence);
+    		logger.debug(sequence);
 //    		sequence.setResultSequence(se.getValue(GlycoSequence.Sequence));
     		// embed wurcs, image, accNum into model
 //    		model.addAttribute("id", sequence.getId());
