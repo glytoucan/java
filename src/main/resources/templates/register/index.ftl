@@ -33,7 +33,7 @@
 						<input type="hidden" name="_method" value="POST" />
 					</div>
 					${Left[0]}
-					<@spring.formTextarea 'sequence.sequence' 'id="sequence" placeholder="Sequence" cols="20" rows="15" style="width: 370px; height: 400px;"' />
+					<@spring.formTextarea 'sequence.sequence' 'id="sequence" placeholder="${sequence}" cols="20" rows="15" style="width: 370px; height: 400px;"' />
 					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 	                <div class="registriesInput_add">
 	                    <span class="registriesInput_addBtn btn">${add!"Add"} ${another!"Another"}</span>
@@ -77,7 +77,7 @@
 						<div class="tab-pane" id="A">
 							<p>
 								${Right[1]}
-								<a href="http://www.ncbi.nlm.nih.gov/pubmed/18436199">More details</a><br>
+								<a href="http://www.ncbi.nlm.nih.gov/pubmed/18436199">${moreDetails}</a><br>
 								${RightFigure[1]}
 							</p>
 						</div>
@@ -85,7 +85,7 @@
 						<div class="tab-pane active" id="B">
 							<p>
 								${Right[2]}
-								<a href="http://www.wurcs-wg.org/about.php">More details</a><br>
+								<a href="http://www.wurcs-wg.org/about.php">${moreDetails}</a><br>
 								<!-- ${RightFigure[2]} -->
 								<img src="/glycans/G22768VO/image?style=extended&format=png&notation=cfg"><br>
 								WURCS=2.0/3,5,4/[a2122h-1b_1-5_2*NCC/3=O][a1122h-1b_1-5][a1122h-1a_1-5]/1-1-2-3-3/a4-b1_b4-c1_c3-d1_c6-e1

@@ -18,9 +18,9 @@
 <div>
 <table class="table table-bordered table-striped table-hover">
 <tr><td>#</td>
-<td>Structure</td>
-<td>Image</td>
-<td>Status</td>
+<td>${structure}</td>
+<td>${image}</td>
+<td>${Status}</td>
 </tr>
 
 <#list registeredList as newItem>

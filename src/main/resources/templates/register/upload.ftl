@@ -28,7 +28,7 @@ ${Top[0]}
 
 	<form method="POST" enctype="multipart/form-data"
 		action="/Registries/upload">
-		File to upload: <input type="file" name="file"><br /> 
+		${fileUpload}: <input type="file" name="file"><br /> 
 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
  
 		<input type="submit" value="${submit}">

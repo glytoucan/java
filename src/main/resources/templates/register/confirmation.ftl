@@ -19,10 +19,10 @@
     <table class="table table-bordered table-striped table-hover">
     <tr>
       <td>#</td>
-      <td>Register?</td>
-      <td>Original Structure</td>
-      <td>Structure</td>
-      <td>Image</td>
+      <td>${register}?</td>
+      <td>${originalStructure}</td>
+      <td>${structure}</td>
+      <td>${image}</td>
     </tr>
 
 
@@ -69,9 +69,9 @@
     <table class="table table-bordered table-striped table-hover">
     <tr>
       <td>#</td>
-      <td>Original Glycan Sequence</td>
-      <td>Sequence</td>
-      <td>Image</td>
+      <td>${originalGlycanSequence}</td>
+      <td>${sequence}</td>
+      <td>${image}</td>
     </tr>
 
 <#items as newItem>
@@ -89,7 +89,7 @@
       <#if newItem.image?? >
         <img src="${newItem.image}" />
       <#else>
-        no image
+        ${noImage}
       </#if>
       </td>
     </tr>
@@ -126,7 +126,7 @@
       <#if newItem.image?? >
         <img src="${newItem.image}" />
       <#else>
-        no image
+        ${noImage}
       </#if>
       </td>
       <td>

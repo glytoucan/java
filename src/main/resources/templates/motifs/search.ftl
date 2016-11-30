@@ -26,7 +26,7 @@
 
         <div class="container">
             <table class="table table-striped motifSearch_table">
-                <thead><tr><th>Name</th><th>Sequence</th><th>Reducing end</th><th>Frequency</th></tr></thead>
+                <thead><tr><th>${Name}</th><th>${sequence}</th><th>${Reducing}</th><th>${Frequency}</th></tr></thead>
                 <tbody></tbody>
             </table>
         </div>

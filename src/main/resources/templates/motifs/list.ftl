@@ -23,13 +23,13 @@
 
 	<div id="motifListApp" data-notation="${imageNotation}">
 		<h4>
-			Count:
+			${Count}
 			<span class="motifList_count"></span><br /><br />
 		</h4>
 
         <div class="container">
 		<table class="table table-striped motifList_table">
-			<thead><tr><th>Name</th><th>Sequence</th><th>Reducing end</th><th>Frequency</th></tr></thead>
+			<thead><tr><th>${Name}</th><th>${sequence}</th><th>${Reducing}</th><th>${Frequency}</th></tr></thead>
 			<tbody></tbody>
 		</table>
 		</div>
