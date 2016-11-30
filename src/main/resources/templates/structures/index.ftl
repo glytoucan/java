@@ -32,7 +32,7 @@
 			<span class="incSearch_list">${showFullListOf}&nbsp;
 				<span class="incSearch_showList" data-category="motif">${motifs}</span>&nbsp;/&nbsp;
 				<span class="incSearch_showList" data-category="monosaccharide">${monosaccharides}</span>&nbsp;/&nbsp;
-				<span class="incSearch_showList" data-category="database">Databases</span>
+				<span class="incSearch_showList" data-category="database">${Databases}</span>
 			</span>
 			<!-- no suggestion -->
 			<span class="incSearch_notfound">(${noneFound})</span>
@@ -46,7 +46,7 @@
 				<!-- Monosaccharides -->
 				<span class="listBox_tabBtn" data-category="monosaccharide">${monosaccharides}</span>
 				<!-- Databases -->
-				<span class="listBox_tabBtn" data-category="database">Databases</span>
+				<span class="listBox_tabBtn" data-category="database">${Databases}</span>
 			</div>
 			<div class="listBox_listArea">
 				<ul class="listBox_ul listBox_ul-motif listBox_ul--show" data-category="motif"></ul>
@@ -90,8 +90,8 @@
 		</div><!--/.massRange-->
 
 		<div class="linkedDb">
-			<p class="linkedDb_title">Linked DB</p>
-			<p class="linkedDb_default linkedDb_default--show">(No condition)</p>
+			<p class="linkedDb_title">${linkedDb}</p>
+			<p class="linkedDb_default linkedDb_default--show">(${noCondition})</p>
 			<div class="linkedDb_items"></div>
 		</div><!--/.linkedDb-->
 	</div><!--/.glSearchWrapper-->
@@ -110,19 +110,19 @@
 		<div class="glCurrentStatus">
 			<p class="glCurrentStatus_header">Current status</p>
 			<div class="glCurrentStatus_category glCurrentStatus_category-motif">
-				<p class="glCurrentStatus_title glCurrentStatus_title-01">Motif</p>
+				<p class="glCurrentStatus_title glCurrentStatus_title-01">${motif}</p>
 				<div class="glCurrentStatus_detail"></div>
 			</div>
 			<div class="glCurrentStatus_category glCurrentStatus_category-monosaccharide">
-				<p class="glCurrentStatus_title glCurrentStatus_title-02">Monosaccharide</p>
+				<p class="glCurrentStatus_title glCurrentStatus_title-02">${monosaccharide}</p>
 				<div class="glCurrentStatus_detail"></div>
 			</div>
 			<div class="glCurrentStatus_category glCurrentStatus_category-mass">
-				<p class="glCurrentStatus_title glCurrentStatus_title-03">Mass range</p>
+				<p class="glCurrentStatus_title glCurrentStatus_title-03">${massRange}</p>
 				<div class="glCurrentStatus_detail"></div>
 			</div>
 			<div class="glCurrentStatus_category glCurrentStatus_category-database">
-				<p class="glCurrentStatus_title glCurrentStatus_title-04">Linked DB</p>
+				<p class="glCurrentStatus_title glCurrentStatus_title-04">${linkedDb}</p>
 				<div class="glCurrentStatus_detail"></div>
 			</div>
 		</div>
