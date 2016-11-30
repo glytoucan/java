@@ -45,8 +45,8 @@
 						</div>
 						<div>
 							<input type="text" name="captcha" id="captcha" value="${captcha!""}" />
-						</div
-						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+						</div>
+						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /> 
 						<input type="hidden" name="accessionNumber" value="${accNum}" />
 						<input type="hidden" name="literatureId" value="${literatureId}" />
 						<input type="hidden" name="literatureTitle" value="${literatureTitle}" />
