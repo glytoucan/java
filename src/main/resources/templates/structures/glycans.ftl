@@ -20,7 +20,7 @@
 	<h2 class="entry_subtitle">${overview}</h2>
 	<div class="entryOverview">
 		<div class="entryInfo">
-			<p class="glycan_entry_notFound">No data found.</p>
+			<p class="glycan_entry_notFound">${noDataFound}.</p>
 		</div><!--/.entryInfo-->
 		<div class="entry_loading entry_loading--hide js_loading_anim_entry">
 			<div id="floatingCirclesG">
@@ -52,11 +52,11 @@
 				</li>
 				<!-- Linkage Isomer -->
 				<li class="entryMain_menuList">
-					<span class="entryMain_menuText" data-stanza="relation_list" data-category="Linkage Isomer">Linkage Isomer</span>
+					<span class="entryMain_menuText" data-stanza="relation_list" data-category="Linkage Isomer">${linkageIsomer}</span>
 				</li>
 				<!-- Visualization Tool -->
 				<li class="entryMain_menuList">
-					<a class="entryMain_menuText" href="/D3_dndTree/${accNum}">Visualization Tool</a>
+					<a class="entryMain_menuText" href="/D3_dndTree/${accNum}">${visualizationTool}</a>
 				</li>
 			</ul>
 		</div><!--/.entryMain_menu-->
@@ -95,21 +95,21 @@
 					<span class="entryMain_menuText" data-stanza="relation_bcsdb" data-category="BCSDB">${bcsdb}</span>
 				</li>
 				<li class="entryMain_menuList">
-					<span class="entryMain_menuText" data-stanza="relation_glycomedb" data-category="GlycomeDB">GlycomeDB</span>
+					<span class="entryMain_menuText" data-stanza="relation_glycomedb" data-category="GlycomeDB">${glycomeDB}</span>
 				</li>
 				<li class="entryMain_menuList">
-					<span class="entryMain_menuText" data-stanza="relation_glycoepitope" data-category="GlycoEpitope">GlycoEpitope</span>
+					<span class="entryMain_menuText" data-stanza="relation_glycoepitope" data-category="GlycoEpitope">${glycoEpitope}</span>
 				</li>
 				<li class="entryMain_menuList">
-					<span class="entryMain_menuText" data-stanza="relation_unicarbdb" data-category="UniCarb-DB">UniCarb-DB</span>
+					<span class="entryMain_menuText" data-stanza="relation_unicarbdb" data-category="UniCarb-DB">${uniCarbDb}</span>
 				</li>
 				<!--
 				<li class="entryMain_menuList">
-					<span class="entryMain_menuText" data-stanza="relation_unicarbkb" data-category="UniCarbKB">UniCarbKB</span>
+					<span class="entryMain_menuText" data-stanza="relation_unicarbkb" data-category="UniCarbKB">${uniCarbKb}</span>
 				</li>
 				-->
 				<li class="entryMain_menuList">
-					<span class="entryMain_menuText" data-stanza="relation_pubchem" data-category="PubChem">PubChem</span>
+					<span class="entryMain_menuText" data-stanza="relation_pubchem" data-category="PubChem">${pubChem}</span>
 				</li>
 			</ul>
 		</div><!--/.entryMain_menu-->
