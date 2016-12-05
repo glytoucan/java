@@ -25,11 +25,11 @@
 <td>${userProfile.email}</td>
 </tr>
 <tr>
-<td>Contributor Id</td>
+<td>${contributorID}</td>
 <td>${userProfile.externalId}</td>
 </tr>
 <tr>
-<td>Verified Email</td>
+<td>${VerifiedE}</td>
 <td>${verifiedEmail?c}</td>
 </tr>
 <tr>
@@ -76,7 +76,7 @@
 <h3><?php echo __('Total Count') . ':' . $hit; ?></h3>
 -->
 
-				In order to signout properly, first disconnect the repository access from google accounts, and then click on <a href="/signout">${signOut}</a>
+				${Bottom[0]} <a href="/signout">${signOut}</a>
 
 </div>
 </div>
