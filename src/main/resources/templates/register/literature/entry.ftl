@@ -36,12 +36,12 @@
 		<div class="entryNew_content">
 			<nav class="entryNav">
 				<ol class="entryNav_ol">
-					<li><a href="#literature">Literature</a></li>
+					<li><a href="#literature">${literature}</a></li>
 				</ol>
 			</nav>
 			<div class="entryNew_right">
 				<section id="literature" class="entryNew_section">
-					<h1 class="entryNew_heading">Currently Registered Literature</h1>
+					<h1 class="entryNew_heading">${currentlyRegisteredLiterature}</h1>
 					<togostanza-literature acc="${accNum}"></togostanza-literature>
 					<div>Submit your own publication id:
 					<form action="/Registries/supplement/${accNum}/confirmation" id="supplementConfirmationForm" method="post" accept-charset="utf-8">
@@ -49,7 +49,7 @@
 							<input type="hidden" name="accessionNumber" value="${accNum}" />
 
 						</div>
-						<input type="text" name="literatureId" id="literatureId" placeholder="pubmed id" value="${literatureId!""}" />
+						<input type="text" name="literatureId" id="literatureId" placeholder="pubmed id" value="${literature}" />
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 						<div class="submit">
 							<input class="btn btn-primary" type="submit" value="${submit!"Submit"}" /><button type="reset" class="btn">${reset!"Reset"}</button>
