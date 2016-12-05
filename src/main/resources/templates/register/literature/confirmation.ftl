@@ -39,7 +39,7 @@
 					<tbody>
 					<tr><th></th><td>${literatureTitle}</td></tr>
 					</tbody></table>
-					<h1 class="entryNew_heading">To submit, please enter the characters in this image:</h1>
+					<h1 class="entryNew_heading">${submitCharactersImage}:</h1>
 						<div>
 							<img src="/Captcha/image">
 						</div>
