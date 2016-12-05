@@ -27,12 +27,12 @@
 		<div class="entryNew_content">
 			<nav class="entryNav">
 				<ol class="entryNav_ol">
-					<li><a href="#literature">Literature</a></li>
+					<li><a href="#literature">${literature}</a></li>
 				</ol>
 			</nav>
 			<div class="entryNew_right">
 				<section id="literature" class="entryNew_section">
-					<h1 class="entryNew_heading">Please confirm the title of your publication id: ${literatureId!""}</h1>
+					<h1 class="entryNew_heading">${confirmationTitlePublicationId}: ${literature}</h1>
 					<form action="/Registries/supplement/${accNum}/complete" method="post" accept-charset="utf-8">
 					
 					<table>
