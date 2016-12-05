@@ -105,10 +105,10 @@
     <table class="table table-bordered table-striped table-hover">
     <tr>
       <td>#</td>
-      <td>Original Glycan Sequence</td>
-      <td>Sequence</td>
-      <td>Image</td>
-      <td>Accession number</td>
+      <td>${originalGlycanSequence}</td>
+      <td>${sequence}</td>
+      <td>${image}</td>
+      <td>${accessionNumber}</td>
     </tr>
 
 <#items as newItem>
