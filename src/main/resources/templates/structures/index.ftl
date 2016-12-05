@@ -79,7 +79,7 @@
 			<div class="massEnable">
 				<input id="applyMassRange" class="massEnable_checkbox" type="checkbox" />
 				<label class="massEnable_style" for="applyMassRange"><img src="/img/checkbox_check.png" width="30" height="30" alt="&radic;" /></label>
-				<label class="massEnable_text" for="applyMassRange">Enable mass range filter</label>
+				<label class="massEnable_text" for="applyMassRange">${enableMassRangeFilter}</label>
 			</div>
 			<div class="massRange_input clearfix">
 				<div class="massRange_slider ju_Range-massRange"></div>
@@ -131,8 +131,8 @@
 			<div class="glResultSwitch js_resultSwitch">
 				<!-- List -->
 				<span class="glResultSwitch_text glResultSwitch_text--current" data-view="list">${list}</span>
-				<span class="glResultSwitch_text" data-view="wurcs">WURCS</span>
-				<span class="glResultSwitch_text" data-view="glycoct">GlycoCT</span>
+				<span class="glResultSwitch_text" data-view="wurcs">${wurcs}</span>
+				<span class="glResultSwitch_text" data-view="glycoct">${glycoCt}</span>
 			</div><!--/.glResultSwitch-->
 
 			<div class="glResultSort">
