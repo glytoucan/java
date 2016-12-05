@@ -23,7 +23,7 @@
 
 	<div id="motifListApp" data-notation="${imageNotation}">
 		<h4>
-			${Count}
+			${Count}:
 			<span class="motifList_count"></span><br /><br />
 		</h4>
 
