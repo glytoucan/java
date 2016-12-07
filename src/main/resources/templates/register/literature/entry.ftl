@@ -43,16 +43,17 @@
 				<section id="literature" class="entryNew_section">
 					<h1 class="entryNew_heading">${currentlyRegisteredLiterature}</h1>
 					<togostanza-literature acc="${accNum}"></togostanza-literature>
-					<div>Submit your own publication id:
+					<div>
+					${submitPublicationId}:
 					<form action="/Registries/supplement/${accNum}/confirmation" id="supplementConfirmationForm" method="post" accept-charset="utf-8">
 						<div style="display: none;">
 							<input type="hidden" name="accessionNumber" value="${accNum}" />
 
 						</div>
-						<input type="text" name="literatureId" id="literatureId" placeholder="pubmed id" value="${literature}" />
+						<input type="text" name="literatureId" id="literatureId" placeholder="pubmed id" value="${literatureId!""}" />
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 						<div class="submit">
-							<input class="btn btn-primary" type="submit" value="${submit!"Submit"}" /><button type="reset" class="btn">${reset!"Reset"}</button>
+							<input class="btn btn-primary" type="submit" value="${submit!"Submit"}" /> &nbsp; <button type="reset" class="btn">${reset!"Reset"}</button>
 						</div>
 					</form>
 					</div>
