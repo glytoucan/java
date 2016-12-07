@@ -11,13 +11,13 @@
 <#include "../nav.ftl">
 <#include "../errormessage.ftl">
 <div class="container">
-<h2 class="page-header">${Title[0]}
+<h1 class="page-header">${Title[0]}
   <a class="userGuide" href="${Title[2]}" target="_blank">
     <img class="icon_userGuide clearfix" src="/img/icon_userGuide.png" height="48" width="24" alt="" />
     <span class="text_userGuide"><img src="/img/text_userGuide.png" height="40" width="80" alt="" /></span>
   </a>
 <script type="text/javascript" src="/GlycanBuilder/VAADIN/vaadinBootstrap.js"></script>
-</h2>
+</h1>
 
 <div class="container-fluid">
   <div class="row-fluid">
