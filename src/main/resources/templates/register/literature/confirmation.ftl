@@ -32,17 +32,20 @@
 			</nav>
 			<div class="entryNew_right">
 				<section id="literature" class="entryNew_section">
-					<h1 class="entryNew_heading">${confirmationTitlePublicationId}: ${literature}</h1>
+					<h1 class="entryNew_heading">${confirmationTitlePublicationId}: ${literatureId!""}</h1>
 					<form action="/Registries/supplement/${accNum}/complete" method="post" accept-charset="utf-8">
 					
 					<table>
 					<tbody>
 					<tr><th></th><td>${literatureTitle}</td></tr>
 					</tbody></table>
+					<br><br><br>
 					<h1 class="entryNew_heading">${submitCharactersImage}:</h1>
+					<br>
 						<div>
 							<img src="/Captcha/image">
 						</div>
+						<br>
 						<div>
 							<input type="text" name="captcha" id="captcha" value="${captcha!""}" />
 						</div>
