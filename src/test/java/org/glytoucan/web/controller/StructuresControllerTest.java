@@ -65,17 +65,17 @@ public class StructuresControllerTest {
 	    logger.debug("sequence:>" + sequence + "<");
 	    SequenceInput si = new SequenceInput();
 	    si.setId("G68158BT");
-	    si.setSequence(sequence);
+	    si.setSequenceInput(sequence);
 	    si.setResultSequence(URLEncoder.encode("WURCS=2.0/1,1,0/[a2112h-1x_1-5]/1/", "UTF-8"));
 	    
 	    si.setImage("/glycans/G68158BT/image?style=extended&format=png&notation=cfg");
 	      mockMvc.perform(
 	          post("/Structures/structure").with(csrf()).contentType(
 	              MediaType.APPLICATION_FORM_URLENCODED).param(
-	              "sequence", sequence))
+	              "sequenceInput", sequence))
 	          .andExpect(status().isOk())
 	          .andExpect(view().name("structures/structure"))
-	          .andExpect(model().attribute("sequenceInput", hasProperty("sequence", is(sequence))))
+	          .andExpect(model().attribute("sequenceInput", hasProperty("sequenceInput", is(sequence))))
 	              .andExpect(model().attribute("sequenceInput", hasProperty("id", is("G68158BT"))))
 	              .andExpect(model().attribute("sequenceInput", hasProperty("resultSequence", is(si.getResultSequence()))))
 	              .andExpect(model().attribute("sequenceInput", hasProperty("image", is(si.getImage()))));
@@ -93,17 +93,17 @@ public class StructuresControllerTest {
 		logger.debug("sequence:>" + sequence + "<");
 		SequenceInput si = new SequenceInput();
 		si.setId("G00031MO");
-		si.setSequence(sequence);
+		si.setSequenceInput(sequence);
 		si.setResultSequence("WURCS%3D2.0%2F2%2C2%2C1%2F%5Ba2112h-1a_1-5_2*NCC%2F3%3DO%5D%5Ba2112h-1b_1-5%5D%2F1-2%2Fa3-b1");
 		
 		si.setImage("/glycans/G00031MO/image?style=extended&format=png&notation=cfg");
 			mockMvc.perform(
 					post("/Structures/structure").with(csrf()).contentType(
 							MediaType.APPLICATION_FORM_URLENCODED).param(
-							"sequence", sequence))
+							"sequenceInput", sequence))
 					.andExpect(status().isOk())
 					.andExpect(view().name("structures/structure"))
-					.andExpect(model().attribute("sequenceInput", hasProperty("sequence", is(sequence))))
+					.andExpect(model().attribute("sequenceInput", hasProperty("sequenceInput", is(sequence))))
 			        .andExpect(model().attribute("sequenceInput", hasProperty("id", is("G00031MO"))))
 			        .andExpect(model().attribute("sequenceInput", hasProperty("resultSequence", is(si.getResultSequence()))))
 			        .andExpect(model().attribute("sequenceInput", hasProperty("image", is(si.getImage()))));
@@ -207,7 +207,7 @@ LIN
 		logger.debug("sequence:>" + sequence + "<");
 		SequenceInput si = new SequenceInput();
 		si.setId(GlycanProcedure.NotRegistered);
-		si.setSequence(sequence);
+		si.setSequenceInput(sequence);
 //		si.setResultSequence(URLEncoder.encode("WURCS=2.0/2,2,1/[22112h-1a_1-5_2*NCC/3=O][a2112h-1b_1-5]/1-2/a3-b1", "UTF-8"));
 //		si.setResultSequence("WURCS=2.0/6,10,11/[a2112h-1a_1-5_2*NCC/3=O][a2112h-1b_1-5][a2122h-1b_1-5_2*NCC/3=O_6*OSO/3=O/3=O][a1221m-1a_1-5][Aad21122h-2a_2-6_5*NCC/3=O][a2112h-1b_1-5_2*NCC/3=O_6*OSO/3=O/3=O]/1-2-3-4-2-5-6-4-2-5/a3-b1_a6-g1_b3-c1_c3-d1_c4-e1_e3-f2_g3-h1_g4-i1_i3-j2_c1-e3~n_g1-i3~n");
 		si.setResultSequence(URLEncoder.encode("WURCS=2.0/6,10,11/[a2112h-1a_1-5_2*NCC/3=O][a2112h-1b_1-5][a2122h-1b_1-5_2*NCC/3=O_6*OSO/3=O/3=O][a1221m-1a_1-5][Aad21122h-2a_2-6_5*NCC/3=O][a2112h-1b_1-5_2*NCC/3=O_6*OSO/3=O/3=O]/1-2-3-4-2-5-6-4-2-5/a3-b1_a6-g1_b3-c1_c3-d1_c4-e1_e3-f2_g3-h1_g4-i1_i3-j2_c1-e3~n_g1-i3~n", "UTF-8"));
@@ -216,10 +216,10 @@ LIN
 			mockMvc.perform(
 					post("/Structures/structure").with(csrf()).contentType(
 							MediaType.APPLICATION_FORM_URLENCODED).param(
-							"sequence", sequence))
+							"sequenceInput", sequence))
 					.andExpect(status().isOk())
 					.andExpect(view().name("structures/structure"))
-					.andExpect(model().attribute("sequenceInput", hasProperty("sequence", is(sequence))))
+					.andExpect(model().attribute("sequenceInput", hasProperty("sequenceInput", is(sequence))))
 			        .andExpect(model().attribute("sequenceInput", hasProperty("id", is(GlycanProcedure.NotRegistered))))
 			        .andExpect(model().attribute("sequenceInput", hasProperty("resultSequence", is(si.getResultSequence()))))
 			        .andExpect(model().attribute("sequenceInput", hasProperty("image", is(si.getImage()))));
@@ -250,17 +250,17 @@ LIN
 		logger.debug("sequence:>" + sequence + "<");
 		SequenceInput si = new SequenceInput();
 		si.setId(id);
-		si.setSequence(sequence);
+		si.setSequenceInput(sequence);
 		si.setResultSequence(URLEncoder.encode("WURCS=2.0/4,5,4/[a2112h-1x_1-5_2*NCC/3=O][a2112h-1b_1-5][a2112h-1a_1-5_2*NCC/3=O][a2122h-1b_1-5_2*NCC/3=O_6*OSO/3=O/3=O]/1-2-3-2-4/a3-b1_a6-e1_b4-c1_c3-d1", "UTF-8"));
 //		si.setResultSequence("WURCS%3D2.0%2F2%2C2%2C1%2F%5B22112h-1a_1-5_2*NCC%2F3%3DO%5D%5B12112h-1b_1-5%5D%2F1-2%2Fa3-b1");
 		si.setImage("/glycans/" + id + "/image?style=extended&format=png&notation=cfg");
 			mockMvc.perform(
 					post("/Structures/structure").with(csrf()).contentType(
 							MediaType.APPLICATION_FORM_URLENCODED).param(
-							"sequence", sequence))
+							"sequenceInput", sequence))
 					.andExpect(status().isOk())
 					.andExpect(view().name("structures/structure"))
-					.andExpect(model().attribute("sequenceInput", hasProperty("sequence", is(sequence))))
+					.andExpect(model().attribute("sequenceInput", hasProperty("sequenceInput", is(sequence))))
 			        .andExpect(model().attribute("sequenceInput", hasProperty("id", is(id))))
 			        .andExpect(model().attribute("sequenceInput", hasProperty("resultSequence", is(si.getResultSequence()))))
 			        .andExpect(model().attribute("sequenceInput", hasProperty("image", is(si.getImage()))));
@@ -280,17 +280,17 @@ LIN
 
 		SequenceInput si = new SequenceInput();
 		si.setId(id);
-		si.setSequence(sequence);
+		si.setSequenceInput(sequence);
 //		si.setResultSequence("WURCS=2.0/4,6,5/[u2122h_2*NCC/3=O][a2122h-1b_1-5_2*NCC/3=O][a1122h-1b_1-5][a1122h-1a_1-5]/1-2-3-4-2-4/a4-b1_b4-c1_c3-d1_c6-f1_e1-d2|d4");
 		si.setResultSequence("WURCS%3D2.0%2F2%2C2%2C1%2F%5Ba2112h-1a_1-5_2*NCC%2F3%3DO%5D%5Ba2112h-1b_1-5%5D%2F1-2%2Fa3-b1");
 		si.setImage("/glycans/" + id + "/image?style=extended&format=png&notation=cfg");
 			mockMvc.perform(
 					post("/Structures/structure").with(csrf()).contentType(
 							MediaType.APPLICATION_FORM_URLENCODED).param(
-							"sequence", sequence))
+							"sequenceInput", sequence))
 					.andExpect(status().isOk())
 					.andExpect(view().name("structures/structure"))
-					.andExpect(model().attribute("sequenceInput", hasProperty("sequence", is(sequence))))
+					.andExpect(model().attribute("sequenceInput", hasProperty("sequenceInput", is(sequence))))
 			        .andExpect(model().attribute("sequenceInput", hasProperty("id", is(id))))
 			        .andExpect(model().attribute("sequenceInput", hasProperty("resultSequence", is(si.getResultSequence()))))
 			        .andExpect(model().attribute("sequenceInput", hasProperty("image", is(si.getImage()))));
@@ -304,16 +304,16 @@ LIN
 
 		SequenceInput si = new SequenceInput();
 		si.setId(id);
-		si.setSequence(sequence);
+		si.setSequenceInput(sequence);
 		si.setResultSequence("WURCS%3D2.0%2F6%2C13%2C12%2F%5Ba2122h-1x_1-5_2*NCC%2F3%3DO%5D%5Ba2122h-1b_1-5_2*NCC%2F3%3DO%5D%5Ba1122h-1b_1-5%5D%5Ba1122h-1a_1-5%5D%5Ba2112h-1b_1-5%5D%5Ba1221m-1a_1-5%5D%2F1-2-3-4-2-2-5-4-2-5-2-6-5%2Fa4-b1_b4-c1_c3-d1_c6-h1_d2-e1_d4-f1_f4-g1_h2-i1_h6-k1_i4-j1_k3-l1_k4-m1");
-		si.setImage("/glycans/" + id + "/image?style=extended&format=png&notation=cfg");
+		si.setImage("data:image/png;base64,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");
 			mockMvc.perform(
 					post("/Structures/structure").with(csrf()).contentType(
 							MediaType.APPLICATION_FORM_URLENCODED).param(
-							"sequence", sequence))
+							"sequenceInput", sequence))
 					.andExpect(status().isOk())
 					.andExpect(view().name("structures/structure"))
-					.andExpect(model().attribute("sequenceInput", hasProperty("sequence", is(sequence))))
+					.andExpect(model().attribute("sequenceInput", hasProperty("sequenceInput", is(sequence))))
 			        .andExpect(model().attribute("sequenceInput", hasProperty("id", is(id))))
 			        .andExpect(model().attribute("sequenceInput", hasProperty("resultSequence", is(si.getResultSequence()))))
 			        .andExpect(model().attribute("sequenceInput", hasProperty("image", is(si.getImage()))));
@@ -329,13 +329,13 @@ LIN
 
     SequenceInput si = new SequenceInput();
     si.setId(id);
-    si.setSequence(sequence);
+    si.setSequenceInput(sequence);
     si.setResultSequence("WURCS%3D2.0%2F6%2C13%2C12%2F%5Ba2122h-1x_1-5_2*NCC%2F3%3DO%5D%5Ba2122h-1b_1-5_2*NCC%2F3%3DO%5D%5Ba1122h-1b_1-5%5D%5Ba1122h-1a_1-5%5D%5Ba2112h-1b_1-5%5D%5Ba1221m-1a_1-5%5D%2F1-2-3-4-2-2-5-4-2-5-2-6-5%2Fa4-b1_b4-c1_c3-d1_c6-h1_d2-e1_d4-f1_f4-g1_h2-i1_h6-k1_i4-j1_k3-l1_k4-m1");
     si.setImage("/glycans/" + id + "/image?style=extended&format=png&notation=cfg");
       mockMvc.perform(
           post("/Structures/structure").with(csrf()).contentType(
               MediaType.APPLICATION_FORM_URLENCODED).param(
-              "sequence", sequence))
+              "sequenceInput", sequence))
           .andExpect(status().is3xxRedirection())
 //          .andExpect(view().name("redirect:/Structures/structureSearch"))
           .andExpect(redirectedUrl("/Structures/structureSearch"));

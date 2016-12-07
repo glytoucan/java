@@ -40,7 +40,7 @@
 				value="sub"; substructure search
 				  -->
 				
-<@spring.formTextarea 'sequenceInput.sequence' 'id="sequenceInput" placeholder="${sequence}" name="sequence" style="width: 465px; height: 300px;"' />
+<@spring.formTextarea 'sequenceInput' 'id="sequenceInput" name="sequence" style="width: 465px; height: 300px;"' />
 <input type="hidden" name="from" value="structure" />
 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 				<#--

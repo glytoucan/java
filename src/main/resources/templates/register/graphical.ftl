@@ -70,7 +70,7 @@ var callBack=[];
 callBack.run=function(response){
   document.write('Please wait... checking for:' + response);
   var r = response;
-  var url = "/Registries/confirmation?from=graphical&sequence=";
+  var url = "/Registries/confirmation?from=graphical&sequenceInput=";
   var x = url + encodeURIComponent(r);
   //alert(x);
 

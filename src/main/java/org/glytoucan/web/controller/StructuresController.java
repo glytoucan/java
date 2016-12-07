@@ -88,7 +88,7 @@ public class StructuresController {
 	}
 	
 	@RequestMapping(value="/structureSearch", method = RequestMethod.GET)
-	public String structureSearch(Model model, @ModelAttribute("sequenceInput") SequenceInput sequence, BindingResult result/*, @RequestParam(value="errorMessage", required=false) String errorMessage*/) {
+	public String structureSearch(Model model, @ModelAttribute("sequenceInput") SequenceInput sequenceInput, BindingResult result/*, @RequestParam(value="errorMessage", required=false) String errorMessage*/) {
 //		logger.debug(errorMessage);
 //		model.addAttribute("errorMessage", errorMessage);
 		return "structures/structure_search";
@@ -111,16 +111,16 @@ public class StructuresController {
 			model.addAttribute("errorMessage", errorMessage);
 
 		logger.debug(sequence);
-        if (StringUtils.isEmpty(sequence.getSequence())) {
+        if (StringUtils.isEmpty(sequence.getSequenceInput())) {
         	
         	logger.debug("adding errorMessage:>input sequence<");
         	redirectAttrs.addFlashAttribute("errorMessage", "Please input a sequence");
         	return "redirect:/Structures/structureSearch";
         } else {
-    		logger.debug("text1>" + sequence.getSequence() + "<");
+    		logger.debug("text1>" + sequence.getSequenceInput() + "<");
 
-//    		glycanProcedure.setSequence(sequence.getSequence());
-    	    GlycoSequenceSearchResponse response = glycoSequenceClient.textSearchRequest(sequence.getSequence() );
+//    		glycanProcedure.setSequence(sequence.getSequenceInput());
+    	    GlycoSequenceSearchResponse response = glycoSequenceClient.textSearchRequest(sequence.getSequenceInput() );
     	    Assert.assertNotNull(response);
     	    
     	    logger.debug(response);

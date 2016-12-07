@@ -73,7 +73,7 @@ var callBack=[];
 callBack.run=function(response){
   document.write('Please wait... searching for:' + response);
   var r = response;
-  var url = "/Structures/structure?from=graphical&sequence=";
+  var url = "/Structures/structure?from=graphical&sequenceInput=";
   var x = url + encodeURIComponent(r);
   //alert(x);
 

@@ -41,8 +41,8 @@
         </div>
       </td>
       <td>
-        ${listNew[newItem?index].sequence?html?replace("\\n", "<br>")}
-        <input type="hidden" name="sequence" value="${listNew[newItem?index].sequence}"/>
+        ${listNew[newItem?index].sequenceInput?html?replace("\\n", "<br>")}
+        <input type="hidden" name="sequenceInput" value="${listNew[newItem?index].sequenceInput}"/>
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
       </td>
       <td>
@@ -80,7 +80,7 @@
         ${newItem?counter}
       </td>
       <td>
-        ${newItem.sequence?html?replace("\n", "<br>")}
+        ${newItem.sequenceInput?html?replace("\n", "<br>")}
       </td>
       <td>
         ${newItem.resultSequence?html?replace("\\n", "<br>")}
@@ -117,7 +117,7 @@
         ${newItem?counter}
       </td>
       <td>
-        ${listRegistered[newItem?index].sequence?html?replace("\\n", "<br>")}
+        ${listRegistered[newItem?index].sequenceInput?html?replace("\\n", "<br>")}
       </td>
       <td>
         ${listRegistered[newItem?index].resultSequence?html?replace("\\n", "<br>")}
@@ -147,7 +147,7 @@
 
 <#list listNew>
 <#items as newItem>
-  <input type="hidden" name="sequence" value="${listNew[newItem?index].sequence}"/>
+  <input type="hidden" name="sequenceInput" value="${listNew[newItem?index].sequenceInput}"/>
   <input type="hidden" name="resultSequence" value="${listNew[newItem?index].resultSequence}"/>
 </#items>
 <#else>
@@ -155,7 +155,7 @@
 
 <#list listErrors>
 <#items as newItem>
-  <input type="hidden" name="errorSequence" value="${listErrors[newItem?index].sequence}"/>
+  <input type="hidden" name="errorSequence" value="${listErrors[newItem?index].sequenceInput}"/>
   <input type="hidden" name="errorResultSequence" value="${listErrors[newItem?index].resultSequence}"/>
 </#items>
 <#else>
@@ -164,7 +164,7 @@
 <#list listRegistered>
 <#items as newItem>
   <input type="hidden" name="registeredId" value="${listRegistered[newItem?index].id}"/>
-  <input type="hidden" name="registeredSequence" value="${listRegistered[newItem?index].sequence}"/>
+  <input type="hidden" name="registeredSequence" value="${listRegistered[newItem?index].sequenceInput}"/>
   <input type="hidden" name="registeredResultSequence" value="${listRegistered[newItem?index].resultSequence}"/>
 </#items>
 <#else>

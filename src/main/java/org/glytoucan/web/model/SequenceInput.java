@@ -7,7 +7,7 @@ import com.wordnik.swagger.annotations.ApiModel;
 @ApiModel (value="Sequence Input", description="Structure Sequence")
 public class SequenceInput {
 //	@NotEmpty
-	String sequence;
+	String sequenceInput;
     
     String resultSequence;
     
@@ -27,17 +27,17 @@ public class SequenceInput {
 		this.register = register;
 	}
 
-	public String getSequence() {
-		return sequence;
+	public String getSequenceInput() {
+		return sequenceInput;
 	}
 
-	public void setSequence(String sequence) {
-		this.sequence = sequence;
+	public void setSequenceInput(String sequence) {
+		this.sequenceInput = sequence;
 	}
 
 	@Override
 	public String toString() {
-		return "SequenceInput [sequence=" + sequence + ", resultSequence="
+		return "SequenceInput [sequence=" + sequenceInput + ", resultSequence="
 				+ resultSequence + ", image=" + image + ", id=" + id + "]";
 	}
 
@@ -82,7 +82,7 @@ public class SequenceInput {
 		result = prime * result
 				+ ((resultSequence == null) ? 0 : resultSequence.hashCode());
 		result = prime * result
-				+ ((sequence == null) ? 0 : sequence.hashCode());
+				+ ((sequenceInput == null) ? 0 : sequenceInput.hashCode());
 		return result;
 	}
 
@@ -110,10 +110,10 @@ public class SequenceInput {
 				return false;
 		} else if (!resultSequence.equals(other.resultSequence))
 			return false;
-		if (sequence == null) {
-			if (other.sequence != null)
+		if (sequenceInput == null) {
+			if (other.sequenceInput != null)
 				return false;
-		} else if (!sequence.equals(other.sequence))
+		} else if (!sequenceInput.equals(other.sequenceInput))
 			return false;
 		return true;
 	}	

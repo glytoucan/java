@@ -30,6 +30,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.glycoinfo.convert.error.ConvertException;
 import org.glycoinfo.convert.util.DetectFormat;
 import org.glycoinfo.rdf.SparqlException;
 import org.glycoinfo.rdf.dao.SparqlEntity;
@@ -37,17 +38,22 @@ import org.glycoinfo.rdf.glycan.Contributor;
 import org.glycoinfo.rdf.service.ContributorProcedure;
 import org.glycoinfo.rdf.service.GlycanProcedure;
 import org.glycoinfo.rdf.service.exception.ContributorException;
+import org.glycoinfo.rdf.utils.NumberGenerator;
 import org.glycoinfo.vision.generator.ImageGenerator;
 import org.glytoucan.admin.client.UserClient;
 import org.glytoucan.admin.model.Authentication;
 import org.glytoucan.admin.model.User;
 import org.glytoucan.admin.model.UserDetailsRequest;
 import org.glytoucan.admin.model.UserDetailsResponse;
+import org.glytoucan.client.GlycanRegisterRest;
 import org.glytoucan.client.GlycoSequenceClient;
 import org.glytoucan.client.LiteratureRest;
 import org.glytoucan.client.model.GlycoSequenceDetailResponse;
+import org.glytoucan.client.model.GlycoSequenceSearchResponse;
 import org.glytoucan.client.model.ResponseMessage;
+import org.glytoucan.model.Message;
 import org.glytoucan.model.spec.GlycanClientQuerySpec;
+import org.glytoucan.model.spec.GlycanClientRegisterSpec;
 import org.glytoucan.web.model.SequenceInput;
 import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,8 +89,8 @@ import static nl.captcha.Captcha.NAME;
 public class RegistriesController {
 	Log logger = LogFactory.getLog(RegistriesController.class);
 
-	@Autowired
-	GlycanProcedure glycanProcedure;
+//	@Autowired
+//	GlycanProcedure glycanProcedure;
 
 	@Autowired
 	ImageGenerator imageGenerator;
@@ -107,6 +113,9 @@ public class RegistriesController {
   
   @Autowired
   NCBIService ncbiService;
+  
+  @Autowired
+  GlycanClientRegisterSpec glycanRest;
 
 	@RequestMapping("/graphical")
 	public String graphical(Model model, RedirectAttributes redirectAttrs) {
@@ -115,7 +124,7 @@ public class RegistriesController {
 
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	public String root(Model model,
-			@ModelAttribute("sequence") SequenceInput sequence,
+			@ModelAttribute("sequenceInput") SequenceInput sequenceInput,
 			BindingResult result/*
 								 * , @RequestParam(value="errorMessage",
 								 * required=false) String errorMessage
@@ -231,7 +240,7 @@ public class RegistriesController {
 	 
 	@RequestMapping("/confirmation")
   public String confirmation(HttpServletRequest request, RedirectAttributes redirectAttrs) throws SparqlException {
-    String sequence1 = request.getParameter("sequence");
+    String sequence1 = request.getParameter("sequenceInput");
     
     if (StringUtils.isEmpty(sequence1)) {
       logger.debug("no input sequence");
@@ -242,7 +251,7 @@ public class RegistriesController {
     
     logger.debug("sequence1>"+sequence1);
 
-    String[] sequence2 = request.getParameterValues("sequence-2");
+    String[] sequence2 = request.getParameterValues("sequenceInput-2");
 
     
     SequenceInput sequenceInput = new SequenceInput();
@@ -258,7 +267,7 @@ public class RegistriesController {
     logger.debug("input sequences:>"+sequence);
     
     sequenceInput.setFrom(sequence);
-    sequenceInput.setSequence(sequence);
+    sequenceInput.setSequenceInput(sequence);
 
     List<SequenceInput> list = new ArrayList<SequenceInput>();
     List<SequenceInput> listRegistered = new ArrayList<SequenceInput>();
@@ -276,56 +285,124 @@ public class RegistriesController {
     return result;
   }
 
-	private String processMultiple(SequenceInput sequence,
+	private String processMultiple(SequenceInput sequenceInput,
 			List<SequenceInput> list, List<SequenceInput> listRegistered,
 			List<SequenceInput> listErrors, String error, String complete,
 			RedirectAttributes redirectAttrs) {
-		if (StringUtils.isEmpty(sequence.getSequence())) {
-
+	  
+		if (StringUtils.isEmpty(sequenceInput.getSequenceInput())) {
 			logger.debug("adding errorMessage:>input sequence<");
 			redirectAttrs.addFlashAttribute("errorMessage",
 					"Please input a sequence");
 			return "redirect:" + error;
 		} else {
-			logger.debug("text1>" + sequence.getSequence() + "<");
+
+		  logger.debug("text1>" + sequenceInput.getSequenceInput() + "<");
 			try {
 				logger.debug("text1encoded>"
-						+ URLEncoder.encode(sequence.getSequence(), "UTF-8")
+						+ URLEncoder.encode(sequenceInput.getSequenceInput(), "UTF-8")
 						+ "<");
 			} catch (UnsupportedEncodingException e1) {
 				e1.printStackTrace();
 			}
+			
 
-			List<String> inputs = DetectFormat.split(sequence.getSequence());
+			List<String> inputs = DetectFormat.split(sequenceInput.getSequenceInput());
 			logger.debug("split input:>" + inputs + "<");
-			SparqlEntity se;
-			List<SparqlEntity> searchResults;
-			try {
-				searchResults = glycanProcedure.search(inputs);
-			} catch (SparqlException e) {
-				redirectAttrs.addFlashAttribute("errorMessage", e.getMessage());
-				return "redirect:" + error;
-			}
+			List<SequenceInput> searchResults = new ArrayList<SequenceInput>();
+		    for (Iterator iterator = inputs.iterator(); iterator.hasNext();) {
+		      String sequence = (String) iterator.next();
+		      String sparqlSequence = null;
+		      sparqlSequence = sequence.replaceAll("(?:\\r\\n|\\n)", "\\\\n");
+
+		      logger.debug("sequence:>" + sparqlSequence + "<");
+
+		      sparqlSequence = sparqlSequence.trim();
+
+	        logger.debug("text1>" + sequence + "<");
+
+		          GlycoSequenceSearchResponse response = glycoSequenceClient.textSearchRequest(sequence);
+		          Assert.assertNotNull(response);
+		          
+		          logger.debug(response);
+		          logger.debug(response.getAccessionNumber());
+		          ResponseMessage rm = response.getResponseMessage();
+		          logger.debug(rm);
+		          logger.debug(rm.getErrorCode());
+		          if (BigInteger.ZERO.compareTo(rm.getErrorCode()) != 0) {
+		            logger.debug("ResponseMessage error:>" + rm.getMessage());
+		            redirectAttrs.addFlashAttribute("errorMessage", rm.getMessage());
+		            return "redirect:" + error;
+		          }
+		        String id = response.getAccessionNumber();
+		        logger.debug("search found:>" + id + "<");
+		        SequenceInput foundSI = new SequenceInput();
+		        
+		        if (null != id && id.equals(GlycanProcedure.NotRegistered)) {
+		          foundSI.setId(GlycanProcedure.NotRegistered);
+		        try {
+		            String imageSequence = response.getConvertedSequence().replaceAll("(?:\\r\\n|\\n)", "\\\\n");
+		            
+		            HashMap<String, Object> data = new HashMap<String, Object>();
+		            data.put(GlycanClientQuerySpec.IMAGE_FORMAT, "png");
+		            data.put(GlycanClientQuerySpec.IMAGE_NOTATION, "cfg");
+		            data.put(GlycanClientQuerySpec.IMAGE_STYLE, "extended");
+		            data.put(GlycanClientQuerySpec.SEQUENCE, imageSequence); 
+		            
+		            foundSI.setImage(gtcClient.getImageBase64(data));
+		        } catch (KeyManagementException | NoSuchAlgorithmException
+		            | KeyStoreException | IOException e) {
+		          redirectAttrs.addFlashAttribute("errorMessage", "system error");
+		          logger.error(e.getMessage());
+		          return "redirect:"  + error;
+		        }
+		        } else {
+		          foundSI.setId(id);
+		          foundSI.setImage(response.getImage());
+		        }
+		        logger.debug("image:>" + foundSI.getImage());
+		        
+		        String resultSequence = null;
+//		      try {
+////		        resultSequence = URLEncoder.encode(se.getValue(GlycoSequenceToWurcsSelectSparql.Sequence), "UTF-8");
+////		        WURCS=2.0/2,2,1/[22112h-1a_1-5_2*NCC/3=O][12112h-1b_1-5]/1-2/a3-b1
+//		        resultSequence = URLEncoder.encode(response.getSequence(), "UTF-8");
+//		      } catch (UnsupportedEncodingException e) {
+//		        e.printStackTrace();
+		        resultSequence = response.getSequence();
+//		      }
+		      foundSI.setSequenceInput(sequence);
+		      foundSI.setResultSequence(resultSequence);
+		        logger.debug(foundSI);
+//		        sequence.setResultSequence(se.getValue(GlycoSequence.Sequence));
+		        // embed wurcs, image, accNum into model
+//		        model.addAttribute("id", sequence.getId());
+//		        model.addAttribute("image", sequence.getImage());
+//		        model.addAttribute("wurcs", sequence.getResultSequence());
+
+		      // se.setValue(FromSequence, getSequence());
+		      logger.debug("adding to search list:>" + foundSI + "<");
+		      searchResults.add(foundSI);
+		    }
+				
 
 			logger.debug("search results:>" + searchResults + "<");
 //      String imageSequence = null, imageString=null;
       String resultSequence = null;
 
-			for (Iterator<SparqlEntity> iterator = searchResults.iterator(); iterator
+			for (Iterator<SequenceInput> iterator = searchResults.iterator(); iterator
 					.hasNext();) {
-				SparqlEntity sparqlEntity = (SparqlEntity) iterator.next();
+			  SequenceInput sparqlEntity = (SequenceInput) iterator.next();
 
-				sparqlEntity.getValue(GlycanProcedure.ResultSequence);
+				sparqlEntity.getResultSequence();
 				
 				// time to fill in this result sequence input
 				SequenceInput si = new SequenceInput();
 
         resultSequence = sparqlEntity
-            .getValue(GlycanProcedure.ResultSequence);
+            .getResultSequence();
         if (StringUtils.isBlank(resultSequence) || resultSequence
             .startsWith(GlycanProcedure.CouldNotConvertHeader))
-          resultSequence = sparqlEntity
-              .getValue(GlycanProcedure.Sequence);
         si.setResultSequence(resultSequence);
         // if the result is blank, or most likely could not be converted, still try to get an image using the original...
         if (StringUtils.isNotBlank(resultSequence) && !resultSequence
@@ -343,12 +420,10 @@ public class RegistriesController {
         } else
           si.setImage("");
 				
-        String fromSequence = sparqlEntity
-            .getValue(GlycanProcedure.FromSequence);
-        si.setSequence(fromSequence);
+        si.setSequenceInput(sparqlEntity.getSequenceInput());
+        si.setResultSequence(sparqlEntity.getResultSequence());
         
-				String id = sparqlEntity
-						.getValue(GlycanProcedure.AccessionNumber);
+				String id = sparqlEntity.getId();
 
 				if (StringUtils.isNotEmpty(resultSequence)
 						&& resultSequence
@@ -363,7 +438,7 @@ public class RegistriesController {
 				} else {
 				  // registered
 					si.setId(id);
-					si.setImage(sparqlEntity.getValue(GlycanProcedure.Image));
+					si.setImage(sparqlEntity.getImage());
 					logger.debug("adding to old:>" + si);
 					listRegistered.add(si);
 				}
@@ -419,49 +494,50 @@ public class RegistriesController {
 			logger.debug("user is verified:>" + userInfo.getGivenName());
 		  SparqlEntity seUserId;
 		try {
-			seUserId = contributorProcedure.searchContributor(userInfo.getGivenName());
+			seUserId = contributorProcedure.searchContributor(userInfo.getEmail());
 		} catch (ContributorException e) {
 			return "redirect:/signin?errorMessage=Please sign in with a verified email address.";
 		}
 		  if (null != seUserId)
 		    userId = seUserId.getValue(Contributor.ID);
 		  if (null == userId) {
-		    
-		    
-		    // there is a chance the user modified the given name so contributor id could not be retrieved.
-//		    try {
-//				userId = userProcedure.getIdByEmail(userInfo.getEmail());
-//			} catch (UserException e) {
-//				return "redirect:/signin?errorMessage=Please sign in with a verified email address.";
-//			}
-		    
-		     OAuth2AccessToken token = (OAuth2AccessToken)SecurityContextHolder.getContext().getAuthentication().getCredentials();
-		     if (null == token) {
-           redirectAttrs.addAttribute("warningMessage", "Could not retrieve user information.  Please Login");
-           return "redirect:/signout";
-		     }
-		      logger.debug("token:>" + token.getValue());
-		      
-		      
-//		      SparqlEntity userData = null;
-//		      try {
-		        UserDetailsRequest req = new UserDetailsRequest();
-		        Authentication auth = new Authentication();
-		        auth.setId(userInfo.getEmail());
-		        auth.setId(token.getValue());
-		        req.setAuthentication(auth);
-		        UserDetailsResponse response =  userClient.userDetailsRequest(req);
-//		        userData = userProcedure.getIdByEmail(userInfo.getEmail());
-		        if (null == response || null == response.getUser()) {
-		          redirectAttrs.addAttribute("warningMessage", "Could not retrieve user information.  Please Login");
-		          return "redirect:/signout";
-		        }
-		        User user = response.getUser();
-//		      };
-		      if (null == user.getGivenName()) {
-		        redirectAttrs.addAttribute("warningMessage", "Could not retrieve user information.  Please Login");
-		        return "redirect:/signout";
-		      }
+//		    
+//		    
+//		    // there is a chance the user modified the given name so contributor id could not be retrieved.
+////		    try {
+////				userId = userProcedure.getIdByEmail(userInfo.getEmail());
+////			} catch (UserException e) {
+////				return "redirect:/signin?errorMessage=Please sign in with a verified email address.";
+////			}
+//		    
+//		     OAuth2AccessToken token = (OAuth2AccessToken)SecurityContextHolder.getContext().getAuthentication().getCredentials();
+//		     if (null == token) {
+//           redirectAttrs.addAttribute("warningMessage", "Could not retrieve user information.  Please Login");
+//           return "redirect:/signout";
+//		     }
+//		      logger.debug("token:>" + token.getValue());
+//		      
+//		      
+////		      SparqlEntity userData = null;
+////		      try {
+//		        UserDetailsRequest req = new UserDetailsRequest();
+//		        Authentication auth = new Authentication();
+//		        auth.setId(userInfo.getEmail());
+//		        auth.setId(token.getValue());
+//		        req.setAuthentication(auth);
+//		        req.setPrimaryId(userInfo.getEmail());
+//		        UserDetailsResponse response =  userClient.userDetailsRequest(req);
+////		        userData = userProcedure.getIdByEmail(userInfo.getEmail());
+//		        if (null == response || null == response.getUser()) {
+//		          redirectAttrs.addAttribute("warningMessage", "Could not retrieve user information.  Please Login");
+//		          return "redirect:/signout";
+//		        }
+//		        User user = response.getUser();
+////		      };
+//		      if (null == user.getGivenName()) {
+//		        redirectAttrs.addAttribute("warningMessage", "Could not retrieve user information.  Please Login");
+//		        return "redirect:/signout";
+//		      }
 		  }
 		} else {
 			return "redirect:/signin?errorMessage=Please sign in with a verified email address or check our Given Name on Google Accounts.  Please refer to Profile page for details.";
@@ -474,7 +550,7 @@ public class RegistriesController {
 		// RES\n1b:x-dman-HEX-1:5\n2b:x-dgal-HEX-1:5\n3s:n-acetyl\nLIN\n1:1o(-1+1)2d\n2:2d(2+1)3n]
 		// [on,on]
 		String[] resultSequence = request.getParameterValues("resultSequence");
-		String[] origSequence = request.getParameterValues("sequence");
+		String[] origSequence = request.getParameterValues("sequenceInput");
 		String[] image = request.getParameterValues("image");
 		ArrayList<String> registerList = new ArrayList<String>();
 		ArrayList<String> origList = new ArrayList<String>();
@@ -484,16 +560,26 @@ public class RegistriesController {
 			String check = checked[i];
 			if (StringUtils.isNotBlank(check) && check.equals("on")) {
 				logger.debug("registering:" + resultSequence[i] + "<");
-				String id;
-				try {
-					id = glycanProcedure.register(origSequence[i], userId);
-				} catch (SparqlException e) {
-					return "redirect:/signin?errorMessage=There was a problem with a structure.  Details:" + e.getMessage();
-				}
+				String id = null;
+//					id = glycanProcedure.register(origSequence[i], userId);
+				  
+        OAuth2AccessToken token = (OAuth2AccessToken)SecurityContextHolder.getContext().getAuthentication().getCredentials();
+        if (null == token) {
+          redirectAttrs.addAttribute("warningMessage", "Could not retrieve user information.  Please Login");
+          return "redirect:/signout";
+        }
+
+			    Map<String, Object>  map = new HashMap<String, Object>();
+			    map.put(GlycanClientRegisterSpec.SEQUENCE, origSequence[i]);
+			    map.put(GlycanRegisterRest.USERNAME, userInfo.getEmail());
+			    map.put(GlycanRegisterRest.API_KEY, token);
+
+			    Map<String, Object>  results = glycanRest.registerStructure(map);
 				registerList.add(resultSequence[i]);
 				origList.add(origSequence[i]);
 				imageList.add(image[i]);
-				resultList.add(id);
+		    Message msg = (Message) results.get(GlycanRegisterRest.MESSAGE);
+				resultList.add(msg.getMessage());
 			}
 		}
 		// Map<String, String> results = null;
@@ -542,7 +628,7 @@ public class RegistriesController {
 				String sequenceFile = new String(Files.readAllBytes(Paths
 						.get(newFile.getPath())));
 				SequenceInput sequence = new SequenceInput();
-				sequence.setSequence(sequenceFile);
+				sequence.setSequenceInput(sequenceFile);
 
 				List<SequenceInput> list = new ArrayList<SequenceInput>();
 				List<SequenceInput> listRegistered = new ArrayList<SequenceInput>();

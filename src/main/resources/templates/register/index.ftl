@@ -33,7 +33,7 @@
 						<input type="hidden" name="_method" value="POST" />
 					</div>
 					${Left[0]}
-					<@spring.formTextarea 'sequence.sequence' 'id="sequence" placeholder="${sequence}" cols="20" rows="15" style="width: 370px; height: 400px;"' />
+					<@spring.formTextarea 'sequenceInput.sequenceInput' 'id="sequenceInput" cols="20" rows="15" style="width: 370px; height: 400px;"' />
 					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 	                <div class="registriesInput_add">
 	                    <span class="registriesInput_addBtn btn">${addAnother}</span>
