@@ -371,7 +371,7 @@ public class RegistriesController {
 //		        e.printStackTrace();
 		        resultSequence = response.getSequence();
 //		      }
-		      foundSI.setSequenceInput(sequence);
+		      foundSI.setSequenceInput(sparqlSequence);
 		      foundSI.setResultSequence(resultSequence);
 		        logger.debug(foundSI);
 //		        sequence.setResultSequence(se.getValue(GlycoSequence.Sequence));
