@@ -24,6 +24,7 @@
 	  }
 ?>
 -->
+<br>
 <fieldset>
 	<legend>${TopTitle[0]}</legend>
 	<input type="button" onclick="location.href='/Preferences/image/cfg'"value="CFG">
@@ -34,6 +35,7 @@
 	<input type="button" onclick="location.href='/Preferences/image/iupac'"value="IUPAC">
 </fieldset>
 <img src="/glycans/G00029MO/image?format=png&notation=${imageNotation}&style=extended">
+<br> <br> <br>
 <fieldset>
 	<legend>${TopTitle[1]}</legend>
 	<input type="button" onclick="location.href='/Preferences/en'"value="English">
