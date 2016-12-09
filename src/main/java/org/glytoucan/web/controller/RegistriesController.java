@@ -179,6 +179,7 @@ public class RegistriesController {
          }
      }
      model.addAttribute("errorMessage", "Your publication ID could not be retrieved.  Please enter an ID such as a pubmed identifier.");
+     model.addAttribute("accNum", accessionNumber);
      return "register/literature/entry";
    }
    

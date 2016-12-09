@@ -599,6 +599,19 @@ LIN
 	  
 	   @Test
 	    @Transactional
+	    public void testRegisterSupplementEmpty() throws Exception {
+	        mockMvc.perform(
+	            post("/Registries/supplement/G00031MO/confirmation").with(csrf()).with(user("test")).contentType(
+	                MediaType.APPLICATION_FORM_URLENCODED)
+	            .param("accessionNumber", "G00031MO")
+	            .param("literatureId", "1234a"))
+	        .andExpect(status().isOk())
+	        .andExpect(view().name("register/literature/entry"))
+	        .andExpect(request().attribute("accNum", is("G00031MO")));
+	    }
+	  
+	   @Test
+	    @Transactional
 	    public void testRegisterSupplementG00031MOComplete() throws Exception {
 	     
 	     Captcha captcha = new Captcha.Builder(200, 50)
