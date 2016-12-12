@@ -216,11 +216,31 @@ public class RegistriesController {
              return "register/literature/entry";
            }
 
+           UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext()
+               .getAuthentication().getPrincipal();
+           String userId = null;
+           if (null != userInfo && userInfo.getVerifiedEmail() != null
+               && userInfo.getVerifiedEmail().equals("true")
+               && StringUtils.isNotBlank(userInfo.getGivenName())) {
+             logger.debug("user is verified:>" + userInfo.getGivenName());
+             SparqlEntity seUserId;
+           try {
+             seUserId = contributorProcedure.searchContributor(userInfo.getEmail());
+           } catch (ContributorException e) {
+             return "redirect:/signin?errorMessage=Please sign in with a verified email address.";
+           }
+             if (null != seUserId)
+               userId = seUserId.getValue(Contributor.ID);
+           } else {
+             return "redirect:/signin?errorMessage=Please sign in with a verified email address or check our Given Name on Google Accounts.  Please refer to Profile page for details.";
+           }
+           
            HashMap<String, Object> map = new HashMap<>();
 //           map.put(LiteratureRest.USERNAME, "815e7cbca52763e5c3fbb5a4dccc176479a50e2367f920843c4c35dca112e33d");
 //           map.put(LiteratureRest.API_KEY, "b83f8b8040a584579ab9bf784ef6275fe47b5694b1adeb82e076289bf17c2632");
            map.put(LiteratureRest.ACCESSION_NUMBER, accessionNumber);
            map.put(LiteratureRest.PUBLICATION_ID, literatureId);
+           map.put(LiteratureRest.CONTRIBUTOR_ID, userId);
            map.put(LiteratureRest.REMOVE_FLAG, false);
            Map<String, Object> results = litClient.register(map);
            
@@ -499,9 +519,9 @@ public class RegistriesController {
 		} catch (ContributorException e) {
 			return "redirect:/signin?errorMessage=Please sign in with a verified email address.";
 		}
-		  if (null != seUserId)
-		    userId = seUserId.getValue(Contributor.ID);
-		  if (null == userId) {
+  	  if (null != seUserId)
+  	    userId = seUserId.getValue(Contributor.ID);
+//		  if (null == userId) {
 //		    
 //		    
 //		    // there is a chance the user modified the given name so contributor id could not be retrieved.
@@ -539,7 +559,7 @@ public class RegistriesController {
 //		        redirectAttrs.addAttribute("warningMessage", "Could not retrieve user information.  Please Login");
 //		        return "redirect:/signout";
 //		      }
-		  }
+//		  }
 		} else {
 			return "redirect:/signin?errorMessage=Please sign in with a verified email address or check our Given Name on Google Accounts.  Please refer to Profile page for details.";
 		}

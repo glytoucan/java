@@ -624,6 +624,17 @@ LIN
 	     
 	     mockHttpSession.putValue(NAME, captcha);
 	     assertThat(mockHttpSession.getAttribute(NAME), is(notNullValue()));
+	     
+       UserInfo userinfo = new UserInfo("123", "Administrator", "Administrator", "Toucan", "",
+           "https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg", null,
+           "aokinobu@gmail.com", "true");
+       OAuth2AccessToken token = new DefaultOAuth2AccessToken(tokenValue);
+
+       logger.debug("Token:>" + token.getValue());
+
+       Authentication auth = new PreAuthenticatedAuthenticationToken(userinfo, token, NO_AUTHORITIES);
+       
+       SecurityContextHolder.getContext().setAuthentication(auth);;
 
 	        mockMvc.perform(
 	            post("/Registries/supplement/G00031MO/complete").session(mockHttpSession).with(csrf()).with(user("test")).contentType(
