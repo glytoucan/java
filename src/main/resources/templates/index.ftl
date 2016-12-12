@@ -52,6 +52,10 @@
 	
 	<div class="topPageMain clearfix">
 		<div class="topPageMain_content">
+			
+			<iframe src="https://calendar.google.com/calendar/embed?title=Glytoucan%20Maintenance%20Schedule&amp;showDate=0&amp;showPrint=0&amp;showCalendars=0&amp;mode=AGENDA&amp;height=350&amp;wkst=1&amp;bgcolor=%2366cccc&amp;src=pvlg7h0vlac5t0lj7sudps5mto%40group.calendar.google.com&amp;color=%23711616&amp;ctz=Asia%2FTokyo" style="border:solid 1px #777" width="500" height="350" frameborder="0" scrolling="no"></iframe>
+			<br> <br> <br> <br>
+			
 			<div class="topPageColumn topPageColumn-01">
 				<p class="topPageColumn_title">${LeftTitle[0]}</p>
 				<p class="topPageColumn_text">${Left[0]}</p>
@@ -74,13 +78,13 @@
 				<ul class="topNav_items">
 					<li></li>
 				</ul>-->
-				<img src="/img/glytoucan_top.png" alt="glytoucan" width="240" height="250" class="image" />			</div>
+				<img src="/img/glytoucan_top.png" alt="glytoucan" width="250" height="450" class="image" />			</div>
 			<div class="topRight_twitterTimeline">
 			<!--	<p class="topNav_label">View All</p>
 				<ul class="topNav_items">
 					<li></li>
 				</ul> -->
-				<a class="twitter-timeline" width="240" height="250" href="https://twitter.com/glytoucan" data-widget-id="524091769575583744" lang="en">Tweets by @glytoucan</a>
+				<a class="twitter-timeline" width="250" height="450" href="https://twitter.com/glytoucan" data-widget-id="524091769575583744" lang="en">Tweets by @glytoucan</a>
             	<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
             	</script>
 			</div>
