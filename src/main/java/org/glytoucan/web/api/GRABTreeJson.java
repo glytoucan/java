@@ -13,11 +13,11 @@ import org.glycoinfo.rdf.glycan.Saccharide;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 @JsonSerialize
-public class D3_Tree_json {
+public class GRABTreeJson {
 
 	String name;
 //	Tree_json children;
-	List<Tree_json> children;
+	List<GRABTreeEachRelationship> children;
 
 	public String getName() {
 		return name;
@@ -27,11 +27,11 @@ public class D3_Tree_json {
 		this.name = name;
 	}
 
-	public List<Tree_json> getChildren() {
+	public List<GRABTreeEachRelationship> getChildren() {
 		return children;
 	}
 
-	public void setChildren(List<Tree_json> children) {
+	public void setChildren(List<GRABTreeEachRelationship> children) {
 		this.children = children;
 	}
 

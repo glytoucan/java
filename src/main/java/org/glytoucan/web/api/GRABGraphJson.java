@@ -1,6 +1,6 @@
 package org.glytoucan.web.api;
 
-public class GRAB_Graph_json {
+public class GRABGraphJson {
 	
 	private String grabGraphjson;
 	private String centerGlycanId;

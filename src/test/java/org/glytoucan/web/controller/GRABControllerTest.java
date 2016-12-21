@@ -1,8 +1,8 @@
 package org.glytoucan.web.controller;
 
 import org.glytoucan.web.Application;
-import org.glytoucan.web.api.D3_Tree_json;
-import org.glytoucan.web.controller.D3Controller;
+import org.glytoucan.web.api.GRABTreeJson;
+import org.glytoucan.web.controller.GRABController;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -19,18 +19,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ComponentScan(basePackages = { "org.glytoucan.web" })
 @EnableAutoConfiguration
-public class D3ControllerTest {
+public class GRABControllerTest {
 	public static Logger logger = (Logger) LoggerFactory
 			.getLogger("org.glytoucan.ws.controller.D3ControllerTest");
 
 	@Autowired
-	D3Controller D3; // D3という名前でD3Controllerを定義している
+	GRABController t_GRAB; // D3という名前でD3Controllerを定義している
 
 	@Test
 	public void testD3() throws Exception {
 
 //		D3_Tree_json result = D3.D3retrieve("GxxxxxxB");
-		D3_Tree_json result = D3.D3retrieve("G99981ST");
+		GRABTreeJson result = t_GRAB.D3retrieve("G99981ST");
 		ObjectMapper mapper = new ObjectMapper();
 		logger.debug(mapper.writeValueAsString(result));
 	}

@@ -60,7 +60,7 @@
  -->				<section id="grab" class="entryNew_section">
 					<h1 class="entryNew_heading">${glycanRDFAssociationBrowserGrab}</h1>
 					<togostanza-grabVisualizer acc="${accNum}"></togostanza-grabVisualizer>
-					<!-- <a class="entryNew_heading-2nd btn btn-primary" href="/D3_dndTree/${accNum}" role="button">Viewer</a> -->
+					<!-- <a class="entryNew_heading-2nd btn btn-primary" href="/GRABTree/${accNum}" role="button">Viewer</a> -->
 				</section>
 				<section id="descriptors" class="entryNew_section">
 					<h1 class="entryNew_heading">${computedDescriptors}</h1>

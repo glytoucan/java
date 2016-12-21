@@ -13,9 +13,9 @@ import org.glycoinfo.rdf.dao.SparqlEntity;
 import org.glycoinfo.rdf.glycan.Glycosidic_topology;
 import org.glycoinfo.rdf.glycan.Saccharide;
 import org.glycoinfo.rdf.utils.TripleStoreProperties;
-import org.glytoucan.web.api.D3_Tree_json;
-import org.glytoucan.web.api.TreeSequence;
-import org.glytoucan.web.api.Tree_json;
+import org.glytoucan.web.api.GRABTreeJson;
+import org.glytoucan.web.api.GRABTreeSequence;
+import org.glytoucan.web.api.GRABTreeEachRelationship;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -34,7 +34,7 @@ import com.wordnik.swagger.annotations.ApiResponses;
 @RestController
 @Api(value = "/Tree", description = "D3 Tree format")
 @RequestMapping("/Tree")
-public class D3Controller {
+public class GRABController {
 	protected Log logger = LogFactory.getLog(getClass());
 
 	@Autowired
@@ -131,9 +131,9 @@ public class D3Controller {
 	private final AtomicLong counter = new AtomicLong();
 
 	@RequestMapping(value = "/D3retrieve", method = RequestMethod.GET)
-	@ApiOperation(value = "Retrieve the sequence of json of D3 Tree ", response = D3_Tree_json.class)
+	@ApiOperation(value = "Retrieve the sequence of json of D3 Tree ", response = GRABTreeJson.class)
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Sequence retrieved successfully") })
-	public @ResponseBody D3_Tree_json D3retrieve(
+	public @ResponseBody GRABTreeJson D3retrieve(
 			@ApiParam(required = true, value = "id of the sequence") @RequestParam(value = "primaryId", defaultValue = "G00030MO") String primaryId) {
 		logger.debug("primaryId=" + primaryId + "<");
 		// error messageを返す（形式が違うもの）
@@ -212,7 +212,7 @@ public class D3Controller {
 			*/
 			
 		} catch (SparqlException e) {
-			D3_Tree_json a = new D3_Tree_json();
+			GRABTreeJson a = new GRABTreeJson();
 			a.setName("sorry");
 			return a;
 		}
@@ -226,23 +226,23 @@ public class D3Controller {
 		SparqlEntity super_se = null;
 		*/
 
-		D3_Tree_json a = new D3_Tree_json();
-		Tree_json b1 = new Tree_json();
-		Tree_json b2 = new Tree_json();
-		Tree_json b3 = new Tree_json();
-		Tree_json b4 = new Tree_json();
-		Tree_json b5 = new Tree_json();
-		Tree_json b6 = new Tree_json();
-		Tree_json b7 = new Tree_json();
-		TreeSequence c2 = new TreeSequence();
-		ArrayList<Tree_json> b_list = new ArrayList<Tree_json>();
-		ArrayList<TreeSequence> c_list1 = new ArrayList<TreeSequence>(); // MAPにする？
-		ArrayList<TreeSequence> c_list2 = new ArrayList<TreeSequence>();
-		ArrayList<TreeSequence> c_list3 = new ArrayList<TreeSequence>();
-		ArrayList<TreeSequence> c_list4 = new ArrayList<TreeSequence>();
-		ArrayList<TreeSequence> c_list5 = new ArrayList<TreeSequence>();
-		ArrayList<TreeSequence> c_list6 = new ArrayList<TreeSequence>();
-		ArrayList<TreeSequence> c_list7 = new ArrayList<TreeSequence>(); //No_reraltion_data
+		GRABTreeJson a = new GRABTreeJson();
+		GRABTreeEachRelationship b1 = new GRABTreeEachRelationship();
+		GRABTreeEachRelationship b2 = new GRABTreeEachRelationship();
+		GRABTreeEachRelationship b3 = new GRABTreeEachRelationship();
+		GRABTreeEachRelationship b4 = new GRABTreeEachRelationship();
+		GRABTreeEachRelationship b5 = new GRABTreeEachRelationship();
+		GRABTreeEachRelationship b6 = new GRABTreeEachRelationship();
+		GRABTreeEachRelationship b7 = new GRABTreeEachRelationship();
+		GRABTreeSequence c2 = new GRABTreeSequence();
+		ArrayList<GRABTreeEachRelationship> b_list = new ArrayList<GRABTreeEachRelationship>();
+		ArrayList<GRABTreeSequence> c_list1 = new ArrayList<GRABTreeSequence>(); // MAPにする？
+		ArrayList<GRABTreeSequence> c_list2 = new ArrayList<GRABTreeSequence>();
+		ArrayList<GRABTreeSequence> c_list3 = new ArrayList<GRABTreeSequence>();
+		ArrayList<GRABTreeSequence> c_list4 = new ArrayList<GRABTreeSequence>();
+		ArrayList<GRABTreeSequence> c_list5 = new ArrayList<GRABTreeSequence>();
+		ArrayList<GRABTreeSequence> c_list6 = new ArrayList<GRABTreeSequence>();
+		ArrayList<GRABTreeSequence> c_list7 = new ArrayList<GRABTreeSequence>(); //No_reraltion_data
 		int check = 0;
 		
 		try {
@@ -252,7 +252,7 @@ public class D3Controller {
 			c2.setName("test_TreeJson");
 			if (list_motif != null) {
 				for (SparqlEntity i : list_motif) {
-					TreeSequence c1 = new TreeSequence();
+					GRABTreeSequence c1 = new GRABTreeSequence();
 					motif_se = list_motif.get(j);
 					// logger.debug("list.motif" + se.getValue("motif") + "<");
 	
@@ -296,7 +296,7 @@ public class D3Controller {
 			c2.setName("test_TreeJson");
 			if (list_isomer != null) {
 				for (SparqlEntity i : list_isomer) {
-					TreeSequence c1 = new TreeSequence();
+					GRABTreeSequence c1 = new GRABTreeSequence();
 					isomer_se = list_isomer.get(j);
 					String isomerName = isomer_se.getValue("isomer");
 					c1.setName(isomerName);
@@ -331,7 +331,7 @@ public class D3Controller {
 			c2.setName("test_TreeJson");
 			if (list_topology != null) {
 				for (SparqlEntity i : list_topology) {
-					TreeSequence c1 = new TreeSequence();
+					GRABTreeSequence c1 = new GRABTreeSequence();
 					topology_se = list_topology.get(j);
 					String topologyName = topology_se.getValue("topology_id");
 					c1.setName(topologyName);
@@ -366,7 +366,7 @@ public class D3Controller {
 			c2.setName("test_TreeJson");
 			if (list_topologyby != null) {
 				for (SparqlEntity i : list_topologyby) {
-					TreeSequence c1 = new TreeSequence();
+					GRABTreeSequence c1 = new GRABTreeSequence();
 					topologyby_se = list_topologyby.get(j);
 					String topologyByName = topologyby_se.getValue("id");
 					c1.setName(topologyByName);
@@ -489,9 +489,9 @@ public class D3Controller {
 
 	
 	@RequestMapping(value = "/D3retrieve2", method = RequestMethod.GET)
-	@ApiOperation(value = "Retrieve the sequence of json of D3 Tree ", response = D3_Tree_json.class)
+	@ApiOperation(value = "Retrieve the sequence of json of D3 Tree ", response = GRABTreeJson.class)
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Sequence retrieved successfully") })
-	public @ResponseBody D3_Tree_json D3retrieve2(
+	public @ResponseBody GRABTreeJson D3retrieve2(
 			@ApiParam(required = true, value = "id of the sequence") @RequestParam(value = "primaryId", defaultValue = "G00030MO") String primaryId) {
 		logger.debug("primaryId=" + primaryId + "<");	
 		// error messageを返す（形式が違うもの）
@@ -519,20 +519,20 @@ public class D3Controller {
 			logger.debug(isomer_ss.getSparql());
 			list_isomer = sparqlDAO.query(isomer_ss);
 		} catch (SparqlException e) {
-			D3_Tree_json a = new D3_Tree_json();
+			GRABTreeJson a = new GRABTreeJson();
 			a.setName("sorry");
 			return a;
 		}
 		SparqlEntity motif_se = null;
 		SparqlEntity isomer_se = null;
 
-		D3_Tree_json a = new D3_Tree_json();
-		Tree_json b1 = new Tree_json();
-		Tree_json b2 = new Tree_json();
-		TreeSequence c2 = new TreeSequence();
-		ArrayList<Tree_json> b_list = new ArrayList<Tree_json>();
-		ArrayList<TreeSequence> c_list1 = new ArrayList<TreeSequence>(); // MAPにする？
-		ArrayList<TreeSequence> c_list2 = new ArrayList<TreeSequence>();
+		GRABTreeJson a = new GRABTreeJson();
+		GRABTreeEachRelationship b1 = new GRABTreeEachRelationship();
+		GRABTreeEachRelationship b2 = new GRABTreeEachRelationship();
+		GRABTreeSequence c2 = new GRABTreeSequence();
+		ArrayList<GRABTreeEachRelationship> b_list = new ArrayList<GRABTreeEachRelationship>();
+		ArrayList<GRABTreeSequence> c_list1 = new ArrayList<GRABTreeSequence>(); // MAPにする？
+		ArrayList<GRABTreeSequence> c_list2 = new ArrayList<GRABTreeSequence>();
 		int check = 0;
 		
 		try {
@@ -542,7 +542,7 @@ public class D3Controller {
 			c2.setName("test_TreeJson");
 			if (list_motif != null) {
 				for (SparqlEntity i : list_motif) {
-					TreeSequence c1 = new TreeSequence();
+					GRABTreeSequence c1 = new GRABTreeSequence();
 					motif_se = list_motif.get(j);
 					// logger.debug("list.motif" + se.getValue("motif") + "<");
 	
@@ -581,7 +581,7 @@ public class D3Controller {
 			c2.setName("test_TreeJson");
 			if (list_isomer != null) {
 				for (SparqlEntity i : list_isomer) {
-					TreeSequence c1 = new TreeSequence();
+					GRABTreeSequence c1 = new GRABTreeSequence();
 					isomer_se = list_isomer.get(j);
 					String isomerName = isomer_se.getValue("isomer");
 					c1.setName(isomerName);

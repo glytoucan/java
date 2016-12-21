@@ -15,7 +15,7 @@ import org.glycoinfo.rdf.glycan.Saccharide;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 @JsonSerialize
-public class TreeSequence {
+public class GRABTreeSequence {
 	
 	String name;
 	int size;

@@ -159,7 +159,7 @@
 	 	 <ul>
 	 	 <br><br><font size="6" color="black"><center><U>GRAB Tree</U></center></font><br>
 		 <font size="5" color="black"><center>${ID}</center></font>
-	 	 <li><a href="/GRAB_Graph/${ID}">GRAB Graph</a></li>
+	 	 <li><a href="/GRABGraph/${ID}">GRAB Graph</a></li>
 	 	 <li><a href="/Structures/Glycans/${ID}">Return</a></li>
 	 	 <font size="1" color="black"><B>GRAB</B> allows users to easily understand the relationships of glycan structures in an informational graphic.</font><br>
 	 	 <font size="1" color="black"><B>GRAB Tree</B> displays multiple relationships in tree format.  Relationships such as motifs, superstructures, substructures, and topology will be displayed as they become available.</font><br>
@@ -246,7 +246,7 @@ var menu = [
 			// Center on this glycan
 			if (d.name != null) {
 				// link to this glycan's relation
-				location.href = "/D3_dndTree/" + d.name;
+				location.href = "/GRABTree/" + d.name;
 			}
 		}
 	},

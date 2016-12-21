@@ -17,7 +17,7 @@ import org.glytoucan.web.api.GRABGraphEdgeIdSequence;
 import org.glytoucan.web.api.GRABGraphNodeData;
 import org.glytoucan.web.api.GRABGraphNodeIdSequence;
 import org.glytoucan.web.api.GRABGraphNodePositionSequence;
-import org.glytoucan.web.api.GRAB_Graph_json;
+import org.glytoucan.web.api.GRABGraphJson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -161,7 +161,7 @@ public class GRABGraphController {
 			*/
 			
 		} catch (SparqlException e) {
-			GRAB_Graph_json a = new GRAB_Graph_json();
+			GRABGraphJson a = new GRABGraphJson();
 			a.setGrabGraphjson("sorry");
 			return a.getGrabGraphjson();
 		}
@@ -172,7 +172,7 @@ public class GRABGraphController {
 		SparqlEntity super_se = null;
 		*/
 
-		GRAB_Graph_json a = new GRAB_Graph_json();
+		GRABGraphJson a = new GRABGraphJson();
 		ArrayList<GRABGraphNodeData> nodeData_list = new ArrayList<GRABGraphNodeData>();
 		//ArrayList<GRABGraphEdgeData> edgeData_list = new ArrayList<GRABGraphEdgeData>();
 		

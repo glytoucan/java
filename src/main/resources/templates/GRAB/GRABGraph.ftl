@@ -7,6 +7,7 @@
 <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
 
 <script src="//code.jquery.com/jquery-2.0.3.min.js"></script>
+<script src="//cytoscape.github.io/cytoscape.js/api/cytoscape.js-latest/cytoscape.min.js"></script>
 <script src="https://raw.githubusercontent.com/cytoscape/cytoscape.js/v2.7.13/dist/cytoscape.min.js"></script>
 <link data-require="fontawesome@4.1.0" data-semver="4.2.0" rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" />
 
@@ -563,7 +564,7 @@
 	                onClickFunction: function (event) {
 	                  var sel = event.cyTarget.id();
 	                  if ( sel != null) {
-	                    location.href = "/GRAB_Graph/" + sel;
+	                    location.href = "/GRABGraph/" + sel;
 	            			}
 	                },
 	              },
@@ -1635,7 +1636,7 @@
 	 	 <br><font size="6" color="black"><center><U>GRAB Graph</U></center></font>
 	 	 <span style="line-height:100%"></span><br>
 		 <font size="5" color="black"><center>${ID}</center></font>
-	 	 <li><a href="/D3_dndTree/${ID}">GRAB Tree</a></li>
+	 	 <li><a href="/GRABTree/${ID}">GRAB Tree</a></li>
 	 	 <li><a href="/Structures/Glycans/${ID}">Return</a></li>
 	 	 <span style="line-height:100%"><font size="1" color="black"><B>GRAB</B> allows users to easily understand the relationships of glycan structures in an informational graphic.</font></span><br>
 	 	 <span style="line-height:100%"><font size="1" color="black"><B>GRAB Tree</B> displays multiple relationships in tree format.  Relationships such as motifs, superstructures, substructures, and topology will be displayed as they become available.</font></span><br>

@@ -5,29 +5,29 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.Date;
 
-import org.glytoucan.web.api.D3_Tree_json;
-import org.glytoucan.web.api.TreeSequence;
-import org.glytoucan.web.api.Tree_json;
+import org.glytoucan.web.api.GRABTreeJson;
+import org.glytoucan.web.api.GRABTreeSequence;
+import org.glytoucan.web.api.GRABTreeEachRelationship;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class D3TreeConfirmTest {
+public class GRABTreeConfirmTest {
 	public static Logger logger = (Logger) LoggerFactory
-			.getLogger(D3TreeConfirmTest.class);
+			.getLogger(GRABTreeConfirmTest.class);
 
 	@Test
 	public void jsonSerializationTest() throws Exception {
-		D3_Tree_json a = new D3_Tree_json();
-		Tree_json b1 = new Tree_json();
-		Tree_json b2 = new Tree_json();
-		TreeSequence c1 = new TreeSequence();
-		TreeSequence c2 = new TreeSequence();
-		TreeSequence c3 = new TreeSequence();
-		ArrayList<Tree_json> b_list = new ArrayList<Tree_json>();
-		ArrayList<TreeSequence> c_list = new ArrayList<TreeSequence>();
+		GRABTreeJson a = new GRABTreeJson();
+		GRABTreeEachRelationship b1 = new GRABTreeEachRelationship();
+		GRABTreeEachRelationship b2 = new GRABTreeEachRelationship();
+		GRABTreeSequence c1 = new GRABTreeSequence();
+		GRABTreeSequence c2 = new GRABTreeSequence();
+		GRABTreeSequence c3 = new GRABTreeSequence();
+		ArrayList<GRABTreeEachRelationship> b_list = new ArrayList<GRABTreeEachRelationship>();
+		ArrayList<GRABTreeSequence> c_list = new ArrayList<GRABTreeSequence>();
 
 		a.setName("G99981ST");
 		// c.setName("Goo");
@@ -46,7 +46,7 @@ public class D3TreeConfirmTest {
 
 		b1.setChildren(c_list);
 		b2.setName("has_sumption");
-		ArrayList<TreeSequence> c_list2 = new ArrayList<TreeSequence>();		
+		ArrayList<GRABTreeSequence> c_list2 = new ArrayList<GRABTreeSequence>();		
 		c_list2.add(c3);
 		b2.setChildren(c_list2);
 		
