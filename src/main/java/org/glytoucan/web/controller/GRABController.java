@@ -488,134 +488,134 @@ public class GRABController {
 
 
 	
-	@RequestMapping(value = "/D3retrieve2", method = RequestMethod.GET)
-	@ApiOperation(value = "Retrieve the sequence of json of D3 Tree ", response = GRABTreeJson.class)
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "Sequence retrieved successfully") })
-	public @ResponseBody GRABTreeJson D3retrieve2(
-			@ApiParam(required = true, value = "id of the sequence") @RequestParam(value = "primaryId", defaultValue = "G00030MO") String primaryId) {
-		logger.debug("primaryId=" + primaryId + "<");	
-		// error messageを返す（形式が違うもの）
-		List<SparqlEntity> list_motif = null;
-		List<SparqlEntity> list_isomer = null;
-
-		try {
-			/* motif*/
-			SelectSparql motif_ss = getSelectD3Sparql_motif();
-			SparqlEntity motif_se = motif_ss.getSparqlEntity();
-			if (null == motif_ss.getSparqlEntity())
-				motif_se = new SparqlEntity();
-			motif_se.setValue(Saccharide.PrimaryId, primaryId);
-			motif_ss.setSparqlEntity(motif_se);
-			logger.debug(motif_ss.getSparql());
-			list_motif = sparqlDAO.query(motif_ss);
-			
-			/* isomer*/
-			SelectSparql isomer_ss = getSelectD3Sparql_isomer();
-			SparqlEntity isomer_se = isomer_ss.getSparqlEntity();
-			if (null == isomer_ss.getSparqlEntity())
-				isomer_se = new SparqlEntity();
-			isomer_se.setValue(Saccharide.PrimaryId, primaryId);
-			isomer_ss.setSparqlEntity(isomer_se);	
-			logger.debug(isomer_ss.getSparql());
-			list_isomer = sparqlDAO.query(isomer_ss);
-		} catch (SparqlException e) {
-			GRABTreeJson a = new GRABTreeJson();
-			a.setName("sorry");
-			return a;
-		}
-		SparqlEntity motif_se = null;
-		SparqlEntity isomer_se = null;
-
-		GRABTreeJson a = new GRABTreeJson();
-		GRABTreeEachRelationship b1 = new GRABTreeEachRelationship();
-		GRABTreeEachRelationship b2 = new GRABTreeEachRelationship();
-		GRABTreeSequence c2 = new GRABTreeSequence();
-		ArrayList<GRABTreeEachRelationship> b_list = new ArrayList<GRABTreeEachRelationship>();
-		ArrayList<GRABTreeSequence> c_list1 = new ArrayList<GRABTreeSequence>(); // MAPにする？
-		ArrayList<GRABTreeSequence> c_list2 = new ArrayList<GRABTreeSequence>();
-		int check = 0;
-		
-		try {
-			// table to d3 class
-			int j = 0;
-			int k = 0;
-			c2.setName("test_TreeJson");
-			if (list_motif != null) {
-				for (SparqlEntity i : list_motif) {
-					GRABTreeSequence c1 = new GRABTreeSequence();
-					motif_se = list_motif.get(j);
-					// logger.debug("list.motif" + se.getValue("motif") + "<");
-	
-					String motifName = motif_se.getValue("motif");
-					c1.setName(motifName);
-					c1.setSize(1);
-					if (c1.getName().length() == 0) {
-						check++;
-						logger.debug("check="+ check);
-						break;
-					}  else {
-						b1.setName("has_motif");
-						c_list1.add(c1);
-						k++;
-						/* 昔のverのmotifの場所にだけ残しておく、他の場所は消す
-						if (c1.getName().equals(c2.getName())) { // c1Name.equals(c2Name)
-							break;
-						} else {
-							c_list1.add(c1);
-							k++;
-						}
-						*/
-					}
-					c2.setName(c1.getName());
-					j++;
-				}
-				if (k != 0) {
-					logger.debug("clist1がblistに");
-					b1.setChildren(c_list1);
-					b_list.add(b1);
-				}
-			}
-
-			j = 0;
-			k = 0;
-			c2.setName("test_TreeJson");
-			if (list_isomer != null) {
-				for (SparqlEntity i : list_isomer) {
-					GRABTreeSequence c1 = new GRABTreeSequence();
-					isomer_se = list_isomer.get(j);
-					String isomerName = isomer_se.getValue("isomer");
-					c1.setName(isomerName);
-					c1.setSize(2);
-					if (c1.getName().length() == 0) {
-						check++;
-						logger.debug("check="+ check);
-						break;
-					} else {
-						b2.setName("has_linkage_isomer");
-						c_list2.add(c1);
-						k++;
-					}
-					c2.setName(c1.getName());
-					j++;
-				}
-				if (k != 0) {
-					logger.debug("clist2がblistに");
-					b2.setChildren(c_list2);
-					b_list.add(b2);
-				}
-			}
-			a.setName(primaryId);
-			a.setChildren(b_list);
-
-		} catch (java.lang.IndexOutOfBoundsException ie) {
-			return null;
-		}
-		// GlycoSequence gs = new GlycoSequence(counter.incrementAndGet(),
-		// primaryId);
-		// gs.setSequence(se.getValue(org.glycoinfo.rdf.glycan.GlycoSequence.Sequence));
-
-		return a;
-	}
+//	@RequestMapping(value = "/D3retrieve2", method = RequestMethod.GET)
+//	@ApiOperation(value = "Retrieve the sequence of json of D3 Tree ", response = GRABTreeJson.class)
+//	@ApiResponses(value = { @ApiResponse(code = 200, message = "Sequence retrieved successfully") })
+//	public @ResponseBody GRABTreeJson D3retrieve2(
+//			@ApiParam(required = true, value = "id of the sequence") @RequestParam(value = "primaryId", defaultValue = "G00030MO") String primaryId) {
+//		logger.debug("primaryId=" + primaryId + "<");	
+//		// error messageを返す（形式が違うもの）
+//		List<SparqlEntity> list_motif = null;
+//		List<SparqlEntity> list_isomer = null;
+//
+//		try {
+//			/* motif*/
+//			SelectSparql motif_ss = getSelectD3Sparql_motif();
+//			SparqlEntity motif_se = motif_ss.getSparqlEntity();
+//			if (null == motif_ss.getSparqlEntity())
+//				motif_se = new SparqlEntity();
+//			motif_se.setValue(Saccharide.PrimaryId, primaryId);
+//			motif_ss.setSparqlEntity(motif_se);
+//			logger.debug(motif_ss.getSparql());
+//			list_motif = sparqlDAO.query(motif_ss);
+//			
+//			/* isomer*/
+//			SelectSparql isomer_ss = getSelectD3Sparql_isomer();
+//			SparqlEntity isomer_se = isomer_ss.getSparqlEntity();
+//			if (null == isomer_ss.getSparqlEntity())
+//				isomer_se = new SparqlEntity();
+//			isomer_se.setValue(Saccharide.PrimaryId, primaryId);
+//			isomer_ss.setSparqlEntity(isomer_se);	
+//			logger.debug(isomer_ss.getSparql());
+//			list_isomer = sparqlDAO.query(isomer_ss);
+//		} catch (SparqlException e) {
+//			GRABTreeJson a = new GRABTreeJson();
+//			a.setName("sorry");
+//			return a;
+//		}
+//		SparqlEntity motif_se = null;
+//		SparqlEntity isomer_se = null;
+//
+//		GRABTreeJson a = new GRABTreeJson();
+//		GRABTreeEachRelationship b1 = new GRABTreeEachRelationship();
+//		GRABTreeEachRelationship b2 = new GRABTreeEachRelationship();
+//		GRABTreeSequence c2 = new GRABTreeSequence();
+//		ArrayList<GRABTreeEachRelationship> b_list = new ArrayList<GRABTreeEachRelationship>();
+//		ArrayList<GRABTreeSequence> c_list1 = new ArrayList<GRABTreeSequence>(); // MAPにする？
+//		ArrayList<GRABTreeSequence> c_list2 = new ArrayList<GRABTreeSequence>();
+//		int check = 0;
+//		
+//		try {
+//			// table to d3 class
+//			int j = 0;
+//			int k = 0;
+//			c2.setName("test_TreeJson");
+//			if (list_motif != null) {
+//				for (SparqlEntity i : list_motif) {
+//					GRABTreeSequence c1 = new GRABTreeSequence();
+//					motif_se = list_motif.get(j);
+//					// logger.debug("list.motif" + se.getValue("motif") + "<");
+//	
+//					String motifName = motif_se.getValue("motif");
+//					c1.setName(motifName);
+//					c1.setSize(1);
+//					if (c1.getName().length() == 0) {
+//						check++;
+//						logger.debug("check="+ check);
+//						break;
+//					}  else {
+//						b1.setName("has_motif");
+//						c_list1.add(c1);
+//						k++;
+//						/* 昔のverのmotifの場所にだけ残しておく、他の場所は消す
+//						if (c1.getName().equals(c2.getName())) { // c1Name.equals(c2Name)
+//							break;
+//						} else {
+//							c_list1.add(c1);
+//							k++;
+//						}
+//						*/
+//					}
+//					c2.setName(c1.getName());
+//					j++;
+//				}
+//				if (k != 0) {
+//					logger.debug("clist1がblistに");
+//					b1.setChildren(c_list1);
+//					b_list.add(b1);
+//				}
+//			}
+//
+//			j = 0;
+//			k = 0;
+//			c2.setName("test_TreeJson");
+//			if (list_isomer != null) {
+//				for (SparqlEntity i : list_isomer) {
+//					GRABTreeSequence c1 = new GRABTreeSequence();
+//					isomer_se = list_isomer.get(j);
+//					String isomerName = isomer_se.getValue("isomer");
+//					c1.setName(isomerName);
+//					c1.setSize(2);
+//					if (c1.getName().length() == 0) {
+//						check++;
+//						logger.debug("check="+ check);
+//						break;
+//					} else {
+//						b2.setName("has_linkage_isomer");
+//						c_list2.add(c1);
+//						k++;
+//					}
+//					c2.setName(c1.getName());
+//					j++;
+//				}
+//				if (k != 0) {
+//					logger.debug("clist2がblistに");
+//					b2.setChildren(c_list2);
+//					b_list.add(b2);
+//				}
+//			}
+//			a.setName(primaryId);
+//			a.setChildren(b_list);
+//
+//		} catch (java.lang.IndexOutOfBoundsException ie) {
+//			return null;
+//		}
+//		// GlycoSequence gs = new GlycoSequence(counter.incrementAndGet(),
+//		// primaryId);
+//		// gs.setSequence(se.getValue(org.glycoinfo.rdf.glycan.GlycoSequence.Sequence));
+//
+//		return a;
+//	}
 	
 /*	@RequestMapping(value = "/D3retrieve3", method = RequestMethod.GET)
 	@ApiOperation(value = "Retrieve the sequence of json of D3 Tree ", response = D3_Tree_json.class)
