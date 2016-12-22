@@ -189,7 +189,7 @@
 		<dependency>
 			<groupId>org.glytoucan</groupId>
 			<artifactId>gtc-wurcs</artifactId>
-			<version>1.0.1-SNAPSHOT</version>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>	
 	</dependencies>
 
