@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @EnableAutoConfiguration
 public class GRABControllerTest {
 	public static Logger logger = (Logger) LoggerFactory
-			.getLogger("org.glytoucan.ws.controller.D3ControllerTest");
+			.getLogger("org.glytoucan.ws.controller.GRABControllerTest");
 
 	@Autowired
 	GRABController t_GRAB; // D3という名前でD3Controllerを定義している

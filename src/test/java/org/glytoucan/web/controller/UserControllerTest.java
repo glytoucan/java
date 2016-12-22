@@ -47,7 +47,7 @@ import com.github.fromi.openidconnect.security.UserInfo;
 @SpringApplicationConfiguration(classes = { Application.class })
 @WebAppConfiguration
 public class UserControllerTest {
-  public static Logger logger = (Logger) LoggerFactory.getLogger("org.glytoucan.ws.controller.D3ControllerTest");
+  public static Logger logger = (Logger) LoggerFactory.getLogger("org.glytoucan.ws.controller.GRABControllerTest");
 
   @Autowired
   UserController userC;

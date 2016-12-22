@@ -56,7 +56,7 @@
 				</li>
 				<!-- Visualization Tool -->
 				<li class="entryMain_menuList">
-					<a class="entryMain_menuText" href="/D3_dndTree/${accNum}">${visualizationTool}</a>
+					<a class="entryMain_menuText" href="/GRABTree/${accNum}">${visualizationTool}</a>
 				</li>
 			</ul>
 		</div><!--/.entryMain_menu-->
