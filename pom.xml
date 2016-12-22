@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>org.glytoucan</groupId>
 		<artifactId>pom</artifactId>
-		<version>1.2.7-TOCO</version>
+		<version>1.2.8-TOCO-SNAPSHOT</version>
 	</parent>
 
 	<properties>
@@ -163,7 +163,7 @@
 		<dependency>
 			<groupId>org.glytoucan</groupId>
 			<artifactId>adminClient</artifactId>
-			<version>${project.version}</version>
+			<version>1.2.7-TOCO</version>
 		</dependency>
 		<dependency>
 			<groupId>org.glytoucan</groupId>

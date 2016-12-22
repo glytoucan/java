@@ -637,7 +637,7 @@ LIN
        SecurityContextHolder.getContext().setAuthentication(auth);;
 
 	        mockMvc.perform(
-	            post("/Registries/supplement/G00031MO/complete").session(mockHttpSession).with(csrf()).with(user("test")).contentType(
+	            post("/Registries/supplement/G00031MO/complete").session(mockHttpSession).with(csrf()).contentType(
 	                MediaType.APPLICATION_FORM_URLENCODED)
               .param("captcha", captcha.getAnswer())
 	            .param("accessionNumber", "G00031MO")

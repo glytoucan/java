@@ -7,6 +7,7 @@ import java.security.Principal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -1040,6 +1041,15 @@ public class GlycanController {
     	} else if (format.equalsIgnoreCase("jpg") || format.equalsIgnoreCase("jpeg")) {
     		headers.setContentType(MediaType.IMAGE_JPEG);
     	}
+    	
+      int noOfDays = 14; //i.e two weeks
+      Calendar calendar = Calendar.getInstance();
+      calendar.add(Calendar.DAY_OF_YEAR, noOfDays);
+      Date date = calendar.getTime();
+      headers.setExpires(date.getTime());
+      logger.debug("expires on :>" + date.getTime() + "<");
+    	
+    	
 		return new ResponseEntity<byte[]>(bytes, headers, HttpStatus.OK);
     }
     
