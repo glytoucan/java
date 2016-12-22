@@ -40,8 +40,13 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td><a href="/Structures/Glycans/${sequenceInput.id}" target="_blank">${sequenceInput.id}</a></td>
+				<tr><td>
+				<#if sequenceInput.id?starts_with("not registered")>
+					${sequenceInput.id}
+				<#else>
+					<a href="/Structures/Glycans/${sequenceInput.id}" target="_blank">${sequenceInput.id}</a>
+				</#if>
+				</td>
 					<td width="60%"><img src="${sequenceInput.image}"><p></td>
 				</tr>
 			</tbody>

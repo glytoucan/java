@@ -183,7 +183,7 @@ public class LocalizationHandlerMapping extends HandlerInterceptorAdapter {
 				} else {
 					logger.debug("file exists at:" + file.getAbsolutePath());
 				}
-				logger.info("size of file:>" + file.getTotalSpace());
+				logger.debug("size of file:>" + file.getTotalSpace());
 				rootNode = mapper.readTree(file);
 
 			} catch (IOException e1) {
