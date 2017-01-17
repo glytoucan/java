@@ -60,6 +60,7 @@ public class GRABController {
 		return selectD3Sparql_motif;
 	}
 	
+	/*
 	@Autowired
 	@Qualifier(value = "d3SequenceSelectSparql_isomer")
 	private SelectSparql selectD3Sparql_isomer;
@@ -76,7 +77,7 @@ public class GRABController {
 	TripleStoreProperties getTripleStoreProperties() {
 		return new TripleStoreProperties();
 	}
-	
+	*/
 	/*
 	@Autowired
 	@Qualifier(value = "d3SequenceSelectSparql_sub")
@@ -100,6 +101,32 @@ public class GRABController {
 
 	public SelectSparql getSelectD3Sparql_super() {
 		return selectD3Sparql_super;
+	}
+	*/
+	
+	/*
+	@Autowired
+	@Qualifier(value = "GRABSequenceSelectSparql_subsumes")
+	private SelectSparql selectGRABSparql_subsumes;
+
+	public void setSelectGRABSparql_subsumes(SelectSparql read) {
+		this.selectGRABSparql_subsumes = read;
+	}
+
+	public SelectSparql getSelectGRABSparql_subsumes() {
+		return selectGRABSparql_subsumes;
+	}
+	
+	@Autowired
+	@Qualifier(value = "GRABSequenceSelectSparql_subsumedby")
+	private SelectSparql selectGRABSparql_subsumedby;
+
+	public void setSelectGRABSparql_subsumedby(SelectSparql read) {
+		this.selectGRABSparql_subsumedby = read;
+	}
+
+	public SelectSparql getSelectGRABSparql_subsumedby() {
+		return selectGRABSparql_subsumedby;
 	}
 	*/
 	
@@ -139,11 +166,13 @@ public class GRABController {
 		// error messageを返す（形式が違うもの）
 		/*List<SparqlEntity> list = new ArrayList<SparqlEntity>();*/
 		List<SparqlEntity> list_motif = null;
-		List<SparqlEntity> list_isomer = null;
+		//List<SparqlEntity> list_isomer = null;
 		List<SparqlEntity> list_topology = null;
 		List<SparqlEntity> list_topologyby = null;
 		
 		/*
+		 List<SparqlEntity> list_subsumes = null;
+		 List<SparqlEntity> list_subsumedby = null;	
 		 List<SparqlEntity> list_sub = null;
 		 List<SparqlEntity> list_super = null; 
 		*/
@@ -159,15 +188,15 @@ public class GRABController {
 			logger.debug(motif_ss.getSparql());
 			list_motif = sparqlDAO.query(motif_ss);
 			
-			/* isomer*/
-			SelectSparql isomer_ss = getSelectD3Sparql_isomer();
-			SparqlEntity isomer_se = isomer_ss.getSparqlEntity();
-			if (null == isomer_ss.getSparqlEntity())
-				isomer_se = new SparqlEntity();
-			isomer_se.setValue(Saccharide.PrimaryId, primaryId);
-			isomer_ss.setSparqlEntity(isomer_se);	
-			logger.debug(isomer_ss.getSparql());
-			list_isomer = sparqlDAO.query(isomer_ss);
+//			/* isomer*/
+//			SelectSparql isomer_ss = getSelectD3Sparql_isomer();
+//			SparqlEntity isomer_se = isomer_ss.getSparqlEntity();
+//			if (null == isomer_ss.getSparqlEntity())
+//				isomer_se = new SparqlEntity();
+//			isomer_se.setValue(Saccharide.PrimaryId, primaryId);
+//			isomer_ss.setSparqlEntity(isomer_se);	
+//			logger.debug(isomer_ss.getSparql());
+//			list_isomer = sparqlDAO.query(isomer_ss);
 			
 			// topology
 			SelectSparql topology_ss = getSelectD3Sparql_topology();
@@ -217,7 +246,7 @@ public class GRABController {
 			return a;
 		}
 		SparqlEntity motif_se = null;
-		SparqlEntity isomer_se = null;
+		//SparqlEntity isomer_se = null;
 		SparqlEntity topology_se = null;
 		SparqlEntity topologyby_se = null;
 		
@@ -291,41 +320,41 @@ public class GRABController {
 				}
 			}
 
-			j = 0;
-			k = 0;
-			c2.setName("test_TreeJson");
-			if (list_isomer != null) {
-				for (SparqlEntity i : list_isomer) {
-					GRABTreeSequence c1 = new GRABTreeSequence();
-					isomer_se = list_isomer.get(j);
-					String isomerName = isomer_se.getValue("isomer");
-					c1.setName(isomerName);
-					c1.setSize(2);
-					if (c1.getName().length() == 0) {
-						check++;
-						logger.debug("check="+ check);
-						c1.setName("None");
-						c_list2.add(c1);
-						b2.setName("has_linkage_isomer");
-						b2.setChildren(c_list2);
-						b_list.add(b2);
-						break;
-					} else {
-						b2.setName("has_linkage_isomer");
-						c_list2.add(c1);
-						k++;
-					}
-					c2.setName(c1.getName());
-					j++;
-				}
-				if (k != 0) {
-					logger.debug("clist2がblistに");
-					b2.setChildren(c_list2);
-					b_list.add(b2);
-				}
-			}
-			
-			// topology
+//			j = 0;
+//			k = 0;
+//			c2.setName("test_TreeJson");
+//			if (list_isomer != null) {
+//				for (SparqlEntity i : list_isomer) {
+//					GRABTreeSequence c1 = new GRABTreeSequence();
+//					isomer_se = list_isomer.get(j);
+//					String isomerName = isomer_se.getValue("isomer");
+//					c1.setName(isomerName);
+//					c1.setSize(2);
+//					if (c1.getName().length() == 0) {
+//						check++;
+//						logger.debug("check="+ check);
+//						c1.setName("None");
+//						c_list2.add(c1);
+//						b2.setName("has_linkage_isomer");
+//						b2.setChildren(c_list2);
+//						b_list.add(b2);
+//						break;
+//					} else {
+//						b2.setName("has_linkage_isomer");
+//						c_list2.add(c1);
+//						k++;
+//					}
+//					c2.setName(c1.getName());
+//					j++;
+//				}
+//				if (k != 0) {
+//					logger.debug("clist2がblistに");
+//					b2.setChildren(c_list2);
+//					b_list.add(b2);
+//				}
+//			}
+
+			// subsumes
 			j = 0;
 			k = 0;
 			c2.setName("test_TreeJson");
@@ -341,12 +370,12 @@ public class GRABController {
 						logger.debug("check="+ check);
 						c1.setName("None");
 						c_list5.add(c1);
-						b5.setName("has_topology");
+						b5.setName("subsumes");
 						b5.setChildren(c_list5);
 						b_list.add(b5);
 						break;
 					} else {
-						b5.setName("has_topology");
+						b5.setName("subsumes");
 						c_list5.add(c1);
 						k++;
 					}
@@ -360,7 +389,7 @@ public class GRABController {
 				}
 			}
 
-			//topologyby
+			// subsumed_by
 			j = 0;
 			k = 0;
 			c2.setName("test_TreeJson");
@@ -376,12 +405,12 @@ public class GRABController {
 						logger.debug("check="+ check);
 						c1.setName("None");
 						c_list6.add(c1);
-						b6.setName("topology_contained_by");
+						b6.setName("subsumed_by");
 						b6.setChildren(c_list6);
 						b_list.add(b6);
 						break;
 					} else {
-						b6.setName("topology_contained_by");
+						b6.setName("subsumed_by");
 						c_list6.add(c1);
 						k++;
 					}
@@ -394,6 +423,76 @@ public class GRABController {
 					b_list.add(b6);
 				}
 			}
+			
+//			// topology
+//			j = 0;
+//			k = 0;
+//			c2.setName("test_TreeJson");
+//			if (list_topology != null) {
+//				for (SparqlEntity i : list_topology) {
+//					GRABTreeSequence c1 = new GRABTreeSequence();
+//					topology_se = list_topology.get(j);
+//					String topologyName = topology_se.getValue("topology_id");
+//					c1.setName(topologyName);
+//					c1.setSize(5);
+//					if (c1.getName().length() == 0) {
+//						check++;
+//						logger.debug("check="+ check);
+//						c1.setName("None");
+//						c_list5.add(c1);
+//						b5.setName("has_topology");
+//						b5.setChildren(c_list5);
+//						b_list.add(b5);
+//						break;
+//					} else {
+//						b5.setName("has_topology");
+//						c_list5.add(c1);
+//						k++;
+//					}
+//					c2.setName(c1.getName());
+//					j++;
+//				}
+//				if (k != 0) {
+//					logger.debug("clist5がblistに");
+//					b5.setChildren(c_list5);
+//					b_list.add(b5);
+//				}
+//			}
+//
+//			//topologyby
+//			j = 0;
+//			k = 0;
+//			c2.setName("test_TreeJson");
+//			if (list_topologyby != null) {
+//				for (SparqlEntity i : list_topologyby) {
+//					GRABTreeSequence c1 = new GRABTreeSequence();
+//					topologyby_se = list_topologyby.get(j);
+//					String topologyByName = topologyby_se.getValue("id");
+//					c1.setName(topologyByName);
+//					c1.setSize(6);
+//					if (c1.getName().length() == 0) {
+//						check++;
+//						logger.debug("check="+ check);
+//						c1.setName("None");
+//						c_list6.add(c1);
+//						b6.setName("topology_contained_by");
+//						b6.setChildren(c_list6);
+//						b_list.add(b6);
+//						break;
+//					} else {
+//						b6.setName("topology_contained_by");
+//						c_list6.add(c1);
+//						k++;
+//					}
+//					c2.setName(c1.getName());
+//					j++;
+//				}
+//				if (k != 0) {
+//					logger.debug("clist6がblistに");
+//					b6.setChildren(c_list6);
+//					b_list.add(b6);
+//				}
+//			}
 			
 			/* super
 			j = 0;

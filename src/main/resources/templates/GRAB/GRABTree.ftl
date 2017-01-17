@@ -691,6 +691,10 @@ d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData) {
 	                        return "skyblue";
 	                      if (d.name == "topology_contained_by")
 	                        return "purple";
+	                      if (d.name == "subsumes")
+	                        return "skyblue";
+	                      if (d.name == "subsumed_by")
+	                        return "purple";
 	                      if (d.name == "None")
 	                      	return "black";
 	                      else  return "black";
@@ -701,7 +705,7 @@ d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData) {
 	    var text_name3 = null;
 	            nodeEnter.append("image")
 	            .attr("xlink:href", function(d){
-	             if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="has_topology"|| d.name =="topology_contained_by"|| d.name =="has_superstructure"|| d.name =="has_substructure" || d.name == "None")
+	             if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="has_topology"|| d.name =="topology_contained_by"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure" || d.name == "None")
 	               return null;
 	             else  return "/glycans/"+ d.name + "/image?style=extended&format=png&notation=cfg";
 	         })
@@ -724,7 +728,7 @@ d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData) {
 	                  d3.select(this).attr("width", 200)
 	                                 .attr("height", 100)
 	                                 .attr("xlink:href", function(d){
-	                                 if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="has_topology"|| d.name =="topology_contained_by"|| d.name =="has_superstructure"|| d.name =="has_substructure"|| d.name == "None")
+	                                 if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="has_topology"|| d.name =="topology_contained_by"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure"|| d.name == "None")
 	                                   return null;
 	                                 else  return "/glycans/"+ d.name + "/image?style=extended&format=png&notation=cfg";
 	                               })
@@ -733,7 +737,7 @@ d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData) {
 	                                  return "translate(-120,-30)";
 	                                else return "translate(100,-10)";
 	                              });
-	                        if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="has_topology"|| d.name =="topology_contained_by"|| d.name =="has_superstructure"|| d.name =="has_substructure"|| d.name == "None"){text_name3 = null;}
+	                        if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="has_topology"|| d.name =="topology_contained_by"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure"|| d.name == "None"){text_name3 = null;}
 	                        else if (d.size == null){text_name3 = null;}
 	                        else{text_name3 = d.name;};
 
@@ -773,7 +777,7 @@ d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData) {
 	                      else return 20;
 	                      })
 	                      .attr("xlink:href", function(d){
-	                      if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="has_topology"|| d.name =="topology_contained_by"|| d.name =="has_superstructure"|| d.name =="has_substructure"|| d.name == "None")
+	                      if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="has_topology"|| d.name =="topology_contained_by"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure"|| d.name == "None")
 	                        return null;
 	                      else  return "/glycans/"+ d.name + "/image?style=extended&format=png&notation=cfg";
 	                    })
@@ -811,7 +815,7 @@ d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData) {
 	                return d.children || d._children ? "end" : "start";
 	            })
 	            .text(function(d) {
-	                if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="has_topology"|| d.name =="topology_contained_by"|| d.name =="has_superstructure"|| d.name =="has_substructure"|| d.name == "None")
+	                if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="has_topology"|| d.name =="topology_contained_by"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure"|| d.name == "None")
 	                  return d.name;
 	                else return null;
 	              });
@@ -820,7 +824,7 @@ d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData) {
 	        node.select("circle.nodeCircle")
 	            //.attr("r", 4.5)
 	            .attr("r", function(d){
-	          	  if (d.name == "has_motif"||d.name == "has_linkage_isomer"||d.name == "has_superstructure"||d.name == "has_substructure"||d.name == "has_topology"||d.name == "topology_contained_by"|| d.name == "None")
+	          	  if (d.name == "has_motif"||d.name == "has_linkage_isomer"||d.name == "has_superstructure"||d.name == "has_substructure"||d.name == "has_topology"||d.name == "topology_contained_by"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name == "None")
 	          	  		return null;
 	          	  else return 4.5;
 	            })
@@ -849,7 +853,7 @@ d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData) {
 			                  //   alert(d.name +"<br>"+ d.x +"<br>" + d.y);
 			                  // })
 			                  .attr("xlink:href", function(d){
-			            	     if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="has_topology"|| d.name =="topology_contained_by"|| d.name =="has_superstructure"|| d.name =="has_substructure"|| d.name == "None")
+			            	     if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="has_topology"|| d.name =="topology_contained_by"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure"|| d.name == "None")
 			            	       return null;
 			            	     else  return "/glycans/"+ d.name + "/image?style=extended&format=png&notation=cfg";
 			             	 })
@@ -874,7 +878,7 @@ d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData) {
 			                        d3.select(this).attr("width", 200)
 			                                       .attr("height", 100)
 			                                       .attr("xlink:href", function(d){
-			                                 	     if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="has_topology"|| d.name =="topology_contained_by"|| d.name =="has_superstructure"|| d.name =="has_substructure"|| d.name == "None")
+			                                 	     if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="has_topology"|| d.name =="topology_contained_by"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure"|| d.name == "None")
 			                                 	       return null;
 			                                 	     else  return "/glycans/"+ d.name + "/image?style=extended&format=png&notation=cfg";
 			                                  	 })
@@ -883,7 +887,7 @@ d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData) {
 			                                        return "translate(-120,-30)";
 			                                  	  else return "translate(100,-10)";
 			                                    });
-			                          if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="has_topology"|| d.name =="topology_contained_by"|| d.name =="has_superstructure"|| d.name =="has_substructure"|| d.name == "None"){text_name = null;}
+			                          if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="has_topology"|| d.name =="topology_contained_by"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure"|| d.name == "None"){text_name = null;}
 			                          else if (d.size == null){text_name = null;}
 			                          else{text_name = d.name;};
 
@@ -925,7 +929,7 @@ d3.json("/Tree/D3retrieve?primaryId=${ID}", function(error, treeData) {
 			                         	  else return 20;
 			                            })
 			                            .attr("xlink:href", function(d){
-			                            if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="has_topology"|| d.name =="topology_contained_by"|| d.name =="has_superstructure"|| d.name =="has_substructure"|| d.name == "None")
+			                            if(d.name == "has_motif"|| d.name =="has_linkage_isomer"|| d.name =="has_topology"|| d.name =="topology_contained_by"|| d.name =="subsumes"|| d.name =="subsumed_by"|| d.name =="has_superstructure"|| d.name =="has_substructure"|| d.name == "None")
 			                              return null;
 			                            else  return "/glycans/"+ d.name + "/image?style=extended&format=png&notation=cfg";
 			                          })
