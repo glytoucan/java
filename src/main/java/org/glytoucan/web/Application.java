@@ -15,12 +15,18 @@ import org.glycoinfo.rdf.dao.virt.SparqlDAOVirtSesameImpl;
 import org.glycoinfo.rdf.dao.virt.VirtRepositoryConnectionFactory;
 import org.glycoinfo.rdf.dao.virt.VirtSesameConnectionFactory;
 import org.glycoinfo.rdf.dao.virt.VirtSesameTransactionManager;
-import org.glycoinfo.rdf.glycan.D3SequenceSelectSparql_has_topology;
-import org.glycoinfo.rdf.glycan.D3SequenceSelectSparql_isomer;
-import org.glycoinfo.rdf.glycan.D3SequenceSelectSparql_motif;
-import org.glycoinfo.rdf.glycan.D3SequenceSelectSparql_topology_by;
-import org.glycoinfo.rdf.glycan.GRABSequenceSelectSparql_subsumedby;
-import org.glycoinfo.rdf.glycan.GRABSequenceSelectSparql_subsumes;
+import org.glycoinfo.rdf.wurcs.GRABSequenceSelectSparqlSubsumedBy;
+import org.glycoinfo.rdf.wurcs.GRABSequenceSelectSparqlMotif;
+import org.glycoinfo.rdf.wurcs.GRABSequenceSelectSparqlSubsumes;
+import org.glycoinfo.rdf.wurcs.GRABSequenceSelectSparqlHasTopology;
+import org.glycoinfo.rdf.wurcs.GRABSequenceSelectSparqlIsomer;
+import org.glycoinfo.rdf.wurcs.GRABSequenceSelectSparqlTopologyBy;
+//import org.glycoinfo.rdf.glycan.D3SequenceSelectSparql_has_topology;
+//import org.glycoinfo.rdf.glycan.D3SequenceSelectSparql_isomer;
+//import org.glycoinfo.rdf.glycan.D3SequenceSelectSparql_motif;
+//import org.glycoinfo.rdf.glycan.D3SequenceSelectSparql_topology_by;
+//import org.glycoinfo.rdf.glycan.GRABSequenceSelectSparql_subsumedby;
+//import org.glycoinfo.rdf.glycan.GRABSequenceSelectSparql_subsumes;
 import org.glycoinfo.rdf.scint.ClassHandler;
 import org.glycoinfo.rdf.scint.InsertScint;
 import org.glycoinfo.rdf.scint.SelectScint;
@@ -70,42 +76,42 @@ public class Application  {
 	
 	@Bean(name = "d3SequenceSelectSparql_motif")
 	SelectSparql getd3SelectSparql_motif() {
-		SelectSparql select = new D3SequenceSelectSparql_motif();
+		SelectSparql select = new GRABSequenceSelectSparqlMotif();
 //		select.setFrom("FROM <http://rdf.glycoinfo.org/glycan/browser/demo>");
 		return select;
 	}
 	
 	@Bean(name = "d3SequenceSelectSparql_isomer")
 	SelectSparql getd3SelectSparql_isomer() {
-		SelectSparql select = new D3SequenceSelectSparql_isomer();
+		SelectSparql select = new GRABSequenceSelectSparqlIsomer();
 //		select.setFrom("FROM <http://rdf.glycoinfo.org/glycan/browser/demo>");
 		return select;
 	}
 	
 	@Bean(name = "d3SequenceSelectSparql_topology")
 	SelectSparql getd3SelectSparql_topology() {
-		SelectSparql select = new D3SequenceSelectSparql_has_topology();
+		SelectSparql select = new GRABSequenceSelectSparqlHasTopology();
 //		select.setFrom("FROM <http://rdf.glycoinfo.org/glycan/browser/demo>");
 		return select;
 	}
 	
 	@Bean(name = "d3SequenceSelectSparql_topologyby")
 	SelectSparql getd3SelectSparql_topologyby() {
-		SelectSparql select = new D3SequenceSelectSparql_topology_by();
+		SelectSparql select = new GRABSequenceSelectSparqlTopologyBy();
 //		select.setFrom("FROM <http://rdf.glycoinfo.org/glycan/browser/demo>");
 		return select;
 	}
 	
 	@Bean(name = "GRABSequenceSelectSparql_subsumes")
 	SelectSparql getGRABSelectSparql_subsumes() {
-		SelectSparql select = new GRABSequenceSelectSparql_subsumes();
+		SelectSparql select = new GRABSequenceSelectSparqlSubsumes();
 //		select.setFrom("FROM <http://rdf.glycoinfo.org/glycan/browser/demo>");
 		return select;
 	}
 	
 	@Bean(name = "GRABSequenceSelectSparql_subsumedby")
 	SelectSparql getGRABSelectSparql_subsumedby() {
-		SelectSparql select = new GRABSequenceSelectSparql_subsumedby();
+		SelectSparql select = new GRABSequenceSelectSparqlSubsumedBy();
 //		select.setFrom("FROM <http://rdf.glycoinfo.org/glycan/browser/demo>");
 		return select;
 	}
