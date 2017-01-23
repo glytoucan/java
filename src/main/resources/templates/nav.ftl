@@ -63,7 +63,7 @@
 				<li class="globalNavItem"><a class="globalNavItem_btn" href="/Preferences/index"><span class="globalNavItem_text">${preferences}</span></a></li>
 <#if user??>
 				<li class="globalNavItem"><a class="globalNavItem_btn" href="/Users/profile"><span class="globalNavItem_text">${profile}</span></a></li>
-				<li class="globalNavItem"><a class="globalNavItem_btn" href="/Users/profile"><span class="globalNavItem_text"><a href="/signout">${signOut}</a></span></a></li>
+				<li class="globalNavItem"><a class="globalNavItem_btn" href="/signout"><span class="globalNavItem_text">${signOut}</span></a></li>
 <#else>
 				<li class="globalNavItem"><a class="globalNavItem_btn" href="/login"><span class="globalNavItem_text"><img src="/img/signin.png" /></span></a></li>
 </#if>
