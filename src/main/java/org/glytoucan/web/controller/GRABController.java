@@ -104,7 +104,7 @@ public class GRABController {
 	}
 	*/
 	
-	/*
+	
 	@Autowired
 	@Qualifier(value = "GRABSequenceSelectSparql_subsumes")
 	private SelectSparql selectGRABSparql_subsumes;
@@ -128,8 +128,8 @@ public class GRABController {
 	public SelectSparql getSelectGRABSparql_subsumedby() {
 		return selectGRABSparql_subsumedby;
 	}
-	*/
 	
+	/*
 	@Autowired
 	@Qualifier(value = "d3SequenceSelectSparql_topology")
 	private SelectSparql selectD3Sparql_topology;
@@ -153,7 +153,7 @@ public class GRABController {
 	public SelectSparql getSelectD3Sparql_topologyby() {
 		return selectD3Sparql_topologyby;
 	}
-
+	*/
 
 	private final AtomicLong counter = new AtomicLong();
 
@@ -167,12 +167,12 @@ public class GRABController {
 		/*List<SparqlEntity> list = new ArrayList<SparqlEntity>();*/
 		List<SparqlEntity> list_motif = null;
 		//List<SparqlEntity> list_isomer = null;
-		List<SparqlEntity> list_topology = null;
-		List<SparqlEntity> list_topologyby = null;
+//		List<SparqlEntity> list_topology = null;
+//		List<SparqlEntity> list_topologyby = null;
+		List<SparqlEntity> list_subsumes = null;
+		List<SparqlEntity> list_subsumedby = null;	
 		
-		/*
-		 List<SparqlEntity> list_subsumes = null;
-		 List<SparqlEntity> list_subsumedby = null;	
+		/* 
 		 List<SparqlEntity> list_sub = null;
 		 List<SparqlEntity> list_super = null; 
 		*/
@@ -198,7 +198,28 @@ public class GRABController {
 //			logger.debug(isomer_ss.getSparql());
 //			list_isomer = sparqlDAO.query(isomer_ss);
 			
-			// topology
+			
+			// subsumes
+			SelectSparql subsumes_ss = getSelectGRABSparql_subsumes();
+			SparqlEntity subsumes_se = subsumes_ss.getSparqlEntity();
+			if (null == subsumes_ss.getSparqlEntity())
+				subsumes_se = new SparqlEntity();
+			subsumes_se.setValue(Glycosidic_topology.PrimaryId_1, primaryId);
+			subsumes_ss.setSparqlEntity(subsumes_se);
+			logger.debug(subsumes_ss.getSparql());
+			list_subsumes = sparqlDAO.query(subsumes_ss);
+			
+			// subsumedby
+			SelectSparql subsumedby_ss = getSelectGRABSparql_subsumedby();
+			SparqlEntity subsumedby_se = subsumedby_ss.getSparqlEntity();
+			if (null == subsumedby_ss.getSparqlEntity())
+				subsumedby_se = new SparqlEntity();
+			subsumedby_se.setValue(Glycosidic_topology.PrimaryId_2, primaryId);
+			subsumedby_ss.setSparqlEntity(subsumedby_se);
+			logger.debug(subsumedby_ss.getSparql());
+			list_subsumedby = sparqlDAO.query(subsumedby_ss);
+			
+			/*// topology
 			SelectSparql topology_ss = getSelectD3Sparql_topology();
 			SparqlEntity topology_se = topology_ss.getSparqlEntity();
 			if (null == topology_ss.getSparqlEntity())
@@ -217,6 +238,7 @@ public class GRABController {
 			topologyby_ss.setSparqlEntity(topologyby_se);
 			logger.debug(topologyby_ss.getSparql());
 			list_topologyby = sparqlDAO.query(topologyby_ss);		
+			*/
 			
 			/* sub
 			SelectSparql sub_ss = getSelectD3Sparql_sub();
@@ -246,9 +268,11 @@ public class GRABController {
 			return a;
 		}
 		SparqlEntity motif_se = null;
+		SparqlEntity subsumes_se = null;
+		SparqlEntity subsumedby_se = null;
 		//SparqlEntity isomer_se = null;
-		SparqlEntity topology_se = null;
-		SparqlEntity topologyby_se = null;
+//		SparqlEntity topology_se = null;
+//		SparqlEntity topologyby_se = null;
 		
 		/*
 		SparqlEntity sub_se = null;
@@ -358,12 +382,12 @@ public class GRABController {
 			j = 0;
 			k = 0;
 			c2.setName("test_TreeJson");
-			if (list_topology != null) {
-				for (SparqlEntity i : list_topology) {
+			if (list_subsumes != null) {
+				for (SparqlEntity i : list_subsumes) {
 					GRABTreeSequence c1 = new GRABTreeSequence();
-					topology_se = list_topology.get(j);
-					String topologyName = topology_se.getValue("topology_id");
-					c1.setName(topologyName);
+					subsumes_se = list_subsumes.get(j);
+					String subsumesName = subsumes_se.getValue("subsumes_id");
+					c1.setName(subsumesName);
 					c1.setSize(5);
 					if (c1.getName().length() == 0) {
 						check++;
@@ -393,12 +417,12 @@ public class GRABController {
 			j = 0;
 			k = 0;
 			c2.setName("test_TreeJson");
-			if (list_topologyby != null) {
-				for (SparqlEntity i : list_topologyby) {
+			if (list_subsumedby != null) {
+				for (SparqlEntity i : list_subsumedby) {
 					GRABTreeSequence c1 = new GRABTreeSequence();
-					topologyby_se = list_topologyby.get(j);
-					String topologyByName = topologyby_se.getValue("id");
-					c1.setName(topologyByName);
+					subsumedby_se = list_subsumedby.get(j);
+					String subsumedByName = subsumedby_se.getValue("id");
+					c1.setName(subsumedByName);
 					c1.setSize(6);
 					if (c1.getName().length() == 0) {
 						check++;
