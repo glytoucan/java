@@ -7,8 +7,7 @@
 <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
 
 <script src="//code.jquery.com/jquery-2.0.3.min.js"></script>
-<script src="//cytoscape.github.io/cytoscape.js/api/cytoscape.js-latest/cytoscape.min.js"></script>
-<script src="https://raw.githubusercontent.com/cytoscape/cytoscape.js/v2.7.13/dist/cytoscape.min.js"></script>
+<script src="/js/cytoscape.min.js"></script>
 <link data-require="fontawesome@4.1.0" data-semver="4.2.0" rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" />
 
 <!-- ID: ${ID} -->
