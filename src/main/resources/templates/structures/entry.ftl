@@ -37,7 +37,11 @@
 			<nav class="entryNav">
 				<ol class="entryNav_ol">
 					<!-- <li><a href="#structure">Structure (Image)</a></li> -->
+					<li><a href="#literature">${literature}</a></li>
+					<li><a href="#species">${species}</a></li>
 					<li><a href="#grab">${glycanRDFAssociationBrowserGrab}</a></li>
+					<li><a href="#external">${externalid}</a></li>
+					<li><a href="#motif">${glycanMotif}</a></li>
 					<li><a href="#descriptors">${computedDescriptors}</a>
 						<ol class="entryNav_ol entryNav_ol-sub">
 							<li><a href="#wurcs">${wurcs}</a></li>
@@ -46,21 +50,34 @@
 							<li><a href="#iupacExtended">${iupacExtended}</a></li>
 						</ol>
 					</li>
-					<li><a href="#motif">${glycanMotif}</a></li>
-					<li><a href="#species">${species}</a></li>
-					<li><a href="#literature">${literature}</a></li>
-					<li><a href="#external">${externalid}</a></li>
 				</ol>
 			</nav>
 			<div class="entryNew_right">
 <!-- 				<section id="structure" class="entryNew_section">
 					<h1 class="entryNew_heading">${structure}</h1>
 					<togostanza-structure acc="${accNum}"></togostanza-structure>
+				</section> -->
+				<section id="literature" class="entryNew_section">
+					<h1 class="entryNew_heading">${literature}</h1>
+					<h2 class="entryNew_heading entryNew_heading-2nd"><a href="/Registries/supplement/${accNum}">${registerYourPublication}!</a></h2>
+					<togostanza-literature acc="${accNum}"></togostanza-literature>
 				</section>
- -->				<section id="grab" class="entryNew_section">
+				<section id="species" class="entryNew_section">
+					<h1 class="entryNew_heading">${species}</h1>
+					<togostanza-species acc="${accNum}"></togostanza-species>
+				</section>
+ 					<section id="grab" class="entryNew_section">
 					<h1 class="entryNew_heading">${glycanRDFAssociationBrowserGrab}</h1>
 					<togostanza-grabVisualizer acc="${accNum}"></togostanza-grabVisualizer>
 					<!-- <a class="entryNew_heading-2nd btn btn-primary" href="/GRABTree/${accNum}" role="button">Viewer</a> -->
+				</section>
+				<section id="external" class="entryNew_section">
+					<h1 class="entryNew_heading">${externalid}</h1>
+					<togostanza-external acc="${accNum}"></togostanza-external>
+				</section>
+				<section id="motif" class="entryNew_section">
+					<h1 class="entryNew_heading">${glycanMotif}</h1>
+					<togostanza-motif acc="${accNum}" notation="${imageNotation}"></togostanza-motif>
 				</section>
 				<section id="descriptors" class="entryNew_section">
 					<h1 class="entryNew_heading">${computedDescriptors}</h1>
@@ -72,23 +89,6 @@
 					<togostanza-iupacCondensed acc="${accNum}"></togostanza-iupacCondensed>
 					<h2 id="iupacExtended" class="entryNew_heading entryNew_heading-2nd">${iupacExtended}</h2>
 					<togostanza-iupacExtended acc="${accNum}"></togostanza-iupacExtended>
-				</section>
-				<section id="motif" class="entryNew_section">
-					<h1 class="entryNew_heading">${glycanMotif}</h1>
-					<togostanza-motif acc="${accNum}" notation="${imageNotation}"></togostanza-motif>
-				</section>
-				<section id="species" class="entryNew_section">
-					<h1 class="entryNew_heading">${species}</h1>
-					<togostanza-species acc="${accNum}"></togostanza-species>
-				</section>
-				<section id="literature" class="entryNew_section">
-					<h1 class="entryNew_heading">${literature}</h1>
-					<h2 class="entryNew_heading entryNew_heading-2nd"><a href="/Registries/supplement/${accNum}">${registerYourPublication}!</a></h2>
-					<togostanza-literature acc="${accNum}"></togostanza-literature>
-				</section>
-				<section id="external" class="entryNew_section">
-					<h1 class="entryNew_heading">${externalid}</h1>
-					<togostanza-external acc="${accNum}"></togostanza-external>
 				</section>
 			</div>
 		</div>
