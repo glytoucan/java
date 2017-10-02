@@ -222,6 +222,29 @@ public class StructuresController {
 		return "redirect:/Structures/test";
 	}
 
+	@RequestMapping(value="/Glycans/all/{accessionNumber}", method=RequestMethod.GET)
+	public String entryAll(@PathVariable String accessionNumber, Model model, RedirectAttributes redirectAttrs)  {
+		try {
+			if (StringUtils.isNotBlank(accessionNumber) && accessionNumber.startsWith("G")) {
+//				logClient.insertDefaultLog("glycan entry page for " + accessionNumber + " requested.");
+			    GlycoSequenceDetailResponse response = glycoSequenceClient.detailAllRequest(accessionNumber);
+			    ResponseMessage rm = response.getResponseMessage();
+			    if (rm.getErrorCode().intValue() == 0) {
+			    	logger.debug(response.getDescription());
+			    	model.addAttribute("accNum", accessionNumber);
+			    	model.addAttribute("description", response.getDescription());
+			    	return "structures/entry";
+			    }
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			redirectAttrs.addFlashAttribute("errorMessage", "Currently under maintence please try again in a few minutes");
+			return "redirect:/";
+		}
+		redirectAttrs.addFlashAttribute("errorMessage", "Accession number \"" + accessionNumber + "\" does not exist");
+		return "redirect:/";
+    }
+	
 	@RequestMapping(value="/Glycans/{accessionNumber}", method=RequestMethod.GET)
 	public String entry(@PathVariable String accessionNumber, Model model, RedirectAttributes redirectAttrs)  {
 		try {
