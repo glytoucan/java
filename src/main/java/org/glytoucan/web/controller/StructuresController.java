@@ -9,6 +9,7 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
@@ -23,6 +24,7 @@ import org.glytoucan.admin.client.config.AdminServerConfiguration;
 import org.glytoucan.client.GlycoSequenceClient;
 import org.glytoucan.client.config.ClientConfiguration;
 import org.glytoucan.client.config.GlycanQueryConfig;
+import org.glytoucan.client.model.GlycoSequenceArchivedResponse;
 import org.glytoucan.client.model.GlycoSequenceDetailResponse;
 import org.glytoucan.client.model.GlycoSequenceSearchResponse;
 import org.glytoucan.client.model.ResponseMessage;
@@ -222,7 +224,7 @@ public class StructuresController {
 		return "redirect:/Structures/test";
 	}
 
-	@RequestMapping(value="/Glycans/all/{accessionNumber}", method=RequestMethod.GET)
+	@RequestMapping(value="/Glycans/All/{accessionNumber}", method=RequestMethod.GET)
 	public String entryAll(@PathVariable String accessionNumber, Model model, RedirectAttributes redirectAttrs)  {
 		try {
 			if (StringUtils.isNotBlank(accessionNumber) && accessionNumber.startsWith("G")) {
@@ -267,4 +269,29 @@ public class StructuresController {
 		redirectAttrs.addFlashAttribute("errorMessage", "Accession number \"" + accessionNumber + "\" does not exist");
 		return "redirect:/";
     }
+	
+	@RequestMapping(value="/Glycans/Archived/{offset}/{limit}", method=RequestMethod.GET)
+	public String archived(@PathVariable String offset, @PathVariable String limit, HttpServletRequest request, RedirectAttributes redirectAttrs)  {
+		try {
+			    GlycoSequenceArchivedResponse response = glycoSequenceClient.retrieveArchived(offset, limit);
+			    ResponseMessage rm = response.getResponseMessage();
+			    if (rm.getErrorCode().intValue() == 0) {
+			    	logger.debug("response.getArchivedList().size()" + response.getArchivedList().size());
+				    request.setAttribute("archivedList", response.getArchivedList());
+				    return "structures/archived";
+			    }
+		} catch (Exception e) {
+			e.printStackTrace();
+			redirectAttrs.addFlashAttribute("errorMessage", "Currently under maintence please try again in a few minutes");
+			return "redirect:/";
+		}
+		redirectAttrs.addFlashAttribute("errorMessage", "An error occurred in retrieving archived data");
+
+		return "redirect:/";
+    }
+	
+	@RequestMapping(value="/Glycans/Archived", method=RequestMethod.GET)
+	public String archivedDefault(HttpServletRequest request, RedirectAttributes redirectAttrs)  {
+		return archived("0", "5000", request, redirectAttrs);
+	}
 }
