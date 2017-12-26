@@ -71,7 +71,7 @@
 <script type="text/javascript">
 var callBack=[];
 callBack.run=function(response){
-  document.write('Please wait... searching for:' + response);
+  //document.write('Please wait... searching for:' + response);
   var r = response;
   var url = "/Structures/structure?from=graphical&sequenceInput=";
   var x = url + encodeURIComponent(r);
@@ -83,7 +83,13 @@ callBack.run=function(response){
     return;
   }
   //var s = [ url, "" , r].join("");
-  window.location.assign(x);
+
+  win = window.open("");
+  win.document.open();
+  win.document.write('Please wait... searching for:' + response);
+  win.document.close();
+
+  win.window.location.assign(x);
 }
 </script>
 
