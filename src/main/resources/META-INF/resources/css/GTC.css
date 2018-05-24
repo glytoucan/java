@@ -88,10 +88,6 @@ pre {
     font-size: 14px;
 }
 
-table {
-    margin-top: 15px;
-}
-
 a.img-help {
     font-size: 19px;
 }
@@ -878,7 +874,7 @@ html {
     overflow: hidden;
     top: 30px;
     right:80px;
-}*/            
+}*/
 
 .userGuide:hover > .icon_userGuide {
     margin-top: -49px;
